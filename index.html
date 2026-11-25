@@ -662,6 +662,26 @@
   .wall-msg .wb{margin-top:3px;font-size:1rem;color:#fff}
   .wall-form{display:flex;gap:10px}
   .wall-form input{flex:1;padding:13px 16px;border-radius:999px;border:1px solid rgba(var(--goldA),.35);background:rgba(255,255,255,.05);color:#fff;font-family:inherit;font-size:1rem}
+  .deen-wrap{max-width:760px;margin:0 auto}
+  .tasbih-card{text-align:center;padding:30px;background:var(--card);border:1px solid rgba(var(--goldA),.3);border-radius:var(--radius)}
+  .tasbih-dhikr{font-size:2rem;font-weight:900;color:var(--gold2);margin-bottom:8px}
+  .tasbih-count{color:var(--muted);margin-bottom:16px;font-size:1.1rem}
+  .tasbih-count b{color:#fff;font-size:1.6rem}
+  .tasbih-btn{width:130px;height:130px;border-radius:50%;font-size:1.2rem;display:block;margin:0 auto}
+  .dua-card,.surah-card{background:var(--card);border:1px solid rgba(var(--goldA),.25);border-radius:16px;padding:18px 20px;margin-bottom:14px;text-align:center}
+  .dua-card .dt{color:var(--gold2);font-weight:800;font-size:.9rem;margin-bottom:8px}
+  .dua-card .db,.surah-card .db{font-size:1.15rem;line-height:2.1;color:#fff}
+  .surah-card .st{color:var(--gold2);font-weight:900;font-size:1.2rem;margin-bottom:8px}
+  .react-pad{height:120px;border-radius:16px;border:1px solid rgba(var(--goldA),.3);background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:700;cursor:pointer;user-select:none;transition:background .1s}
+  .react-pad.wait{background:rgba(248,113,113,.25)}
+  .react-pad.go{background:linear-gradient(120deg,var(--gold2),var(--gold));color:#1a1405;font-size:1.3rem}
+  .num-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:300px;margin:0 auto 12px;direction:ltr}
+  .num-cell{aspect-ratio:1;border-radius:10px;border:1px solid rgba(var(--goldA),.3);background:rgba(255,255,255,.05);color:#fff;font-weight:800;font-size:1.1rem;cursor:pointer;font-family:inherit}
+  .num-cell.hit{background:rgba(74,222,128,.25);border-color:var(--ok);color:var(--ok)}
+  .goal-wrap{max-width:760px;margin:0 auto 26px;padding:18px 22px;background:var(--card);border:1px solid rgba(var(--goldA),.3);border-radius:var(--radius)}
+  .goal-head{display:flex;justify-content:space-between;color:var(--gold2);font-weight:800;margin-bottom:10px;font-size:.95rem}
+  .goal-bar{height:14px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+  .goal-fill{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--gold2),var(--gold));transition:width .6s ease}
 </style>
 </head>
 <body>
@@ -678,6 +698,9 @@
     <a href="#gallery">📸 بالصور</a>
     <a href="#brain">🧠 ذكاء</a>
     <a href="#wall">💬 الكلام</a>
+    <a href="#deen">🕌 روحانيات</a>
+    <a href="#songs">🎵 أغاني</a>
+    <a href="#cinema">🎬 سينما</a>
     <a href="#karma">ركن كرمة 👑</a>
     <a href="#videos">الفيديوهات</a>
   </nav>
@@ -744,6 +767,10 @@
       <div class="profile-sub" id="pfSub">سجّلي اسمك عشان يظهر في الشهادات والتحديات 👑</div>
     </div>
     <button class="profile-edit" id="pfEdit">✏️ تعديل الحساب</button>
+  </div>
+  <div class="goal-wrap">
+    <div class="goal-head"><span>🎯 هدف اليوم: <b id="goalTarget">100</b> نقطة</span><span id="goalText"></span></div>
+    <div class="goal-bar"><div class="goal-fill" id="goalFill"></div></div>
   </div>
   <div class="dash-badge" id="dashBadge"></div>
   <div id="dashBars"></div>
@@ -1295,6 +1322,20 @@
       <button class="btn" id="memStart" style="margin-top:10px">ابدئي التحدي 🧠</button>
     </div>
     <div class="bg-card">
+      <h3>⚡ سرعة البرق</h3>
+      <p>اضغطي أول ما الشاشة تتحول للدهبي — أسرع رد فعل</p>
+      <div class="react-pad" id="reactPad">اضغطي "ابدئي" واستني الدهبي…</div>
+      <div class="speak-result" id="reactRes"></div>
+      <button class="btn" id="reactStart" style="margin-top:10px">ابدئي ⚡</button>
+    </div>
+    <div class="bg-card">
+      <h3>🔢 سباق الأرقام</h3>
+      <p>اضغطي الأرقام من ١ لـ ١٦ بالترتيب بأسرع وقت</p>
+      <div class="num-grid" id="numGrid"></div>
+      <div class="speak-result" id="numRes">الوقت: <b id="numTime">0.0</b>ث</div>
+      <button class="btn" id="numStart" style="margin-top:10px">ابدئي السباق 🔢</button>
+    </div>
+    <div class="bg-card">
       <h3>🎨 ستوديو التصميم</h3>
       <p>صمّمي بكسل آرت بألوانك وحمّليه صورة</p>
       <div class="pix-pal" id="pixPal"></div>
@@ -1306,6 +1347,50 @@
       <div class="speak-result" id="pixRes"></div>
     </div>
   </div>
+</section>
+
+<!-- ===================== DEEN CORNER ===================== -->
+<section id="deen">
+  <h2 class="sec-title">✦ ركن الروح ✦</h2>
+  <p class="sec-sub">قرآن وأدعية وأذكار — ذكّري قلبك وسط التعلّم 🕌💜</p>
+  <div class="tabs" id="deenTabs">
+    <button class="tab active" data-deen="adhkar">📿 الأذكار</button>
+    <button class="tab" data-deen="duas">🤲 الأدعية</button>
+    <button class="tab" data-deen="quran">📖 قرآن قصير</button>
+  </div>
+
+  <div id="deenAdhkar" class="deen-wrap">
+    <div class="tasbih-card">
+      <div class="tasbih-dhikr" id="tasDhikr">سبحان الله</div>
+      <div class="tasbih-count"><b id="tasCount">0</b> / 33</div>
+      <button class="btn tasbih-btn" id="tasBtn">سبّحي 📿</button>
+      <div class="speak-result" id="tasRes">كل ٣٣ تسبيحة = ١٠ نقاط ✨</div>
+      <button class="btn" id="tasNext" style="margin-top:10px;padding:10px 20px;font-size:.85rem;background:rgba(255,255,255,.1);color:var(--gold2)">ذكر تالي ›</button>
+    </div>
+  </div>
+
+  <div id="deenDuas" class="deen-wrap" style="display:none"></div>
+  <div id="deenQuran" class="deen-wrap" style="display:none"></div>
+</section>
+
+<!-- ===================== SONGS CORNER ===================== -->
+<section id="songs">
+  <h2 class="sec-title">✦ ركن الأغاني ✦</h2>
+  <p class="sec-sub">اتعلمي بالموسيقى — أغاني مشهورة بلغات الموقع 🎵</p>
+  <div class="tabs" id="songTabs">
+    <button class="tab active" data-lang="en">🇬🇧 إنجليزي</button>
+    <button class="tab" data-lang="fr">🇫🇷 فرنسي</button>
+    <button class="tab" data-lang="de">🇩🇪 ألماني</button>
+    <button class="tab" data-lang="zh">🇨🇳 صيني</button>
+  </div>
+  <div class="video-grid" id="songGrid"></div>
+</section>
+
+<!-- ===================== CINEMA ===================== -->
+<section id="cinema">
+  <h2 class="sec-title">✦ سينما لينجوا ✦</h2>
+  <p class="sec-sub">إعلانات أفلام أسطورية — اتفرجي واسمعي اللغة الأصلية 🎬🍿</p>
+  <div class="video-grid" id="movieGrid"></div>
 </section>
 
 <!-- ===================== DICTIONARY ===================== -->
@@ -3154,6 +3239,253 @@ document.getElementById('wallIn').addEventListener('keydown', function(e){
   if(e.key === 'Enter') document.getElementById('wallSend').click();
 });
 renderWall();
+
+/* ================= v4.2: deen corner ================= */
+const DHIKR = ['سبحان الله','الحمد لله','الله أكبر','لا إله إلا الله','أستغفر الله','اللهم صلِّ على محمد'];
+let tas = {i:0, c:0};
+document.getElementById('tasBtn').addEventListener('click', function(){
+  tas.c++;
+  document.getElementById('tasCount').textContent = tas.c;
+  sndGood();
+  if(tas.c >= 33){
+    awardPoints(10, 'الأذكار');
+    confetti();
+    document.getElementById('tasRes').innerHTML = '<span style="color:var(--ok)">ما شاء الله! خلّصتي «'+DHIKR[tas.i]+'» ٣٣ مرة — +١٠ نقاط ✨</span>';
+    tas.i = (tas.i + 1) % DHIKR.length;
+    tas.c = 0;
+    setTimeout(function(){
+      document.getElementById('tasDhikr').textContent = DHIKR[tas.i];
+      document.getElementById('tasCount').textContent = '0';
+    }, 1200);
+  }
+});
+document.getElementById('tasNext').addEventListener('click', function(){
+  tas.i = (tas.i + 1) % DHIKR.length;
+  tas.c = 0;
+  document.getElementById('tasDhikr').textContent = DHIKR[tas.i];
+  document.getElementById('tasCount').textContent = '0';
+});
+const DUAS = [
+  {t:'قبل المذاكرة 📚', b:'رَبِّ زِدْنِي عِلْمًا'},
+  {t:'في كل وقت 💜', b:'اللهم أعنّي على ذكرك وشكرك وحُسن عبادتك'},
+  {t:'قبل النوم 🌙', b:'باسمك اللهم أموت وأحيا'},
+  {t:'دعاء جامع 🤲', b:'ربنا آتنا في الدنيا حسنة وفي الآخرة حسنة وقِنا عذاب النار'},
+  {t:'للعافية 🌿', b:'اللهم إني أسألك العفو والعافية في الدنيا والآخرة'},
+  {t:'عند الهم 🕊️', b:'لا إله إلا أنت سبحانك إني كنت من الظالمين'}
+];
+document.getElementById('deenDuas').innerHTML = DUAS.map(function(d){
+  return '<div class="dua-card"><div class="dt">'+d.t+'</div><div class="db">'+d.b+'</div></div>';
+}).join('');
+const SURAHS = [
+  {t:'الفاتحة', b:'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ﴿١﴾ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ﴿٢﴾ الرَّحْمَٰنِ الرَّحِيمِ ﴿٣﴾ مَالِكِ يَوْمِ الدِّينِ ﴿٤﴾ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ﴿٥﴾ اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ ﴿٦﴾ صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ ﴿٧﴾'},
+  {t:'الإخلاص', b:'قُلْ هُوَ اللَّهُ أَحَدٌ ﴿١﴾ اللَّهُ الصَّمَدُ ﴿٢﴾ لَمْ يَلِدْ وَلَمْ يُولَدْ ﴿٣﴾ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ﴿٤﴾'},
+  {t:'الفلق', b:'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ﴿١﴾ مِن شَرِّ مَا خَلَقَ ﴿٢﴾ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ﴿٣﴾ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ﴿٤﴾ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ ﴿٥﴾'},
+  {t:'الناس', b:'قُلْ أَعُوذُ بِرَبِّ النَّاسِ ﴿١﴾ مَلِكِ النَّاسِ ﴿٢﴾ إِلَٰهِ النَّاسِ ﴿٣﴾ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ﴿٤﴾ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ﴿٥﴾ مِنَ الْجِنَّةِ وَالنَّاسِ ﴿٦﴾'},
+  {t:'الكوثر', b:'إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ ﴿١﴾ فَصَلِّ لِرَبِّكَ وَانْحَرْ ﴿٢﴾ إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ ﴿٣﴾'},
+  {t:'العصر', b:'وَالْعَصْرِ ﴿١﴾ إِنَّ الْإِنسَانَ لَفِي خُسْرٍ ﴿٢﴾ إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِالصَّبْرِ ﴿٣﴾'}
+];
+document.getElementById('deenQuran').innerHTML = SURAHS.map(function(x){
+  return '<div class="surah-card"><div class="st">سورة '+x.t+'</div><div class="db">'+x.b+'</div></div>';
+}).join('');
+document.querySelectorAll('#deenTabs .tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('#deenTabs .tab').forEach(function(x){x.classList.remove('active')});
+    t.classList.add('active');
+    document.getElementById('deenAdhkar').style.display = t.dataset.deen==='adhkar' ? 'block' : 'none';
+    document.getElementById('deenDuas').style.display = t.dataset.deen==='duas' ? 'block' : 'none';
+    document.getElementById('deenQuran').style.display = t.dataset.deen==='quran' ? 'block' : 'none';
+  });
+});
+
+/* ================= v4.2: reaction + number race ================= */
+let react = {state:'idle', t0:0, timer:null};
+document.getElementById('reactStart').addEventListener('click', function(){
+  const pad = document.getElementById('reactPad');
+  react.state = 'wait';
+  pad.className = 'react-pad wait';
+  pad.textContent = 'استني الدهبي… 👀';
+  document.getElementById('reactRes').textContent = '';
+  document.getElementById('reactStart').style.display = 'none';
+  clearTimeout(react.timer);
+  react.timer = setTimeout(function(){
+    react.state = 'go';
+    pad.className = 'react-pad go';
+    pad.textContent = 'دوسي!! ⚡';
+    react.t0 = performance.now();
+  }, 1200 + Math.random()*2500);
+});
+document.getElementById('reactPad').addEventListener('click', function(){
+  const pad = document.getElementById('reactPad');
+  if(react.state === 'wait'){
+    clearTimeout(react.timer);
+    react.state = 'idle';
+    pad.className = 'react-pad';
+    pad.textContent = 'بدري أوي! 😅 جربي تاني';
+    sndBad();
+    document.getElementById('reactStart').style.display = '';
+  } else if(react.state === 'go'){
+    const ms = Math.round(performance.now() - react.t0);
+    react.state = 'idle';
+    pad.className = 'react-pad';
+    pad.textContent = ms + ' مللي ثانية ⚡';
+    let pts = ms < 250 ? 30 : ms < 350 ? 20 : ms < 500 ? 10 : 5;
+    awardPoints(pts, 'سرعة البرق');
+    sndGood();
+    if(ms < 250){ sndWin(); confetti(); }
+    document.getElementById('reactRes').innerHTML = 'رد فعلك ' + ms + 'ms — <b style="color:var(--gold2)">+' + pts + ' نقطة</b>';
+    document.getElementById('reactStart').style.display = '';
+    document.getElementById('reactStart').textContent = 'العبي تاني ↺';
+  }
+});
+let nrace = {n:1, t0:0, timer:null};
+document.getElementById('numStart').addEventListener('click', function(){
+  const grid = document.getElementById('numGrid');
+  const nums = [];
+  for(let i=1;i<=16;i++) nums.push(i);
+  for(let i=nums.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=nums[i];nums[i]=nums[j];nums[j]=t;}
+  grid.innerHTML = '';
+  nums.forEach(function(n){
+    const b = document.createElement('button');
+    b.className = 'num-cell';
+    b.textContent = n;
+    b.addEventListener('click', function(){
+      if(n === nrace.n){
+        b.classList.add('hit');
+        sndGood();
+        nrace.n++;
+        if(nrace.n > 16){
+          clearInterval(nrace.timer);
+          const sec = ((performance.now() - nrace.t0)/1000).toFixed(1);
+          const pts = sec < 15 ? 40 : sec < 25 ? 25 : 15;
+          awardPoints(pts, 'سباق الأرقام');
+          sndWin(); confetti();
+          document.getElementById('numRes').innerHTML = 'خلصتي في ' + sec + ' ثانية! <b style="color:var(--gold2)">+' + pts + ' نقطة</b> 🏁';
+          document.getElementById('numStart').style.display = '';
+          document.getElementById('numStart').textContent = 'العبي تاني ↺';
+        }
+      } else sndBad();
+    });
+    grid.appendChild(b);
+  });
+  nrace = {n:1, t0:performance.now(), timer:setInterval(function(){
+    document.getElementById('numTime').textContent = ((performance.now() - nrace.t0)/1000).toFixed(1);
+  }, 100)};
+  document.getElementById('numStart').style.display = 'none';
+});
+
+/* ================= v4.3: songs + cinema ================= */
+const SONGS = {
+  en: [
+    {t:'Adele — Hello', id:'YQHsXMglC9A'},
+    {t:'The Beatles — Let It Be', id:'QDYfEBY9NM4'},
+    {t:'Katy Perry — Roar', id:'CevxZvSJLk8'},
+    {t:'Taylor Swift — Shake It Off', id:'nfWlot6h_JM'},
+    {t:'Taylor Swift — Blank Space', id:'e-ORhEE9VVg'},
+    {t:'Frozen — Let It Go', id:'moSFlvxnbgk'}
+  ],
+  fr: [
+    {t:'Édith Piaf — La Vie en rose', id:'Q3Kvu6Kgp88'},
+    {t:'Indila — Dernière danse', id:'K5KAc5CoCuk'}
+  ],
+  de: [
+    {t:'Rammstein — Deutschland', id:'NeQM1c-XCDc'}
+  ],
+  zh: [
+    {t:'Jay Chou — 晴天', id:'DYptgVvkVLQ'}
+  ]
+};
+let songLang = 'en';
+function renderSongs(){
+  document.getElementById('songGrid').innerHTML = SONGS[songLang].map(function(v){
+    return '<div class="video-card"><div class="vthumb"><iframe loading="lazy" src="https://www.youtube.com/embed/' + v.id + '" title="' + v.t + '" allowfullscreen></iframe></div><div class="vbody"><h3>' + v.t + '</h3></div></div>';
+  }).join('');
+}
+document.querySelectorAll('#songTabs .tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('#songTabs .tab').forEach(function(x){x.classList.remove('active')});
+    t.classList.add('active');
+    songLang = t.dataset.lang;
+    renderSongs();
+  });
+});
+renderSongs();
+const MOVIES = [
+  {t:'Titanic — الإعلان الرسمي', id:'2e-eXJ6HgkQ'},
+  {t:'The Lion King — الإعلان الرسمي', id:'7TavVZMewpY'},
+  {t:'Frozen — الإعلان الرسمي', id:'TbQm5doF_Uc'}
+];
+document.getElementById('movieGrid').innerHTML = MOVIES.map(function(v){
+  return '<div class="video-card"><div class="vthumb"><iframe loading="lazy" src="https://www.youtube.com/embed/' + v.id + '" title="' + v.t + '" allowfullscreen></iframe></div><div class="vbody"><h3>' + v.t + '</h3></div></div>';
+}).join('');
+
+/* ================= v4.3: daily gift + goal + quote ================= */
+(function(){
+  try {
+    const today = new Date().toDateString();
+    const last = localStorage.getItem('lingua_gift_day');
+    if(last !== today){
+      localStorage.setItem('lingua_gift_day', today);
+      awardPoints(25, 'هدية اليوم 🎁');
+      setTimeout(function(){
+        confetti();
+        toast('🎁 هدية اليوم: +٢٥ نقطة! تعالي كل يوم تكسبي');
+      }, 1500);
+    }
+  } catch(e){}
+})();
+(function(){
+  try {
+    const QUOTES = [
+      'كل كلمة جديدة بتقرّبك من حلمك 🌟',
+      'مفيش حاجة اسمها صعب، في بس لسه ما اتعلمتوش 💪',
+      'اللغة مفتاح العالم — وإنتي معاكي ٤ مفاتيح 🗝️',
+      'خطوة صغيرة كل يوم = إنجاز كبير آخر السنة 📈',
+      'الغلط أول خطوة في التعلّم، كمّلي غلط واتعلمي 😄',
+      'إنتي أقوى من أي كلمة صعبة 💜'
+    ];
+    const day = Math.floor(Date.now() / 86400000);
+    const q = QUOTES[day % QUOTES.length];
+    const badge = document.getElementById('dashBadge');
+    if(badge){
+      const d = document.createElement('div');
+      d.style.cssText = 'margin-top:10px;color:var(--muted);font-size:1rem;font-style:italic';
+      d.textContent = '✨ ' + q;
+      badge.parentNode.insertBefore(d, badge.nextSibling);
+    }
+  } catch(e){}
+})();
+function renderGoal(){
+  try {
+    const today = new Date().toDateString();
+    const key = 'lingua_goal_' + today;
+    const pts = parseInt(localStorage.getItem(key) || '0', 10);
+    const target = 100;
+    const pct = Math.min(100, Math.round(pts / target * 100));
+    const fill = document.getElementById('goalFill');
+    const txt = document.getElementById('goalText');
+    if(!fill) return;
+    fill.style.width = pct + '%';
+    txt.textContent = pts + ' / ' + target;
+    if(pts >= target && !localStorage.getItem('lingua_goal_done_' + today)){
+      localStorage.setItem('lingua_goal_done_' + today, '1');
+      sndWin(); confetti();
+      toast('🎯 حقّقتي هدف اليوم! بطلة 🏆');
+    }
+  } catch(e){}
+}
+const __origAward = awardPoints;
+awardPoints = function(n, label){
+  __origAward(n, label);
+  try {
+    if(n > 0){
+      const today = new Date().toDateString();
+      const key = 'lingua_goal_' + today;
+      localStorage.setItem(key, String(parseInt(localStorage.getItem(key) || '0', 10) + n));
+      renderGoal();
+    }
+  } catch(e){}
+};
+renderGoal();
 
 /* ================= v3: challenge a friend ================= */
 function shareChallenge(kind, parts){
