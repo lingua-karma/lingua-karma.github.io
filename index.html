@@ -678,6 +678,24 @@
   .outfit-drop{max-width:560px;margin:0 auto;border:2px dashed rgba(var(--goldA),.5);border-radius:24px;padding:34px;text-align:center;cursor:pointer;transition:.2s}
   .outfit-drop:hover{border-color:var(--gold2);background:rgba(var(--goldA),.06)}
   .outfit-res{max-width:640px;margin:20px auto 0}
+  /* ===== v7: dress-up studio ===== */
+  .du-wrap{display:flex;gap:16px;justify-content:center;align-items:stretch;max-width:760px;margin:0 auto;flex-wrap:wrap}
+  .du-stage{flex:1;min-width:280px;background:radial-gradient(circle at 50% 20%,rgba(var(--goldA),.22),transparent 60%),linear-gradient(160deg,var(--bg2),var(--bg));border:2px solid rgba(var(--goldA),.45);border-radius:28px;padding:18px;display:flex;justify-content:center;align-items:flex-end;box-shadow:0 20px 60px rgba(0,0,0,.35), inset 0 0 60px rgba(var(--goldA),.06)}
+  .du-cats{display:flex;flex-direction:column;gap:10px;justify-content:center}
+  .du-cat{width:62px;height:62px;border-radius:18px;border:2px solid rgba(var(--goldA),.4);background:var(--card);font-size:1.7rem;cursor:pointer;transition:.2s;backdrop-filter:blur(8px)}
+  .du-cat:hover{transform:scale(1.08)}
+  .du-cat.active{background:linear-gradient(135deg,var(--gold2),var(--gold));border-color:transparent;box-shadow:0 8px 24px rgba(var(--goldA),.4)}
+  .du-items{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:760px;margin:18px auto 0}
+  .du-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 14px;border-radius:16px;border:2px solid rgba(var(--goldA),.3);background:var(--card);color:var(--text);cursor:pointer;font-family:inherit;transition:.2s;min-width:86px}
+  .du-item:hover{border-color:var(--gold2)}
+  .du-item.active{border-color:var(--gold2);background:rgba(var(--goldA),.14)}
+  .du-item .di-ico{font-size:1.6rem}
+  .du-item .di-n{font-size:.75rem;font-weight:800}
+  .du-colors{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;max-width:760px;margin:14px auto 0}
+  .du-col{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,.3);cursor:pointer;transition:.15s}
+  .du-col:hover{transform:scale(1.2);border-color:#fff}
+  .du-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:18px auto 0;max-width:760px}
+  @media (max-width:520px){.du-cats{flex-direction:row;flex-wrap:wrap}.du-cat{width:52px;height:52px;font-size:1.4rem}}
   .theme-fab{position:fixed;bottom:18px;inset-inline-start:18px;z-index:999;width:52px;height:52px;border-radius:50%;border:1px solid rgba(var(--goldA),.5);background:var(--card2);backdrop-filter:blur(10px);font-size:1.4rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,0,0,.45);transition:.25s}
   .theme-fab:hover{transform:scale(1.1) rotate(-10deg)}
   .theme-pop{position:fixed;bottom:80px;inset-inline-start:18px;z-index:999;display:none;gap:10px;padding:12px 16px;border-radius:999px;border:1px solid rgba(var(--goldA),.4);background:var(--card2);backdrop-filter:blur(12px);box-shadow:0 12px 34px rgba(0,0,0,.5)}
@@ -791,7 +809,8 @@
     <a href="#cinema">🎬 سينما</a>
     <a href="#shop">🛍️ المتجر</a>
     <a href="#friends">👯 أصحابي</a>
-    <a href="#fun">🎀 ألعاب حلوة</a>
+    <a href="#fun">🎮 العاب</a>
+    <a href="#dressup">👗 ستوديو</a>
     <a href="#outfit">👚 تنسيق لبس</a>
     <a href="#eng">⚙️ هندسة</a>
     <a href="#karma">ركن كرمة 👑</a>
@@ -1516,6 +1535,61 @@
   <div class="video-grid" id="songGrid"></div>
 </section>
 
+<!-- ===================== SCHOLARSHIPS ===================== -->
+<section id="scholar">
+  <h2 class="sec-title">✦ منح دراسية حول العالم ✦</h2>
+  <p class="sec-sub">أشهر المنح الممولة بالكامل — الشروط والمواقع الرسمية 🏆</p>
+  <div class="sch-grid" id="schGrid"></div>
+  <h3 class="level-head" style="max-width:760px;margin:26px auto 14px"><span class="pill">🔄 مصادر بتتجدد يوميًا</span><span class="line"></span></h3>
+  <div class="sch-grid">
+    <a class="sch-card sch-live" href="https://www.for9a.com/opportunity/category/%D9%85%D9%86%D8%AD-%D8%AF%D8%B1%D8%A7%D8%B3%D9%8A%D8%A9" target="_blank" rel="noopener"><div class="sch-flag">🌍</div><div class="sch-name">منصة فرصة</div><div class="sch-req">منح 2026 الممولة بالكامل — بالعربي، بتتحدث كل يوم</div><span class="sch-go">افتحي ↗</span></a>
+    <a class="sch-card sch-live" href="https://www.scholars4dev.com/" target="_blank" rel="noopener"><div class="sch-flag">📚</div><div class="sch-name">Scholars4Dev</div><div class="sch-req">قوائم منح محدثة لكل الدول والتخصصات</div><span class="sch-go">افتحي ↗</span></a>
+    <a class="sch-card sch-live" href="https://www.opportunitydesk.org/" target="_blank" rel="noopener"><div class="sch-flag">🔔</div><div class="sch-name">Opportunity Desk</div><div class="sch-req">منح ومؤتمرات وتبادل ثقافي — تحديث يومي</div><span class="sch-go">افتحي ↗</span></a>
+  </div>
+</section>
+<style>
+  .sch-grid{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+  .sch-card{background:var(--card2);border:1px solid rgba(var(--goldA),.25);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:8px;transition:.2s;text-decoration:none;color:inherit}
+  .sch-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 14px 36px rgba(var(--goldA),.22)}
+  .sch-flag{font-size:1.9rem}
+  .sch-name{font-weight:900;font-size:1.02rem}
+  .sch-fund{display:inline-block;align-self:flex-start;background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.35);border-radius:999px;padding:2px 10px;font-size:.7rem;font-weight:800}
+  .sch-fund.partial{background:rgba(183,155,240,.15);color:#b79bf0;border-color:rgba(183,155,240,.35)}
+  .sch-req{color:var(--muted);font-size:.8rem;line-height:1.7;flex:1}
+  .sch-req b{color:var(--gold2)}
+  .sch-go{color:var(--gold);font-weight:800;font-size:.82rem;margin-top:4px}
+</style>
+
+<!-- ===================== MUSIC (direct audio) ===================== -->
+<section id="music">
+  <h2 class="sec-title">✦ استمعي ✦</h2>
+  <p class="sec-sub">أغاني تشتغل على طول من الموقع — من غير يوتيوب 🎧</p>
+  <div class="tabs lang-tabs" id="musicTabs">
+    <button class="tab lang-tab active" data-music="ar"><span class="lf">🇪🇬</span><span class="ln">عربي</span></button>
+    <button class="tab lang-tab" data-music="en"><span class="lf">🇬🇧</span><span class="ln">إنجليزي</span></button>
+    <button class="tab lang-tab" data-music="zh"><span class="lf">🇨🇳</span><span class="ln">صيني</span></button>
+    <button class="tab lang-tab" data-music="de"><span class="lf">🇩🇪</span><span class="ln">ألماني</span></button>
+  </div>
+  <div class="music-list" id="musicList"></div>
+  <p class="sec-sub" style="font-size:.72rem;margin-top:12px">مقاطع استماع قانونية من iTunes 🎶</p>
+</section>
+<style>
+  .music-list{max-width:620px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+  .music-row{display:flex;align-items:center;gap:12px;background:var(--card2);border:1px solid rgba(var(--goldA),.22);border-radius:18px;padding:10px 14px;cursor:pointer;transition:.2s}
+  .music-row:hover{border-color:rgba(var(--goldA),.5);transform:translateY(-1px)}
+  .music-row.playing{border-color:var(--gold);box-shadow:0 8px 28px rgba(var(--goldA),.28)}
+  .m-play{width:44px;height:44px;flex:0 0 44px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#221c05;font-size:1.05rem;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(var(--goldA),.35)}
+  .m-info{flex:1;min-width:0;text-align:start}
+  .m-t{font-weight:900;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .m-a{color:var(--muted);font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .m-eq{display:none;align-items:flex-end;gap:3px;height:20px;flex:0 0 22px}
+  .music-row.playing .m-eq{display:flex}
+  .m-eq span{width:4px;background:linear-gradient(180deg,var(--gold2),var(--gold));border-radius:2px;animation:eq .8s ease-in-out infinite}
+  .m-eq span:nth-child(2){animation-delay:.25s}
+  .m-eq span:nth-child(3){animation-delay:.5s}
+  @keyframes eq{0%,100%{height:6px}50%{height:20px}}
+</style>
+
 <!-- ===================== CINEMA ===================== -->
 <section id="cinema">
   <h2 class="sec-title">✦ سينما لينجوا ✦</h2>
@@ -1526,6 +1600,8 @@
     <button class="tab lang-tab" data-cinema="de"><span class="lf">🇩🇪</span><span class="ln">ألماني</span></button>
     <button class="tab lang-tab" data-cinema="zh"><span class="lf">🇨🇳</span><span class="ln">صيني</span></button>
     <button class="tab lang-tab" data-cinema="anime"><span class="lf">🎌</span><span class="ln">أنمي</span></button>
+    <button class="tab lang-tab" data-cinema="cartoon"><span class="lf">🐱</span><span class="ln">كرتون</span></button>
+    <button class="tab lang-tab" data-cinema="series"><span class="lf">📺</span><span class="ln">مسلسلات</span></button>
   </div>
   <div class="video-grid" id="movieGrid"></div>
 </section>
@@ -1725,13 +1801,13 @@
 
 <!-- ===================== v6: FUN GAMES ===================== -->
 <section id="fun">
-  <h2 class="sec-title">✦ ألعاب حلوة ✦</h2>
-  <p class="sec-sub">تلبيس وطبخ وتصميم بيوت وكورة — اتلعبي واتعلمي كلمات جديدة 🎀</p>
+  <h2 class="sec-title">✦ العاب ✦</h2>
+  <p class="sec-sub">طبخ وتصميم بيوت وكورة وستوديو تلبيس — العبي واتعلمي كلمات جديدة 🎮</p>
   <div class="tabs lang-tabs" id="funTabs">
-    <button class="tab lang-tab active" data-fun="dress"><span class="lf">👗</span><span class="ln">تلبيس</span></button>
-    <button class="tab lang-tab" data-fun="cook"><span class="lf">🍳</span><span class="ln">طبخ</span></button>
+    <button class="tab lang-tab active" data-fun="cook"><span class="lf">🍳</span><span class="ln">طبخ</span></button>
     <button class="tab lang-tab" data-fun="house"><span class="lf">🏠</span><span class="ln">تصميم بيوت</span></button>
     <button class="tab lang-tab" data-fun="football"><span class="lf">⚽</span><span class="ln">كورة</span></button>
+    <button class="tab lang-tab" id="funStudioBtn"><span class="lf">👗</span><span class="ln">ستوديو التلبيس</span></button>
   </div>
   <div class="tabs lang-tabs" id="funLangTabs">
     <button class="tab lang-tab active" data-lang="en"><span class="lf">🇬🇧</span><span class="ln">الإنجليزية</span></button>
@@ -1773,6 +1849,29 @@
     <button class="tab lang-tab" data-ui="en"><span class="lf">🇬🇧</span><span class="ln">English</span></button>
   </div>
   <p class="sec-sub" style="font-size:.8rem">الترجمة بتغطي القوائم والعناوين الرئيسية — المحتوى التعليمي يفضل بالعربية 📚</p>
+</section>
+
+<!-- ===================== v7: DRESS-UP STUDIO ===================== -->
+<section id="dressup">
+  <h2 class="sec-title">✦ ستوديو التلبيس ✦</h2>
+  <p class="sec-sub">البسي العروسة زي ما يعجبك — شعر، لبس، جزم، شنط وإكسسوار 👗✨</p>
+  <div class="tabs lang-tabs" id="dressLangTabs" style="max-width:520px">
+    <button class="tab lang-tab active" data-lang="en"><span class="lf">🇬🇧</span><span class="ln">الإنجليزية</span></button>
+    <button class="tab lang-tab" data-lang="fr"><span class="lf">🇫🇷</span><span class="ln">الفرنسية</span></button>
+    <button class="tab lang-tab" data-lang="de"><span class="lf">🇩🇪</span><span class="ln">الألمانية</span></button>
+    <button class="tab lang-tab" data-lang="zh"><span class="lf">🇨🇳</span><span class="ln">الصينية</span></button>
+  </div>
+  <div class="du-wrap">
+    <div class="du-stage"><div id="duDoll"></div></div>
+    <div class="du-cats" id="duCats"></div>
+  </div>
+  <div class="du-items" id="duItems"></div>
+  <div class="du-colors" id="duColors"></div>
+  <div class="du-actions">
+    <button class="btn" id="duSpeak">🔊 اسم القطعة</button>
+    <button class="btn" id="duRandom" style="background:linear-gradient(120deg,#b79bf0,#7c5cd6);color:#fff">🎲 لوك عشوائي</button>
+    <button class="btn" id="duSave" style="background:linear-gradient(120deg,#4ade80,#16a34a);color:#052e12">💾 احفظي اللوك</button>
+  </div>
 </section>
 
 <section id="love">
@@ -3613,17 +3712,27 @@ const SONGS = {
     {t:'Katy Perry — Roar', id:'CevxZvSJLk8'},
     {t:'Taylor Swift — Shake It Off', id:'nfWlot6h_JM'},
     {t:'Taylor Swift — Blank Space', id:'e-ORhEE9VVg'},
-    {t:'Frozen — Let It Go', id:'moSFlvxnbgk'}
+    {t:'Frozen — Let It Go', id:'moSFlvxnbgk'},
+    {t:'Ed Sheeran — Perfect', id:'2Vv-BfVoq4g'},
+    {t:'Ed Sheeran — Shape of You', id:'JGwWNGJdvx8'},
+    {t:'Dua Lipa — Levitating', id:'TUVcZfQe-Kw'},
+    {t:'Coldplay — Yellow', id:'yKNxeF4KMsY'},
+    {t:'Maroon 5 — Sugar', id:'09R8_2nJtjg'},
+    {t:'Luis Fonsi — Despacito', id:'kJQP7kiw5Fk'}
   ],
   fr: [
     {t:'Édith Piaf — La Vie en rose', id:'Q3Kvu6Kgp88'},
-    {t:'Indila — Dernière danse', id:'K5KAc5CoCuk'}
+    {t:'Indila — Dernière danse', id:'K5KAc5CoCuk'},
+    {t:'Stromae — Papaoutai', id:'oiKj0Z_Xnjc'}
   ],
   de: [
-    {t:'Rammstein — Deutschland', id:'NeQM1c-XCDc'}
+    {t:'Rammstein — Deutschland', id:'NeQM1c-XCDc'},
+    {t:'Rammstein — Sonne', id:'StZcUAPRRac'}
   ],
   zh: [
-    {t:'Jay Chou — 晴天', id:'DYptgVvkVLQ'}
+    {t:'Jay Chou — 晴天', id:'DYptgVvkVLQ'},
+    {t:'Jay Chou — 告白氣球', id:'bu7nU9Mhpyo'},
+    {t:'G.E.M. — 光年之外', id:'T4SimnaiktU'}
   ]
 };
 let songLang = 'en';
@@ -3686,6 +3795,32 @@ const CINEMA = {
   anime: [
     {t:'المخطوفة (سبيريتد أواي) — الإعلان', id:'ByXuk9QqQkk'},
     {t:'قلعة هاول المتحركة — الإعلان', id:'iwROgK94zcM'}
+  ],
+  cartoon: [
+    {t:'توم وجيري — ماراثون الحلقات القصيرة', id:'U91AHkvkh-8'},
+    {t:'توم وجيري — أفضل الأصدقاء', id:'cqyziA30whE'},
+    {t:'توم وجيري — كل الحلقات (الجزء ١)', id:'UUuxhuI4Ofw'},
+    {t:'توم وجيري — معركة الأكل', id:'OjIXzZ25tjA'},
+    {t:'تروترو — ٣٠ حلقة كاملة (فرنسي)', id:'l03x_-pom5s'},
+    {t:'الدب الصغير براون — ساعة حلقات (فرنسي)', id:'sA3iRyFuuwE'},
+    {t:'الدب الصغير براون — ساعتين حلقات (فرنسي)', id:'sXm3-Eg0_ng'},
+    {t:'النحلة مايا — مغامرة العسل الكبيرة (ألماني)', id:'8YER_1_r2wU'},
+    {t:'النحلة مايا — ويللي يصبح بطلًا (ألماني)', id:'ITAm-fc1cno'},
+    {t:'النحلة مايا — حبوب اللقاح المفقودة (ألماني)', id:'Do4jw7SvPv8'},
+    {t:'الدببة بوني: فانتاستيكا — فيلم كامل (صيني)', id:'iO0Ze5PBmCU'},
+    {t:'الدببة بوني: روبو رامبل — فيلم كامل (صيني)', id:'KYtOGYeNkbI'},
+    {t:'الدببة بوني: شيفرة الحماية — فيلم كامل (صيني)', id:'oIkLFRD65a8'},
+    {t:'الدببة بوني: الانكماش الكبير — فيلم كامل (صيني)', id:'xnW5V35H9sU'},
+    {t:'الدببة بوني: إلى الإنقاذ — فيلم كامل (صيني)', id:'U2ipRvgCjnc'}
+  ],
+  series: [
+    {t:'Extra English — الحلقة ١: وصول هيكتور (الجزء ١)', id:'k89GF-i_Eyg'},
+    {t:'Extra English — الحلقة ١ كاملة', id:'DjufuMDV9D8'},
+    {t:'Extra English — الحلقة ١ بترجمة إنجليزية', id:'uG3XVajkQ_4'},
+    {t:'Extra French — الحلقة ١ بترجمة فرنسية', id:'EaNqp4FXh-s'},
+    {t:'Extra French — الحلقة ١: وصول سام', id:'YGE6ymTCHAQ'},
+    {t:'Extra German — الحلقة ١: وصول سام بترجمة', id:'MbI21f7z02I'},
+    {t:'Extra German — الحلقة ١ بترجمة ألمانية', id:'F6khA8eZaD4'}
   ]
 };
 let cinTab = 'en';
@@ -4104,11 +4239,11 @@ window.renderBadges = function(){
 /* ================= v6: router — كل قسم صفحة لوحده ================= */
 const MENU = [
   ['dash','💎','لوحة إنجازك'],['corners','🌍','أقسام اللغات'],['courses','🎓','الكورسات'],
-  ['lessons','📚','الدروس'],['quiz','📝','الاختبارات'],['games','🎮','الألعاب'],
-  ['brain','🧠','ألعاب ذكاء'],['fun','🎀','ألعاب حلوة'],['dict','📖','القاموس'],
+  ['lessons','📚','الدروس'],['quiz','📝','الاختبارات'],['games','🎯','ألعاب اللغات'],
+  ['brain','🧠','ألعاب ذكاء'],['fun','🎮','العاب'],['dressup','👗','ستوديو التلبيس'],['dict','📖','القاموس'],
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
-  ['songs','🎵','أغاني'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
-  ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],
+  ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
+  ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
   ['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['karma','👑','ركن كرمة'],['settings','🌐','لغة التطبيق']
 ];
 document.getElementById('menuGrid').innerHTML = MENU.map(function(m){
@@ -4205,7 +4340,7 @@ const FUN_ITEMS = {
 const FUN_STAGE0 = {dress:'👧', cook:'🥣', house:'🏠', football:'🥅'};
 const FUN_DONE = {dress:'👸', cook:'🍲', house:'🏡', football:'🏆'};
 const FUN_LANGI = {en:1, fr:2, de:3, zh:4};
-let funGame = 'dress', funLang = 'en', funIdx = 0, funGot = [];
+let funGame = 'cook', funLang = 'en', funIdx = 0, funGot = [];
 function funStageDraw(){
   document.getElementById('funStage').textContent = FUN_STAGE0[funGame] + ' ' + funGot.join(' ');
 }
@@ -4246,9 +4381,9 @@ function funNext(){
   });
 }
 function funStart(){ funIdx = 0; funGot = []; funStageDraw(); funNext(); }
-document.querySelectorAll('#funTabs .tab').forEach(function(t){
+document.querySelectorAll('#funTabs .tab[data-fun]').forEach(function(t){
   t.addEventListener('click', function(){
-    document.querySelectorAll('#funTabs .tab').forEach(function(x){ x.classList.remove('active'); });
+    document.querySelectorAll('#funTabs .tab[data-fun]').forEach(function(x){ x.classList.remove('active'); });
     t.classList.add('active');
     funGame = t.dataset.fun;
     funStart();
@@ -4327,6 +4462,7 @@ funStart();
           const nm = colorName(cl.r,cl.g,cl.b);
           return '<div style="background:var(--card);border:1px solid rgba(var(--goldA),.25);border-radius:16px;padding:14px;margin:10px 0;text-align:center">لون <b style="color:var(--gold2)">'+nm+'</b> — '+matchTips(nm)+'</div>';
         }).join('') +
+        outfitCombos(cols) +
         '<div style="text-align:center;color:var(--muted);font-size:.8rem;margin-top:12px">💡 نصيحة: كونسي لون واحد صريح في اللوك والباقي هادي</div>';
       toast('طلّعنا ألوان القطعة! 🎨');
       awardPoints(10, 'تنسيق لبس');
@@ -4353,6 +4489,17 @@ const ENG = [
     {t:'بنية الحواسيب وتنظيمها — محاضرة', id:'55ld_GN7nQs'},
     {t:'أساسيات الشبكات', id:'DG--5d3U88A'},
     {t:'أساسيات شبكات الحاسب — توجيه الرسائل', id:'mMfP0IXYJp8'}]},
+  {dept:'🖊️ رسم هندسي', vids:[
+    {t:'شرح مبادئ الرسم الهندسي — المحاضرة ٨', id:'A1OYfW5asmo'},
+    {t:'عرض منهج رسم هندسي — جامعة أم القرى', id:'Uol6XQIA16w'},
+    {t:'دورة الرسم الهندسي الصناعي بـ SolidWorks — المحاضرة ٧', id:'MTthZU1p2l8'},
+    {t:'أساسيات الرسم الهندسي — SolidWorks بالعربي', id:'erXDKdvv9sM'}]},
+  {dept:'➗ رياضيات تحضيري', vids:[
+    {t:'حساب التفاضل والتكامل — المحاضرة الأولى', id:'pUAaasolcVk'},
+    {t:'التفاضل والتكامل MATH 201 — الاشتقاق (جامعة طيبة)', id:'ulr2sbrcJTQ'}]},
+  {dept:'💻 برمجة', vids:[
+    {t:'البرمجة بلغة C — الدرس الأول', id:'2GllO9oo2b4'},
+    {t:'خارطة طريق تعلم البرمجة من واقع سوق العمل', id:'sWCQMMfP8p8'}]},
   {dept:'🧭 اختاري تخصصك', vids:[
     {t:'الفرق بين الهندسة المعمارية والعمران', id:'wfp0Exd9Sio'},
     {t:'هندسة الاتصالات والإلكترونيات', id:'G2WdqnZ-4tw'}]}
@@ -4426,7 +4573,7 @@ const UI_PAIRS = [
   ['تدريب النطق','Speaking'],['القاموس','Dictionary'],['📸 بالصور','📸 Photos'],['🧠 ذكاء','🧠 Brain'],
   ['💬 الكلام','💬 Wall'],['🕌 روحانيات','🕌 Spirit'],['🎵 أغاني','🎵 Songs'],['🎬 سينما','🎬 Cinema'],
   ['ركن كرمة 👑','Karma 👑'],['الفيديوهات','Videos'],['🛍️ المتجر','🛍️ Shop'],['👯 أصحابي','👯 Friends'],
-  ['🎀 ألعاب حلوة','🎀 Fun Games'],['👚 تنسيق لبس','👚 Stylist'],['⚙️ هندسة','⚙️ Engineering'],['🌐 اللغة','🌐 Language'],
+  ['🎮 العاب','🎮 Games'],['👚 تنسيق لبس','👚 Stylist'],['⚙️ هندسة','⚙️ Engineering'],['🌐 اللغة','🌐 Language'],
   ['✦ كلمات اليوم ✦','✦ Words of the Day ✦'],['لماذا Lingua؟','Why Lingua?'],['✦ لوحة إنجازك ✦','✦ Your Dashboard ✦'],
   ['✦ أقسام اللغات ✦','✦ Language Corners ✦'],['اختاري لغتك','Choose Your Language'],['✦ الدروس ✦','✦ Lessons ✦'],
   ['✦ الاختبارات ✦','✦ Quizzes ✦'],['✦ الألعاب ✦','✦ Games ✦'],['✦ القاموس ✦','✦ Dictionary ✦'],
@@ -4472,6 +4619,389 @@ window.renderShop();
 window.renderBadges();
 checkBadges();
 try { window.refreshDash(); } catch(e){}
+
+
+/* ================= v7: dress-up studio ================= */
+(function(){
+const DU_BODY =
+  '<ellipse cx="110" cy="54" rx="23" ry="26" fill="#f0c090"/>' +
+  '<rect x="103" y="76" width="14" height="14" fill="#f0c090"/>' +
+  '<path d="M90,92 Q110,84 130,92 L134,152 Q134,160 126,160 L94,160 Q86,160 86,152 Z" fill="#f0c090"/>' +
+  '<line x1="90" y1="96" x2="74" y2="168" stroke="#f0c090" stroke-width="12" stroke-linecap="round"/>' +
+  '<line x1="130" y1="96" x2="146" y2="168" stroke="#f0c090" stroke-width="12" stroke-linecap="round"/>' +
+  '<circle cx="74" cy="170" r="7" fill="#f0c090"/><circle cx="146" cy="170" r="7" fill="#f0c090"/>' +
+  '<line x1="100" y1="160" x2="97" y2="298" stroke="#f0c090" stroke-width="15" stroke-linecap="round"/>' +
+  '<line x1="120" y1="160" x2="123" y2="298" stroke="#f0c090" stroke-width="15" stroke-linecap="round"/>';
+const DU_FACE =
+  '<circle cx="101" cy="52" r="2.6" fill="#3a2a22"/><circle cx="119" cy="52" r="2.6" fill="#3a2a22"/>' +
+  '<path d="M96,45 Q101,42 106,45" stroke="#3a2a22" fill="none" stroke-width="1.6" stroke-linecap="round"/>' +
+  '<path d="M114,45 Q119,42 124,45" stroke="#3a2a22" fill="none" stroke-width="1.6" stroke-linecap="round"/>' +
+  '<path d="M104,64 Q110,69 116,64" stroke="#c2447a" fill="none" stroke-width="2.2" stroke-linecap="round"/>' +
+  '<circle cx="94" cy="60" r="3.4" fill="#ff5d9e" opacity=".25"/><circle cx="126" cy="60" r="3.4" fill="#ff5d9e" opacity=".25"/>';
+function fringe(c){
+  return '<path d="M87,54 C88,32 132,32 133,54 C126,42 120,50 110,44 C100,50 94,42 87,54 Z" fill="'+c+'"/>';
+}
+const DU = {
+  hair: [
+    {n:{ar:'شعر طويل',en:'Long hair',fr:'Cheveux longs',de:'Lange Haare',zh:'长发'}, back:function(c){ return '<path d="M110,26 C82,26 76,52 78,84 C80,112 72,146 76,182 L144,182 C148,146 140,112 142,84 C144,52 138,26 110,26 Z" fill="'+c+'"/>'; }, front:fringe},
+    {n:{ar:'ذيل حصان',en:'Ponytail',fr:'Queue de cheval',de:'Pferdeschwanz',zh:'马尾'}, back:function(c){ return '<path d="M110,26 C86,26 78,48 80,76 C82,96 78,116 82,132 L138,132 C142,116 138,96 140,76 C142,48 134,26 110,26 Z" fill="'+c+'"/><path d="M138,58 C160,68 164,112 152,146 C166,124 170,76 148,52 Z" fill="'+c+'"/>'; }, front:fringe},
+    {n:{ar:'كعكة',en:'Bun',fr:'Chignon',de:'Dutt',zh:'发髻'}, back:function(c){ return '<path d="M110,26 C86,26 78,48 80,74 C82,94 80,104 84,110 L136,110 C140,104 138,94 140,74 C142,48 134,26 110,26 Z" fill="'+c+'"/><circle cx="110" cy="20" r="14" fill="'+c+'"/>'; }, front:fringe},
+    {n:{ar:'قصير',en:'Bob cut',fr:'Carré',de:'Bob',zh:'短发'}, back:function(c){ return '<path d="M110,26 C84,26 76,50 78,76 C80,96 78,104 82,110 L138,110 C142,104 140,96 142,76 C144,50 136,26 110,26 Z" fill="'+c+'"/>'; }, front:fringe}
+  ],
+  top: [
+    {n:{ar:'تيشيرت',en:'T-shirt',fr:'T-shirt',de:'T-Shirt',zh:'T恤'}, ico:'👕', svg:function(c){ return '<path d="M90,92 L72,102 L78,122 L88,116 L86,152 Q86,160 94,160 L126,160 Q134,160 134,152 L132,116 L142,122 L148,102 L130,92 Q110,86 90,92 Z" fill="'+c+'"/><path d="M100,90 Q110,96 120,90 L118,96 Q110,101 102,96 Z" fill="#ffffff" opacity=".85"/>'; }},
+    {n:{ar:'بلوزة',en:'Blouse',fr:'Chemisier',de:'Bluse',zh:'女衬衫'}, ico:'👚', svg:function(c){ return '<path d="M90,92 Q110,86 130,92 L134,152 Q134,160 126,160 L94,160 Q86,160 86,152 Z" fill="'+c+'"/><path d="M104,88 L110,98 L116,88 L110,92 Z" fill="#ffffff"/><circle cx="110" cy="110" r="2" fill="#ffffff"/><circle cx="110" cy="124" r="2" fill="#ffffff"/><circle cx="110" cy="138" r="2" fill="#ffffff"/>'; }},
+    {n:{ar:'كروب توب',en:'Crop top',fr:'Crop top',de:'Crop-Top',zh:'露脐上衣'}, ico:'🎽', svg:function(c){ return '<path d="M88,92 L74,104 L80,120 L88,116 L87,132 L133,132 L132,116 L140,120 L146,104 L132,92 Q110,86 88,92 Z" fill="'+c+'"/>'; }},
+    {n:{ar:'هودي',en:'Hoodie',fr:'Sweat à capuche',de:'Hoodie',zh:'连帽衫'}, ico:'🧥', svg:function(c){ return '<path d="M88,92 L72,104 L78,124 L87,118 L85,152 Q85,162 94,162 L126,162 Q135,162 135,152 L133,118 L142,124 L148,104 L132,92 Q110,84 88,92 Z" fill="'+c+'"/><path d="M96,90 Q110,80 124,90 Q118,98 110,98 Q102,98 96,90 Z" fill="'+c+'" stroke="#00000033" stroke-width="1.5"/><rect x="98" y="136" width="24" height="16" rx="6" fill="#00000022"/>'; }}
+  ],
+  bottom: [
+    {n:{ar:'جيبة',en:'Skirt',fr:'Jupe',de:'Rock',zh:'短裙'}, ico:'👗', svg:function(c){ return '<path d="M86,152 L134,152 L152,226 Q110,238 68,226 Z" fill="'+c+'"/><path d="M98,160 L96,222 M110,160 L110,226 M122,160 L124,222" stroke="#00000022" stroke-width="2"/>'; }},
+    {n:{ar:'بنطلون',en:'Pants',fr:'Pantalon',de:'Hose',zh:'裤子'}, ico:'👖', svg:function(c){ return '<path d="M88,152 L132,152 L130,296 L114,296 L112,192 L108,192 L106,296 L90,296 Z" fill="'+c+'"/>'; }},
+    {n:{ar:'شورت',en:'Shorts',fr:'Short',de:'Shorts',zh:'短裤'}, ico:'🩳', svg:function(c){ return '<path d="M88,152 L132,152 L130,198 L112,198 L110,180 L108,180 L106,198 L90,198 Z" fill="'+c+'"/>'; }},
+    {n:{ar:'جيبة طويلة',en:'Maxi skirt',fr:'Jupe longue',de:'Maxirock',zh:'长裙'}, ico:'💃', svg:function(c){ return '<path d="M86,152 L134,152 L146,292 Q110,302 74,292 Z" fill="'+c+'"/><path d="M98,160 L92,288 M110,160 L110,292 M122,160 L128,288" stroke="#00000022" stroke-width="2"/>'; }}
+  ],
+  dress: [
+    {n:{ar:'فستان كاجوال',en:'Casual dress',fr:'Robe casual',de:'Kleid',zh:'连衣裙'}, ico:'👗', svg:function(c){ return '<path d="M90,92 L74,104 L80,120 L88,116 L84,150 L74,238 Q110,252 146,238 L136,150 L132,116 L140,120 L146,104 L130,92 Q110,86 90,92 Z" fill="'+c+'"/><rect x="88" y="146" width="44" height="8" rx="4" fill="#d4af37"/>'; }},
+    {n:{ar:'فستان سواريه',en:'Gown',fr:'Robe de soirée',de:'Abendkleid',zh:'晚礼服'}, ico:'✨', svg:function(c){ return '<path d="M92,92 Q110,86 128,92 L132,150 L148,296 Q110,310 72,296 L88,150 Z" fill="'+c+'"/><path d="M100,180 l3,7 7,1 -5,5 1,7 -6,-3 -6,3 1,-7 -5,-5 7,-1 Z" fill="#ffe9a3"/><path d="M122,220 l2.4,5.5 5.5,0.8 -4,4 0.8,5.5 -4.7,-2.4 -4.7,2.4 0.8,-5.5 -4,-4 5.5,-0.8 Z" fill="#ffe9a3"/><path d="M104,256 l2,4.5 4.5,0.7 -3.3,3.2 0.7,4.5 -3.9,-2 -3.9,2 0.7,-4.5 -3.3,-3.2 4.5,-0.7 Z" fill="#ffe9a3"/><path d="M92,92 Q110,86 128,92 L126,104 Q110,98 94,104 Z" fill="#ffffff" opacity=".3"/>'; }},
+    {n:{ar:'فستان صيفي',en:'Sundress',fr:'Robe d\u2019été',de:'Sommerkleid',zh:'夏装裙'}, ico:'🌸', svg:function(c){ return '<path d="M96,92 L124,92 L134,150 L146,236 Q110,250 74,236 L86,150 Z" fill="'+c+'"/><line x1="98" y1="92" x2="98" y2="84" stroke="'+c+'" stroke-width="4"/><line x1="122" y1="92" x2="122" y2="84" stroke="'+c+'" stroke-width="4"/><circle cx="100" cy="190" r="4" fill="#ffffff66"/><circle cx="122" cy="205" r="4" fill="#ffffff66"/><circle cx="106" cy="222" r="4" fill="#ffffff66"/>'; }}
+  ],
+  shoes: [
+    {n:{ar:'كوتشي',en:'Sneakers',fr:'Baskets',de:'Sneaker',zh:'运动鞋'}, ico:'👟', svg:function(c){ return '<rect x="84" y="290" width="28" height="16" rx="8" fill="'+c+'"/><rect x="84" y="300" width="28" height="8" rx="4" fill="#ffffff"/><rect x="108" y="290" width="28" height="16" rx="8" fill="'+c+'"/><rect x="108" y="300" width="28" height="8" rx="4" fill="#ffffff"/>'; }},
+    {n:{ar:'كعب عالي',en:'Heels',fr:'Talons',de:'Absatz',zh:'高跟鞋'}, ico:'👠', svg:function(c){ return '<path d="M86,292 L110,292 L110,304 L100,304 L98,314 L93,314 L94,304 L86,304 Z" fill="'+c+'"/><path d="M110,292 L134,292 L134,304 L124,304 L122,314 L117,314 L118,304 L110,304 Z" fill="'+c+'"/>'; }},
+    {n:{ar:'بوت',en:'Boots',fr:'Bottes',de:'Stiefel',zh:'靴子'}, ico:'🥾', svg:function(c){ return '<rect x="86" y="260" width="26" height="46" rx="8" fill="'+c+'"/><rect x="108" y="260" width="26" height="46" rx="8" fill="'+c+'"/><rect x="86" y="260" width="26" height="10" rx="5" fill="#00000033"/><rect x="108" y="260" width="26" height="10" rx="5" fill="#00000033"/>'; }}
+  ],
+  bag: [
+    {n:{ar:'شنطة يد',en:'Handbag',fr:'Sac à main',de:'Handtasche',zh:'手提包'}, ico:'👜', svg:function(c){ return '<rect x="132" y="168" width="34" height="26" rx="8" fill="'+c+'"/><path d="M140,170 Q149,152 158,170" stroke="'+c+'" fill="none" stroke-width="4"/><rect x="145" y="178" width="8" height="6" rx="2" fill="#d4af37"/>'; }},
+    {n:{ar:'شنطة ظهر',en:'Backpack',fr:'Sac à dos',de:'Rucksack',zh:'背包'}, ico:'🎒', svg:function(c){ return '<rect x="52" y="104" width="32" height="44" rx="10" fill="'+c+'"/><rect x="60" y="122" width="16" height="14" rx="5" fill="#00000022"/>'; }},
+    {n:{ar:'كلاتش',en:'Clutch',fr:'Pochette',de:'Clutch',zh:'手拿包'}, ico:'👛', svg:function(c){ return '<rect x="56" y="168" width="30" height="16" rx="7" fill="'+c+'"/><circle cx="71" cy="176" r="3" fill="#d4af37"/>'; }}
+  ],
+  acc: [
+    {n:{ar:'نضارة',en:'Glasses',fr:'Lunettes',de:'Brille',zh:'眼镜'}, ico:'👓', svg:function(c){ return '<circle cx="100" cy="52" r="8.5" fill="none" stroke="'+c+'" stroke-width="2.6"/><circle cx="120" cy="52" r="8.5" fill="none" stroke="'+c+'" stroke-width="2.6"/><line x1="108.5" y1="52" x2="111.5" y2="52" stroke="'+c+'" stroke-width="2.6"/>'; }},
+    {n:{ar:'فيونكة',en:'Bow',fr:'Nœud',de:'Schleife',zh:'蝴蝶结'}, ico:'🎀', svg:function(c){ return '<polygon points="132,26 146,18 146,34" fill="'+c+'"/><polygon points="132,26 118,18 118,34" fill="'+c+'"/><circle cx="132" cy="26" r="4.5" fill="'+c+'"/>'; }},
+    {n:{ar:'كاب',en:'Cap',fr:'Casquette',de:'Kappe',zh:'帽子'}, ico:'🧢', svg:function(c){ return '<path d="M86,42 Q110,14 134,42 Z" fill="'+c+'"/><ellipse cx="110" cy="42" rx="34" ry="6" fill="'+c+'"/>'; }}
+  ]
+};
+const DU_CATS = [
+  {id:'hair', ico:'💇‍♀️', ar:'الشعر'}, {id:'top', ico:'👚', ar:'التوب'}, {id:'bottom', ico:'👖', ar:'البنطلون'},
+  {id:'dress', ico:'👗', ar:'الفستان'}, {id:'shoes', ico:'👟', ar:'الجزمة'}, {id:'bag', ico:'👜', ar:'الشنطة'}, {id:'acc', ico:'🎀', ar:'إكسسوار'}
+];
+const DU_COLORS = ['#e85d9e','#d4af37','#22b8cf','#34d399','#9d7bff','#ff7a3d','#e11d48','#ffffff','#3b2a20','#111111','#8b5a2b','#f5e0c8'];
+const DU_HAIRCOLORS = ['#3b2a20','#8b5a2b','#d9a066','#f5e0c8','#e11d48','#111111','#9d7bff','#e85d9e'];
+let duLook = {hair:0, hairC:'#3b2a20', top:0, topC:'#e85d9e', bottom:0, bottomC:'#1e2a5a', dress:-1, dressC:'#d4af37', shoes:0, shoesC:'#ffffff', bag:-1, bagC:'#8b5a2b', acc:-1, accC:'#e11d48'};
+let duCat = 'top', duLang = 'en';
+const duTried = new Set();
+try {
+  const sv = JSON.parse(localStorage.getItem('lingua_dress_saved') || 'null');
+  if(sv && typeof sv === 'object') duLook = Object.assign(duLook, sv);
+} catch(e){}
+function duItemName(cat, i){ return DU[cat][i].n[duLang] || DU[cat][i].n.en; }
+window.duDollSvg = function(look, maxw){
+  let x = '<svg viewBox="0 0 220 330" style="width:100%;max-width:'+(maxw||290)+'px;display:block;margin:0 auto">';
+  x += DU.hair[look.hair].back(look.hairC);
+  x += DU_BODY;
+  x += DU.shoes[look.shoes].svg(look.shoesC);
+  if(look.dress >= 0){ x += DU.dress[look.dress].svg(look.dressC); }
+  else { x += DU.bottom[look.bottom].svg(look.bottomC); x += DU.top[look.top].svg(look.topC); }
+  if(look.bag >= 0) x += DU.bag[look.bag].svg(look.bagC);
+  x += DU_FACE;
+  x += DU.hair[look.hair].front(look.hairC);
+  if(look.acc >= 0) x += DU.acc[look.acc].svg(look.accC);
+  x += '</svg>';
+  return x;
+};
+function duRender(){
+  document.getElementById('duDoll').innerHTML = window.duDollSvg(duLook, 290);
+}
+function duRenderCats(){
+  document.getElementById('duCats').innerHTML = DU_CATS.map(function(c){
+    return '<button class="du-cat'+(c.id===duCat?' active':'')+'" data-cat="'+c.id+'" title="'+c.ar+'">'+c.ico+'</button>';
+  }).join('');
+  document.querySelectorAll('#duCats .du-cat').forEach(function(b){
+    b.addEventListener('click', function(){ duCat = b.dataset.cat; duRenderCats(); duRenderItems(); duRenderColors(); });
+  });
+}
+function duRenderItems(){
+  const items = DU[duCat];
+  const curKey = duCat;
+  document.getElementById('duItems').innerHTML =
+    '<button class="du-item'+(duLook[curKey] < 0 ? ' active':'')+'" data-i="-1"><span class="di-ico">🚫</span><span class="di-n">من غير</span></button>' +
+    items.map(function(it, i){
+      return '<button class="du-item'+(duLook[curKey]===i?' active':'')+'" data-i="'+i+'"><span class="di-ico">'+(it.ico||'✨')+'</span><span class="di-n">'+it.n.ar+'</span></button>';
+    }).join('');
+  document.querySelectorAll('#duItems .du-item').forEach(function(b){
+    b.addEventListener('click', function(){
+      const i = parseInt(b.dataset.i, 10);
+      if(duCat === 'dress' && i >= 0){ duLook.dress = i; }
+      else {
+        duLook[duCat] = i;
+        if((duCat === 'top' || duCat === 'bottom') && i >= 0) duLook.dress = -1;
+      }
+      const key = duCat + ':' + i;
+      if(i >= 0 && !duTried.has(key)){ duTried.add(key); awardPoints(3, 'قطعة جديدة 👗'); }
+      sndGood();
+      duRenderItems(); duRender();
+    });
+  });
+}
+function duRenderColors(){
+  const cols = duCat === 'hair' ? DU_HAIRCOLORS : DU_COLORS;
+  document.getElementById('duColors').innerHTML = cols.map(function(c){
+    return '<button class="du-col" data-c="'+c+'" style="background:'+c+'" title="'+c+'"></button>';
+  }).join('');
+  document.querySelectorAll('#duColors .du-col').forEach(function(b){
+    b.addEventListener('click', function(){
+      duLook[duCat === 'hair' ? 'hairC' : duCat + 'C'] = b.dataset.c;
+      sndGood();
+      duRender();
+    });
+  });
+}
+document.getElementById('duRandom').addEventListener('click', function(){
+  const r = function(n){ return Math.floor(Math.random()*n); };
+  const rc = function(a){ return a[r(a.length)]; };
+  duLook.hair = r(DU.hair.length); duLook.hairC = rc(DU_HAIRCOLORS);
+  duLook.shoes = r(DU.shoes.length); duLook.shoesC = rc(DU_COLORS);
+  if(Math.random() < 0.5){ duLook.dress = r(DU.dress.length); duLook.dressC = rc(DU_COLORS); }
+  else { duLook.dress = -1; duLook.top = r(DU.top.length); duLook.topC = rc(DU_COLORS); duLook.bottom = r(DU.bottom.length); duLook.bottomC = rc(DU_COLORS); }
+  duLook.bag = Math.random() < 0.6 ? r(DU.bag.length) : -1; duLook.bagC = rc(DU_COLORS);
+  duLook.acc = Math.random() < 0.5 ? r(DU.acc.length) : -1; duLook.accC = rc(DU_COLORS);
+  duRenderItems(); duRender(); confetti(); sndGood();
+});
+document.getElementById('duSave').addEventListener('click', function(){
+  try { localStorage.setItem('lingua_dress_saved', JSON.stringify(duLook)); } catch(e){}
+  awardPoints(25, 'لوك محفوظ 💾');
+  confetti();
+  toast('اللوك اتحفظ! هرجعلك ياه تاني ما تفتحي الستوديو 💾✨');
+});
+document.getElementById('duSpeak').addEventListener('click', function(){
+  const i = duLook[duCat];
+  if(i < 0){ toast('اختاري قطعة الأول 👗'); return; }
+  speakText(duItemName(duCat, i), duLang);
+});
+document.querySelectorAll('#dressLangTabs .tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('#dressLangTabs .tab').forEach(function(x){ x.classList.remove('active'); });
+    t.classList.add('active');
+    duLang = t.dataset.lang;
+  });
+});
+duRenderCats(); duRenderItems(); duRenderColors(); duRender();
+})();
+
+/* ================= v7: illustrated scenes for fun games ================= */
+const FUN_SCENES = {
+  cook: {
+    bg: '<rect width="400" height="230" rx="18" fill="#241428"/>' +
+      '<rect x="18" y="26" width="66" height="48" rx="8" fill="#5a3a4a"/><rect x="96" y="26" width="66" height="48" rx="8" fill="#5a3a4a"/>' +
+      '<rect x="286" y="24" width="88" height="64" rx="8" fill="#0e2238" stroke="#6b4a5a" stroke-width="4"/><circle cx="346" cy="42" r="8" fill="#ffe9a3" opacity=".9"/>' +
+      '<rect y="150" width="400" height="80" fill="#4a2c3a"/><rect y="146" width="400" height="8" fill="#6b4a5a"/>' +
+      '<rect x="150" y="118" width="100" height="52" rx="12" fill="#8a8f98"/><rect x="142" y="112" width="116" height="10" rx="5" fill="#aab0ba"/>' +
+      '<circle cx="140" cy="144" r="6" fill="#aab0ba"/><circle cx="260" cy="144" r="6" fill="#aab0ba"/>' +
+      '<path d="M185,104 q4,-10 0,-18 M205,104 q-4,-10 0,-18 M225,104 q4,-10 0,-18" stroke="#ffffff" stroke-width="3" fill="none" opacity=".35"/>',
+    slots: [[168,150],[196,150],[224,150],[252,150],[168,166],[196,166],[224,166],[252,166]]
+  },
+  house: {
+    bg: '<rect width="400" height="230" rx="18" fill="#2c2140"/>' +
+      '<rect y="150" width="400" height="80" fill="#54403a"/>' +
+      '<rect x="30" y="30" width="90" height="80" rx="8" fill="#0e2238" stroke="#7a5a4a" stroke-width="5"/><line x1="75" y1="30" x2="75" y2="110" stroke="#7a5a4a" stroke-width="4"/><line x1="30" y1="70" x2="120" y2="70" stroke="#7a5a4a" stroke-width="4"/>' +
+      '<rect x="24" y="22" width="102" height="10" rx="5" fill="#8b5a6b"/><rect x="24" y="22" width="14" height="96" rx="6" fill="#8b5a6b"/><rect x="112" y="22" width="14" height="96" rx="6" fill="#8b5a6b"/>' +
+      '<circle cx="330" cy="50" r="16" fill="#ffe9a3" opacity=".85"/><rect x="328" y="66" width="4" height="24" fill="#8a8f98"/>',
+    slots: [[80,195],[160,195],[240,195],[320,195],[80,220],[160,220],[240,220],[320,220]]
+  },
+  football: {
+    bg: '<rect width="400" height="230" rx="18" fill="#17703a"/>' +
+      '<rect x="0" y="20" width="400" height="38" fill="#1c8044"/><rect x="0" y="96" width="400" height="38" fill="#1c8044"/><rect x="0" y="172" width="400" height="38" fill="#1c8044"/>' +
+      '<line x1="200" y1="0" x2="200" y2="230" stroke="#ffffff" stroke-width="3" opacity=".8"/><circle cx="200" cy="115" r="34" fill="none" stroke="#ffffff" stroke-width="3" opacity=".8"/>' +
+      '<rect x="150" y="6" width="100" height="36" fill="none" stroke="#ffffff" stroke-width="4"/>' +
+      '<text x="200" y="34" font-size="24" text-anchor="middle">🧤</text>',
+    slots: [[50,210],[95,210],[140,210],[185,210],[230,210],[275,210],[320,210],[362,210]]
+  }
+};
+function funStageDraw(){
+  const sc = FUN_SCENES[funGame] || FUN_SCENES.cook;
+  let x = '<svg viewBox="0 0 400 230" style="width:100%;display:block">' + sc.bg;
+  funGot.forEach(function(e, i){
+    const sl = sc.slots[i];
+    if(sl) x += '<text x="'+sl[0]+'" y="'+sl[1]+'" font-size="26" text-anchor="middle">'+e+'</text>';
+  });
+  x += '</svg>';
+  document.getElementById('funStage').innerHTML = x;
+}
+
+/* ================= v7: visual outfit combos ================= */
+function duShift(c, dh, dl){
+  let r=c.r/255, g=c.g/255, b=c.b/255;
+  const mx=Math.max(r,g,b), mn=Math.min(r,g,b); let h=0;
+  const d=mx-mn, l=(mx+mn)/2;
+  if(d>0){
+    if(mx===r) h=((g-b)/d)%6; else if(mx===g) h=(b-r)/d+2; else h=(r-g)/d+4;
+    h*=60; if(h<0) h+=360;
+  }
+  const s = d===0 ? 0 : d/(1-Math.abs(2*l-1));
+  h = (h+dh+360)%360;
+  const l2 = Math.min(0.9, Math.max(0.12, l+(dl||0)));
+  const c2 = (1-Math.abs(2*l2-1))*s, x2 = c2*(1-Math.abs(((h/60)%2)-1)), m = l2-c2/2;
+  let rr=0, gg=0, bb=0;
+  if(h<60){rr=c2;gg=x2;} else if(h<120){rr=x2;gg=c2;} else if(h<180){gg=c2;bb=x2;}
+  else if(h<240){gg=x2;bb=c2;} else if(h<300){rr=x2;bb=c2;} else {rr=c2;bb=x2;}
+  return 'rgb('+Math.round((rr+m)*255)+','+Math.round((gg+m)*255)+','+Math.round((bb+m)*255)+')';
+}
+function outfitCombos(cols){
+  if(!window.duDollSvg || !cols || !cols.length) return '';
+  const main = cols[0], mainRgb = 'rgb('+main.r+','+main.g+','+main.b+')';
+  const light = (main.r+main.g+main.b)/3 > 140;
+  const neutral = light ? '#1e2a5a' : '#f5f0e6';
+  const accent = duShift(main, 150, 0.05);
+  const look1 = {hair:1, hairC:'#3b2a20', top:0, topC:mainRgb, bottom:1, bottomC:neutral, dress:-1, shoes:0, shoesC:accent, bag:-1, bagC:'#8b5a2b', acc:-1, accC:'#e11d48'};
+  const look2 = {hair:0, hairC:'#8b5a2b', top:0, topC:'#fff', bottom:0, bottomC:'#000', dress:0, dressC:mainRgb, shoes:1, shoesC:neutral, bag:0, bagC:accent, acc:-1, accC:'#e11d48'};
+  return '<div style="text-align:center;font-weight:900;margin-top:16px">👗 لوكات مقترحة بنفس ألوانك:</div>' +
+    '<div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:10px">' +
+    '<div style="background:var(--card2);border:1px solid rgba(var(--goldA),.3);border-radius:20px;padding:12px;width:170px">' + window.duDollSvg(look1, 150) + '<div style="text-align:center;font-size:.8rem;font-weight:800;margin-top:6px">لوك كاجوال 👕</div></div>' +
+    '<div style="background:var(--card2);border:1px solid rgba(var(--goldA),.3);border-radius:20px;padding:12px;width:170px">' + window.duDollSvg(look2, 150) + '<div style="text-align:center;font-size:.8rem;font-weight:800;margin-top:6px">لوك فستان 👗</div></div>' +
+    '</div>';
+}
+
+/* ================= v7: quran audio + whatsapp invite ================= */
+(function(){
+  const Q = document.getElementById('deenQuran');
+  if(!Q) return;
+  Q.querySelectorAll('.surah-card, .dua-card').forEach(function(card, i){
+    const QN = [1,112,113,114,108,103];
+    const n = QN[i] || 1;
+    const a = document.createElement('audio');
+    a.controls = true; a.preload = 'none';
+    a.style.cssText = 'width:100%;margin-top:10px;height:36px';
+    a.src = 'https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/' + ('00' + n).slice(-3) + '.mp3';
+    card.appendChild(a);
+  });
+})();
+(function(){
+  const btn = document.getElementById('friendAdd');
+  if(!btn) return;
+  const w = document.createElement('button');
+  w.className = 'btn';
+  w.style.cssText = 'background:linear-gradient(120deg,#25D366,#128C7E);color:#fff;margin-inline-start:10px';
+  w.textContent = '💌 دعوة واتساب';
+  w.addEventListener('click', function(){
+    const msg = 'تعالي العبي واتعلمي معايا على Lingua 🌍✨ ألعاب ودروس ونقاط وهدايا — ادخلي من هنا: https://lingua-karma.github.io';
+    window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+  });
+  btn.parentNode.appendChild(w);
+})();
+(function(){
+  const st = document.getElementById('funStudioBtn');
+  if(st) st.addEventListener('click', function(){ location.hash = 'dressup'; });
+})();
+
+
+/* ================= v7b: direct-audio music player ================= */
+const MUSIC = {
+  ar: [
+    {t:'Tamly Maak', a:'عمرو دياب — Amr Diab', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5e/df/09/5edf0981-ce52-4740-f0b2-f6ad0760afcb/mzaf_17144740537777531434.plus.aac.p.m4a'},
+    {t:'Noor Al Ain', a:'عمرو دياب — Amr Diab', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ae/19/51/ae1951e7-fb94-f734-d68f-8a5955c8c6d9/mzaf_14930287996363580653.plus.aac.p.m4a'},
+    {t:'Qusad Einy', a:'عمرو دياب — Amr Diab', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fc/5e/58/fc5e5864-62e5-caac-5c58-42a8ec1ad5a6/mzaf_2189674438371045214.plus.aac.p.m4a'},
+    {t:'Ya Bent El Eh', a:'تامر حسني — Tamer Hosny', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/bb/a9/4b/bba94bd9-020a-8eb9-c67e-1930dce68986/mzaf_11579290530808350749.plus.aac.p.m4a'},
+    {t:'Ana Wala 3aref', a:'تامر حسني — Tamer Hosny', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2f/3b/76/2f3b7652-e838-313e-6060-10c54b88792b/mzaf_3866792037020058066.plus.aac.p.m4a'},
+    {t:'Omry Ebtada', a:'تامر حسني — Tamer Hosny', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b6/42/e6/b642e662-623d-8506-946a-5c09ff299128/mzaf_839726446197364456.plus.aac.p.m4a'},
+    {t:'Inta Eyh', a:'نانسي عجرم — Nancy Ajram', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3c/c3/fd/3cc3fdbb-5dd2-19d4-517a-d427315872d5/mzaf_15059795685168259069.plus.aac.p.m4a'},
+    {t:'Badna Nwalee El Jaw', a:'نانسي عجرم — Nancy Ajram', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/fb/cc/18/fbcc1862-f862-cece-b3f4-210018770a93/mzaf_2451396044207308743.plus.aac.p.m4a'},
+    {t:'Sah Sah', a:'نانسي عجرم ومارشميلو — Nancy Ajram & Marshmello', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/86/14/67/86146728-11b4-31f4-c933-3cf023fcf8be/mzaf_16855856943488765109.plus.aac.p.m4a'},
+    {t:'Wahdon', a:'فيروز — Fairouz', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/8b/e5/02/8be502ea-7294-b1cf-df37-b2c65f64566e/mzaf_13229560357091027869.plus.aac.p.m4a'},
+    {t:'Konna Netlaka', a:'فيروز — Fairouz', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/bc/bc/6f/bcbc6f55-6554-5da8-d4cb-d22805e81533/mzaf_5046128595056838713.plus.aac.p.m4a'}
+  ],
+  en: [
+    {t:'Someone Like You', a:'أديل — Adele', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/08/22/2e/08222e25-43f5-20e6-a442-b8127ac83368/mzaf_1689070223363740216.plus.aac.p.m4a'},
+    {t:'Set Fire to the Rain', a:'أديل — Adele', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/96/8b/3f/968b3f92-f082-c8c2-47ba-ab7add22dfdc/mzaf_7388168289354543091.plus.aac.p.m4a'},
+    {t:'Perfect', a:'إد شيران — Ed Sheeran', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c7/ba/bc/c7babc66-f598-aaa6-bcf6-307281795817/mzaf_16337361235117168274.plus.aac.p.m4a'},
+    {t:'Thinking Out Loud', a:'إد شيران — Ed Sheeran', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/78/a5/f2/78a5f25e-ad1b-718d-82ad-b82e676c1855/mzaf_6133970271589343093.plus.aac.p.m4a'},
+    {t:'Yellow', a:'كولدبلاي — Coldplay', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/66/f3/1a/66f31a76-a6ed-cb4c-f353-23310a7ae9a8/mzaf_10593596652344378873.plus.aac.p.m4a'},
+    {t:'Viva La Vida', a:'كولدبلاي — Coldplay', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a3/30/8e/a3308eed-d8b7-e0b3-f09d-5e1b0f4d660a/mzaf_8517946447501075134.plus.aac.p.m4a'},
+    {t:'Love Story (Taylor’s Version)', a:'تايلور سويفت — Taylor Swift', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/8b/4c/b3/8b4cb3a5-b1d1-c82c-e6ab-48cc3969d4ff/mzaf_858711921713575608.plus.aac.p.m4a'},
+    {t:'Love Story', a:'تايلور سويفت — Taylor Swift', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/44/8a/a4/448aa432-42ae-8075-fe00-5f2deffe9896/mzaf_13232029737890307916.plus.aac.p.m4a'},
+    {t:'WILDFLOWER', a:'بيلي آيلش — Billie Eilish', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/de/c3/e8/dec3e884-7237-9622-718a-12c5f48c5ca2/mzaf_3134455671785145822.plus.aac.p.m4a'},
+    {t:'ocean eyes', a:'بيلي آيلش — Billie Eilish', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d6/59/2b/d6592b0b-1e7e-4743-b2e4-f2af038fd783/mzaf_7697277787797935735.plus.aac.p.m4a'}
+  ],
+  zh: [
+    {t:'屋頂', a:'لاندي وين وجاي تشو — Landy Wen & Jay Chou', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ed/9b/f9/ed9bf9bd-7475-bc6c-6be0-e02531097bd1/mzaf_4950304544004788100.plus.aac.p.m4a'},
+    {t:'Only One', a:'جيم — G.E.M.', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/80/c2/89/80c289dd-9bf6-3694-04f5-f68471a01cad/mzaf_3663263374343293987.plus.aac.p.m4a'},
+    {t:'Light Years Away (Theme from Movie "Passengers")', a:'جيم — G.E.M.', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/97/4f/e7/974fe739-8319-f45d-a4fa-34d77b1bec25/mzaf_2902864200094899486.plus.aac.p.m4a'},
+    {t:'江南', a:'جي جي لين — JJ Lin', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/0d/0a/1f/0d0a1f64-1faa-01a3-6b82-3f71c7f1ad53/mzaf_6171234305789252058.plus.aac.p.m4a'},
+    {t:'她說', a:'جي جي لين — JJ Lin', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/5a/d9/b5/5ad9b59a-d760-afb6-71d4-6e9614dbd18b/mzaf_2961581987529700790.plus.aac.p.m4a'},
+    {t:'Qing Hua', a:'Steve Chou', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4f/5d/57/4f5d5792-b6c0-c3b9-25ce-c64a00d2204f/mzaf_8970370017745441566.plus.aac.p.m4a'},
+    {t:'屋頂', a:'لاندي وين وجاي تشو — Landy Wen & Jay Chou', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ed/9b/f9/ed9bf9bd-7475-bc6c-6be0-e02531097bd1/mzaf_4950304544004788100.plus.aac.p.m4a'}
+  ],
+  de: [
+    {t:'WAS HAST DU MIT MIR GEMACHT', a:'هيلين فيشر — Helene Fischer', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/10/d8/a6/10d8a673-2caa-5f04-174b-763883ce7a97/mzaf_2650793103827232347.plus.aac.p.m4a'},
+    {t:'Du hast', a:'رامشتاين — Rammstein', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/5a/75/08/5a7508ee-f167-37aa-3b1a-7c63db8cb450/mzaf_11938743806268466326.plus.aac.p.m4a'},
+    {t:'Sonne', a:'رامشتاين — Rammstein', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/58/89/be/5889beee-3248-8e1f-bb77-98fb0dd7998b/mzaf_18321568262675482928.plus.aac.p.m4a'},
+    {t:'194 Länder', a:'مارك فورستر — Mark Forster', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/0e/51/c9/0e51c9e5-ef40-b9c7-9c00-71f0950225cd/mzaf_3181097715465972151.plus.aac.p.m4a'},
+    {t:'Wir Sind Groß', a:'مارك فورستر — Mark Forster', u:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/2c/7f/87/2c7f8782-dac5-64e7-d2c1-b2978da37d7b/mzaf_11501689619099005064.plus.aac.p.m4a'}
+  ]
+};
+let musicLang = 'ar';
+const musicAudio = new Audio();
+let musicKey = '';
+function renderMusic(){
+  document.getElementById('musicList').innerHTML = MUSIC[musicLang].map(function(v, i){
+    return '<div class="music-row" data-mi="' + i + '"><button class="m-play">▶</button><div class="m-info"><div class="m-t">' + v.t + '</div><div class="m-a">' + v.a + '</div></div><div class="m-eq"><span></span><span></span><span></span></div></div>';
+  }).join('');
+}
+function musicStopAll(){
+  document.querySelectorAll('.music-row.playing').forEach(function(r){
+    r.classList.remove('playing');
+    r.querySelector('.m-play').textContent = '▶';
+  });
+}
+musicAudio.addEventListener('ended', function(){ musicStopAll(); musicKey = ''; });
+document.querySelectorAll('#musicTabs .tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('#musicTabs .tab').forEach(function(x){ x.classList.remove('active'); });
+    t.classList.add('active');
+    musicLang = t.dataset.music;
+    musicAudio.pause(); musicStopAll(); musicKey = '';
+    renderMusic();
+  });
+});
+document.getElementById('musicList').addEventListener('click', function(e){
+  const row = e.target.closest('.music-row');
+  if(!row) return;
+  const i = +row.dataset.mi;
+  const key = musicLang + ':' + i;
+  if(key === musicKey && !musicAudio.paused){
+    musicAudio.pause();
+    row.classList.remove('playing');
+    row.querySelector('.m-play').textContent = '▶';
+    return;
+  }
+  musicStopAll();
+  musicAudio.src = MUSIC[musicLang][i].u;
+  musicAudio.play().catch(function(){});
+  row.classList.add('playing');
+  row.querySelector('.m-play').textContent = '⏸';
+  musicKey = key;
+});
+renderMusic();
+
+
+/* ================= v7c: scholarships ================= */
+const SCHOLARS = [
+  {f:'🇩🇪', n:'DAAD — ألمانيا', fund:'تمويل كامل', r:'ماجستير ودكتوراه. الشروط: بكالوريوس بجدارة، إثبات لغة (IELTS/TOEFL أو ألماني)، وخطاب دوافع. التقديم أونلاين على موقع DAAD.', u:'https://www.daad.de/en/'},
+  {f:'🇬🇧', n:'Chevening — بريطانيا', fund:'تمويل كامل', r:'ماجستير سنة واحدة في أي جامعة بريطانية. الشروط: بكالوريوس + خبرة عمل سنتين على الأقل + قيادة وطموح. بيفتح التقديم أغسطس من كل سنة.', u:'https://www.chevening.org/'},
+  {f:'🇪🇺', n:'Erasmus Mundus — أوروبا', fund:'تمويل كامل', r:'ماجستير مشترك بتدريس في ٢-٣ دول أوروبية، وبيغطي المصاريف والسكن والطيران. الشروط: بكالوريوس + لغة إنجليزية قوية. اختاري البرنامج من الكتالوج وقدمي عليه مباشرة.', u:'https://erasmus-plus.ec.europa.eu/opportunities/opportunities-for-individuals/students/erasmus-mundus-joint-masters'},
+  {f:'🇯🇵', n:'MEXT — اليابان', fund:'تمويل كامل', r:'بكالوريوس وماجستير ودكتوراه، مع مرتب شهري وتذاكر طيران. التقديم عن طريق السفارة اليابانية في القاهرة، وبيكون فيه امتحان ومقابلة.', u:'https://www.studyinjapan.go.jp/en/planning/scholarships/'},
+  {f:'🇹🇷', n:'Türkiye Bursları — تركيا', fund:'تمويل كامل', r:'كل الدرجات (بكالوريوس/ماجستير/دكتوراه). تمويل كامل + سكن + مرتب + سنة لغة تركية. التقديم أونلاين مجانًا وبيفتح عادة أول السنة.', u:'https://www.turkiyeburslari.gov.tr/'},
+  {f:'🇨🇳', n:'CSC — الصين', fund:'تمويل كامل', r:'منحة الحكومة الصينية لكل الدرجات. تمويل كامل + سكن + مرتب. التقديم على بوابة campuschina ومعاهد كونفوشيوس.', u:'https://www.campuschina.org/'},
+  {f:'🇭🇺', n:'Stipendium Hungaricum — المجر', fund:'تمويل كامل', r:'كل الدرجات، ومصر من الدول المشاركة بعدد كبير من المقاعد. تمويل كامل + سكن + مرتب. التقديم أونلاين وبيفتح نوفمبر من كل سنة.', u:'https://stipendiumhungaricum.hu/'},
+  {f:'🇺🇸', n:'Fulbright — أمريكا (لمصر)', fund:'تمويل كامل', r:'ماجستير ودكتوراه وأبحاث في أمريكا عن طريق الهيئة في القاهرة. الشروط: تفوق أكاديمي ولغة إنجليزية قوية.', u:'https://www.fulbright-egypt.org/'},
+  {f:'🇮🇹', n:'منحة الحكومة الإيطالية — إيطاليا', fund:'تمويل كامل/جزئي', r:'ماجستير ودكتوراه وكورسات لغة. التقديم على بوابة Study in Italy، والشروط بتختلف حسب الجامعة.', u:'https://studyinitaly.esteri.it/'},
+  {f:'🇪🇬', n:'AUC — الجامعة الأمريكية بالقاهرة', fund:'جزئي', r:'منح تفوق واحتياج مالي للبكالوريوس والدراسات العليا داخل مصر. قدمي من بوابة القبول وطلب المنحة.', u:'https://www.aucegypt.edu/admissions/scholarships'}
+];
+document.getElementById('schGrid').innerHTML = SCHOLARS.map(function(x){
+  return '<a class="sch-card" href="' + x.u + '" target="_blank" rel="noopener">' +
+    '<div class="sch-flag">' + x.f + '</div><div class="sch-name">' + x.n + '</div>' +
+    '<span class="sch-fund' + (x.fund.indexOf('جزئي') > -1 ? ' partial' : '') + '">' + x.fund + '</span>' +
+    '<div class="sch-req">' + x.r + '</div><span class="sch-go">الموقع الرسمي ↗</span></a>';
+}).join('');
 
 </script>
 </body>
