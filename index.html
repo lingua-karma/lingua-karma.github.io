@@ -614,6 +614,9 @@
   html[data-theme="royal"] body{--bg:#0a0a1a;--bg2:#161632;--card:rgba(26,26,56,.72);--card2:rgba(34,34,70,.85);--gold:#f7c948;--gold2:#ffe9a3;--goldA:247,201,72}
   html[data-theme="sunset"] body{--bg:#1a0906;--bg2:#2c120a;--card:rgba(52,24,14,.72);--card2:rgba(66,30,18,.85);--gold:#ff7a3d;--gold2:#ffc9a8;--goldA:255,122,61}
   html[data-theme="midnight"] body{--bg:#020617;--bg2:#0a1228;--card:rgba(12,20,44,.72);--card2:rgba(16,26,54,.85);--gold:#60a5fa;--gold2:#bfdbfe;--goldA:96,165,250}
+  html[data-theme="white"] body{--bg:#f7f4ee;--bg2:#efe9df;--card:rgba(255,255,255,.85);--card2:rgba(255,255,255,.95);--gold:#b8912b;--gold2:#8a6d1a;--goldA:184,145,43;--text:#2a2416;--muted:#6f675a}
+  html[data-theme="mint"] body{--bg:#eafaf3;--bg2:#dcf4e8;--card:rgba(255,255,255,.85);--card2:rgba(255,255,255,.95);--gold:#0f9d78;--gold2:#0b6e54;--goldA:15,157,120;--text:#12332a;--muted:#4f6f64}
+  html[data-theme="sky"] body{--bg:#eef6fd;--bg2:#e2eefb;--card:rgba(255,255,255,.85);--card2:rgba(255,255,255,.95);--gold:#2f7fd0;--gold2:#1f5c9e;--goldA:47,127,208;--text:#16283d;--muted:#51677e}
   /* ===== v6: flag-card language tabs ===== */
   .tabs.lang-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:680px;margin:0 auto 34px}
   @media (max-width:620px){.tabs.lang-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -813,7 +816,7 @@
     <a href="#dressup">👗 ستوديو</a>
     <a href="#outfit">👚 تنسيق لبس</a>
     <a href="#eng">⚙️ هندسة</a>
-    <a href="#karma">ركن كرمة 👑</a>
+    <a href="#karma">ركن كارما 👑</a>
     <a href="#settings">🌐 اللغة</a>
     <a href="#videos">الفيديوهات</a>
   </nav>
@@ -1497,6 +1500,35 @@
 </section>
 
 <!-- ===================== DEEN CORNER ===================== -->
+<!-- ===================== MUSHAF ===================== -->
+<section id="mushaf">
+  <h2 class="sec-title">✦ المصحف الشريف ✦</h2>
+  <p class="sec-sub">القرآن الكريم كاملًا — اختاري السورة واقرئي واسمعي 📖</p>
+  <div id="mushafHome">
+    <div class="mushaf-grid" id="mushafGrid"><div class="gbk-empty">بيتم تحميل الفهرس... 📖</div></div>
+  </div>
+  <div id="mushafRead" style="display:none;max-width:760px;margin:0 auto">
+    <div style="display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;margin-bottom:16px">
+      <button class="btn" id="mushafBack">→ رجوع للفهرس</button>
+      <button class="btn" id="mushafAudio" style="background:linear-gradient(120deg,#4ade80,#16a34a);color:#052e12">🔊 استماع للسورة</button>
+    </div>
+    <h3 class="sec-title" id="mushafTitle" style="font-size:1.5rem"></h3>
+    <div class="mushaf-text" id="mushafText"></div>
+    <audio id="mushafPlayer" controls preload="none" style="width:100%;margin-top:14px;display:none"></audio>
+  </div>
+</section>
+<style>
+  .mushaf-grid{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+  .mushaf-cell{background:var(--card2);border:1px solid rgba(var(--goldA),.25);border-radius:16px;padding:12px 10px;text-align:center;cursor:pointer;transition:.2s}
+  .mushaf-cell:hover{border-color:var(--gold);transform:translateY(-2px)}
+  .mushaf-cell .num{display:inline-flex;min-width:30px;height:30px;padding:0 6px;border-radius:10px;background:rgba(var(--goldA),.15);color:var(--gold);align-items:center;justify-content:center;font-weight:900;font-size:.85rem;margin-bottom:6px}
+  .mushaf-cell .sn{font-weight:900;font-size:1rem}
+  .mushaf-cell .sa{color:var(--muted);font-size:.7rem;margin-top:2px}
+  .mushaf-text{background:var(--card2);border:1px solid rgba(var(--goldA),.3);border-radius:22px;padding:26px 22px;font-size:1.35rem;line-height:2.4;text-align:justify}
+  .mushaf-text .aya{color:var(--text)}
+  .mushaf-text .an{color:var(--gold);font-size:1rem;margin:0 4px}
+</style>
+
 <section id="deen">
   <h2 class="sec-title">✦ ركن الروح ✦</h2>
   <p class="sec-sub">قرآن وأدعية وأذكار — ذكّري قلبك وسط التعلّم 🕌💜</p>
@@ -1898,37 +1930,84 @@
 
 
 <!-- ===================== KARMA CORNER ===================== -->
+<!-- ===================== TIPS ===================== -->
+<section id="tips">
+  <h2 class="sec-title">✦ نصايح لتعلم اللغات ✦</h2>
+  <p class="sec-sub">أسرار اللي بيتكلموا لغات كتير — خطوة خطوة 💡</p>
+  <div class="tips-grid" id="tipsGrid"></div>
+</section>
+<style>
+  .tips-grid{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+  .tip-card{background:var(--card2);border:1px solid rgba(var(--goldA),.25);border-radius:20px;padding:18px;transition:.2s}
+  .tip-card:hover{border-color:var(--gold);transform:translateY(-3px)}
+  .tip-num{display:inline-flex;width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#221c05;align-items:center;justify-content:center;font-weight:900;margin-bottom:8px}
+  .tip-t{font-weight:900;margin-bottom:6px}
+  .tip-d{color:var(--muted);font-size:.84rem;line-height:1.8}
+  .k-about{max-width:760px;margin:0 auto 22px;background:linear-gradient(135deg,rgba(var(--goldA),.16),rgba(var(--goldA),.05));border:1px solid rgba(var(--goldA),.4);border-radius:24px;padding:22px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .k-ava{width:84px;height:84px;border-radius:50%;background:linear-gradient(135deg,var(--gold2),var(--gold));display:flex;align-items:center;justify-content:center;font-size:2.4rem;flex:0 0 84px;box-shadow:0 10px 26px rgba(var(--goldA),.35)}
+  .k-who{flex:1;min-width:220px;text-align:start}
+  .k-who h3{margin:0 0 6px;font-size:1.15rem}
+  .k-who p{margin:0;color:var(--muted);font-size:.88rem;line-height:1.9}
+  .gbk-form{max-width:560px;margin:0 auto 22px;background:var(--card2);border:1px solid rgba(var(--goldA),.3);border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:10px}
+  .gbk-form input,.gbk-form textarea{background:var(--card);border:1px solid rgba(var(--goldA),.3);border-radius:14px;padding:12px 14px;color:var(--text);font-family:inherit;font-size:.95rem;resize:vertical}
+  .gbk-form input:focus,.gbk-form textarea:focus{outline:none;border-color:var(--gold)}
+  .gbk-list{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+  .gbk-card{background:var(--card2);border:1px solid rgba(var(--goldA),.25);border-radius:18px;padding:14px}
+  .gbk-msg{font-size:.9rem;line-height:1.8;margin-bottom:8px}
+  .gbk-who{color:var(--gold);font-weight:800;font-size:.78rem}
+  .gbk-empty{text-align:center;color:var(--muted);padding:20px;grid-column:1/-1}
+</style>
+
+<!-- ===================== GUESTBOOK ===================== -->
+<section id="gbk">
+  <h2 class="sec-title">✦ اكتبي كلمة لكارما ✦</h2>
+  <p class="sec-sub">سيبي كلمة حلوة أو نصيحة أو تحية — هتقراها 💌</p>
+  <form class="gbk-form" id="gbkForm">
+    <input id="gbkName" maxlength="30" placeholder="اسمك (اختياري)">
+    <textarea id="gbkMsg" rows="3" maxlength="300" placeholder="اكتبي كلمتك هنا..." required></textarea>
+    <button class="btn" type="submit">💌 ابعتي الكلمة</button>
+  </form>
+  <div class="gbk-list" id="gbkList"></div>
+</section>
+
 <section id="karma">
-  <h2 class="sec-title">✦ ركن كرمة 👑 ✦</h2>
+  <h2 class="sec-title">✦ ركن كارما 👑 ✦</h2>
   <p class="sec-sub">اختيارات صاحبة الموقع الشخصية — الأفضل من الأفضل</p>
+  <div class="k-about">
+    <div class="k-ava">👑</div>
+    <div class="k-who">
+      <h3>كارما ✨</h3>
+      <p>طالبة في كلية الهندسة ⚙️ — بتقسم يومها بين الرسم الهندسي والمسائل، وبين شغفها الحقيقي: اللغات. بدأت Lingua عشان تثبت إن تعلم اللغة ممكن يبقى لعبة وألوان وموسيقى، مش ملازم وجداول. بتحب الكرتون، والأغاني بكل اللغات، وبتجمع كلمات جديدة زي ما بتجمع الملابس 👗. حلمها تسافر العالم وتكلم كل بلد بلغتها.</p>
+    </div>
+  </div>
   <div class="karma-grid">
     <a class="karma-card" href="#lessons">
-      <span class="k-crown">👑 اختيار كرمة</span>
+      <span class="k-crown">👑 اختيار كارما</span>
       <div class="k-ico">🎯</div>
       <div class="k-title">أفضل بداية</div>
       <div class="k-desc">درس التحيات الإنجليزي — "أول خطوة بتغيّر كل حاجة. ابدئي من هنا ومش هتوقفي"</div>
     </a>
     <a class="karma-card" href="#videos">
-      <span class="k-crown">👑 اختيار كرمة</span>
+      <span class="k-crown">👑 اختيار كارما</span>
       <div class="k-ico">🎬</div>
       <div class="k-title">كورسها المفضل</div>
       <div class="k-desc">تعلّم الإنجليزية في 10 ساعات — "الكورس اللي هيخليكي تفهمي أفلام من غير ترجمة"</div>
     </a>
     <a class="karma-card" href="#games">
-      <span class="k-crown">👑 اختيار كرمة</span>
+      <span class="k-crown">👑 اختيار كارما</span>
       <div class="k-ico">⏱️</div>
       <div class="k-title">لعبتها المفضلة</div>
       <div class="k-desc">سباق الوقت — "الأدرينالين بيخليني أحفظ أسرع. جربيه هتدمنيه"</div>
     </a>
     <div class="karma-card">
-      <span class="k-crown">👑 اختيار كرمة</span>
+      <span class="k-crown">👑 اختيار كارما</span>
       <div class="k-ico">💎</div>
       <div class="k-title">كلمتها المفضلة</div>
       <div class="k-desc"><b style="color:#fff">Serendipity</b> — مصادفة سعيدة. "أجمل كلمة في الإنجليزي، زي اللي حصل لما الموقع ده اتعمل" <button class="row-listen" id="karmaWord" title="استمعي">🔊</button></div>
     </div>
     <div class="karma-card karma-quote">
       <div class="k-big">"متستنيش تبقي جاهزة… ابدئي غلط واتعلمي في السكة. كل خبير كان يوم ما مبتدئ 💜"</div>
-      <div class="k-sign">— كرمة، صاحبة Lingua</div>
+      <div class="k-sign">— كارما، صاحبة Lingua</div>
     </div>
   </div>
 </section>
@@ -3246,10 +3325,10 @@ document.getElementById('lstPlay').addEventListener('click', function(){
 })();
 
 /* ================= v4: themes ================= */
-const THEMES = {gold:'👑 ذهبي', rose:'🌸 فوشيا', ocean:'🌊 محيط', emerald:'💚 زمرد', violet:'💜 بنفسجي', royal:'🏰 ملكي', sunset:'🌅 غروب', midnight:'🌌 منتصف الليل'};
-const THEME_COLORS = {gold:'#d4af37', rose:'#e85d9e', ocean:'#22b8cf', emerald:'#34d399', violet:'#9d7bff', royal:'#f7c948', sunset:'#ff7a3d', midnight:'#60a5fa'};
+const THEMES = {gold:'👑 ذهبي', rose:'🌸 فوشيا', ocean:'🌊 محيط', emerald:'💚 زمرد', violet:'💜 بنفسجي', white:'🤍 أبيض', mint:'🌿 نعناعي', sky:'🩵 سماوي', royal:'🏰 ملكي', sunset:'🌅 غروب', midnight:'🌌 منتصف الليل'};
+const THEME_COLORS = {gold:'#d4af37', rose:'#e85d9e', ocean:'#22b8cf', emerald:'#34d399', violet:'#9d7bff', white:'#f7f4ee', mint:'#4ade80', sky:'#7dd3fc', royal:'#f7c948', sunset:'#ff7a3d', midnight:'#60a5fa'};
 const PREMIUM_THEMES = {royal:150, sunset:300, midnight:500};
-const BASE_THEMES = ['gold','rose','ocean','emerald','violet'];
+const BASE_THEMES = ['gold','rose','ocean','emerald','violet','white','mint','sky'];
 function getOwnedThemes(){ try{ return JSON.parse(localStorage.getItem('lingua_owned_themes')||'[]'); }catch(e){ return []; } }
 function applyTheme(name){
   document.documentElement.setAttribute('data-theme', name === 'gold' ? '' : name);
@@ -3539,8 +3618,8 @@ function renderWall(){
   try { msgs = JSON.parse(localStorage.getItem('lingua_wall') || '[]'); } catch(e){}
   if(!msgs.length){
     msgs = [
-      {n:'كرمة 👑', b:'أهلًا بيكم في لينجوا! اتعلموا، العبوا، واكسبوا نقاط — وبصوا على ركني 💜', t:Date.now()-86400000},
-      {n:'كرمة 👑', b:'جربوا تحدي الأسبوع وقولولي جبتُوا كام! 🏆', t:Date.now()-3600000}
+      {n:'كارما 👑', b:'أهلًا بيكم في لينجوا! اتعلموا، العبوا، واكسبوا نقاط — وبصوا على ركني 💜', t:Date.now()-86400000},
+      {n:'كارما 👑', b:'جربوا تحدي الأسبوع وقولولي جبتُوا كام! 🏆', t:Date.now()-3600000}
     ];
   }
   document.getElementById('wallList').innerHTML = msgs.slice(-30).map(function(m){
@@ -4244,7 +4323,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['karma','👑','ركن كرمة'],['settings','🌐','لغة التطبيق']
+  ['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
 ];
 document.getElementById('menuGrid').innerHTML = MENU.map(function(m){
   return '<a class="menu-card" href="#'+m[0]+'"><span class="m-ico">'+m[1]+'</span><span class="m-name">'+m[2]+'</span></a>';
@@ -4341,7 +4420,7 @@ const FUN_STAGE0 = {dress:'👧', cook:'🥣', house:'🏠', football:'🥅'};
 const FUN_DONE = {dress:'👸', cook:'🍲', house:'🏡', football:'🏆'};
 const FUN_LANGI = {en:1, fr:2, de:3, zh:4};
 let funGame = 'cook', funLang = 'en', funIdx = 0, funGot = [];
-function funStageDraw(){
+function funStageDrawOrig(){
   document.getElementById('funStage').textContent = FUN_STAGE0[funGame] + ' ' + funGot.join(' ');
 }
 function funNext(){
@@ -4513,7 +4592,7 @@ document.getElementById('engWrap').innerHTML = ENG.map(function(g){
 
 /* ================= v6: seerah ================= */
 const SEERAH = [
-  {t:'🕯️ المولد النبوي', d:'وُلد النبي محمد ﷺ في مكة المكرمة عام الفيل، يتيم الأب، وتكفّله جده ثم عمه أبو طالب.'},
+  {t:'🕯️ المولد النبوي', d:'وُلد النبي محمد ﷺ في مكة المكارما عام الفيل، يتيم الأب، وتكفّله جده ثم عمه أبو طالب.'},
   {t:'📖 البعثة', d:'في غار حراء نزل عليه الوحي وهو في الأربعين من عمره: «اقرأ باسم ربك الذي خلق».'},
   {t:'🐪 الهجرة النبوية', d:'هاجر ﷺ إلى المدينة المنورة، فأسست الهجرة لأول مجتمع إسلامي، ومنها بدأ التاريخ الهجري.'},
   {t:'⚔️ غزوة بدر الكبرى', d:'أول معركة فاصلة في الإسلام؛ نصر الله فيها المؤمنين رغم قلة العدد والعُدد.'},
@@ -4572,7 +4651,7 @@ const UI_PAIRS = [
   ['👤 حسابك','👤 Account'],['الدروس','Lessons'],['الاختبارات','Quizzes'],['الألعاب','Games'],
   ['تدريب النطق','Speaking'],['القاموس','Dictionary'],['📸 بالصور','📸 Photos'],['🧠 ذكاء','🧠 Brain'],
   ['💬 الكلام','💬 Wall'],['🕌 روحانيات','🕌 Spirit'],['🎵 أغاني','🎵 Songs'],['🎬 سينما','🎬 Cinema'],
-  ['ركن كرمة 👑','Karma 👑'],['الفيديوهات','Videos'],['🛍️ المتجر','🛍️ Shop'],['👯 أصحابي','👯 Friends'],
+  ['ركن كارما 👑','Karma 👑'],['الفيديوهات','Videos'],['🛍️ المتجر','🛍️ Shop'],['👯 أصحابي','👯 Friends'],
   ['🎮 العاب','🎮 Games'],['👚 تنسيق لبس','👚 Stylist'],['⚙️ هندسة','⚙️ Engineering'],['🌐 اللغة','🌐 Language'],
   ['✦ كلمات اليوم ✦','✦ Words of the Day ✦'],['لماذا Lingua؟','Why Lingua?'],['✦ لوحة إنجازك ✦','✦ Your Dashboard ✦'],
   ['✦ أقسام اللغات ✦','✦ Language Corners ✦'],['اختاري لغتك','Choose Your Language'],['✦ الدروس ✦','✦ Lessons ✦'],
@@ -4789,7 +4868,7 @@ duRenderCats(); duRenderItems(); duRenderColors(); duRender();
 })();
 
 /* ================= v7: illustrated scenes for fun games ================= */
-const FUN_SCENES = {
+window.FUN_SCENES = {
   cook: {
     bg: '<rect width="400" height="230" rx="18" fill="#241428"/>' +
       '<rect x="18" y="26" width="66" height="48" rx="8" fill="#5a3a4a"/><rect x="96" y="26" width="66" height="48" rx="8" fill="#5a3a4a"/>' +
@@ -4818,7 +4897,9 @@ const FUN_SCENES = {
   }
 };
 function funStageDraw(){
-  const sc = FUN_SCENES[funGame] || FUN_SCENES.cook;
+  const SC = window.FUN_SCENES;
+  if(!SC){ funStageDrawOrig(); return; }
+  const sc = SC[funGame] || SC.cook;
   let x = '<svg viewBox="0 0 400 230" style="width:100%;display:block">' + sc.bg;
   funGot.forEach(function(e, i){
     const sl = sc.slots[i];
@@ -5002,6 +5083,112 @@ document.getElementById('schGrid').innerHTML = SCHOLARS.map(function(x){
     '<span class="sch-fund' + (x.fund.indexOf('جزئي') > -1 ? ' partial' : '') + '">' + x.fund + '</span>' +
     '<div class="sch-req">' + x.r + '</div><span class="sch-go">الموقع الرسمي ↗</span></a>';
 }).join('');
+
+
+/* ================= v8: tips + guestbook ================= */
+const TIPS = [
+  {t:'١٥ دقيقة كل يوم أحسن من ٥ ساعات في الأسبوع', d:'المخ بيحفظ بالتكرار اليومي مش بالحشو. خلي اللغة عادة يومية زي غسل وشك — حتى لو ربع ساعة بس.'},
+  {t:'اتعلمي بجمل مش كلمات', d:'بدل ما تحفظي "apple = تفاحة"، احفظي "I want an apple". الجملة بتعلمك الكلمة والقاعدة والنطق في نفس الوقت.'},
+  {t:'غيري لغة موبايلك', d:'أقوى حيلة مجانية: خلي تليفونك باللغة اللي بتتعلميها. هتتعلمي مئات الكلمات من غير ما تحسي.'},
+  {t:'اتفرجي على اللي بتحبيه باللغة دي', d:'كرتون الطفولة بترجمة، أغاني، فيديوهات طبخ — المتعة هي اللي بتخلي المعلومة تثبت. سينما لينجوا معمولة للسبب ده 🎬'},
+  {t:'اتكلمي من أول يوم (حتى لو غلط)', d:'الغلط هو الطريق. اقرأي بصوت عالي، قلدي النطق، وكلمي نفسك في المراية. اللي بيستنى "يبقى جاهز" مش بيتكلم أبدًا.'},
+  {t:'قاعدة الظل (Shadowing)', d:'شغلي جملة من فيديو أو أغنية، وقوليها وراها بنفس النبرة والسرعة زي الببغاء. دي أسرع طريقة للنطق الصح.'},
+  {t:'الكلمات الألف الأهم أولًا', d:'أي لغة فيها ١٠٠٠ كلمة بيغطوا ٨٥٪ من الكلام اليومي. ابدئي بيهم (هتلاقيهم في دروس لينجوا 📚) وبعدها التفاصيل سهلة.'},
+  {t:'راجعي قبل ما تنامي', d:'النوم بيثبت الذاكرة. ٥ دقايق مراجعة على كلمات النهاردة قبل السرير بتساوي ساعة مذاكرة الصبح.'},
+  {t:'صاحبة لغة أحسن من مدرس', d:'كلمي حد بيتعلم زيك أو بيتكلم اللغة. ضيفي أصحابك في Lingua واتنافسوا على النقاط 👯'}
+];
+document.getElementById('tipsGrid').innerHTML = TIPS.map(function(x, i){
+  return '<div class="tip-card"><span class="tip-num">' + (i + 1) + '</span><div class="tip-t">' + x.t + '</div><div class="tip-d">' + x.d + '</div></div>';
+}).join('');
+function gbkLoad(){ try { return JSON.parse(localStorage.getItem('lingua_gbk') || '[]'); } catch(e){ return []; } }
+function gbkRender(){
+  const items = gbkLoad();
+  document.getElementById('gbkList').innerHTML = items.length ? items.map(function(x){
+    return '<div class="gbk-card"><div class="gbk-msg">' + x.m + '</div><div class="gbk-who">— ' + (x.n || 'زائرة') + ' 💌</div></div>';
+  }).join('') : '<div class="gbk-empty">لسه مفيش كلمات — كوني أول واحدة تسيب كلمة حلوة لكارما 💌</div>';
+}
+document.getElementById('gbkForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const m = document.getElementById('gbkMsg').value.trim();
+  if(!m) return;
+  const esc = function(x){ return x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
+  const items = gbkLoad();
+  items.unshift({n: esc(document.getElementById('gbkName').value.trim()), m: esc(m)});
+  try { localStorage.setItem('lingua_gbk', JSON.stringify(items.slice(0, 60))); } catch(e){}
+  document.getElementById('gbkMsg').value = '';
+  gbkRender();
+  if(typeof toast === 'function') toast('وصلت كلمتك لكارما 💌 شكرًا!');
+  if(typeof confetti === 'function') confetti();
+});
+gbkRender();
+
+
+/* ================= v9: full mushaf ================= */
+(function(){
+  const API = 'https://api.alquran.cloud/v1';
+  const grid = document.getElementById('mushafGrid');
+  const home = document.getElementById('mushafHome');
+  const read = document.getElementById('mushafRead');
+  const txt = document.getElementById('mushafText');
+  const title = document.getElementById('mushafTitle');
+  const player = document.getElementById('mushafPlayer');
+  let surahs = null;
+  function esc(x){ return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function loadList(){
+    fetch(API + '/surah').then(function(r){ return r.json(); }).then(function(d){
+      surahs = d.data;
+      grid.innerHTML = surahs.map(function(x){
+        return '<div class="mushaf-cell" data-n="' + x.number + '"><div class="num">' + x.number + '</div><div class="sn">' + esc(x.name.replace('سُورَةُ ', '')) + '</div><div class="sa">' + x.numberOfAyahs + ' آية • ' + (x.revelationType === 'Meccan' ? 'مكية' : 'مدنية') + '</div></div>';
+      }).join('');
+    }).catch(function(){
+      grid.innerHTML = '<div class="gbk-empty">مفيش اتصال بالإنترنت دلوقتي — جربي تاني لما النت يرجع 📡</div>';
+    });
+  }
+  function openSurah(n){
+    const meta = (surahs || []).find(function(x){ return x.number === n; });
+    title.textContent = meta ? ('سورة ' + meta.name.replace('سُورَةُ ', '')) : ('سورة ' + n);
+    txt.innerHTML = '<div class="gbk-empty">بيتم التحميل... 📖</div>';
+    home.style.display = 'none';
+    read.style.display = 'block';
+    player.style.display = 'none';
+    player.pause();
+    const cacheKey = 'lingua_surah_' + n;
+    let cached = null;
+    try { cached = localStorage.getItem(cacheKey); } catch(e){}
+    if(cached){ renderSurah(JSON.parse(cached), n); return; }
+    fetch(API + '/surah/' + n + '/quran-uthmani').then(function(r){ return r.json(); }).then(function(d){
+      try { localStorage.setItem(cacheKey, JSON.stringify(d.data)); } catch(e){}
+      renderSurah(d.data, n);
+    }).catch(function(){
+      txt.innerHTML = '<div class="gbk-empty">حصلت مشكلة في التحميل — جربي تاني 📡</div>';
+    });
+  }
+  function renderSurah(data, n){
+    const bism = 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ';
+    let out = (n !== 1 && n !== 9) ? '<div style="text-align:center;color:var(--gold);margin-bottom:14px">' + bism + '</div>' : '';
+    out += data.ayahs.map(function(a){
+      let t = a.text;
+      if(n !== 1 && a.numberInSurah === 1 && t.indexOf(bism) === 0) t = t.slice(bism.length).trim();
+      return '<span class="aya">' + esc(t) + '</span><span class="an">﴿' + a.numberInSurah + '﴾</span>';
+    }).join(' ');
+    txt.innerHTML = out;
+    document.getElementById('mushafAudio').onclick = function(){
+      player.src = 'https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/' + ('00' + n).slice(-3) + '.mp3';
+      player.style.display = 'block';
+      player.play().catch(function(){});
+    };
+  }
+  grid.addEventListener('click', function(e){
+    const c = e.target.closest('.mushaf-cell');
+    if(c) openSurah(+c.dataset.n);
+  });
+  document.getElementById('mushafBack').addEventListener('click', function(){
+    read.style.display = 'none';
+    home.style.display = 'block';
+    player.pause();
+  });
+  loadList();
+})();
 
 </script>
 </body>
