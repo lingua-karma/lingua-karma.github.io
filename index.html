@@ -2363,19 +2363,21 @@ window.refreshDash = function(){
   document.getElementById('dGames').textContent = games;
   const pts = parseInt(localStorage.getItem('lingua_points')||'0',10);
   document.getElementById('dPoints').textContent = pts;
-  const lvl = levelOf(getLifetime());
-  let customTitle = '';
-  try { customTitle = localStorage.getItem('lingua_title') || ''; } catch(e){}
-  document.getElementById('dashBadge').textContent = 'لقبك الحالي: ' + (customTitle || lvl.name);
-  if(document.getElementById('lvlName')){
-    document.getElementById('lvlName').textContent = lvl.name;
-    document.getElementById('lvlFill').style.width = lvl.pct + '%';
-    document.getElementById('lvlText').textContent = lvl.next
-      ? ('فاضل ' + (lvl.next - getLifetime()) + ' نقطة على مستوى ' + lvl.nextName + ' — مجموع نقاطك الكلي ' + getLifetime())
-      : ('وصلتي لأعلى مستوى! مجموع نقاطك الكلي ' + getLifetime() + ' 👑');
-  }
-  if(window.renderShop) window.renderShop();
-  if(window.renderBadges) window.renderBadges();
+  try {
+    const lvl = levelOf(getLifetime());
+    let customTitle = '';
+    try { customTitle = localStorage.getItem('lingua_title') || ''; } catch(e){}
+    document.getElementById('dashBadge').textContent = 'لقبك الحالي: ' + (customTitle || lvl.name);
+    if(document.getElementById('lvlName')){
+      document.getElementById('lvlName').textContent = lvl.name;
+      document.getElementById('lvlFill').style.width = lvl.pct + '%';
+      document.getElementById('lvlText').textContent = lvl.next
+        ? ('فاضل ' + (lvl.next - getLifetime()) + ' نقطة على مستوى ' + lvl.nextName + ' — مجموع نقاطك الكلي ' + getLifetime())
+        : ('وصلتي لأعلى مستوى! مجموع نقاطك الكلي ' + getLifetime() + ' 👑');
+    }
+    if(window.renderShop) window.renderShop();
+    if(window.renderBadges) window.renderBadges();
+  } catch(e){}
   /* per-language progress bars */
   const flags = {en:'🇬🇧 الإنجليزية', fr:'🇫🇷 الفرنسية', de:'🇩🇪 الألمانية', zh:'🇨🇳 الصينية'};
   let html = '';
@@ -4469,6 +4471,7 @@ try {
 window.renderShop();
 window.renderBadges();
 checkBadges();
+try { window.refreshDash(); } catch(e){}
 
 </script>
 </body>
