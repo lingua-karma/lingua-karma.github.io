@@ -1826,9 +1826,8 @@
 <!-- ===================== v6: FRIENDS ===================== -->
 <section id="friends">
   <h2 class="sec-title">✦ أصحابي ✦</h2>
-  <p class="sec-sub">ضيفي صحابك وتحدّيهم في الاختبارات — كل صاحبة ليها كارت 👯‍♀️</p>
-  <div style="text-align:center;margin-bottom:22px"><button class="btn" id="friendAdd">➕ ضيفي صاحبة</button></div>
-  <div class="friend-grid" id="friendGrid"></div>
+  <p class="sec-sub">صحابك الحقيقيين — الإضافة بدعوة واتساب بس، وهم بينضموا معاكي فعلًا 👯‍♀️💜</p>
+  <div id="friendsReal"><div class="gbk-empty">سجلي حسابك من قسم «حسابي» الأول، وبعدين ابعتي دعوة واتساب لصحابك — أول ما يدخلوا من اللينك هتلاقيهم هنا 💌</div></div>
 </section>
 
 <!-- ===================== v6: FUN GAMES ===================== -->
@@ -1873,6 +1872,66 @@
 </section>
 
 <!-- ===================== v6: UI LANGUAGE ===================== -->
+
+<!-- ===================== v11: ACCOUNT HUB ===================== -->
+<section id="account">
+  <h2 class="sec-title">✦ حسابي وصحابي ✦</h2>
+  <p class="sec-sub">حساب حقيقي يحفظ نقاطك على أي جهاز — وصحابك معاكي بشات حي 💜</p>
+  <style>
+    .acc-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+    .acc-tabs .tab{padding:9px 18px;border-radius:999px;border:1px solid rgba(212,175,55,.35);background:rgba(255,255,255,.04);color:var(--gold);cursor:pointer;font-family:inherit;font-size:.88rem}
+    .acc-tabs .tab.active{background:linear-gradient(135deg,rgba(212,175,55,.28),rgba(212,175,55,.1));border-color:var(--gold);color:#fff}
+    .acc-card{background:rgba(255,255,255,.045);border:1px solid rgba(212,175,55,.25);border-radius:18px;padding:20px;max-width:440px;margin:0 auto 16px}
+    .acc-card h3{color:var(--gold);margin:0 0 12px;font-size:1.05rem;text-align:center}
+    .acc-in{width:100%;padding:11px 14px;margin-bottom:10px;border-radius:12px;border:1px solid rgba(212,175,55,.3);background:rgba(0,0,0,.3);color:#fff;font-family:inherit;font-size:.92rem;box-sizing:border-box}
+    .acc-in:focus{outline:none;border-color:var(--gold)}
+    .acc-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    .acc-me{display:flex;align-items:center;gap:14px;justify-content:center;margin-bottom:14px}
+    .acc-av{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#8a6a1f);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:700;color:#1a1405}
+    .acc-name{font-size:1.15rem;font-weight:700}
+    .acc-pts{color:var(--gold);font-size:.88rem}
+    .fr-item{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1px solid rgba(212,175,55,.2);border-radius:14px;padding:10px 14px;margin-bottom:8px;max-width:440px;margin-left:auto;margin-right:auto}
+    .fr-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#8a6a1f);display:flex;align-items:center;justify-content:center;font-weight:700;color:#1a1405;flex-shrink:0}
+    .fr-name{flex:1;font-weight:600}
+    .fr-pts{color:var(--gold);font-size:.8rem}
+    .chat-box{max-width:520px;margin:0 auto}
+    .chat-msgs{background:rgba(0,0,0,.28);border:1px solid rgba(212,175,55,.2);border-radius:16px;padding:14px;height:300px;overflow-y:auto;margin-bottom:10px}
+    .cm{margin-bottom:8px;display:flex}
+    .cm.me{justify-content:flex-start}
+    .cm.them{justify-content:flex-end}
+    .cm-b{max-width:75%;padding:8px 13px;border-radius:14px;font-size:.9rem;line-height:1.5}
+    .cm.me .cm-b{background:linear-gradient(135deg,rgba(212,175,55,.3),rgba(212,175,55,.15));border:1px solid rgba(212,175,55,.4)}
+    .cm.them .cm-b{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14)}
+    .chat-send{display:flex;gap:8px}
+    .chat-send input{flex:1}
+    .top-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1px solid rgba(212,175,55,.2);border-radius:14px;padding:10px 16px;margin-bottom:8px;max-width:440px;margin-left:auto;margin-right:auto}
+    .top-rank{width:34px;height:34px;border-radius:50%;background:rgba(212,175,55,.15);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--gold);flex-shrink:0}
+    .top-row.me{border-color:var(--gold);background:linear-gradient(135deg,rgba(212,175,55,.18),rgba(212,175,55,.06))}
+    .feed-card{background:rgba(255,255,255,.045);border:1px solid rgba(212,175,55,.22);border-radius:16px;padding:14px 16px;max-width:520px;margin:0 auto 10px}
+    .feed-who{color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:5px}
+    .feed-when{color:var(--muted);font-size:.72rem;margin-top:6px}
+  </style>
+  <div class="acc-tabs" id="accTabs">
+    <button class="tab active" data-at="me">👑 حسابي</button>
+    <button class="tab" data-at="friends">👯 صحابي</button>
+    <button class="tab" data-at="chat">💬 الشات</button>
+    <button class="tab" data-at="top">🏆 لوحة الشرف</button>
+    <button class="tab" data-at="feed">📣 منشورات</button>
+  </div>
+  <div id="accMe" class="acc-panel"></div>
+  <div id="accFriends" class="acc-panel" style="display:none"></div>
+  <div id="accChat" class="acc-panel" style="display:none"><div class="chat-box" id="chatBox"><div class="gbk-empty">اختاري صاحبة من «صحابي» وابدئوا الكلام 💬</div></div></div>
+  <div id="accTop" class="acc-panel" style="display:none"><div id="topList"><div class="gbk-empty">بيتم التحميل... 🏆</div></div></div>
+  <div id="accFeed" class="acc-panel" style="display:none">
+    <div class="acc-card" id="feedForm" style="max-width:520px">
+      <h3>📣 شاركي إنجازك أو كلمة حلوة</h3>
+      <textarea class="acc-in" id="feedText" rows="3" maxlength="500" placeholder="اكتبي اللي في خاطرك..."></textarea>
+      <button class="btn" id="feedSend" style="width:100%">انشري ✨</button>
+    </div>
+    <div id="feedList"><div class="gbk-empty">بيتم التحميل... 📣</div></div>
+  </div>
+</section>
+
 <section id="settings">
   <h2 class="sec-title">✦ لغة التطبيق ✦</h2>
   <p class="sec-sub">بدّلي واجهة الموقع بين العربية والإنجليزية 🌐</p>
@@ -5285,6 +5344,376 @@ gbkRender();
     render();
   });
   render();
+})();
+
+
+/* ================= v11: Supabase backend (accounts/friends/chat/top/feed) ================= */
+(function(){
+  var SUPA_URL = 'https://yzzlgalxjaaevmytdazf.supabase.co';
+  var SUPA_KEY = 'sb_publishable_EmbKVWREHSs3sZ_nBKFyqg_zxv3Z38-';
+  var sb = null, me = null, myProfile = null, myFriends = [], chatWith = null, msgChan = null, syncTimer = null;
+
+  function esc(x){ return String(x == null ? '' : x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function needLogin(el){ el.innerHTML = '<div class="gbk-empty">الجزء ده بيشتغل بحساب — سجلي من تاب «👑 حسابي» الأول 💜</div>'; }
+
+  /* ---- menu entry ---- */
+  try {
+    MENU.push(['account','💜','حسابي']); VIEWIDS.push('account');
+    document.getElementById('menuGrid').insertAdjacentHTML('beforeend', '<a class="menu-card" href="#account"><span class="m-ico">💜</span><span class="m-name">حسابي</span></a>');
+  } catch(e){}
+
+  /* ---- tabs ---- */
+  document.getElementById('accTabs').addEventListener('click', function(e){
+    var b = e.target.closest('.tab'); if(!b) return;
+    document.querySelectorAll('#accTabs .tab').forEach(function(t){ t.classList.toggle('active', t === b); });
+    var map = {me:'accMe', friends:'accFriends', chat:'accChat', top:'accTop', feed:'accFeed'};
+    Object.keys(map).forEach(function(k){ document.getElementById(map[k]).style.display = (k === b.dataset.at) ? 'block' : 'none'; });
+    if(b.dataset.at === 'top') loadTop();
+    if(b.dataset.at === 'feed') loadFeed();
+    if(b.dataset.at === 'friends') renderFriendsReal();
+  });
+
+  /* ---- pending referral from invite link ---- */
+  try {
+    var q = new URLSearchParams(location.search);
+    var ref = q.get('ref');
+    if(ref && /^[0-9a-f-]{36}$/i.test(ref)){
+      localStorage.setItem('lingua_pending_ref', ref);
+      history.replaceState(null, '', location.pathname + location.hash);
+    }
+  } catch(e){}
+
+  function consumeRef(){
+    var ref = null;
+    try { ref = localStorage.getItem('lingua_pending_ref'); } catch(e){}
+    if(!ref || !me || ref === me.id) return;
+    localStorage.removeItem('lingua_pending_ref');
+    sb.from('friendships').insert([{user_id: ref, friend_id: me.id}, {user_id: me.id, friend_id: ref}]).then(function(r){
+      if(!r.error){ toast('صديقتك اللي دعتك بقت في صحابك 👯‍♀️💜'); confetti(); loadFriends(); }
+    });
+  }
+
+  /* ---- points sync ---- */
+  function queueSync(){
+    if(!me) return;
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(function(){
+      sb.from('profiles').update({points: getPoints(), lifetime: getLifetime()}).eq('id', me.id).then(function(){});
+    }, 2500);
+  }
+  try {
+    var _award = window.awardPoints;
+    window.awardPoints = function(n, label){ _award(n, label); queueSync(); };
+  } catch(e){}
+
+  /* ---- auth UI ---- */
+  function renderMe(){
+    var el = document.getElementById('accMe');
+    if(!me){
+      el.innerHTML =
+        '<div class="acc-row">' +
+        '<div class="acc-card"><h3>✨ حساب جديد</h3>' +
+        '<input class="acc-in" id="suName" maxlength="30" placeholder="اسمك (هيظهر لصحابك)">' +
+        '<input class="acc-in" id="suEmail" type="email" dir="ltr" placeholder="إيميلك">' +
+        '<input class="acc-in" id="suPass" type="password" dir="ltr" placeholder="باسورد (٦ حروف على الأقل)">' +
+        '<button class="btn" id="suBtn" style="width:100%">اعملي حسابي 💜</button></div>' +
+        '<div class="acc-card"><h3>🔑 عندي حساب</h3>' +
+        '<input class="acc-in" id="liEmail" type="email" dir="ltr" placeholder="إيميلك">' +
+        '<input class="acc-in" id="liPass" type="password" dir="ltr" placeholder="الباسورد">' +
+        '<button class="btn" id="liBtn" style="width:100%">ادخلي 🔑</button></div>' +
+        '</div>' +
+        '<p style="text-align:center;color:var(--muted);font-size:.85rem">حسابك بيحفظ نقاطك وتقدمك على أي موبايل، وبيخليكي تضيفي صحابك وتكلمهم 💬</p>';
+      document.getElementById('suBtn').onclick = doSignup;
+      document.getElementById('liBtn').onclick = doLogin;
+      return;
+    }
+    var nm = (myProfile && myProfile.display_name) || 'صديقتنا';
+    el.innerHTML =
+      '<div class="acc-card" style="max-width:480px">' +
+      '<div class="acc-me"><div class="acc-av">' + esc(nm.charAt(0)) + '</div>' +
+      '<div><div class="acc-name">' + esc(nm) + '</div><div class="acc-pts">💎 ' + getPoints() + ' نقطة • المجموع الكلي ' + getLifetime() + '</div></div></div>' +
+      '<div class="acc-row">' +
+      '<button class="btn" id="inviteBtn">💌 دعوة صاحبة بالواتساب</button>' +
+      '<button class="btn" id="signOut" style="background:rgba(255,255,255,.08);color:var(--muted)">خروج</button>' +
+      '</div></div>';
+    document.getElementById('signOut').onclick = function(){
+      sb.auth.signOut().then(function(){ me = null; myProfile = null; renderAll(); toast('باي باي... استنيناكي ترجعي 👋💜'); });
+    };
+    document.getElementById('inviteBtn').onclick = function(){
+      var link = 'https://lingua-karma.github.io/?ref=' + me.id;
+      var txt = 'يلا بينا نتعلم لغات سوا على Lingua! 💜 اعملي حساب من اللينك ده وهنبقى صحاب على طول ونتنافس في النقاط: ' + link;
+      window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank');
+    };
+  }
+
+  function doSignup(){
+    var name = document.getElementById('suName').value.trim();
+    var email = document.getElementById('suEmail').value.trim();
+    var pass = document.getElementById('suPass').value;
+    if(!name){ toast('اكتبي اسمك الأول 💜'); return; }
+    if(!email || pass.length < 6){ toast('إيميل صح وباسورد ٦ حروف على الأقل 🔑'); return; }
+    sb.auth.signUp({email: email, password: pass}).then(function(r){
+      if(r.error){ toast(r.error.message.indexOf('already') >= 0 ? 'الإيميل ده متسجل — جربي تدخلي بيه 🔑' : 'حصلت مشكلة: ' + r.error.message); return; }
+      if(!r.data.session){ toast('اتسجل! جربي تدخلي دلوقتي 🔑'); return; }
+      me = r.data.session.user;
+      sb.from('profiles').upsert({id: me.id, display_name: name, points: getPoints(), lifetime: getLifetime()}).then(function(){
+        myProfile = {id: me.id, display_name: name};
+        afterAuth('أهلًا بيكي في Lingua يا ' + name + '! 🎉💜');
+      });
+    });
+  }
+
+  function doLogin(){
+    var email = document.getElementById('liEmail').value.trim();
+    var pass = document.getElementById('liPass').value;
+    if(!email || !pass){ toast('اكتبي الإيميل والباسورد 🔑'); return; }
+    sb.auth.signInWithPassword({email: email, password: pass}).then(function(r){
+      if(r.error){ toast('الإيميل أو الباسورد مش صح 🔑'); return; }
+      me = r.data.session.user;
+      sb.from('profiles').select('*').eq('id', me.id).maybeSingle().then(function(pr){
+        var local = getPoints(), life = getLifetime();
+        if(pr.data){
+          myProfile = pr.data;
+          var best = Math.max(pr.data.points || 0, local);
+          var bestL = Math.max(pr.data.lifetime || 0, life);
+          localStorage.setItem('lingua_points', String(best));
+          localStorage.setItem('lingua_lifetime', String(bestL));
+          if(best !== pr.data.points || bestL !== pr.data.lifetime){
+            sb.from('profiles').update({points: best, lifetime: bestL}).eq('id', me.id).then(function(){});
+          }
+        } else {
+          var nm = (me.email || 'صديقة').split('@')[0];
+          sb.from('profiles').insert({id: me.id, display_name: nm, points: local, lifetime: life}).then(function(){});
+          myProfile = {id: me.id, display_name: nm, points: local};
+        }
+        if(window.refreshDash) window.refreshDash();
+        afterAuth('رجعتي! نقاطك كلها موجودة 💎💜');
+      });
+    });
+  }
+
+  function afterAuth(msg){
+    toast(msg);
+    confetti();
+    renderAll();
+    consumeRef();
+    subscribeMsgs();
+  }
+
+  function renderAll(){ renderMe(); renderFriendsReal(); }
+
+  /* ---- friends ---- */
+  function loadFriends(){
+    if(!me) return;
+    sb.from('friendships').select('user_id,friend_id').or('user_id.eq.' + me.id + ',friend_id.eq.' + me.id).then(function(r){
+      if(r.error) return;
+      var ids = {};
+      (r.data || []).forEach(function(f){ if(f.user_id !== me.id) ids[f.user_id] = 1; if(f.friend_id !== me.id) ids[f.friend_id] = 1; });
+      var arr = Object.keys(ids);
+      if(!arr.length){ myFriends = []; renderFriendsReal(); return; }
+      sb.from('profiles').select('id,display_name,points').in('id', arr).then(function(pr){
+        myFriends = pr.data || [];
+        renderFriendsReal();
+      });
+    });
+  }
+
+  function renderFriendsReal(){
+    var el = document.getElementById('accFriends');
+    var fr = document.getElementById('friendsReal');
+    if(!me){ needLogin(el); return; }
+    var html = '<div style="text-align:center;margin-bottom:16px"><button class="btn" id="inviteBtn2">💌 دعوة صاحبة جديدة بالواتساب</button></div>';
+    if(!myFriends.length){
+      html += '<div class="gbk-empty">لسه مفيش صحاب — ابعتي الدعوة لصاحبتك، أول ما تعمل حساب من اللينك هتظهر هنا فورًا 👯‍♀️</div>';
+    } else {
+      html += myFriends.map(function(f){
+        return '<div class="fr-item"><div class="fr-av">' + esc((f.display_name || '؟').charAt(0)) + '</div>' +
+          '<div class="fr-name">' + esc(f.display_name) + '</div><div class="fr-pts">💎 ' + (f.points || 0) + '</div>' +
+          '<button class="btn" style="padding:7px 14px;font-size:.8rem" data-chat="' + f.id + '" data-nm="' + esc(f.display_name) + '">💬 كلميها</button></div>';
+      }).join('');
+    }
+    el.innerHTML = html;
+    if(fr) fr.innerHTML = me ? html : '<div class="gbk-empty">سجلي حسابك من قسم «حسابي» الأول 💜</div>';
+    document.querySelectorAll('[data-chat]').forEach(function(b){
+      b.onclick = function(){ openChat(b.dataset.chat, b.dataset.nm); location.hash = 'account'; };
+    });
+    var ib = document.getElementById('inviteBtn2');
+    if(ib) ib.onclick = function(){
+      var link = 'https://lingua-karma.github.io/?ref=' + me.id;
+      var txt = 'يلا بينا نتعلم لغات سوا على Lingua! 💜 اعملي حساب من اللينك ده وهنبقى صحاب على طول ونتنافس في النقاط: ' + link;
+      window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank');
+    };
+  }
+
+  /* ---- chat ---- */
+  function openChat(uid, name){
+    chatWith = {id: uid, name: name};
+    var box = document.getElementById('chatBox');
+    box.innerHTML =
+      '<div style="text-align:center;color:var(--gold);font-weight:700;margin-bottom:10px">💬 شات مع ' + esc(name) + '</div>' +
+      '<div class="chat-msgs" id="chatMsgs"><div class="gbk-empty">بيتم التحميل...</div></div>' +
+      '<div class="chat-send"><input class="acc-in" id="chatIn" maxlength="500" placeholder="اكتبي رسالتك..." style="margin-bottom:0"><button class="btn" id="chatGo">ابعتي 💌</button></div>';
+    document.getElementById('chatGo').onclick = sendChat;
+    document.getElementById('chatIn').addEventListener('keydown', function(e){ if(e.key === 'Enter') sendChat(); });
+    document.querySelector('#accTabs .tab[data-at="chat"]').click();
+    sb.from('messages').select('*').or('and(sender.eq.' + me.id + ',recipient.eq.' + uid + '),and(sender.eq.' + uid + ',recipient.eq.' + me.id + ')').order('created_at', {ascending: true}).limit(200).then(function(r){
+      renderMsgs(r.data || []);
+    });
+  }
+
+  function renderMsgs(list){
+    var el = document.getElementById('chatMsgs');
+    if(!el) return;
+    el.innerHTML = list.length ? list.map(function(m){
+      return '<div class="cm ' + (m.sender === me.id ? 'me' : 'them') + '"><div class="cm-b">' + esc(m.body) + '</div></div>';
+    }).join('') : '<div class="gbk-empty">ابدئوا الكلام... أول رسالة بتفتح الدنيا 💬✨</div>';
+    el.scrollTop = el.scrollHeight;
+  }
+
+  function sendChat(){
+    var inp = document.getElementById('chatIn');
+    var t = inp.value.trim();
+    if(!t || !chatWith || !me) return;
+    inp.value = '';
+    sb.from('messages').insert({sender: me.id, recipient: chatWith.id, body: t}).then(function(r){
+      if(r.error){ toast('الرسالة مرسلتش — جربي تاني 📡'); return; }
+      sb.from('messages').select('*').or('and(sender.eq.' + me.id + ',recipient.eq.' + chatWith.id + '),and(sender.eq.' + chatWith.id + ',recipient.eq.' + me.id + ')').order('created_at', {ascending: true}).limit(200).then(function(rr){ renderMsgs(rr.data || []); });
+    });
+  }
+
+  function subscribeMsgs(){
+    if(!me || msgChan) return;
+    msgChan = sb.channel('lingua-msgs').on('postgres_changes', {event: 'INSERT', schema: 'public', table: 'messages', filter: 'recipient=eq.' + me.id}, function(p){
+      if(chatWith && p.new.sender === chatWith.id && document.getElementById('chatMsgs')){
+        sb.from('messages').select('*').or('and(sender.eq.' + me.id + ',recipient.eq.' + chatWith.id + '),and(sender.eq.' + chatWith.id + ',recipient.eq.' + me.id + ')').order('created_at', {ascending: true}).limit(200).then(function(rr){ renderMsgs(rr.data || []); });
+      } else {
+        toast('رسالة جديدة من صاحبتك 💬💜');
+      }
+    }).subscribe();
+  }
+
+  /* ---- leaderboard ---- */
+  function loadTop(){
+    var el = document.getElementById('topList');
+    if(!sb){ el.innerHTML = '<div class="gbk-empty">لوحة الشرف محتاجة نت 📡</div>'; return; }
+    sb.from('profiles').select('id,display_name,points').order('points', {ascending: false}).limit(50).then(function(r){
+      if(r.error || !(r.data || []).length){ el.innerHTML = '<div class="gbk-empty">لسه مفيش نقط متسجلة — كوني الأولى! 🏆</div>'; return; }
+      el.innerHTML = r.data.map(function(p, i){
+        var medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1);
+        var isMe = me && p.id === me.id;
+        return '<div class="top-row' + (isMe ? ' me' : '') + '"><div class="top-rank">' + medal + '</div>' +
+          '<div class="fr-name">' + esc(p.display_name) + (isMe ? ' (إنتي! 💜)' : '') + '</div><div class="fr-pts">💎 ' + (p.points || 0) + '</div></div>';
+      }).join('');
+    });
+  }
+
+  /* ---- posts feed ---- */
+  function loadFeed(){
+    var el = document.getElementById('feedList');
+    if(!sb){ el.innerHTML = '<div class="gbk-empty">المنشورات محتاجة نت 📡</div>'; return; }
+    sb.from('posts').select('*').order('created_at', {ascending: false}).limit(50).then(function(r){
+      renderFeed(r.data || []);
+    });
+  }
+  function renderFeed(list){
+    var el = document.getElementById('feedList');
+    el.innerHTML = list.length ? list.map(function(p){
+      var d = '';
+      try { d = new Date(p.created_at).toLocaleDateString('ar-EG', {day: 'numeric', month: 'long'}); } catch(e){}
+      return '<div class="feed-card"><div class="feed-who">' + esc(p.author_name) + ' ✨</div><div>' + esc(p.body) + '</div><div class="feed-when">' + d + '</div></div>';
+    }).join('') : '<div class="gbk-empty">لسه مفيش منشورات — كوني أول واحدة تكتب! 📣✨</div>';
+  }
+  document.getElementById('feedSend').addEventListener('click', function(){
+    if(!me){ toast('سجلي حسابك الأول عشان تنشري 💜'); return; }
+    var t = document.getElementById('feedText').value.trim();
+    if(!t){ toast('اكتبي حاجة الأول ✨'); return; }
+    document.getElementById('feedText').value = '';
+    sb.from('posts').insert({author: me.id, author_name: (myProfile && myProfile.display_name) || 'صديقة', body: t}).then(function(r){
+      if(r.error){ toast('المنشور متنشرش — جربي تاني 📡'); return; }
+      toast('اتنشر! 📣✨');
+      loadFeed();
+    });
+  });
+
+  /* ---- guestbook goes live ---- */
+  function gbkRemoteRender(){
+    if(!sb) return;
+    sb.from('guestbook').select('*').order('created_at', {ascending: false}).limit(60).then(function(r){
+      if(r.error) return;
+      var el = document.getElementById('gbkList');
+      if(!el) return;
+      var list = r.data || [];
+      el.innerHTML = list.length ? list.map(function(x){
+        return '<div class="gbk-card"><div class="gbk-msg">' + esc(x.body) + '</div><div class="gbk-who">— ' + esc(x.author_name || 'زائرة') + ' 💌</div></div>';
+      }).join('') : '<div class="gbk-empty">لسه مفيش كلمات — كوني أول واحدة تسيب كلمة حلوة لكارما 💌</div>';
+    });
+  }
+  try {
+    var gbkForm = document.getElementById('gbkForm');
+    var clone = gbkForm.cloneNode(true);
+    gbkForm.parentNode.replaceChild(clone, gbkForm);
+    clone.addEventListener('submit', function(e){
+      e.preventDefault();
+      var m = document.getElementById('gbkMsg').value.trim();
+      if(!m) return;
+      var n = document.getElementById('gbkName').value.trim() || 'زائرة';
+      document.getElementById('gbkMsg').value = '';
+      if(sb){
+        sb.from('guestbook').insert({author_name: n.slice(0, 40), body: m.slice(0, 500)}).then(function(r){
+          if(r.error){ toast('مفيش نت — كلمتك اتحفظت على جهازك 💌'); }
+          gbkRemoteRender();
+        });
+      } else {
+        toast('مفيش نت — جربي لما النت يرجع 💌');
+      }
+      toast('وصلت كلمتك لكارما 💌 شكرًا!');
+      confetti();
+    });
+    gbkRemoteRender();
+  } catch(e){}
+
+  /* ---- boot ---- */
+  function initSb(){
+    sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+    sb.auth.getSession().then(function(r){
+      if(r.data && r.data.session){
+        me = r.data.session.user;
+        sb.from('profiles').select('*').eq('id', me.id).maybeSingle().then(function(pr){
+          if(pr.data){
+            myProfile = pr.data;
+            var best = Math.max(pr.data.points || 0, getPoints());
+            var bestL = Math.max(pr.data.lifetime || 0, getLifetime());
+            localStorage.setItem('lingua_points', String(best));
+            localStorage.setItem('lingua_lifetime', String(bestL));
+            if(best !== pr.data.points || bestL !== pr.data.lifetime) sb.from('profiles').update({points: best, lifetime: bestL}).eq('id', me.id).then(function(){});
+            if(window.refreshDash) window.refreshDash();
+          }
+          renderAll();
+          consumeRef();
+          subscribeMsgs();
+        });
+      } else {
+        renderAll();
+      }
+    });
+    sb.channel('lingua-feed').on('postgres_changes', {event: 'INSERT', schema: 'public', table: 'posts'}, function(){ loadFeed(); }).subscribe();
+    sb.channel('lingua-gbk').on('postgres_changes', {event: 'INSERT', schema: 'public', table: 'guestbook'}, function(){ gbkRemoteRender(); }).subscribe();
+    loadTop();
+    loadFeed();
+  }
+
+  renderMe();
+  if(window.supabase && window.supabase.createClient){
+    initSb();
+  } else {
+    var sc = document.createElement('script');
+    sc.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+    sc.onload = initSb;
+    sc.onerror = function(){
+      document.getElementById('accMe').innerHTML = '<div class="gbk-empty">الحسابات محتاجة نت — جربي لما النت يرجع 📡💜</div>';
+    };
+    document.head.appendChild(sc);
+  }
 })();
 
 </script>
