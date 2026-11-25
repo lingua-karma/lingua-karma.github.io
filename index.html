@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lingua | لينجوا — تعلّم لغات العالم بفخامة</title>
+<style>
+  :root{
+    --bg:#0b0b12;
+    --bg2:#12121d;
+    --card:#171724;
+    --card2:#1d1d2e;
+    --gold:#d4af37;
+    --gold2:#f0d97a;
+    --text:#f3efe4;
+    --muted:#a9a49a;
+    --ok:#4ade80;
+    --bad:#f87171;
+    --radius:18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI',Tahoma,Arial,sans-serif;
+    line-height:1.7;
+    overflow-x:hidden;
+  }
+  /* ===== Header ===== */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(11,11,18,.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(212,175,55,.25);
+    padding:14px 20px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .logo{
+    font-size:1.6rem;font-weight:800;letter-spacing:1px;
+    background:linear-gradient(120deg,var(--gold2),var(--gold) 60%,#b8860b);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .logo small{display:block;font-size:.7rem;color:var(--muted);font-weight:400;letter-spacing:0}
+  nav{display:flex;gap:6px}
+  nav a{
+    color:var(--muted);text-decoration:none;font-size:.85rem;padding:8px 12px;border-radius:999px;
+    transition:.2s;
+  }
+  nav a:active,nav a:hover{color:var(--gold2);background:rgba(212,175,55,.1)}
+  /* ===== Hero ===== */
+  .hero{
+    text-align:center;padding:70px 20px 50px;
+    background:
+      radial-gradient(600px 300px at 50% -50px, rgba(212,175,55,.18), transparent 70%),
+      radial-gradient(400px 200px at 90% 100%, rgba(90,60,180,.12), transparent 70%);
+  }
+  .hero h1{
+    font-size:clamp(2rem,7vw,3.4rem);font-weight:900;line-height:1.3;
+    background:linear-gradient(120deg,#fff,var(--gold2) 55%,var(--gold));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p{color:var(--muted);max-width:560px;margin:16px auto 28px;font-size:1.05rem}
+  .cta{
+    display:inline-block;text-decoration:none;font-weight:700;font-size:1rem;
+    color:#1a1405;padding:14px 38px;border-radius:999px;
+    background:linear-gradient(120deg,var(--gold2),var(--gold));
+    box-shadow:0 8px 30px rgba(212,175,55,.35);
+    transition:.2s;
+  }
+  .cta:active{transform:scale(.97)}
+  .flags{margin-top:26px;font-size:2rem;letter-spacing:12px}
+  .stats{
+    display:flex;justify-content:center;gap:14px;flex-wrap:wrap;
+    margin-top:34px;
+  }
+  .stat{
+    background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.25);
+    border-radius:14px;padding:12px 22px;min-width:110px;
+  }
+  .stat b{display:block;font-size:1.4rem;color:var(--gold2)}
+  .stat span{font-size:.75rem;color:var(--muted)}
+  /* ===== Feature cards ===== */
+  .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+  .feature{
+    background:linear-gradient(160deg,var(--card),var(--card2));
+    border:1px solid rgba(212,175,55,.18);border-radius:var(--radius);
+    padding:24px 18px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.3);
+  }
+  .feature .ico{font-size:2rem;margin-bottom:10px}
+  .feature h3{font-size:1rem;color:var(--gold2);margin-bottom:6px}
+  .feature p{font-size:.85rem;color:var(--muted)}
+  /* ===== Course cards ===== */
+  .courses{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+  .course{
+    position:relative;border-radius:var(--radius);overflow:hidden;cursor:pointer;
+    border:1px solid rgba(212,175,55,.25);
+    background:linear-gradient(160deg,var(--card2),var(--card));
+    box-shadow:0 12px 34px rgba(0,0,0,.4);transition:.2s;
+  }
+  .course:active{transform:scale(.98)}
+  .course .banner{
+    padding:34px 20px 24px;text-align:center;font-size:3rem;
+    background:radial-gradient(300px 140px at 50% 0%, rgba(212,175,55,.22), transparent 70%);
+  }
+  .course .cbody{padding:0 20px 20px}
+  .course h3{color:#fff;font-size:1.15rem;margin-bottom:4px}
+  .course p{color:var(--muted);font-size:.85rem;margin-bottom:14px}
+  .course .meta{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--gold)}
+  .course .go{
+    background:linear-gradient(120deg,var(--gold2),var(--gold));color:#1a1405;
+    font-weight:700;font-size:.8rem;padding:8px 16px;border-radius:999px;
+  }
+  /* ===== Sections ===== */
+  section{padding:40px 18px;max-width:900px;margin:0 auto}
+  .sec-title{
+    text-align:center;font-size:1.6rem;font-weight:800;margin-bottom:6px;color:var(--gold2);
+  }
+  .sec-sub{text-align:center;color:var(--muted);margin-bottom:26px;font-size:.95rem}
+  /* ===== Language tabs ===== */
+  .tabs{display:flex;justify-content:center;gap:10px;margin-bottom:26px;flex-wrap:wrap}
+  .tab{
+    border:1px solid rgba(212,175,55,.35);background:var(--card);color:var(--text);
+    padding:12px 22px;border-radius:999px;font-size:1rem;font-weight:600;cursor:pointer;
+    font-family:inherit;transition:.2s;
+  }
+  .tab.active{
+    background:linear-gradient(120deg,var(--gold2),var(--gold));color:#1a1405;border-color:transparent;
+    box-shadow:0 6px 20px rgba(212,175,55,.3);
+  }
+  .lang-panel{display:none;animation:fade .3s ease}
+  .lang-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .level-head{
+    display:flex;align-items:center;gap:10px;margin:26px 0 14px;
+    color:var(--gold2);font-weight:800;font-size:1.05rem;
+  }
+  .level-head .pill{
+    font-size:.7rem;font-weight:700;color:#1a1405;padding:4px 12px;border-radius:999px;
+    background:linear-gradient(120deg,var(--gold2),var(--gold));
+  }
+  .level-head .line{flex:1;height:1px;background:rgba(212,175,55,.25)}
+  .lock-note{color:var(--muted);font-size:.8rem;text-align:center;margin-top:6px}
+  /* ===== Lesson cards ===== */
+  .lesson{
+    background:linear-gradient(160deg,var(--card),var(--card2));
+    border:1px solid rgba(212,175,55,.18);
+    border-radius:var(--radius);padding:22px;margin-bottom:18px;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  .lesson h3{color:var(--gold2);font-size:1.15rem;margin-bottom:4px}
+  .lesson .lvl{color:var(--muted);font-size:.8rem;margin-bottom:14px}
+  table{width:100%;border-collapse:collapse;font-size:.95rem}
+  th,td{padding:10px 8px;text-align:right;border-bottom:1px solid rgba(255,255,255,.06)}
+  th{color:var(--gold);font-weight:700;font-size:.85rem}
+  td .foreign{direction:ltr;display:inline-block;font-weight:600;color:#fff}
+  tr:last-child td{border-bottom:none}
+  /* ===== Quiz ===== */
+  .quiz-box{
+    background:linear-gradient(160deg,var(--card),var(--card2));
+    border:1px solid rgba(212,175,55,.18);border-radius:var(--radius);
+    padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  .q-text{font-size:1.15rem;font-weight:700;margin-bottom:16px}
+  .q-foreign{direction:ltr;display:inline-block;color:var(--gold2)}
+  .opt{
+    display:block;width:100%;text-align:right;margin-bottom:10px;
+    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+    color:var(--text);padding:14px 16px;border-radius:12px;font-size:1rem;cursor:pointer;
+    font-family:inherit;transition:.15s;
+  }
+  .opt:active{transform:scale(.98)}
+  .opt.correct{background:rgba(74,222,128,.15);border-color:var(--ok);color:var(--ok)}
+  .opt.wrong{background:rgba(248,113,113,.12);border-color:var(--bad);color:var(--bad)}
+  .quiz-foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;color:var(--muted);font-size:.85rem}
+  .btn{
+    border:none;cursor:pointer;font-family:inherit;font-weight:700;font-size:.95rem;
+    color:#1a1405;padding:12px 28px;border-radius:999px;
+    background:linear-gradient(120deg,var(--gold2),var(--gold));
+  }
+  .result{text-align:center;padding:20px 0}
+  .result .score{font-size:3rem;font-weight:900;color:var(--gold2)}
+  .result p{color:var(--muted);margin-bottom:16px}
+  .best{color:var(--muted);font-size:.8rem;text-align:center;margin-top:8px}
+  /* ===== Videos ===== */
+  .video-grid{display:grid;gap:18px}
+  .video-card{
+    background:var(--card);border:1px solid rgba(212,175,55,.18);
+    border-radius:var(--radius);overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  .video-card .frame{position:relative;padding-top:56.25%}
+  .video-card iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .video-card .vtitle{padding:14px 16px;font-size:.95rem;font-weight:600}
+  .video-card .vlang{padding:0 16px 14px;color:var(--muted);font-size:.8rem}
+  /* ===== Footer ===== */
+  footer{
+    text-align:center;padding:34px 20px;border-top:1px solid rgba(212,175,55,.15);
+    color:var(--muted);font-size:.85rem;
+  }
+  footer .logo{font-size:1.3rem}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Lingua<small>لينجوا — بوابتك للغات العالم</small></div>
+  <nav>
+    <a href="#lessons">الدروس</a>
+    <a href="#quiz">الاختبارات</a>
+    <a href="#videos">الفيديوهات</a>
+  </nav>
+</header>
+
+<!-- AD SLOT: top banner (AdSense leaderboard 728x90 / mobile banner) — تُضاف الشيفرة بعد الموافقة على AdSense -->
+
+<div class="hero">
+  <h1>تعلّم لغات العالم<br>بلمسة من الفخامة</h1>
+  <p>دروس مبسّطة، اختبارات تفاعلية، وفيديوهات مختارة بعناية — الإنجليزية والفرنسية والألمانية في مكان واحد، مجانًا وبالعربية.</p>
+  <a class="cta" href="#lessons">ابدأ رحلتك الآن ✦</a>
+  <div class="flags">🇬🇧 🇫🇷 🇩🇪</div>
+  <div class="stats">
+    <div class="stat"><b>٣</b><span>لغات عالمية</span></div>
+    <div class="stat"><b>٩</b><span>دروس تأسيسية</span></div>
+    <div class="stat"><b>١٥</b><span>سؤال تفاعلي</span></div>
+    <div class="stat"><b>٦</b><span>فيديوهات مختارة</span></div>
+  </div>
+</div>
+
+<!-- ===================== FEATURES ===================== -->
+<section id="features">
+  <h2 class="sec-title">لماذا Lingua؟</h2>
+  <p class="sec-sub">تجربة تعلم صُممت لتليق بكِ</p>
+  <div class="features">
+    <div class="feature"><div class="ico">📚</div><h3>دروس مبسّطة</h3><p>مفردات وجُمل أساسية بالنطق العربي، خطوة بخطوة من الصفر.</p></div>
+    <div class="feature"><div class="ico">📝</div><h3>اختبارات تفاعلية</h3><p>اختبري نفسك بعد كل لغة ودرجاتك تُحفظ على جهازك تلقائيًا.</p></div>
+    <div class="feature"><div class="ico">🎬</div><h3>فيديوهات مختارة</h3><p>أفضل دروس يوتيوب المجانية مجمّعة لك في مكان واحد.</p></div>
+    <div class="feature"><div class="ico">💎</div><h3>مجاني بالكامل</h3><p>كل المحتوى مجاني، بدون تسجيل وبدون اشتراكات.</p></div>
+  </div>
+</section>
+
+<!-- ===================== COURSES ===================== -->
+<section id="courses">
+  <h2 class="sec-title">اختاري لغتك</h2>
+  <p class="sec-sub">٣ مسارات تعلم جاهزة — اضغطي على أي لغة للبدء</p>
+  <div class="courses">
+    <div class="course" data-lang="en">
+      <div class="banner">🇬🇧</div>
+      <div class="cbody">
+        <h3>الإنجليزية</h3>
+        <p>لغة العالم الأولى — تحيات، أرقام، وأفراد العائلة.</p>
+        <div class="meta"><span>٣ دروس • اختبار • فيديو</span><span class="go">ابدئي ←</span></div>
+      </div>
+    </div>
+    <div class="course" data-lang="fr">
+      <div class="banner">🇫🇷</div>
+      <div class="cbody">
+        <h3>الفرنسية</h3>
+        <p>لغة الأناقة — تحيات، أرقام، وكلمات يومية مفيدة.</p>
+        <div class="meta"><span>٣ دروس • اختبار • فيديو</span><span class="go">ابدئي ←</span></div>
+      </div>
+    </div>
+    <div class="course" data-lang="de">
+      <div class="banner">🇩🇪</div>
+      <div class="cbody">
+        <h3>الألمانية</h3>
+        <p>لغة العلم والعمل — تحيات، أرقام، وكلمات يومية.</p>
+        <div class="meta"><span>٣ دروس • اختبار • فيديو</span><span class="go">ابدئي ←</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LESSONS ===================== -->
+<section id="lessons">
+  <h2 class="sec-title">✦ الدروس ✦</h2>
+  <p class="sec-sub">اختاري اللغة وابدئي من الدرس الأول — مفردات وجُمل أساسية للمبتدئين</p>
+
+  <div class="tabs" id="lessonTabs">
+    <button class="tab active" data-lang="en">🇬🇧 الإنجليزية</button>
+    <button class="tab" data-lang="fr">🇫🇷 الفرنسية</button>
+    <button class="tab" data-lang="de">🇩🇪 الألمانية</button>
+  </div>
+
+  <!-- ENGLISH -->
+  <div class="lang-panel active" data-lang="en">
+    <div class="level-head"><span class="pill">المستوى ١</span> المبتدئ <span class="line"></span></div>
+    <div class="lesson">
+      <h3>الدرس ١: التحيات والتعارف</h3>
+      <div class="lvl">مستوى مبتدئ • ٥ دقائق</div>
+      <table>
+        <tr><th>الكلمة / الجملة</th><th>المعنى</th><th>النطق</th></tr>
+        <tr><td><span class="foreign">Hello</span></td><td>مرحبًا</td><td>هَلو</td></tr>
+        <tr><td><span class="foreign">Good morning</span></td><td>صباح الخير</td><td>جُد مورنينج</td></tr>
+        <tr><td><span class="foreign">How are you?</span></td><td>كيف حالك؟</td><td>هاو آر يو؟</td></tr>
+        <tr><td><span class="foreign">I'm fine, thank you</span></td><td>أنا بخير، شكرًا</td><td>آيم فاين، ثانك يو</td></tr>
+        <tr><td><span class="foreign">What is your name?</span></td><td>ما اسمك؟</td><td>وات إز يور نيم؟</td></tr>
+        <tr><td><span class="foreign">My name is…</span></td><td>اسمي هو…</td><td>ماي نيم إز…</td></tr>
+        <tr><td><span class="foreign">Nice to meet you</span></td><td>سعيد بلقائك</td><td>نايس تو ميت يو</td></tr>
+      </table>
+    </div>
+    <div class="lesson">
+      <h3>الدرس ٢: الأرقام من ١ إلى ١٠</h3>
+      <div class="lvl">مستوى مبتدئ • ٤ دقائق</div>
+      <table>
+        <tr><th>الرقم</th><th>بالإنجليزية</th><th>النطق</th></tr>
+        <tr><td>١</td><td><span class="foreign">One</span></td><td>وان</td></tr>
+        <tr><td>٢</td><td><span class="foreign">Two</span></td><td>تو</td></tr>
+        <tr><td>٣</td><td><span class="foreign">Three</span></td><td>ثري</td></tr>
+        <tr><td>٤</td><td><span class="foreign">Four</span></td><td>فور</td></tr>
+        <tr><td>٥</td><td><span class="foreign">Five</span></td><td>فايف</td></tr>
+        <tr><td>٦</td><td><span class="foreign">Six</span></td><td>سيكس</td></tr>
+        <tr><td>٧</td><td><span class="foreign">Seven</span></td><td>سيفن</td></tr>
+        <tr><td>٨</td><td><span class="foreign">Eight</span></td><td>إيت</td></tr>
+        <tr><td>٩</td><td><span class="foreign">Nine</span></td><td>ناين</td></tr>
+        <tr><td>١٠</td><td><span class="foreign">Ten</span></td><td>تين</td></tr>
+      </table>
+    </div>
+    <div class="lesson">
+      <h3>الدرس ٣: أفراد العائلة</h3>
+      <div class="lvl">مستوى مبتدئ • ٤ دقائق</div>
+      <table>
+        <tr><th>الكلمة</th><th>المعنى</th><th>النطق</th></tr>
+        <tr><td><span class="foreign">Father</span></td><td>أب</td><td>فاذر</td></tr>
+        <tr><td><span class="foreign">Mother</span></td><td>أم</td><td>ماذر</td></tr>
+        <tr><td><span class="foreign">Brother</span></td><td>أخ</td><td>براذر</td></tr>
+        <tr><td><span class="foreign">Sister</span></td><td>أخت</td><td>سيستر</td></tr>
+        <tr><td><span class="foreign">Grandfather</span></td><td>جد</td><td>جراند فاذر</td></tr>
+        <tr><td><span class="foreign">Grandmother</span></td><td>جدة</td><td>جراند ماذر</td></tr>
+      </table>
+    </div>
+    <div class="level-head"><span class="pill">المستوى ٢</span> المتوسط <span class="line"></span></div>
+    <div class="lesson">
+      <h3>الدرس ١: جمل المحادثة اليومية</h3>
+      <div class="lvl">مستوى متوسط • ٦ دقائق</div>
+      <table>
+        <tr><th>الجملة</th><th>المعنى</th><th>النطق</th></tr>
+        <tr><td><span class="foreign">Where are you from?</span></td><td>من أين أنتِ؟</td><td>وير آر يو فروم؟</td></tr>
+        <tr><td><span class="foreign">I am from Egypt</span></td><td>أنا من مصر</td><td>آي آم فروم إيجيبت</td></tr>
+        <tr><td><span class="foreign">How old are you?</span></td><td>كم عمرك؟</td><td>هاو أولد آر يو؟</td></tr>
+        <tr><td><span class="foreign">I am twenty years old</span></td><td>عمري عشرون سنة</td><td>آي آم توينتي ييرز أولد</td></tr>
+        <tr><td><span class="foreign">What do you do?</span></td><td>ماذا تعملين؟</td><td>وات دو يو دو؟</td></tr>
+        <tr><td><span class="foreign">I am a student</span></td><td>أنا طالبة</td><td>آي آم أستيودنت</td></tr>
+      </table>
+    </div>
+    <div class="level-head"><span class="pill">المستوى ٣</span> المتقدم <span class="line"></span></div>
+    <div class="lesson">
+      <h3>الدرس ١: تعبيرات شائعة يستخدمها الأجانب</h3>
+      <div class="lvl">مستوى متقدم • ٦ دقائق</div>
+      <table>
+        <tr><th>التعبير</th><th>المعنى</th><th>النطق</th></tr>
+        <tr><td><span class="foreign">Never mind</span></td><td>لا يهم / لا تقلق</td><td>نيفر مايند</td></tr>
+        <tr><td><span class="foreign">Sounds good</span></td><td>يبدو جيدًا</td><td>ساوندز جود</td></tr>
+        <tr><td><span class="foreign">It's up to you</span></td><td>الأمر يرجع إليكِ</td><td>إتس أب تو يو</td></tr>
+        <tr><td><span class="foreign">Long time no see</span></td><td>لم أرك منذ زمن</td><td>لونج تايم نو سي</td></tr>
+        <tr><td><span class="foreign">No worries</span></td><td>لا مشكلة</td><td>نو وريس</td></tr>
+        <tr><td><span class="foreign">I'm looking forward to it</span></td><td>أتطلع لذلك بفارغ الصبر</td><td>آيم لوكينج فوروورد تو إت</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- FRENCH -->
+  <div class="lang-panel" data-lang="fr">
+    <div class="level-head"><span class="pill">المستوى ١</span> المبتدئ <span class="line"></span></div>
+    <div class="lesson">
+      <h3>الدرس ١: التحيات والتعارف</h3>
+      <div class="lvl">مستوى مبتدئ • ٥ دقائق</div>
+      <table>
+        <tr><th>الكلمة / الجملة</th><th>المعنى</th><th>النطق</th></tr>
+        <tr><td><span class="foreign">Bonjour</span></td><td>مرحبًا / صباح الخير</td><td>بونجور</td></tr>
+        <tr><td><span class="foreign">Bonsoir</span></td><td>مساء الخير</td><td>بونسوار</td></tr>
+        <tr><td><span class="foreign">Ça va?</span></td><td>كيف حالك؟</td><td>سا فا؟</td></tr>
+        <tr><td><span class="foreign">Ça va bien, merci</span></td><td>أنا بخير، شكرًا</td><td>سا فا بيان، ميرسي</td></tr>
+        <tr><td><span class="foreign">Comment tu t'appelles?</span></td><td>ما اسمك؟</td><td>كومان تي تابيل؟</td></tr>
+        <tr><td><span class="foreign">Je m'appelle…</span></td><td>اسمي…</td><td>جُ مابيل…</td></tr>
+        <tr><td><span class="foreign">Enchanté(e)</span></td><td>تشرفت بمعرفتك</td><td>أونشانتيه</td></tr>
+      </table>
+    </div>
+    <div class="lesson">
+      <h3>الدرس ٢: الأرقام من ١ إلى ١٠</h3>
+      <div class="lvl">مستوى مبتدئ • ٤ دقائق</div>
+      <table>
+        <tr><th>الرقم</th><th>بالفرنسية</th><th>النطق</th></tr>
+        <tr><td>١</td><td><span class="foreign">Un</span></td><td>آن</td></tr>
+        <tr><td>٢</td><td><span class="foreign">Deux</span></td><td>دُو</td></tr>
+        <tr><td>٣</td><td><span class="foreign">Trois</span></td><td>تْروا</td></tr>
+        <tr><td>٤</td><td><span class="foreign">Quatre</span></td><td>كاتر</td></tr>
+        <tr><td>٥</td><td><span class="foreign">Cinq</span></td><td>سانك</td></tr>
+        <tr><td>٦</td><td><span class="foreign">Six</span></td><td>سيس</td></tr>
+        <tr><td>٧</td><td><span class="foreign">Sept</span></td><td>سيت</td></tr>
+        <tr><td>٨</td><td><span class="foreign">Huit</span></td><td>وِيت</td></tr>
+        <tr><td>٩</td><td><span class="foreign">Neuf</span></td><td>نُف</td></tr>
+        <tr><td>١٠</td><td><span class="foreign">Dix</span></td><td>ديس</td></tr>
+      </table>
+    </div>
+    <div class="lesson">
+      <h3>الدرس ٣: كلمات يومية مفيدة</h3>
+      <div class="lvl">مستوى مبتدئ • ٤ دقائق</div>
+      <table>
+        <tr><th>الكلمة</th><th>المعنى</th><th>النطق</th></tr>
+        <tr><td><span class="foreign">Merci</span></td><td>شكرًا</td><td>ميرسي</td></tr>
+        <tr><td><span class="foreign">S'il vous plaît</span></td><td>من فضلك</td><td>سيل فو بليه</td></tr>
+        <tr><td><span class="foreign">Oui / Non</span></td><td>نعم / لا</td><td>وِي / نو</td></tr>
+        <tr><td><span class="foreign">Pardon</span></td><td>عذرًا</td><td>باردون</td></tr>
+        <tr><td><span class="foreign">L'eau</span></td><td>الماء</td><td>لو</td></tr>
+        <tr><td><span class="foreign">Le pain</span></td><td>الخبز</td><td>لو بان</td></tr>
+      </table>
+    </div>
+    <div class="level-head"><span class="pill">المستوى ٢</span> المتوسط <span class="line"></span></div>
+    <div class="lesson">
+      <h3>الدرس ١: جمل المحادثة اليومية</h3>
+      <div class="lvl">مستوى متوسط • ٦ دقائق</div>
+      <table>
+        <tr><th>الجملة</th><th>المعنى</th><th>النطق</th></tr>
+        <tr><td><span class="foreign">D'où viens-tu?</span></td><td>من أين أنتِ؟</td><td>دو فيان تي؟</td></tr>
+        <tr><td><span class="foreign">Je viens d'Égypte</span></td><td>أنا من مصر</td><td>جُ فيان ديجيبت</td></tr>
+        <tr><td><span class="foreign">Quel âge as-tu?</span></td><td>كم عمرك؟</td><td>كيل آج آ تي؟</td></tr>
+        <tr><td><span class="foreign">J'ai vingt ans</span></td><td>عمري عشرون سنة</td><td>جيه فان آن</td></tr>
+        <tr><td><span class="foreign">Où habites-tu?</span></td><td>أين تسكنين؟</td><td>أو آبيت تي؟</td></tr>
+        <tr><td><span class="foreign">Je suis étudiante</span></td><td>أنا طالبة</td><td>جُ سوي إيتيديانت</td></tr>
+      </table>
+    </div>
+    <div class="level-head"><span class="pill">المستوى ٣</span> المتقدم <span class="line"></span></div>
+    <div class="lesson">
+      <h3>الدرس ١: تعبيرات شائعة يستخدمها الفرنسيون</h3>
+      <div class="lvl">مستوى متقدم • ٦ دقائق</div>
+      <table>
+        <tr><th>التعبير</th><th>المعنى</th><th>النطق</th></tr>
+        <tr><td><span class="foreign">D'accord</span></td><td>حسنًا / موافقة</td><td>داكور</td></tr>
+        <tr><td><span class="foreign">Pas de problème</span></td><td>لا مشكلة</td><td>با دو بروبليم</td></tr>
+        <tr><td><span class="foreign">Bien sûr</span></td><td>بالتأكيد</td><td>بيان سور</td></tr>
+        <tr><td><span class="foreign">À tout à l'heure</span></td><td>أراك لاحقًا</td><td>آ تو تا لير</td></tr>
+        <tr><td><span class="foreign">Je t'en prie</span></td><td>عفوًا / على الرحب</td><td>جُ تان بري</td></tr>
+        <tr><td><span class="foreign">Ça m'est égal</span></td><td>لا يفرق معي</td><td>سا ميه إيجال</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- GERMAN -->
+  <div class="lang-panel" data-lang="de">
+    <div class="level-head"><span class="pill">المستوى ١</span> المبتدئ <span class="line"></span></div>
+    <div class="lesson">
+      <h3>الدرس ١: التحيات والتعارف</h3>
+      <div class="lvl">مستوى مبتدئ • ٥ دقائق</div>
+      <table>
+        <tr><th>الكلمة / الجملة</th><th>المعنى</th><th>النطق</th></tr>
+        <tr><td><span class="foreign">Hallo</span></td><td>مرحبًا</td><td>هالو</td></tr>
+        <tr><td><span class="foreign">Guten Morgen</span></td><td>صباح الخير</td><td>جوتن مورجن</td></tr>
+        <tr><td><span class="foreign">Guten Tag</span></td><td>نهارك سعيد</td><td>جوتن تاج</td></tr>
+        <tr><td><span class="foreign">Wie geht's?</span></td><td>كيف حالك؟</td><td>في جيتس؟</td></tr>
+        <tr><td><span class="foreign">Mir geht's gut, danke</span></td><td>أنا بخير، شكرًا</td><td>مير جيتس جوت، دانكه</td></tr>
+        <tr><td><span class="foreign">Wie heißt du?</span></td><td>ما اسمك؟</td><td>في هايست دو؟</td></tr>
+        <tr><td><span class="foreign">Ich heiße…</span></td><td>اسمي…</td><td>إش هايسه…</td></tr>
+      </table>
+    </div>
+    <div class="lesson">
+      <h3>الدرس ٢: الأرقام من ١ إلى ١٠</h3>
+      <div class="lvl">مستوى مبتدئ • ٤ دقائق</div>
+      <table>
+        <tr><th>الرقم</th><th>بالألمانية</th><th>النطق</th></tr>
+        <tr><td>١</td><td><span class="foreign">Eins</span></td><td>آينس</td></tr>
+        <tr><td>٢</td><td><span class="foreign">Zwei</span></td><td>تسفاي</td></tr>
+        <tr><td>٣</td><td><span class="foreign">Drei</span></td><td>دراي</td></tr>
+        <tr><td>٤</td><td><span class="foreign">Vier</span></td><td>فير</td></tr>
+        <tr><td>٥</td><td><span class="foreign">Fünf</span></td><td>فونف</td></tr>
+        <tr><td>٦</td><td><span class="foreign">Sechs</span></td><td>زيكس</td></tr>
+        <tr><td>٧</td><td><span class="foreign">Sieben</span></td><td>زيبن</td></tr>
+        <tr><td>٨</td><td><span class="foreign">Acht</span></td><td>آخت</td></tr>
+        <tr><td>٩</td><td><span class="foreign">Neun</span></td><td>نوين</td></tr>
+        <tr><td>١٠</td><td><span class="foreign">Zehn</span></td><td>تسين</td></tr>
+      </table>
+    </div>
+    <div class="lesson">
+      <h3>الدرس ٣: كلمات يومية مفيدة</h3>
+      <div class="lvl">مستوى مبتدئ • ٤ دقائق</div>
+      <table>
+        <tr><th>الكلمة</th><th>المعنى</th><th>النطق</th></tr>
+        <tr><td><span class="foreign">Danke</span></td><td>شكرًا</td><td>دانكه</td></tr>
+        <tr><td><span class="foreign">Bitte</span></td><td>من فضلك / عفوًا</td><td>بيته</td></tr>
+        <tr><td><span class="foreign">Ja / Nein</span></td><td>نعم / لا</td><td>يا / ناين</td></tr>
+        <tr><td><span class="foreign">Entschuldigung</span></td><td>عذرًا</td><td>إنتشولديجونج</td></tr>
+        <tr><td><span class="foreign">Wasser</span></td><td>الماء</td><td>فاسر</td></tr>
+        <tr><td><span class="foreign">Brot</span></td><td>الخبز</td><td>بروت</td></tr>
+      </table>
+    </div>
+    <div class="level-head"><span class="pill">المستوى ٢</span> المتوسط <span class="line"></span></div>
+    <div class="lesson">
+      <h3>الدرس ١: جمل المحادثة اليومية</h3>
+      <div class="lvl">مستوى متوسط • ٦ دقائق</div>
+      <table>
+        <tr><th>الجملة</th><th>المعنى</th><th>النطق</th></tr>
+        <tr><td><span class="foreign">Woher kommst du?</span></td><td>من أين أنتِ؟</td><td>فوهر كومست دو؟</td></tr>
+        <tr><td><span class="foreign">Ich komme aus Ägypten</span></td><td>أنا من مصر</td><td>إش كومه أوس إجيبتن</td></tr>
+        <tr><td><span class="foreign">Wie alt bist du?</span></td><td>كم عمرك؟</td><td>في ألت بيست دو؟</td></tr>
+        <tr><td><span class="foreign">Ich bin zwanzig Jahre alt</span></td><td>عمري عشرون سنة</td><td>إش بين تسفانتسيج ياره ألت</td></tr>
+        <tr><td><span class="foreign">Wo wohnst du?</span></td><td>أين تسكنين؟</td><td>فو فونست دو؟</td></tr>
+        <tr><td><span class="foreign">Ich bin Studentin</span></td><td>أنا طالبة</td><td>إش بين شتودنتين</td></tr>
+      </table>
+    </div>
+    <div class="level-head"><span class="pill">المستوى ٣</span> المتقدم <span class="line"></span></div>
+    <div class="lesson">
+      <h3>الدرس ١: تعبيرات شائعة يستخدمها الألمان</h3>
+      <div class="lvl">مستوى متقدم • ٦ دقائق</div>
+      <table>
+        <tr><th>التعبير</th><th>المعنى</th><th>النطق</th></tr>
+        <tr><td><span class="foreign">Kein Problem</span></td><td>لا مشكلة</td><td>كاين بروبليم</td></tr>
+        <tr><td><span class="foreign">Na klar</span></td><td>بالتأكيد / طبعًا</td><td>نا كلار</td></tr>
+        <tr><td><span class="foreign">Bis später</span></td><td>إلى اللقاء لاحقًا</td><td>بيس شبيتير</td></tr>
+        <tr><td><span class="foreign">Alles Gute</span></td><td>كل التوفيق</td><td>ألس جوته</td></tr>
+        <tr><td><span class="foreign">Mach's gut</span></td><td>اعتنِ بنفسك</td><td>ماخس جوت</td></tr>
+        <tr><td><span class="foreign">Schön, dich kennenzulernen</span></td><td>سعيد بالتعرف عليكِ</td><td>شون، ديش كينن تسو ليرنن</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- AD SLOT: in-content rectangle (AdSense 336x280) بين الدروس والاختبارات — تُضاف الشيفرة بعد الموافقة على AdSense -->
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz">
+  <h2 class="sec-title">✦ الاختبارات ✦</h2>
+  <p class="sec-sub">اختبري نفسك في كل لغة — درجاتك تُحفظ على جهازك تلقائيًا</p>
+
+  <div class="tabs" id="quizTabs">
+    <button class="tab active" data-lang="en">🇬🇧 الإنجليزية</button>
+    <button class="tab" data-lang="fr">🇫🇷 الفرنسية</button>
+    <button class="tab" data-lang="de">🇩🇪 الألمانية</button>
+  </div>
+  <div class="tabs" id="quizLevelTabs" style="margin-top:-12px">
+    <button class="tab active" data-level="beg">المستوى المبتدئ</button>
+    <button class="tab" data-level="mid">المستوى المتوسط</button>
+  </div>
+
+  <div class="quiz-box" id="quizBox"></div>
+  <div class="best" id="bestScore"></div>
+</section>
+
+<!-- ===================== VIDEOS ===================== -->
+<section id="videos">
+  <h2 class="sec-title">✦ فيديوهات التعلم ✦</h2>
+  <p class="sec-sub">دروس فيديو مختارة من يوتيوب لتبدئي من الصفر</p>
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/uYEiKO--dAQ" title="درس إنجليزي A1 — أول محادثة" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="vtitle">أول محادثة إنجليزية: التحيات والتعارف والحروف</div>
+      <div class="vlang">🇬🇧 الإنجليزية • مستوى A1</div>
+    </div>
+    <div class="video-card">
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/IeaadwctbD4" title="درس إنجليزي للمبتدئين — سررت بمقابلتك" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="vtitle">المستوى المبتدئ — الدرس الأول: سررت بمقابلتك</div>
+      <div class="vlang">🇬🇧 الإنجليزية • شرح بالعربية</div>
+    </div>
+    <div class="video-card">
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/c7Jc0U0CiAQ" title="أهم الجمل الفرنسية مع الترجمة" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="vtitle">استمعي ورددي: أهم الجمل الفرنسية اليومية مع الترجمة</div>
+      <div class="vlang">🇫🇷 الفرنسية • مبتدئ</div>
+    </div>
+    <div class="video-card">
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/Sk6YQynZ1h8" title="تعلم الفرنسية من الصفر" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="vtitle">تعلّم الفرنسية من الصفر — دليل المبتدئين الكامل</div>
+      <div class="vlang">🇫🇷 الفرنسية • FrenchPod101</div>
+    </div>
+    <div class="video-card">
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/ZYYpP_hGvHs" title="تعلم الألمانية من الصفر — الأرقام" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="vtitle">الألمانية من الصفر — درس الأرقام بطريقة سهلة</div>
+      <div class="vlang">🇩🇪 الألمانية • مستوى A1</div>
+    </div>
+    <div class="video-card">
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/videoseries?list=PL_Lje8xtkLIrDBN78pbFG5r1xFOIHXIBj" title="كورس ألماني A1.1 للمبتدئين" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="vtitle">كورس متكامل: اللغة الألمانية للمبتدئين A1.1</div>
+      <div class="vlang">🇩🇪 الألمانية • قائمة تشغيل كاملة</div>
+    </div>
+  </div>
+</section>
+
+<!-- AD SLOT: bottom banner (AdSense anchor / 728x90) قبل الفوتر — تُضاف الشيفرة بعد الموافقة على AdSense -->
+
+<footer>
+  <div class="logo">Lingua</div>
+  <p>لينجوا — تعلّمي لغات العالم مجانًا وبالعربية 💜</p>
+  <p style="margin-top:8px">© 2026 Lingua — جميع الحقوق محفوظة</p>
+</footer>
+
+<script>
+/* ================= Tabs ================= */
+function bindTabs(tabsId, panelsSelector){
+  const tabs = document.querySelectorAll('#'+tabsId+' .tab');
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){x.classList.remove('active')});
+      t.classList.add('active');
+      const lang = t.dataset.lang;
+      if(panelsSelector === 'lessons'){
+        document.querySelectorAll('.lang-panel').forEach(function(p){
+          p.classList.toggle('active', p.dataset.lang === lang);
+        });
+      } else {
+        startQuiz(lang, cur.level);
+      }
+    });
+  });
+}
+bindTabs('lessonTabs','lessons');
+bindTabs('quizTabs','quiz');
+
+/* Course cards jump to the lessons section with that language selected */
+document.querySelectorAll('.course').forEach(function(c){
+  c.addEventListener('click', function(){
+    const lang = c.dataset.lang;
+    document.querySelectorAll('#lessonTabs .tab').forEach(function(t){
+      t.classList.toggle('active', t.dataset.lang === lang);
+    });
+    document.querySelectorAll('.lang-panel').forEach(function(p){
+      p.classList.toggle('active', p.dataset.lang === lang);
+    });
+    document.getElementById('lessons').scrollIntoView({behavior:'smooth'});
+  });
+});
+
+/* ================= Quiz data ================= */
+const QUIZZES = {
+  en: {
+    beg: [
+      {q:'ما معنى كلمة <span class="q-foreign">Hello</span>؟', opts:['وداعًا','مرحبًا','شكرًا','من فضلك'], a:1},
+      {q:'كيف تقول «صباح الخير» بالإنجليزية؟', opts:['<span class="q-foreign">Good night</span>','<span class="q-foreign">Good evening</span>','<span class="q-foreign">Good morning</span>','<span class="q-foreign">Goodbye</span>'], a:2},
+      {q:'ما معنى <span class="q-foreign">Thank you</span>؟', opts:['شكرًا','عذرًا','نعم','مرحبًا'], a:0},
+      {q:'كلمة <span class="q-foreign">Mother</span> تعني:', opts:['أخت','جدة','أم','ابنة'], a:2},
+      {q:'الرقم <span class="q-foreign">Seven</span> هو:', opts:['٦','٧','٨','٩'], a:1}
+    ],
+    mid: [
+      {q:'ما معنى <span class="q-foreign">Where are you from?</span>', opts:['كم عمرك؟','من أين أنتِ؟','أين تسكنين؟','ما اسمك؟'], a:1},
+      {q:'<span class="q-foreign">I am a student</span> تعني:', opts:['أنا معلمة','أنا طبيبة','أنا طالبة','أنا مهندسة'], a:2},
+      {q:'ما معنى <span class="q-foreign">Never mind</span>؟', opts:['لا يهم','بالتأكيد','أراك لاحقًا','مبروك'], a:0},
+      {q:'كيف تقول «أنا من مصر» بالإنجليزية؟', opts:['<span class="q-foreign">I live in Egypt</span>','<span class="q-foreign">I am from Egypt</span>','<span class="q-foreign">I love Egypt</span>','<span class="q-foreign">I go to Egypt</span>'], a:1},
+      {q:'<span class="q-foreign">Sounds good</span> تعني:', opts:['صوت عالٍ','اسمع جيدًا','يبدو جيدًا','كلام جميل'], a:2}
+    ]
+  },
+  fr: {
+    beg: [
+      {q:'ما معنى <span class="q-foreign">Bonjour</span>؟', opts:['مساء الخير','وداعًا','مرحبًا','شكرًا'], a:2},
+      {q:'كيف تقول «شكرًا» بالفرنسية؟', opts:['<span class="q-foreign">Pardon</span>','<span class="q-foreign">Merci</span>','<span class="q-foreign">Oui</span>','<span class="q-foreign">Bonsoir</span>'], a:1},
+      {q:'<span class="q-foreign">Oui</span> تعني:', opts:['لا','ربما','نعم','أبدًا'], a:2},
+      {q:'الرقم <span class="q-foreign">Trois</span> هو:', opts:['٢','٣','٤','٥'], a:1},
+      {q:'ما معنى <span class="q-foreign">L\'eau</span>؟', opts:['الخبز','الحليب','العصير','الماء'], a:3}
+    ],
+    mid: [
+      {q:'ما معنى <span class="q-foreign">D\'où viens-tu?</span>', opts:['كم عمرك؟','من أين أنتِ؟','ماذا تعملين؟','أين تسكنين؟'], a:1},
+      {q:'<span class="q-foreign">J\'ai vingt ans</span> تعني:', opts:['عمري عشرون سنة','أنا من مصر','أنا طالبة','أنا بخير'], a:0},
+      {q:'ما معنى <span class="q-foreign">D\'accord</span>؟', opts:['وداعًا','عذرًا','حسنًا / موافقة','شكرًا'], a:2},
+      {q:'<span class="q-foreign">À tout à l\'heure</span> تعني:', opts:['أراك لاحقًا','صباح الخير','تصبح على خير','أهلاً بك'], a:0},
+      {q:'كيف تقول «أنا طالبة» بالفرنسية؟', opts:['<span class="q-foreign">Je suis étudiante</span>','<span class="q-foreign">Je suis professeur</span>','<span class="q-foreign">Je suis médecin</span>','<span class="q-foreign">Je suis ingénieure</span>'], a:0}
+    ]
+  },
+  de: {
+    beg: [
+      {q:'ما معنى <span class="q-foreign">Hallo</span>؟', opts:['مرحبًا','وداعًا','شكرًا','عذرًا'], a:0},
+      {q:'كيف تقول «شكرًا» بالألمانية؟', opts:['<span class="q-foreign">Bitte</span>','<span class="q-foreign">Ja</span>','<span class="q-foreign">Danke</span>','<span class="q-foreign">Nein</span>'], a:2},
+      {q:'<span class="q-foreign">Ja</span> تعني:', opts:['لا','نعم','ربما','أمس'], a:1},
+      {q:'الرقم <span class="q-foreign">Fünf</span> هو:', opts:['٤','٥','٦','٧'], a:1},
+      {q:'ما معنى <span class="q-foreign">Brot</span>؟', opts:['الماء','الجبن','الخبز','التفاح'], a:2}
+    ],
+    mid: [
+      {q:'ما معنى <span class="q-foreign">Woher kommst du?</span>', opts:['كم عمرك؟','من أين أنتِ؟','ما اسمك؟','أين تسكنين؟'], a:1},
+      {q:'<span class="q-foreign">Ich komme aus Ägypten</span> تعني:', opts:['أنا أسكن في مصر','أنا أحب مصر','أنا من مصر','أنا أسافر إلى مصر'], a:2},
+      {q:'ما معنى <span class="q-foreign">Kein Problem</span>؟', opts:['مشكلة كبيرة','لا مشكلة','عذرًا','مع السلامة'], a:1},
+      {q:'<span class="q-foreign">Bis später</span> تعني:', opts:['صباح الخير','تصبح على خير','إلى اللقاء لاحقًا','أهلاً وسهلاً'], a:2},
+      {q:'كيف تقول «أنا طالبة» بالألمانية؟', opts:['<span class="q-foreign">Ich bin Lehrerin</span>','<span class="q-foreign">Ich bin Studentin</span>','<span class="q-foreign">Ich bin Ärztin</span>','<span class="q-foreign">Ich bin Schülerin</span>'], a:1}
+    ]
+  }
+};
+const LANG_NAMES = {en:'الإنجليزية', fr:'الفرنسية', de:'الألمانية'};
+
+let cur = {lang:'en', level:'beg', i:0, score:0, locked:false};
+const LEVEL_NAMES = {beg:'المبتدئ', mid:'المتوسط'};
+
+function bestKey(lang, level){ return 'lingua_best_'+lang+'_'+level; }
+function showBest(lang, level){
+  const b = localStorage.getItem(bestKey(lang, level));
+  document.getElementById('bestScore').textContent =
+    b !== null ? ('🏆 أفضل نتيجة لك في '+LANG_NAMES[lang]+' — '+LEVEL_NAMES[level]+': '+b+' من '+QUIZZES[lang][level].length) : '';
+}
+
+function startQuiz(lang, level){
+  cur = {lang:lang, level:(level || cur.level || 'beg'), i:0, score:0, locked:false};
+  showBest(cur.lang, cur.level);
+  renderQ();
+}
+
+function renderQ(){
+  const box = document.getElementById('quizBox');
+  const qs = QUIZZES[cur.lang][cur.level];
+  if(cur.i >= qs.length){ return renderResult(); }
+  const q = qs[cur.i];
+  cur.locked = false;
+  let html = '<div class="q-text">'+(cur.i+1)+'. '+q.q+'</div>';
+  q.opts.forEach(function(o, idx){
+    html += '<button class="opt" data-i="'+idx+'">'+o+'</button>';
+  });
+  html += '<div class="quiz-foot"><span>سؤال '+(cur.i+1)+' من '+qs.length+'</span><span>النقاط: '+cur.score+'</span></div>';
+  box.innerHTML = html;
+  box.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){ answer(parseInt(btn.dataset.i,10)); });
+  });
+}
+
+function answer(idx){
+  if(cur.locked) return;
+  cur.locked = true;
+  const q = QUIZZES[cur.lang][cur.level][cur.i];
+  const opts = document.querySelectorAll('#quizBox .opt');
+  opts.forEach(function(o, i){
+    if(i === q.a) o.classList.add('correct');
+    else if(i === idx) o.classList.add('wrong');
+  });
+  if(idx === q.a) cur.score++;
+  setTimeout(function(){
+    cur.i++;
+    renderQ();
+  }, 900);
+}
+
+function renderResult(){
+  const box = document.getElementById('quizBox');
+  const total = QUIZZES[cur.lang][cur.level].length;
+  const prev = parseInt(localStorage.getItem(bestKey(cur.lang, cur.level)) || '-1', 10);
+  if(cur.score > prev) localStorage.setItem(bestKey(cur.lang, cur.level), String(cur.score));
+  let msg;
+  if(cur.score === total) msg = 'مذهل! علامة كاملة 🌟';
+  else if(cur.score >= total-1) msg = 'ممتاز! أنتِ قريبة جدًا من العلامة الكاملة';
+  else if(cur.score >= total/2) msg = 'جيد جدًا! راجعي الدروس وحاولي من جديد';
+  else msg = 'بداية شجاعة! اقرئي الدروس ثم أعيدي المحاولة';
+  box.innerHTML =
+    '<div class="result"><div class="score">'+cur.score+' / '+total+'</div>'+
+    '<p>'+msg+'</p>'+
+    '<button class="btn" id="retryBtn">إعادة الاختبار ↺</button></div>';
+  document.getElementById('retryBtn').addEventListener('click', function(){ startQuiz(cur.lang, cur.level); });
+  showBest(cur.lang, cur.level);
+}
+
+/* quiz level tabs */
+document.querySelectorAll('#quizLevelTabs .tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('#quizLevelTabs .tab').forEach(function(x){x.classList.remove('active')});
+    t.classList.add('active');
+    startQuiz(cur.lang, t.dataset.level);
+  });
+});
+
+startQuiz('en','beg');
+</script>
+</body>
+</html>
