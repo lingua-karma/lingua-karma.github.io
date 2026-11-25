@@ -682,6 +682,27 @@
   .goal-head{display:flex;justify-content:space-between;color:var(--gold2);font-weight:800;margin-bottom:10px;font-size:.95rem}
   .goal-bar{height:14px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
   .goal-fill{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--gold2),var(--gold));transition:width .6s ease}
+  .corner-pick{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
+  .corner-flag{display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px 26px;border-radius:20px;border:1px solid rgba(var(--goldA),.3);background:var(--card);cursor:pointer;font-family:inherit;color:#fff;font-size:2rem;transition:.25s}
+  .corner-flag span{font-size:.95rem;font-weight:800;color:var(--gold2)}
+  .corner-flag.active{border-color:var(--gold2);background:rgba(var(--goldA),.18);transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,.4)}
+  .corner-card{max-width:860px;margin:0 auto;background:var(--card);border:1px solid rgba(var(--goldA),.3);border-radius:var(--radius);padding:30px;box-shadow:0 16px 44px rgba(0,0,0,.4)}
+  .corner-hero{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:16px}
+  .corner-hero .cflag{font-size:3.4rem}
+  .corner-hero .cname{font-size:1.6rem;font-weight:900;color:var(--gold2)}
+  .corner-hero .cmotto{color:var(--muted);font-size:.95rem}
+  .corner-greet{margin-inline-start:auto;text-align:center}
+  .corner-greet .gw{font-size:1.4rem;font-weight:800;color:#fff}
+  .corner-facts{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+  .corner-fact{flex:1;min-width:150px;background:rgba(var(--goldA),.12);border:1px solid rgba(var(--goldA),.3);border-radius:14px;padding:12px;text-align:center;font-size:.9rem;color:var(--gold2);font-weight:700}
+  .corner-words{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:18px}
+  .corner-word{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:10px 12px;font-size:.95rem}
+  .corner-word b{color:#fff;direction:ltr}
+  .corner-word span{color:var(--muted);font-size:.85rem}
+  .corner-cta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+  header nav{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;max-width:100%}
+  header nav::-webkit-scrollbar{display:none}
+  header nav a{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -777,6 +798,19 @@
 
   <h3 class="level-head" style="margin-top:40px"><span class="pill">⚔️ أصحابك</span><span class="line"></span></h3>
   <div class="chal-list" id="chalList"></div>
+</section>
+
+<!-- ===================== LANGUAGE CORNERS ===================== -->
+<section id="corners">
+  <h2 class="sec-title">✦ أقسام اللغات ✦</h2>
+  <p class="sec-sub">كل لغة ليها ركنها الخاص — اختاري لغتك وعيشي جوّها 🌍</p>
+  <div class="corner-pick" id="cornerPick">
+    <button class="corner-flag active" data-lang="en">🇬🇧<span>الإنجليزية</span></button>
+    <button class="corner-flag" data-lang="fr">🇫🇷<span>الفرنسية</span></button>
+    <button class="corner-flag" data-lang="de">🇩🇪<span>الألمانية</span></button>
+    <button class="corner-flag" data-lang="zh">🇨🇳<span>الصينية</span></button>
+  </div>
+  <div class="corner-card" id="cornerCard"></div>
 </section>
 
 <!-- ===================== COURSES ===================== -->
@@ -3486,6 +3520,66 @@ awardPoints = function(n, label){
   } catch(e){}
 };
 renderGoal();
+
+/* ================= v5: language corners ================= */
+const CORNERS = {
+  en: {flag:'🇬🇧', name:'الإنجليزية', motto:'لغة العالم كله 🌍', greet:'Hello!',
+    facts:['١.٥ مليار متحدث حول العالم 🌍','اللغة الرسمية في ٦٧ دولة','لغة العلم والتكنولوجيا الأولى 💻']},
+  fr: {flag:'🇫🇷', name:'الفرنسية', motto:'لغة الأناقة والحب 🇫🇷', greet:'Bonjour!',
+    facts:['٣٢٠ مليون متحدث 🗣️','لغة الأزياء والدبلوماسية','رسمية في ٢٩ دولة']},
+  de: {flag:'🇩🇪', name:'الألمانية', motto:'لغة الدقة والهندسة ⚙️', greet:'Hallo!',
+    facts:['١٣٠ مليون متحدث 🇩🇪','أكبر لغة أم في أوروبا','لغة الفلسفة والاختراعات']},
+  zh: {flag:'🇨🇳', name:'الصينية', motto:'لغة الحضارة العريقة 🐉', greet:'你好!',
+    facts:['١.٣ مليار متحدث — الأكبر عالميًا 🏮','حروفها عمرها ٣٠٠٠+ سنة','لغة المستقبل الاقتصادية']}
+};
+let cornerLang = 'en';
+function goLang(lang, target){
+  ['quizTabs','gameTabs','dictTabs','galTabs','songTabs'].forEach(function(id){
+    const t = document.querySelector('#' + id + ' .tab[data-lang="' + lang + '"]');
+    if(t) t.click();
+  });
+  const el = document.getElementById(target);
+  if(el) el.scrollIntoView({behavior:'smooth'});
+}
+function renderCorner(){
+  const c = CORNERS[cornerLang];
+  const words = DICT[cornerLang].slice(0, 8);
+  const songs = SONGS[cornerLang] || [];
+  let html = '<div class="corner-hero"><div class="cflag">' + c.flag + '</div>' +
+    '<div><div class="cname">ركن ' + c.name + '</div><div class="cmotto">' + c.motto + '</div></div>' +
+    '<div class="corner-greet"><div class="gw">' + c.greet + '</div>' +
+    '<button class="gal-listen corner-greet-btn">🔊 اسمعي التحية</button></div></div>' +
+    '<div class="corner-facts">' + c.facts.map(function(f){ return '<div class="corner-fact">' + f + '</div>'; }).join('') + '</div>' +
+    '<h3 style="color:var(--gold2);margin-bottom:10px">📖 كلمات أساسية</h3>' +
+    '<div class="corner-words">' + words.map(function(w){
+      return '<div class="corner-word"><b>' + w[0] + '</b><span>' + w[1] + '</span></div>';
+    }).join('') + '</div>';
+  if(songs.length){
+    html += '<h3 style="color:var(--gold2);margin-bottom:10px">🎵 أغاني اللغة</h3><div class="video-grid">' +
+      songs.map(function(v){
+        return '<div class="video-card"><div class="vthumb"><iframe loading="lazy" src="https://www.youtube.com/embed/' + v.id + '" title="' + v.t + '" allowfullscreen></iframe></div><div class="vbody"><h3>' + v.t + '</h3></div></div>';
+      }).join('') + '</div>';
+  }
+  html += '<div class="corner-cta">' +
+    '<button class="btn corner-go" data-target="lessons">📚 دروس ' + c.name + '</button>' +
+    '<button class="btn corner-go" style="background:linear-gradient(120deg,#b79bf0,#7c5cd6);color:#fff" data-target="quiz">📝 اختباري نفسك</button>' +
+    '<button class="btn corner-go" style="background:rgba(255,255,255,.12);color:var(--gold2)" data-target="games">🎮 ألعاب ' + c.name + '</button></div>';
+  document.getElementById('cornerCard').innerHTML = html;
+  document.querySelectorAll('.corner-go').forEach(function(b){
+    b.addEventListener('click', function(){ goLang(cornerLang, b.dataset.target); });
+  });
+  const gb = document.querySelector('.corner-greet-btn');
+  if(gb) gb.addEventListener('click', function(){ speakText(c.greet.replace('!',''), cornerLang); });
+}
+document.querySelectorAll('.corner-flag').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('.corner-flag').forEach(function(x){x.classList.remove('active')});
+    b.classList.add('active');
+    cornerLang = b.dataset.lang;
+    renderCorner();
+  });
+});
+renderCorner();
 
 /* ================= v3: challenge a friend ================= */
 function shareChallenge(kind, parts){
