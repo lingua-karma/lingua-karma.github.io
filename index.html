@@ -1930,6 +1930,35 @@
 
 
 <!-- ===================== KARMA CORNER ===================== -->
+<!-- ===================== VENT ===================== -->
+<section id="vent">
+  <h2 class="sec-title">✦ فضفضة ✦</h2>
+  <p class="sec-sub">مكانك الآمن — اكتبي اللي في قلبك من غير ما حد يحاسبك 💭💛</p>
+  <div class="vent-card">
+    <div class="vent-prompt" id="ventPrompt">إيه اللي شاغل بالك النهاردة؟ 🌙</div>
+    <textarea id="ventText" rows="5" maxlength="2000" placeholder="اكتبي هنا... الكلام اللي بيطلع بيخف"></textarea>
+    <div class="vent-actions">
+      <button class="btn" id="ventKeep">📔 احفظيها في دفترك</button>
+      <button class="btn" id="ventThrow" style="background:linear-gradient(120deg,#b79bf0,#7c5cd6);color:#fff">🕊️ ارميها وارتاحي</button>
+    </div>
+  </div>
+  <div class="vent-list" id="ventList"></div>
+</section>
+<style>
+  .vent-card{max-width:640px;margin:0 auto 24px;background:linear-gradient(135deg,rgba(183,155,240,.14),rgba(var(--goldA),.08));border:1px solid rgba(183,155,240,.35);border-radius:26px;padding:22px;display:flex;flex-direction:column;gap:12px}
+  .vent-prompt{text-align:center;color:var(--gold2);font-weight:800;font-size:1rem}
+  .vent-card textarea{background:var(--card);border:1px solid rgba(183,155,240,.3);border-radius:18px;padding:14px 16px;color:var(--text);font-family:inherit;font-size:1rem;line-height:1.8;resize:vertical}
+  .vent-card textarea:focus{outline:none;border-color:#b79bf0}
+  .vent-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .vent-list{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+  .vent-item{background:var(--card2);border:1px solid rgba(183,155,240,.25);border-radius:18px;padding:14px 16px}
+  .vent-item .v-date{color:#b79bf0;font-size:.72rem;font-weight:800;margin-bottom:6px}
+  .vent-item .v-text{font-size:.92rem;line-height:1.9;white-space:pre-wrap}
+  .vent-item .v-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.75rem;margin-top:8px;font-family:inherit}
+  .vent-item .v-del:hover{color:#f87171}
+  .vent-empty{text-align:center;color:var(--muted);font-size:.85rem;padding:10px}
+</style>
+
 <!-- ===================== TIPS ===================== -->
 <section id="tips">
   <h2 class="sec-title">✦ نصايح لتعلم اللغات ✦</h2>
@@ -4323,7 +4352,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
+  ['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
 ];
 document.getElementById('menuGrid').innerHTML = MENU.map(function(m){
   return '<a class="menu-card" href="#'+m[0]+'"><span class="m-ico">'+m[1]+'</span><span class="m-name">'+m[2]+'</span></a>';
@@ -4633,8 +4662,24 @@ document.querySelectorAll('#lessons .lang-panel').forEach(function(panel){
     g.holder.style.display = i === 0 ? '' : 'none';
     const b = document.createElement('button');
     b.className = 'tab' + (i === 0 ? ' active' : '');
-    b.textContent = g.label;
+    const LVL_COST = [0, 150, 400];
+    const lvlKey = 'lingua_lvl_' + (panel.id || 'p') + '_' + i;
+    const lvlOpen = function(){ if(i === 0) return true; try { return localStorage.getItem(lvlKey) === '1'; } catch(e){ return true; } };
+    const paint = function(){ b.textContent = g.label + (lvlOpen() ? '' : ' 🔒 ' + LVL_COST[i]); };
+    paint();
     b.addEventListener('click', function(){
+      if(!lvlOpen()){
+        const cost = LVL_COST[i] || 0;
+        if(spendPoints(cost)){
+          try { localStorage.setItem(lvlKey, '1'); } catch(e){}
+          paint();
+          confetti();
+          toast('اتفتح ' + g.label + '! 🔓✨');
+        } else {
+          toast('محتاجة ' + cost + ' نقطة عشان تفتحي ' + g.label + ' — العبي واكسبي نقاط 🔒');
+          return;
+        }
+      }
       tabs.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
       b.classList.add('active');
       groups.forEach(function(gg, j){ gg.holder.style.display = j === i ? '' : 'none'; });
@@ -5188,6 +5233,58 @@ gbkRender();
     player.pause();
   });
   loadList();
+})();
+
+
+/* ================= v10: vent corner ================= */
+(function(){
+  const PROMPTS = [
+    'إيه اللي شاغل بالك النهاردة؟ 🌙',
+    'لو يومك كان لون... كان هيبقى إيه وليه؟ 🎨',
+    'إيه أصعب حاجة عديتي بيها الفترة دي؟ 💪',
+    'إيه الحاجة الصغيرة اللي فرحتك مبارح؟ 🌸',
+    'لو هتقولي لنفسك من سنة نصيحة واحدة... هتقولي إيه؟ ✨',
+    'إيه الحلم اللي لسه شايلاه من زمان؟ 🌟'
+  ];
+  document.getElementById('ventPrompt').textContent = PROMPTS[Math.floor(Math.random() * PROMPTS.length)];
+  const KEY = 'lingua_vent';
+  const esc = function(x){ return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
+  const load = function(){ try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(e){ return []; } };
+  const render = function(){
+    const items = load();
+    document.getElementById('ventList').innerHTML = items.length ? items.map(function(x, i){
+      return '<div class="vent-item"><div class="v-date">' + x.d + '</div><div class="v-text">' + x.t + '</div><button class="v-del" data-i="' + i + '">🗑️ امسحيها</button></div>';
+    }).join('') : '<div class="vent-empty">دفترك فاضي — أول فضفضة هتلاقيها هنا 📔</div>';
+  };
+  document.getElementById('ventKeep').addEventListener('click', function(){
+    const t = document.getElementById('ventText').value.trim();
+    if(!t){ toast('اكتبي حاجة الأول 💭'); return; }
+    const items = load();
+    const now = new Date();
+    items.unshift({d: now.toLocaleDateString('ar-EG', {weekday:'long', day:'numeric', month:'long'}) + ' • ' + now.toLocaleTimeString('ar-EG', {hour:'numeric', minute:'2-digit'}), t: esc(t)});
+    try { localStorage.setItem(KEY, JSON.stringify(items.slice(0, 100))); } catch(e){}
+    document.getElementById('ventText').value = '';
+    render();
+    toast('اتحفظت في دفترك 📔💛');
+    awardPoints(2, 'فضفضة بتريّح 💭');
+  });
+  document.getElementById('ventThrow').addEventListener('click', function(){
+    const t = document.getElementById('ventText').value.trim();
+    if(!t){ toast('اكتبي حاجة الأول 💭'); return; }
+    document.getElementById('ventText').value = '';
+    confetti();
+    toast('اترميت في السما... خدي نفس عميق، انتي أقوى 🕊️💛');
+    awardPoints(1, 'رميتي الهم 🕊️');
+  });
+  document.getElementById('ventList').addEventListener('click', function(e){
+    const b = e.target.closest('.v-del');
+    if(!b) return;
+    const items = load();
+    items.splice(+b.dataset.i, 1);
+    try { localStorage.setItem(KEY, JSON.stringify(items)); } catch(e){}
+    render();
+  });
+  render();
 })();
 
 </script>
