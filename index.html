@@ -387,6 +387,175 @@
   .reveal-toggle:hover{background:rgba(212,175,55,.15)}
   table.blur-mean .mean-cell{filter:blur(7px);cursor:pointer;transition:filter .25s;user-select:none}
   table.blur-mean .mean-cell.peek{filter:none}
+
+  /* ===== v3: entrance & scroll animations ===== */
+  .hero h1,.hero .kicker,.hero p,.cta,.flags,.stats{opacity:0;animation:heroUp .9s cubic-bezier(.2,.8,.3,1) forwards}
+  .hero .kicker{animation-delay:.05s}
+  .hero h1{animation-delay:.15s}
+  .hero p{animation-delay:.3s}
+  .cta{animation-delay:.45s}
+  .flags{animation-delay:.6s}
+  .stats{animation-delay:.75s}
+  @keyframes heroUp{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+  .flags span{display:inline-block;animation:flagFloat 3s ease-in-out infinite}
+  .flags span:nth-child(2){animation-delay:.4s}
+  .flags span:nth-child(3){animation-delay:.8s}
+  .flags span:nth-child(4){animation-delay:1.2s}
+  @keyframes flagFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.2,.8,.3,1),transform .8s cubic-bezier(.2,.8,.3,1)}
+  .reveal.in{opacity:1;transform:none}
+  /* ===== Word of the day ===== */
+  .wotd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+  .wotd{
+    background:var(--card);backdrop-filter:blur(12px);
+    border:1px solid rgba(212,175,55,.25);border-radius:var(--radius);
+    padding:26px 22px;text-align:center;position:relative;overflow:hidden;
+    transition:.3s;box-shadow:0 14px 40px rgba(0,0,0,.4);
+  }
+  .wotd:hover{transform:translateY(-5px);border-color:var(--gold);box-shadow:0 22px 55px rgba(212,175,55,.18)}
+  .wotd::before{
+    content:'';position:absolute;top:-40px;left:-40px;width:120px;height:120px;border-radius:50%;
+    background:radial-gradient(circle,rgba(212,175,55,.18),transparent 70%);
+  }
+  .wotd .w-lang{font-size:.85rem;color:var(--muted);font-weight:700;margin-bottom:8px}
+  .wotd .w-word{font-size:1.6rem;font-weight:900;color:#fff;margin-bottom:4px;line-height:1.4}
+  .wotd .w-word .foreign{direction:ltr;display:inline-block}
+  .wotd .w-ar{color:var(--gold2);font-size:1.05rem;font-weight:700;margin-bottom:12px}
+  .wotd .w-date{position:absolute;top:14px;inset-inline-end:16px;font-size:.7rem;color:var(--muted)}
+  /* ===== Dashboard ===== */
+  .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-bottom:34px}
+  .dash-card{
+    background:var(--card);backdrop-filter:blur(12px);border:1px solid rgba(212,175,55,.25);
+    border-radius:var(--radius);padding:22px 14px;text-align:center;box-shadow:0 14px 40px rgba(0,0,0,.4);
+  }
+  .dash-card .d-num{font-size:2.2rem;font-weight:900;color:var(--gold2)}
+  .dash-card .d-ico{font-size:1.6rem}
+  .dash-card .d-label{font-size:.85rem;color:var(--muted);margin-top:4px}
+  .prog-row{margin-bottom:18px}
+  .prog-row .p-head{display:flex;justify-content:space-between;font-size:.95rem;font-weight:700;margin-bottom:8px}
+  .prog-row .p-head span:last-child{color:var(--gold2)}
+  .p-track{height:12px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;border:1px solid rgba(212,175,55,.2)}
+  .p-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--gold),var(--gold2));width:0;transition:width 1.2s cubic-bezier(.2,.8,.3,1)}
+  /* ===== Testimonials ===== */
+  .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+  .testi{
+    background:var(--card);backdrop-filter:blur(12px);border:1px solid rgba(212,175,55,.22);
+    border-radius:var(--radius);padding:28px 24px;box-shadow:0 14px 40px rgba(0,0,0,.4);position:relative;
+    transition:.3s;
+  }
+  .testi:hover{transform:translateY(-5px);border-color:rgba(212,175,55,.5)}
+  .testi .t-stars{color:var(--gold);letter-spacing:4px;margin-bottom:12px}
+  .testi p{color:#e8e2f5;font-size:.98rem;line-height:1.9;margin-bottom:18px}
+  .testi .t-who{display:flex;align-items:center;gap:12px}
+  .testi .t-avatar{
+    width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:1.3rem;background:radial-gradient(circle at 30% 30%,rgba(245,224,140,.3),rgba(212,175,55,.1));
+    border:1px solid rgba(212,175,55,.45);
+  }
+  .testi .t-name{font-weight:800;color:#fff;font-size:.95rem}
+  .testi .t-role{font-size:.78rem;color:var(--muted)}
+  /* ===== Confetti canvas ===== */
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:2000}
+  /* ===== button micro-interaction ===== */
+  .btn,.cta{position:relative;overflow:hidden}
+  .btn:active,.cta:active{transform:scale(.96)}
+
+
+  /* ===== v3 games: scramble & race ===== */
+  .scr-card{
+    background:var(--card);backdrop-filter:blur(12px);
+    border:1px solid rgba(212,175,55,.25);border-radius:var(--radius);
+    padding:32px;box-shadow:0 16px 44px rgba(0,0,0,.45);text-align:center;
+  }
+  .scr-word{
+    font-size:2rem;font-weight:900;letter-spacing:10px;color:var(--gold2);margin-bottom:6px;
+    direction:ltr;min-height:56px;
+  }
+  .scr-hint{color:var(--muted);font-size:1rem;margin-bottom:20px}
+  .scr-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+  .scr-row input{
+    flex:1;min-width:200px;max-width:340px;padding:12px 16px;border-radius:12px;
+    border:1px solid rgba(212,175,55,.4);background:#0d0918;color:#fff;text-align:center;
+    font-size:1.05rem;font-family:inherit;
+  }
+  .race-head{
+    display:flex;justify-content:space-between;font-size:1.15rem;font-weight:800;
+    color:var(--gold2);margin-bottom:18px;
+  }
+  .race-opt{
+    display:block;width:100%;text-align:right;margin-bottom:10px;
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);
+    color:var(--text);padding:13px 18px;border-radius:12px;font-size:1rem;font-weight:600;
+    cursor:pointer;font-family:inherit;transition:.15s;
+  }
+  .race-opt:active{transform:scale(.98)}
+  /* ===== dictionary ===== */
+  .dict-wrap{max-width:760px;margin:0 auto}
+  .dict-search{
+    display:block;width:100%;padding:14px 20px;border-radius:14px;margin-bottom:18px;
+    border:1px solid rgba(212,175,55,.4);background:var(--card);color:#fff;font-size:1.05rem;font-family:inherit;
+  }
+  .dict-row{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    background:var(--card);border:1px solid rgba(212,175,55,.18);border-radius:14px;
+    padding:12px 18px;margin-bottom:10px;transition:.2s;
+  }
+  .dict-row:hover{border-color:rgba(212,175,55,.45)}
+  .dict-row .dw{font-weight:800;color:#fff;font-size:1.05rem}
+  .dict-row .dw .foreign{direction:ltr;display:inline-block}
+  .dict-row .dm{color:var(--gold2);font-weight:700}
+  .dict-empty{color:var(--muted);text-align:center;padding:20px}
+  /* ===== points toast & badge ===== */
+  .toast{
+    position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(90px);
+    background:linear-gradient(120deg,var(--gold2),var(--gold));color:#1a1405;font-weight:800;
+    padding:12px 26px;border-radius:999px;box-shadow:0 12px 40px rgba(212,175,55,.5);
+    z-index:1500;transition:transform .4s cubic-bezier(.2,.8,.3,1.2);font-size:1rem;
+  }
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  .dash-badge{
+    text-align:center;font-size:1.2rem;font-weight:800;color:var(--gold2);margin-top:-14px;margin-bottom:34px;
+  }
+
+
+  /* ===== Karma corner ===== */
+  .karma-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+  .karma-card{
+    display:block;text-decoration:none;position:relative;
+    background:linear-gradient(160deg,rgba(212,175,55,.14),rgba(124,92,214,.1));
+    border:1.5px solid var(--gold);border-radius:var(--radius);
+    padding:28px 24px;box-shadow:0 14px 44px rgba(212,175,55,.18);
+    transition:.3s;color:var(--text);
+  }
+  .karma-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 24px 60px rgba(212,175,55,.3)}
+  .karma-card .k-ico{font-size:2rem;margin-bottom:12px}
+  .karma-card .k-title{font-weight:800;font-size:1.1rem;color:var(--gold2);margin-bottom:6px}
+  .karma-card .k-desc{font-size:.9rem;color:var(--muted);line-height:1.8}
+  .karma-card .k-crown{
+    position:absolute;top:-14px;inset-inline-start:18px;background:linear-gradient(120deg,var(--gold2),var(--gold));
+    color:#1a1405;font-size:.72rem;font-weight:800;padding:4px 14px;border-radius:999px;
+    box-shadow:0 4px 14px rgba(212,175,55,.4);
+  }
+  .karma-quote{
+    grid-column:1/-1;text-align:center;padding:36px 28px;
+  }
+  .karma-quote .k-big{font-size:1.35rem;font-weight:800;color:#fff;line-height:1.9}
+  .karma-quote .k-sign{color:var(--gold);margin-top:10px;font-weight:700}
+  /* ===== Challenge bar ===== */
+  .challenge-bar{
+    position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:900;
+    width:min(680px,92vw);display:none;align-items:center;gap:12px;flex-wrap:wrap;
+    background:linear-gradient(120deg,#241b38,#171124);
+    border:1.5px solid var(--gold);border-radius:18px;padding:14px 18px;
+    box-shadow:0 16px 50px rgba(0,0,0,.6), 0 0 30px rgba(212,175,55,.25);
+  }
+  .challenge-bar.show{display:flex}
+  .challenge-bar span{flex:1;font-size:.98rem;font-weight:700;color:#fff;line-height:1.7}
+  .challenge-bar .btn{padding:10px 20px;font-size:.9rem}
+  .challenge-x{
+    background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:4px 8px;
+  }
+
   /* ===== Mobile tuning ===== */
   @media (max-width:640px){
     header{padding:12px 16px}
@@ -407,6 +576,8 @@
     <a href="#quiz">الاختبارات</a>
     <a href="#games">الألعاب</a>
     <a href="#speak">تدريب النطق</a>
+    <a href="#dict">القاموس</a>
+    <a href="#karma">ركن كرمة 👑</a>
     <a href="#videos">الفيديوهات</a>
   </nav>
 </header>
@@ -426,6 +597,14 @@
   </div>
 </div>
 
+
+<!-- ===================== WORD OF THE DAY ===================== -->
+<section id="today">
+  <h2 class="sec-title">✦ كلمات اليوم ✦</h2>
+  <p class="sec-sub">كلمة جديدة كل يوم في كل لغة — اسمعيها واحفظيها 💎</p>
+  <div class="wotd-grid" id="wotdGrid"></div>
+</section>
+
 <!-- ===================== FEATURES ===================== -->
 <section id="features">
   <h2 class="sec-title">لماذا Lingua؟</h2>
@@ -439,6 +618,22 @@
     <div class="feature"><div class="ico">🎙️</div><h3>تدريب النطق بالصوت</h3><p>اسمعي الجملة وأعيديها بصوتك، والموقع يقيّم نطقك فورًا.</p></div>
     <div class="feature"><div class="ico">💎</div><h3>مجاني بالكامل</h3><p>كل المحتوى مجاني، بدون تسجيل وبدون اشتراكات.</p></div>
   </div>
+</section>
+
+
+<!-- ===================== DASHBOARD ===================== -->
+<section id="dash">
+  <h2 class="sec-title">✦ لوحة إنجازك ✦</h2>
+  <p class="sec-sub">تقدّمك محفوظ على جهازك — كل يوم تدخلينه يقرّبك للطلاقة 🔥</p>
+  <div class="dash-grid">
+    <div class="dash-card"><div class="d-ico">🔥</div><div class="d-num" id="dStreak">1</div><div class="d-label">أيام متتالية</div></div>
+    <div class="dash-card"><div class="d-ico">📝</div><div class="d-num" id="dQuizzes">0</div><div class="d-label">اختبار أكملتِه</div></div>
+    <div class="dash-card"><div class="d-ico">🏆</div><div class="d-num" id="dPerfect">0</div><div class="d-label">علامة كاملة</div></div>
+    <div class="dash-card"><div class="d-ico">🎮</div><div class="d-num" id="dGames">0</div><div class="d-label">لعبة ذاكرة</div></div>
+    <div class="dash-card"><div class="d-ico">💎</div><div class="d-num" id="dPoints">0</div><div class="d-label">نقطة</div></div>
+  </div>
+  <div class="dash-badge" id="dashBadge"></div>
+  <div id="dashBars"></div>
 </section>
 
 <!-- ===================== COURSES ===================== -->
@@ -828,7 +1023,7 @@
 <!-- ===================== GAMES ===================== -->
 <section id="games">
   <h2 class="sec-title">✦ الألعاب ✦</h2>
-  <p class="sec-sub">لعبة الذاكرة: طابقي الكلمة الأجنبية بمعناها العربي — تعلّم وأنتِ تلعبين 🎮</p>
+  <p class="sec-sub">٣ ألعاب لكل لغة: ذاكرة وحروف مبعثرة وسباق وقت — تعلّمي واكسبي نقاط 🎮</p>
 
   <div class="tabs" id="gameTabs">
     <button class="tab active" data-lang="en">🇬🇧 الإنجليزية</button>
@@ -837,14 +1032,65 @@
     <button class="tab" data-lang="zh">🇨🇳 الصينية</button>
   </div>
 
+  <div class="tabs" id="gameTypeTabs" style="margin-top:-14px">
+    <button class="tab active" data-type="memory">🃏 ذاكرة</button>
+    <button class="tab" data-type="scramble">🔤 حروف مبعثرة</button>
+    <button class="tab" data-type="race">⏱️ سباق الوقت</button>
+  </div>
+
   <div class="game-wrap">
-    <div class="game-bar">
-      <span>الحركات: <b id="gameMoves">0</b></span>
-      <span id="gameBest"></span>
-      <button class="btn" id="gameRestart" style="padding:8px 16px;font-size:.85rem">لعبة جديدة ↺</button>
+    <div id="gameMemory">
+      <div class="game-bar">
+        <span>الحركات: <b id="gameMoves">0</b></span>
+        <span id="gameBest"></span>
+        <button class="btn" id="gameRestart" style="padding:8px 16px;font-size:.85rem">لعبة جديدة ↺</button>
+      </div>
+      <div class="game-grid" id="gameGrid"></div>
+      <div class="game-win" id="gameWin"></div>
     </div>
-    <div class="game-grid" id="gameGrid"></div>
-    <div class="game-win" id="gameWin"></div>
+
+    <div id="gameScramble" style="display:none">
+      <div class="scr-card">
+        <div class="scr-word" id="scrWord"></div>
+        <div class="scr-hint" id="scrHint"></div>
+        <div class="scr-row">
+          <input id="scrInput" placeholder="رتّبي الحروف هنا…" autocomplete="off">
+          <button class="btn" id="scrListen" style="padding:12px 16px">🔊</button>
+          <button class="btn" id="scrCheck">تحقق ✓</button>
+        </div>
+        <div class="speak-result" id="scrResult"></div>
+        <div class="game-bar" style="margin-top:6px">
+          <span id="scrCount"></span>
+          <button class="btn" id="scrSkip" style="padding:8px 18px;font-size:.85rem;background:none;border:1px solid rgba(212,175,55,.5);color:var(--gold2)">تخطّي ›</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="gameRace" style="display:none">
+      <div class="scr-card">
+        <div class="race-head"><span>⏱️ <b id="raceTime">60</b> ثانية</span><span>النقاط: <b id="raceScore">0</b></span></div>
+        <div id="raceBox"></div>
+        <div class="speak-result" id="raceResult">أجيبي صح على أكبر عدد من الأسئلة قبل انتهاء الوقت! كل إجابة صح = ١٥ نقطة 🏁</div>
+        <button class="btn" id="raceStart" style="margin-top:14px">ابدئي السباق 🏁</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===================== DICTIONARY ===================== -->
+<section id="dict">
+  <h2 class="sec-title">✦ القاموس ✦</h2>
+  <p class="sec-sub">ابحثي في كلمات كل لغة — ترجمة فورية ونطق بالصوت 📖</p>
+  <div class="tabs" id="dictTabs">
+    <button class="tab active" data-lang="en">🇬🇧 الإنجليزية</button>
+    <button class="tab" data-lang="fr">🇫🇷 الفرنسية</button>
+    <button class="tab" data-lang="de">🇩🇪 الألمانية</button>
+    <button class="tab" data-lang="zh">🇨🇳 الصينية</button>
+  </div>
+  <div class="dict-wrap">
+    <input class="dict-search" id="dictSearch" placeholder="ابحثي بالعربية أو باللغة الأجنبية… 🔍">
+    <div id="dictList"></div>
   </div>
 </section>
 
@@ -989,6 +1235,67 @@
   </div>
 </section>
 
+
+<!-- ===================== TESTIMONIALS ===================== -->
+<section id="love">
+  <h2 class="sec-title">✦ قالوا عن Lingua ✦</h2>
+  <p class="sec-sub">متعلّمات بدأوا من الصفر زيك بالظبط 💜</p>
+  <div class="testi-grid">
+    <div class="testi">
+      <div class="t-stars">★★★★★</div>
+      <p>"أول موقع عربي أحس إنه فخم بجد. الدروس بالنطق خلتني أنطق الإنجليزي صح من أول أسبوع، ولعبة الذاكرة بقت عادتي اليومية."</p>
+      <div class="t-who"><div class="t-avatar">🌸</div><div><div class="t-name">مريم أحمد</div><div class="t-role">بتتعلم إنجليزي</div></div></div>
+    </div>
+    <div class="testi">
+      <div class="t-stars">★★★★★</div>
+      <p>"تدريب النطق عبقري! بسجل صوتي والموقع يقولي نسبة النطق الصح. حسيت إن معايا مدرّسة خاصة في موبايلي."</p>
+      <div class="t-who"><div class="t-avatar">🦋</div><div><div class="t-name">سارة محمود</div><div class="t-role">بتتعلم فرنسي</div></div></div>
+    </div>
+    <div class="testi">
+      <div class="t-stars">★★★★★</div>
+      <p>"فكرت تعلم الصيني مستحيل، لقيته هنا مرتب بمستويات وبشرح عربي. والشهادة لما خلصت المستوى فرحتني أوي."</p>
+      <div class="t-who"><div class="t-avatar">🌙</div><div><div class="t-name">نور الهدى</div><div class="t-role">بتتعلم صيني</div></div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===================== KARMA CORNER ===================== -->
+<section id="karma">
+  <h2 class="sec-title">✦ ركن كرمة 👑 ✦</h2>
+  <p class="sec-sub">اختيارات صاحبة الموقع الشخصية — الأفضل من الأفضل</p>
+  <div class="karma-grid">
+    <a class="karma-card" href="#lessons">
+      <span class="k-crown">👑 اختيار كرمة</span>
+      <div class="k-ico">🎯</div>
+      <div class="k-title">أفضل بداية</div>
+      <div class="k-desc">درس التحيات الإنجليزي — "أول خطوة بتغيّر كل حاجة. ابدئي من هنا ومش هتوقفي"</div>
+    </a>
+    <a class="karma-card" href="#videos">
+      <span class="k-crown">👑 اختيار كرمة</span>
+      <div class="k-ico">🎬</div>
+      <div class="k-title">كورسها المفضل</div>
+      <div class="k-desc">تعلّم الإنجليزية في 10 ساعات — "الكورس اللي هيخليكي تفهمي أفلام من غير ترجمة"</div>
+    </a>
+    <a class="karma-card" href="#games">
+      <span class="k-crown">👑 اختيار كرمة</span>
+      <div class="k-ico">⏱️</div>
+      <div class="k-title">لعبتها المفضلة</div>
+      <div class="k-desc">سباق الوقت — "الأدرينالين بيخليني أحفظ أسرع. جربيه هتدمنيه"</div>
+    </a>
+    <div class="karma-card">
+      <span class="k-crown">👑 اختيار كرمة</span>
+      <div class="k-ico">💎</div>
+      <div class="k-title">كلمتها المفضلة</div>
+      <div class="k-desc"><b style="color:#fff">Serendipity</b> — مصادفة سعيدة. "أجمل كلمة في الإنجليزي، زي اللي حصل لما الموقع ده اتعمل" <button class="row-listen" id="karmaWord" title="استمعي">🔊</button></div>
+    </div>
+    <div class="karma-card karma-quote">
+      <div class="k-big">"متستنيش تبقي جاهزة… ابدئي غلط واتعلمي في السكة. كل خبير كان يوم ما مبتدئ 💜"</div>
+      <div class="k-sign">— كرمة، صاحبة Lingua</div>
+    </div>
+  </div>
+</section>
+
 <!-- AD SLOT: bottom banner (AdSense anchor / 728x90) قبل الفوتر — تُضاف الشيفرة بعد الموافقة على AdSense -->
 
 <!-- Certificate overlay -->
@@ -1014,6 +1321,10 @@
   <p>لينجوا — تعلّمي لغات العالم مجانًا وبالعربية 💜</p>
   <p style="margin-top:8px">© 2026 Lingua — جميع الحقوق محفوظة</p>
 </footer>
+
+<div class="challenge-bar" id="challengeBar"><span id="challengeText"></span><button class="btn" id="challengeGo">العبي التحدي 🔥</button><button class="challenge-x" id="challengeX">✕</button></div>
+<canvas id="confetti"></canvas>
+<div class="toast" id="toast"></div>
 
 <script>
 /* ================= Tabs ================= */
@@ -1190,7 +1501,7 @@ function answer(idx){
     if(i === q.a) o.classList.add('correct');
     else if(i === idx) o.classList.add('wrong');
   });
-  if(idx === q.a) cur.score++;
+  if(idx === q.a){ cur.score++; sndGood(); } else { sndBad(); }
   setTimeout(function(){
     cur.i++;
     renderQ();
@@ -1200,10 +1511,11 @@ function answer(idx){
 function renderResult(){
   const box = document.getElementById('quizBox');
   const total = QUIZZES[cur.lang][cur.level].length;
+  awardPoints(cur.score*10 + (cur.score===total ? 50 : 0), 'من الاختبار');
   const prev = parseInt(localStorage.getItem(bestKey(cur.lang, cur.level)) || '-1', 10);
   if(cur.score > prev) localStorage.setItem(bestKey(cur.lang, cur.level), String(cur.score));
   let msg;
-  if(cur.score === total) msg = 'مذهل! علامة كاملة 🌟';
+  if(cur.score === total){ msg = 'مذهل! علامة كاملة 🌟'; sndWin(); confetti(); }
   else if(cur.score >= total-1) msg = 'ممتاز! أنتِ قريبة جدًا من العلامة الكاملة';
   else if(cur.score >= total/2) msg = 'جيد جدًا! راجعي الدروس وحاولي من جديد';
   else msg = 'بداية شجاعة! اقرئي الدروس ثم أعيدي المحاولة';
@@ -1211,12 +1523,17 @@ function renderResult(){
     '<div class="result"><div class="score">'+cur.score+' / '+total+'</div>'+
     '<p>'+msg+'</p>'+
     (cur.score === total ? '<button class="btn" id="certBtn" style="margin-inline-end:8px">🎓 احصلي على شهادتك</button>' : '')+
+    '<button class="btn" id="challengeBtn" style="margin-inline-end:8px;background:linear-gradient(120deg,#b79bf0,#7c5cd6);color:#fff">⚔️ تحدي صاحبك</button>'+
     '<button class="btn" id="retryBtn">إعادة الاختبار ↺</button></div>';
   document.getElementById('retryBtn').addEventListener('click', function(){ startQuiz(cur.lang, cur.level); });
   if(cur.score === total){
     document.getElementById('certBtn').addEventListener('click', function(){ showCert(cur.lang, cur.level); });
   }
+  document.getElementById('challengeBtn').addEventListener('click', function(){
+    shareChallenge('c', [cur.lang, cur.level, cur.score, total]);
+  });
   showBest(cur.lang, cur.level);
+  if(window.refreshDash) window.refreshDash();
 }
 
 /* ================= Certificate ================= */
@@ -1328,19 +1645,157 @@ function winGame(){
     localStorage.setItem(key, String(game.moves));
     extra = ' — رقم قياسي جديد! 🏆';
   }
-  document.getElementById('gameWin').textContent =
-    '🎉 أحسنتِ! أكملتِ كل الأزواج في '+game.moves+' حركة'+extra;
+  document.getElementById('gameWin').innerHTML =
+    '🎉 أحسنتِ! أكملتِ كل الأزواج في '+game.moves+' حركة'+extra+
+    ' <button class="btn" id="gameChallenge" style="padding:8px 18px;font-size:.85rem;margin-inline-start:10px;background:linear-gradient(120deg,#b79bf0,#7c5cd6);color:#fff">⚔️ تحدي صاحبك</button>';
+  document.getElementById('gameChallenge').addEventListener('click', function(){
+    shareChallenge('g', [game.lang, game.moves]);
+  });
   showGameBest();
 }
 document.querySelectorAll('#gameTabs .tab').forEach(function(t){
   t.addEventListener('click', function(){
     document.querySelectorAll('#gameTabs .tab').forEach(function(x){x.classList.remove('active')});
     t.classList.add('active');
-    newGame(t.dataset.lang);
+    startGameType(t.dataset.lang);
   });
 });
 document.getElementById('gameRestart').addEventListener('click', function(){ newGame(game.lang); });
 newGame('en');
+
+/* ================= v3: scroll reveal ================= */
+(function(){
+  const els = document.querySelectorAll('.feature,.course,.lesson,.video-card,.dash-card,.testi,.wotd,.quiz-box,.speak-card,.sec-title,.sec-sub,.vgroup-title');
+  els.forEach(function(e){ e.classList.add('reveal'); });
+  const io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+    });
+  }, {threshold:.12});
+  els.forEach(function(e){ io.observe(e); });
+})();
+
+/* ================= v3: sound feedback (WebAudio, no files) ================= */
+let AC = null;
+function tone(freq, dur, type, vol, when){
+  try{
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.type = type || 'sine'; o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, AC.currentTime + (when||0));
+    g.gain.exponentialRampToValueAtTime(vol || .12, AC.currentTime + (when||0) + .02);
+    g.gain.exponentialRampToValueAtTime(0.0001, AC.currentTime + (when||0) + (dur||.15));
+    o.connect(g); g.connect(AC.destination);
+    o.start(AC.currentTime + (when||0)); o.stop(AC.currentTime + (when||0) + (dur||.15) + .05);
+  }catch(e){}
+}
+function sndGood(){ tone(660,.12,'sine',.12); tone(880,.18,'sine',.12,.1); }
+function sndBad(){ tone(220,.25,'sawtooth',.06); }
+function sndWin(){ [523,659,784,1047].forEach(function(f,i){ tone(f,.22,'sine',.12,i*.12); }); }
+
+/* ================= v3: confetti ================= */
+function confetti(){
+  const cv = document.getElementById('confetti');
+  const ctx = cv.getContext('2d');
+  cv.width = innerWidth; cv.height = innerHeight;
+  const colors = ['#d4af37','#f5e08c','#7c5cd6','#ffffff','#4ade80'];
+  const parts = [];
+  for(let i=0;i<140;i++){
+    parts.push({
+      x: Math.random()*cv.width, y: -20 - Math.random()*cv.height*.5,
+      w: 5+Math.random()*7, h: 8+Math.random()*10,
+      c: colors[Math.floor(Math.random()*colors.length)],
+      vy: 2+Math.random()*3.5, vx: -1.5+Math.random()*3,
+      r: Math.random()*Math.PI, vr: -.1+Math.random()*.2
+    });
+  }
+  let frames = 0;
+  (function tick(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    parts.forEach(function(p){
+      p.y += p.vy; p.x += p.vx; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
+      ctx.fillStyle = p.c; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+    });
+    if(++frames < 260) requestAnimationFrame(tick);
+    else ctx.clearRect(0,0,cv.width,cv.height);
+  })();
+}
+
+/* ================= v3: word of the day ================= */
+const WOTD = {
+  en: ['Serendipity|مصادفة سعيدة','Brave|شجاع','Journey|رحلة','Shine|تألّق','Dream|حلم','Wisdom|حكمة','Freedom|حرية','Hope|أمل','Peace|سلام','Smile|ابتسامة','Bloom|تفتّح','Wonder|دهشة'],
+  fr: ['Amour|حب','Étoile|نجمة','Bonheur|سعادة','Rêve|حلم','Lumière|ضوء','Espoir|أمل','Paix|سلام','Courage|شجاعة','Sourire|ابتسامة','Liberté|حرية','Soleil|شمس','Mer|بحر'],
+  de: ['Glück|سعادة','Herz|قلب','Stern|نجمة','Traum|حلم','Licht|ضوء','Hoffnung|أمل','Frieden|سلام','Mut|شجاعة','Liebe|حب','Freiheit|حرية','Sonne|شمس','Welt|عالم'],
+  zh: ['爱|حب','星星|نجمة','幸福|سعادة','梦|حلم','光|ضوء','希望|أمل','和平|سلام','勇气|شجاعة','微笑|ابتسامة','自由|حرية','太阳|شمس','月亮|قمر']
+};
+(function(){
+  const day = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0).getTime())/86400000);
+  const flags = {en:'🇬🇧 الإنجليزية', fr:'🇫🇷 الفرنسية', de:'🇩🇪 الألمانية', zh:'🇨🇳 الصينية'};
+  const grid = document.getElementById('wotdGrid');
+  let html = '';
+  Object.keys(WOTD).forEach(function(lang){
+    const w = WOTD[lang][day % WOTD[lang].length].split('|');
+    html += '<div class="wotd">' +
+      '<div class="w-lang">'+flags[lang]+'</div>' +
+      '<div class="w-word"><span class="foreign">'+w[0]+'</span></div>' +
+      '<div class="w-ar">'+w[1]+'</div>' +
+      '<button class="row-listen" data-l="'+lang+'" data-w="'+w[0]+'" title="استمعي">🔊</button>' +
+      '</div>';
+  });
+  grid.innerHTML = html;
+  grid.querySelectorAll('.row-listen').forEach(function(b){
+    b.addEventListener('click', function(){ speakText(b.dataset.w, b.dataset.l); tone(520,.08,'sine',.06); });
+  });
+})();
+
+/* ================= v3: dashboard ================= */
+window.refreshDash = function(){
+  /* streak */
+  const today = new Date().toDateString();
+  let st = {last:'', count:0};
+  try{ st = JSON.parse(localStorage.getItem('lingua_streak')) || st; }catch(e){}
+  if(st.last !== today){
+    const y = new Date(Date.now()-86400000).toDateString();
+    st.count = (st.last === y) ? st.count + 1 : 1;
+    st.last = today;
+    localStorage.setItem('lingua_streak', JSON.stringify(st));
+  }
+  document.getElementById('dStreak').textContent = st.count;
+  /* quiz stats */
+  let quizzes = 0, perfect = 0, games = 0;
+  const levelsDone = {en:0, fr:0, de:0, zh:0};
+  ['en','fr','de','zh'].forEach(function(l){
+    ['beg','mid','adv'].forEach(function(v){
+      const b = localStorage.getItem('lingua_best_'+l+'_'+v);
+      if(b !== null){ quizzes++; levelsDone[l]++; if(parseInt(b,10) === QUIZZES[l][v].length) perfect++; }
+    });
+    if(localStorage.getItem('lingua_game_best_'+l) !== null) games++;
+  });
+  document.getElementById('dQuizzes').textContent = quizzes;
+  document.getElementById('dPerfect').textContent = perfect;
+  document.getElementById('dGames').textContent = games;
+  const pts = parseInt(localStorage.getItem('lingua_points')||'0',10);
+  document.getElementById('dPoints').textContent = pts;
+  const badges = [[1000,'أسطورة اللغات 👑'],[600,'نجمة لينجوا 💫'],[300,'مجتهدة 🔥'],[100,'صاعدة ⭐'],[0,'بداية رحلتك 🌱']];
+  let badge = badges[badges.length-1][1];
+  for(const b of badges){ if(pts >= b[0]){ badge = b[1]; break; } }
+  document.getElementById('dashBadge').textContent = 'لقبك الحالي: ' + badge;
+  /* per-language progress bars */
+  const flags = {en:'🇬🇧 الإنجليزية', fr:'🇫🇷 الفرنسية', de:'🇩🇪 الألمانية', zh:'🇨🇳 الصينية'};
+  let html = '';
+  ['en','fr','de','zh'].forEach(function(l){
+    const pct = Math.round(100*levelsDone[l]/3);
+    html += '<div class="prog-row"><div class="p-head"><span>'+flags[l]+'</span><span>'+pct+'%</span></div>' +
+      '<div class="p-track"><div class="p-fill" data-w="'+pct+'"></div></div></div>';
+  });
+  document.getElementById('dashBars').innerHTML = html;
+  setTimeout(function(){
+    document.querySelectorAll('.p-fill').forEach(function(f){ f.style.width = f.dataset.w + '%'; });
+  }, 400);
+};
+window.refreshDash();
 
 /* ================= Text-to-speech helper ================= */
 const TTS_LANGS = {en:'en-US', fr:'fr-FR', de:'de-DE', zh:'zh-CN'};
@@ -1514,6 +1969,319 @@ document.querySelectorAll('#quizLevelTabs .tab').forEach(function(t){
 });
 
 startQuiz('en','beg');
+
+/* ================= v3: points & toast ================= */
+function getPoints(){ return parseInt(localStorage.getItem('lingua_points')||'0',10); }
+function awardPoints(n, label){
+  if(!n || n <= 0) return;
+  localStorage.setItem('lingua_points', String(getPoints()+n));
+  toast('+'+n+' نقطة 🎉'+(label?' — '+label:''));
+  if(window.refreshDash) window.refreshDash();
+}
+let toastTimer = null;
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+}
+
+/* ================= v3: dictionary ================= */
+const DICT = {
+  en: [['Hello','مرحبًا'],['Thank you','شكرًا'],['Good morning','صباح الخير'],['Water','ماء'],['Book','كتاب'],['Friend','صديق'],['House','بيت'],['Sun','شمس'],['Moon','قمر'],['Love','حب'],['Family','عائلة'],['Food','طعام'],['Time','وقت'],['Day','يوم'],['Night','ليل'],['Happy','سعيد'],['Beautiful','جميل'],['Big','كبير'],['Small','صغير'],['School','مدرسة'],['Cat','قطة'],['Dog','كلب'],['Bread','خبز'],['Milk','حليب']],
+  fr: [['Bonjour','مرحبًا'],['Merci','شكرًا'],['Eau','ماء'],['Livre','كتاب'],['Ami','صديق'],['Maison','بيت'],['Soleil','شمس'],['Lune','قمر'],['Amour','حب'],['Famille','عائلة'],['Nourriture','طعام'],['Temps','وقت'],['Jour','يوم'],['Nuit','ليل'],['Heureux','سعيد'],['Beau','جميل'],['Grand','كبير'],['Petit','صغير'],['École','مدرسة'],['Chat','قطة'],['Chien','كلب'],['Pain','خبز'],['Lait','حليب'],['Au revoir','إلى اللقاء']],
+  de: [['Hallo','مرحبًا'],['Danke','شكرًا'],['Wasser','ماء'],['Buch','كتاب'],['Freund','صديق'],['Haus','بيت'],['Sonne','شمس'],['Mond','قمر'],['Liebe','حب'],['Familie','عائلة'],['Essen','طعام'],['Zeit','وقت'],['Tag','يوم'],['Nacht','ليل'],['Glücklich','سعيد'],['Schön','جميل'],['Groß','كبير'],['Klein','صغير'],['Schule','مدرسة'],['Katze','قطة'],['Hund','كلب'],['Brot','خبز'],['Milch','حليب'],['Tschüss','إلى اللقاء']],
+  zh: [['你好','مرحبًا'],['谢谢','شكرًا'],['水','ماء'],['书','كتاب'],['朋友','صديق'],['房子','بيت'],['太阳','شمس'],['月亮','قمر'],['爱','حب'],['家庭','عائلة'],['食物','طعام'],['时间','وقت'],['天','يوم'],['夜','ليل'],['快乐','سعيد'],['美丽','جميل'],['大','كبير'],['小','صغير'],['学校','مدرسة'],['猫','قطة'],['狗','كلب'],['面包','خبز'],['牛奶','حليب'],['再见','إلى اللقاء']]
+};
+let dictLang = 'en';
+function renderDict(){
+  const q = norm(document.getElementById('dictSearch').value);
+  const list = DICT[dictLang].filter(function(w){
+    return !q || norm(w[0]).indexOf(q) !== -1 || norm(w[1]).indexOf(q) !== -1;
+  });
+  const box = document.getElementById('dictList');
+  if(!list.length){
+    box.innerHTML = '<div class="dict-empty">لا توجد نتائج — جرّبي كلمة أخرى 🔍</div>';
+    return;
+  }
+  box.innerHTML = list.map(function(w, i){
+    return '<div class="dict-row"><span class="dw"><span class="foreign">'+w[0]+'</span></span>' +
+      '<span class="dm">'+w[1]+'</span>' +
+      '<button class="row-listen" data-i="'+i+'" title="استمعي">🔊</button></div>';
+  }).join('');
+  box.querySelectorAll('.row-listen').forEach(function(b){
+    b.addEventListener('click', function(){
+      speakText(list[parseInt(b.dataset.i,10)][0], dictLang);
+      tone(520,.08,'sine',.06);
+    });
+  });
+}
+document.querySelectorAll('#dictTabs .tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('#dictTabs .tab').forEach(function(x){x.classList.remove('active')});
+    t.classList.add('active');
+    dictLang = t.dataset.lang;
+    renderDict();
+  });
+});
+document.getElementById('dictSearch').addEventListener('input', renderDict);
+renderDict();
+
+/* ================= v3: game type router ================= */
+let gType = 'memory';
+function startGameType(lang){
+  if(lang) game.lang = lang;
+  if(gType === 'memory') newGame(game.lang);
+  else if(gType === 'scramble') startScramble();
+  else resetRace();
+}
+document.querySelectorAll('#gameTypeTabs .tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('#gameTypeTabs .tab').forEach(function(x){x.classList.remove('active')});
+    t.classList.add('active');
+    gType = t.dataset.type;
+    document.getElementById('gameMemory').style.display = gType === 'memory' ? 'block' : 'none';
+    document.getElementById('gameScramble').style.display = gType === 'scramble' ? 'block' : 'none';
+    document.getElementById('gameRace').style.display = gType === 'race' ? 'block' : 'none';
+    startGameType();
+  });
+});
+
+/* ================= v3: word scramble ================= */
+let scr = {words:[], i:0, score:0};
+function shuffled(s){
+  const a = s.split('');
+  if(a.length < 2) return s;
+  for(let tries=0; tries<10; tries++){
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      const t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    if(a.join('') !== s) return a.join('');
+  }
+  return a.reverse().join('');
+}
+function startScramble(){
+  const pool = DICT[game.lang].filter(function(w){ return w[0].replace(/\s/g,'').length > 1; });
+  const picks = pool.slice();
+  for(let i=picks.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    const t = picks[i]; picks[i] = picks[j]; picks[j] = t;
+  }
+  scr = {words:picks.slice(0,6), i:0, score:0};
+  renderScr();
+}
+function renderScr(){
+  if(scr.i >= scr.words.length){
+    document.getElementById('scrWord').textContent = '🏁';
+    document.getElementById('scrHint').textContent = 'خلصت الجولة!';
+    document.getElementById('scrResult').innerHTML = '🎉 جبتِ '+scr.score+' من '+scr.words.length+' كلمة صح!';
+    document.getElementById('scrCount').textContent = '';
+    if(scr.score === scr.words.length && scr.words.length){ sndWin(); confetti(); }
+    return;
+  }
+  const w = scr.words[scr.i];
+  document.getElementById('scrWord').textContent = shuffled(w[0].replace(/\s/g,''));
+  document.getElementById('scrHint').textContent = 'المعنى: '+w[1];
+  document.getElementById('scrCount').textContent = 'كلمة '+(scr.i+1)+' من '+scr.words.length;
+  document.getElementById('scrInput').value = '';
+  document.getElementById('scrResult').textContent = '';
+}
+function scrNext(){ scr.i++; renderScr(); }
+document.getElementById('scrCheck').addEventListener('click', function(){
+  if(scr.i >= scr.words.length){ startScramble(); return; }
+  const w = scr.words[scr.i];
+  const val = norm(document.getElementById('scrInput').value);
+  if(val === norm(w[0].replace(/\s/g,''))){
+    scr.score++;
+    sndGood();
+    awardPoints(15, 'حروف مبعثرة');
+    document.getElementById('scrResult').innerHTML = '<span style="color:var(--ok)">صح! الكلمة هي «'+w[0]+'» ✓</span>';
+    setTimeout(scrNext, 1000);
+  } else {
+    sndBad();
+    document.getElementById('scrResult').innerHTML = '<span style="color:var(--bad)">ليس بعد — ركّزي في الحروف وحاولي تاني 💪</span>';
+  }
+});
+document.getElementById('scrInput').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') document.getElementById('scrCheck').click();
+});
+document.getElementById('scrSkip').addEventListener('click', scrNext);
+document.getElementById('scrListen').addEventListener('click', function(){
+  if(scr.i < scr.words.length){ speakText(scr.words[scr.i][0], game.lang); }
+});
+
+/* ================= v3: timed race ================= */
+let race = {on:false, t:60, score:0, qs:[], qi:0, timer:null};
+function resetRace(){
+  clearInterval(race.timer);
+  race = {on:false, t:60, score:0, qs:[], qi:0, timer:null};
+  document.getElementById('raceTime').textContent = '60';
+  document.getElementById('raceScore').textContent = '0';
+  document.getElementById('raceBox').innerHTML = '';
+  document.getElementById('raceResult').textContent = 'أجيبي صح على أكبر عدد من الأسئلة قبل انتهاء الوقت! كل إجابة صح = ١٥ نقطة 🏁';
+  const rs = document.getElementById('raceStart');
+  rs.style.display = '';
+  rs.textContent = 'ابدئي السباق 🏁';
+}
+function renderRaceQ(){
+  if(race.qi >= race.qs.length){
+    race.qs.sort(function(){ return Math.random()-.5; });
+    race.qi = 0;
+  }
+  const item = race.qs[race.qi];
+  let html = '<div class="q-text" style="font-size:1.1rem">'+item.q+'</div>';
+  item.opts.forEach(function(o, idx){
+    html += '<button class="race-opt" data-i="'+idx+'">'+o+'</button>';
+  });
+  document.getElementById('raceBox').innerHTML = html;
+  document.querySelectorAll('#raceBox .race-opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      if(!race.on) return;
+      if(parseInt(btn.dataset.i,10) === item.a){
+        race.score += 15;
+        document.getElementById('raceScore').textContent = race.score;
+        sndGood();
+      } else {
+        sndBad();
+      }
+      race.qi++;
+      setTimeout(renderRaceQ, 150);
+    });
+  });
+}
+document.getElementById('raceStart').addEventListener('click', function(){
+  race.qs = [];
+  ['beg','mid','adv'].forEach(function(v){ race.qs = race.qs.concat(QUIZZES[game.lang][v]); });
+  race.qs.sort(function(){ return Math.random()-.5; });
+  race.on = true; race.t = 60; race.score = 0; race.qi = 0;
+  document.getElementById('raceStart').style.display = 'none';
+  document.getElementById('raceResult').textContent = 'يلااا 🔥';
+  renderRaceQ();
+  race.timer = setInterval(function(){
+    race.t--;
+    document.getElementById('raceTime').textContent = race.t;
+    if(race.t <= 0){
+      clearInterval(race.timer);
+      race.on = false;
+      const n = race.score/15;
+      document.getElementById('raceBox').innerHTML = '';
+      document.getElementById('raceResult').innerHTML =
+        '⏱️ انتهى الوقت! جبتِ <b style="color:var(--gold2)">'+race.score+' نقطة</b> ('+n+' إجابة صح) 🏁';
+      const rs = document.getElementById('raceStart');
+      rs.style.display = '';
+      rs.textContent = 'العبي تاني ↺';
+      awardPoints(race.score, 'سباق الوقت');
+      if(n >= 8){ sndWin(); confetti(); }
+    }
+  }, 1000);
+});
+
+/* ================= v3: challenge a friend ================= */
+function shareChallenge(kind, parts){
+  const name = (localStorage.getItem('lingua_cert_name') || '').trim() || 'صديقتك';
+  const url = location.origin + location.pathname + '#' + kind + '=' + parts.join('-') + '-' + encodeURIComponent(name);
+  const done = function(){ toast('لينك التحدي اتنسخ — ابعتيه لصاحبك ⚔️'); };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(done, function(){ prompt('انسخي لينك التحدي:', url); });
+  } else {
+    prompt('انسخي لينك التحدي:', url);
+  }
+}
+(function(){
+  const h = location.hash || '';
+  if(h.indexOf('#c=') !== 0 && h.indexOf('#g=') !== 0) return;
+  const parts = h.slice(3).split('-');
+  let msg = '', go = null;
+  const name = decodeURIComponent(parts[parts.length-1] || 'صديقتك');
+  if(h.indexOf('#c=') === 0 && parts.length >= 5){
+    const lang = parts[0], level = parts[1], score = parts[2], total = parts[3];
+    if(!QUIZZES[lang] || !QUIZZES[lang][level]) return;
+    msg = '⚔️ '+name+' جابت '+score+' من '+total+' في اختبار '+LANG_NAMES[lang]+' — المستوى '+LEVEL_NAMES[level]+'. تقدري تكسريها؟';
+    go = function(){
+      document.getElementById('quiz').scrollIntoView({behavior:'smooth'});
+      document.querySelectorAll('#quizTabs .tab').forEach(function(x){ x.classList.toggle('active', x.dataset.lang === lang); });
+      document.querySelectorAll('#quizLevelTabs .tab').forEach(function(x){ x.classList.toggle('active', x.dataset.level === level); });
+      startQuiz(lang, level);
+    };
+  } else if(h.indexOf('#g=') === 0 && parts.length >= 3){
+    const lang = parts[0], moves = parts[1];
+    if(!GAME_WORDS[lang]) return;
+    msg = '⚔️ '+name+' خلّصت لعبة الذاكرة ('+LANG_NAMES[lang]+') في '+moves+' حركة بس. تقدري تكسريها؟';
+    go = function(){
+      document.getElementById('games').scrollIntoView({behavior:'smooth'});
+      document.querySelectorAll('#gameTabs .tab').forEach(function(x){ x.classList.toggle('active', x.dataset.lang === lang); });
+      newGame(lang);
+    };
+  }
+  if(!msg) return;
+  const bar = document.getElementById('challengeBar');
+  document.getElementById('challengeText').textContent = msg;
+  bar.classList.add('show');
+  document.getElementById('challengeGo').addEventListener('click', function(){
+    bar.classList.remove('show');
+    if(go) go();
+  });
+  document.getElementById('challengeX').addEventListener('click', function(){ bar.classList.remove('show'); });
+})();
+
+/* ================= v3 surprises: karma word, easter egg, listen mode ================= */
+document.getElementById('karmaWord').addEventListener('click', function(){ speakText('Serendipity', 'en'); });
+(function(){
+  let buf = '';
+  document.addEventListener('keydown', function(e){
+    if(e.key && e.key.length === 1){
+      buf = (buf + e.key).slice(-10);
+      if(buf.endsWith('كارما') || buf.toLowerCase().endsWith('karma')){
+        confetti(); sndWin();
+        toast('✨ Lingua بتحب كارما ✨');
+        buf = '';
+      }
+    }
+  });
+})();
+/* listen mode: play a whole lesson aloud */
+document.querySelectorAll('.lang-panel .lesson').forEach(function(lesson){
+  const panel = lesson.closest('.lang-panel');
+  const lang = panel ? panel.dataset.lang : 'en';
+  const rows = [];
+  lesson.querySelectorAll('tbody tr').forEach(function(tr){
+    const tds = tr.querySelectorAll('td');
+    if(tds.length < 2) return;
+    let idx = 0;
+    if(/^[\d\u0660-\u0669\s.,:;\-؟?!]*$/.test(tds[0].textContent.trim())) idx = 1;
+    rows.push(tds[idx].textContent.trim());
+  });
+  if(!rows.length) return;
+  const b = document.createElement('button');
+  b.className = 'reveal-toggle';
+  b.type = 'button';
+  b.textContent = '▶️ استمعي للدرس كله';
+  let playing = false;
+  b.addEventListener('click', function(){
+    if(playing){ speechSynthesis.cancel(); playing = false; b.textContent = '▶️ استمعي للدرس كله'; return; }
+    if(!('speechSynthesis' in window)) return;
+    playing = true;
+    b.textContent = '⏸️ إيقاف الاستماع';
+    let i = 0;
+    (function next(){
+      if(!playing || i >= rows.length){
+        playing = false; b.textContent = '▶️ استمعي للدرس كله';
+        return;
+      }
+      const u = new SpeechSynthesisUtterance(rows[i++]);
+      u.lang = TTS_LANGS[lang] || 'en-US';
+      u.rate = 0.8;
+      u.onend = function(){ setTimeout(next, 350); };
+      speechSynthesis.speak(u);
+    })();
+  });
+  const toggle = lesson.querySelector('.reveal-toggle');
+  if(toggle) toggle.parentNode.insertBefore(b, toggle.nextSibling);
+  else lesson.insertBefore(b, lesson.firstChild);
+});
+
 </script>
 </body>
 </html>
