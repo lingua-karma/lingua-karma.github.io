@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="version" content="11.3">
+<meta name="version" content="12.0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1934,6 +1934,73 @@
     </div>
     <div id="feedList"><div class="gbk-empty">بيتم التحميل... 📣</div></div>
   </div>
+</section>
+
+
+<!-- ===================== v12: FEATURE BATCH 1 ===================== -->
+<section id="wheel">
+  <h2 class="sec-title">✦ عجلة الحظ ✦</h2>
+  <p class="sec-sub">لفة واحدة كل يوم — نقط هدية من كارما 🎡💎</p>
+  <div style="text-align:center">
+    <canvas id="wheelCv" width="320" height="320" style="max-width:86vw;border-radius:50%;box-shadow:0 10px 40px rgba(212,175,55,.25)"></canvas>
+    <div style="margin-top:16px"><button class="btn" id="wheelSpin" style="font-size:1.05rem;padding:13px 34px">🎡 لفّي العجلة</button></div>
+    <div id="wheelNote" style="color:var(--muted);margin-top:10px;font-size:.88rem"></div>
+  </div>
+</section>
+
+<section id="qotd">
+  <h2 class="sec-title">✦ سؤال اليوم ✦</h2>
+  <p class="sec-sub">سؤال جديد كل يوم — جاوبي صح وخدي ١٥ نقطة 💡</p>
+  <div class="acc-card" style="max-width:520px" id="qotdCard"></div>
+</section>
+
+<section id="jokes">
+  <h2 class="sec-title">✦ ركن الضحك ✦</h2>
+  <p class="sec-sub">نكتة بكل لغة ومعناها — اتعلمي وانتي بتضحكي 😂</p>
+  <div class="corner-pick" id="jokeLangs">
+    <button class="corner-flag active" data-jl="en">🇬🇧<span>إنجليزي</span></button>
+    <button class="corner-flag" data-jl="fr">🇫🇷<span>فرنسي</span></button>
+    <button class="corner-flag" data-jl="de">🇩🇪<span>ألماني</span></button>
+    <button class="corner-flag" data-jl="zh">🇨🇳<span>صيني</span></button>
+  </div>
+  <div class="acc-card" style="max-width:520px;text-align:center" id="jokeCard"></div>
+  <div style="text-align:center;margin-top:14px"><button class="btn" id="jokeNext">😂 نكتة تانية</button></div>
+</section>
+
+<section id="mood">
+  <h2 class="sec-title">✦ مودك إيه النهارده؟ ✦</h2>
+  <p class="sec-sub">اختاري إحساسك — ولنجوا هتقترحلك أنشطة على مزاجك 🧘‍♀️💜</p>
+  <div class="menu-grid" id="moodGrid"></div>
+  <div id="moodSugg" style="margin-top:18px"></div>
+</section>
+
+<section id="snake">
+  <h2 class="sec-title">✦ لعبة الثعبان ✦</h2>
+  <p class="sec-sub">كلي التفاح واطولي — كل تفاحة بنقطتين 🐍🍎</p>
+  <div style="text-align:center">
+    <canvas id="snakeCv" width="320" height="320" style="max-width:86vw;background:rgba(0,0,0,.35);border:1px solid rgba(212,175,55,.3);border-radius:16px;touch-action:none"></canvas>
+    <div style="margin-top:10px;color:var(--gold);font-weight:800" id="snakeScore">0 🍎</div>
+    <div style="margin-top:12px"><button class="btn" id="snakeStart">▶️ ابدئي</button></div>
+    <div style="display:grid;grid-template-columns:repeat(3,64px);gap:8px;justify-content:center;margin-top:14px" id="snakePad">
+      <span></span><button class="btn" data-sd="up" style="padding:10px">⬆️</button><span></span>
+      <button class="btn" data-sd="right" style="padding:10px">➡️</button>
+      <button class="btn" data-sd="down" style="padding:10px">⬇️</button>
+      <button class="btn" data-sd="left" style="padding:10px">⬅️</button>
+    </div>
+  </div>
+</section>
+
+<section id="flash">
+  <h2 class="sec-title">✦ كروت الحفظ ✦</h2>
+  <p class="sec-sub">دوسي على الكارت يتقلب — الكلمة وش، والمعنى ضهر 🃏</p>
+  <div class="corner-pick" id="flashLangs">
+    <button class="corner-flag active" data-fl="en">🇬🇧<span>إنجليزي</span></button>
+    <button class="corner-flag" data-fl="fr">🇫🇷<span>فرنسي</span></button>
+    <button class="corner-flag" data-fl="de">🇩🇪<span>ألماني</span></button>
+    <button class="corner-flag" data-fl="zh">🇨🇳<span>صيني</span></button>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;max-width:760px;margin:0 auto" id="flashGrid"></div>
+  <div style="text-align:center;margin-top:16px"><button class="btn" id="flashShuffle">🔀 خلط وكروت جديدة</button></div>
 </section>
 
 <section id="settings">
@@ -5683,9 +5750,344 @@ gbkRender();
   }
 })();
 
+
+/* ================= v12: feature batch 1 ================= */
+(function(){
+  /* menu entries */
+  try {
+    var NM = [['wheel','🎡','عجلة الحظ'],['qotd','💡','سؤال اليوم'],['flash','🃏','كروت الحفظ'],['jokes','😂','ركن الضحك'],['mood','🧘','مودك إيه'],['snake','🐍','الثعبان']];
+    NM.forEach(function(m){ MENU.push(m); VIEWIDS.push(m[0]); });
+    document.getElementById('menuGrid').insertAdjacentHTML('beforeend', NM.map(function(m){
+      return '<a class="menu-card" href="#' + m[0] + '"><span class="m-ico">' + m[1] + '</span><span class="m-name">' + m[2] + '</span></a>';
+    }).join(''));
+  } catch(e){}
+
+  /* ---- birthday countdown (Aug 7) injected into #today ---- */
+  try {
+    var todaySec = document.getElementById('today');
+    var bd = document.createElement('div');
+    bd.id = 'bdayCard';
+    bd.style.cssText = 'max-width:520px;margin:0 auto 22px;background:linear-gradient(135deg,rgba(212,175,55,.16),rgba(212,175,55,.05));border:1px solid rgba(212,175,55,.4);border-radius:18px;padding:16px 20px;text-align:center';
+    todaySec.insertBefore(bd, todaySec.children[2] || null);
+    function bdTick(){
+      var now = new Date();
+      var y = now.getFullYear();
+      var next = new Date(y, 7, 7); // Aug 7
+      if(next <= now) next = new Date(y + 1, 7, 7);
+      var diff = next - now;
+      var d = Math.floor(diff / 86400000);
+      var h = Math.floor(diff % 86400000 / 3600000);
+      var m = Math.floor(diff % 3600000 / 60000);
+      var dd = Math.floor(diff / 86400000);
+      bd.innerHTML = dd === 0
+        ? '<div style="font-size:1.3rem;font-weight:900;color:var(--gold)">🎂 النهارده عيد ميلاد كارما! 🎉👑</div><div style="color:var(--muted);font-size:.85rem;margin-top:4px">كل سنة وانتي طيبة يا أجمل كارما 💜</div>'
+        : '<div style="font-weight:900;color:var(--gold);font-size:1.05rem">🎂 عيد ميلاد كارما بعد</div>' +
+          '<div style="font-size:1.5rem;font-weight:900;margin-top:4px">' + d + ' يوم • ' + h + ' ساعة • ' + m + ' دقيقة</div>' +
+          '<div style="color:var(--muted);font-size:.8rem;margin-top:4px">٧ أغسطس 👑✨</div>';
+    }
+    bdTick();
+    setInterval(bdTick, 30000);
+  } catch(e){}
+
+  /* ---- prayer times in deen corner ---- */
+  try {
+    var deenSec = document.getElementById('deen');
+    var pt = document.createElement('div');
+    pt.innerHTML = '<h3 style="color:var(--gold);text-align:center;margin:26px 0 12px">🕌 مواقيت الصلاة</h3><div id="ptGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px;max-width:640px;margin:0 auto"><div class="gbk-empty" style="grid-column:1/-1">بيتم التحميل... 🕌</div></div><div id="ptCity" style="text-align:center;color:var(--muted);font-size:.78rem;margin-top:8px"></div>';
+    deenSec.appendChild(pt);
+    var PT_NAMES = {Fajr: 'الفجر', Sunrise: 'الشروق', Dhuhr: 'الظهر', Asr: 'العصر', Maghrib: 'المغرب', Isha: 'العشاء'};
+    function ptRender(timings, where){
+      document.getElementById('ptGrid').innerHTML = Object.keys(PT_NAMES).map(function(k){
+        return '<div style="background:rgba(255,255,255,.05);border:1px solid rgba(212,175,55,.25);border-radius:14px;padding:12px 6px;text-align:center"><div style="color:var(--gold);font-weight:800;font-size:.85rem">' + PT_NAMES[k] + '</div><div style="font-weight:900;font-size:1.05rem;margin-top:4px" dir="ltr">' + timings[k] + '</div></div>';
+      }).join('');
+      document.getElementById('ptCity').textContent = where;
+    }
+    function ptFetch(url, where){
+      return fetch(url).then(function(r){ return r.json(); }).then(function(d){
+        var t = {};
+        Object.keys(PT_NAMES).forEach(function(k){ t[k] = d.data.timings[k].slice(0, 5); });
+        ptRender(t, where);
+      });
+    }
+    var ptByCity = function(){ return ptFetch('https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5', 'القاهرة، مصر 📍').catch(function(){ document.getElementById('ptGrid').innerHTML = '<div class="gbk-empty" style="grid-column:1/-1">مفيش نت — المواقيت هتظهر أول ما الاتصال يرجع 📡</div>'; }); };
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(function(pos){
+        ptFetch('https://api.aladhan.com/v1/timings/' + Math.floor(Date.now() / 1000) + '?latitude=' + pos.coords.latitude.toFixed(3) + '&longitude=' + pos.coords.longitude.toFixed(3) + '&method=5', 'حسب مكانك 📍').catch(ptByCity);
+      }, ptByCity, {timeout: 6000});
+    } else { ptByCity(); }
+  } catch(e){}
+
+  /* ---- prize wheel ---- */
+  (function(){
+    var cv = document.getElementById('wheelCv');
+    var ctx = cv.getContext('2d');
+    var SEG = [['10', '#3b2f16'], ['25', '#241d0e'], ['5', '#3b2f16'], ['50', '#241d0e'], ['15', '#3b2f16'], ['100', '#4a3a12'], ['5', '#241d0e'], ['30', '#3b2f16']];
+    var ang0 = -Math.PI / 2;
+    function draw(rot){
+      ctx.clearRect(0, 0, 320, 320);
+      var n = SEG.length, r = 150, cx = 160, cy = 160;
+      for(var i = 0; i < n; i++){
+        var a0 = ang0 + rot + i * 2 * Math.PI / n, a1 = a0 + 2 * Math.PI / n;
+        ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, a0, a1); ctx.closePath();
+        ctx.fillStyle = SEG[i][1]; ctx.fill();
+        ctx.strokeStyle = 'rgba(212,175,55,.55)'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.save(); ctx.translate(cx, cy); ctx.rotate((a0 + a1) / 2);
+        ctx.textAlign = 'right'; ctx.fillStyle = '#e8c96a'; ctx.font = '900 22px Cairo, sans-serif';
+        ctx.fillText(SEG[i][0], r - 18, 8); ctx.restore();
+      }
+      ctx.beginPath(); ctx.arc(cx, cy, 26, 0, 7); ctx.fillStyle = '#d4af37'; ctx.fill();
+      ctx.beginPath(); ctx.moveTo(cx - 10, cy - r - 4); ctx.lineTo(cx + 10, cy - r - 4); ctx.lineTo(cx, cy - r + 18); ctx.closePath(); ctx.fillStyle = '#fff'; ctx.fill();
+    }
+    draw(0);
+    var KEY = 'lingua_wheel_day';
+    function spunToday(){ try { return localStorage.getItem(KEY) === new Date().toDateString(); } catch(e){ return false; } }
+    function note(t){ document.getElementById('wheelNote').textContent = t; }
+    if(spunToday()) note('لفيتي النهارده ✅ — ارجعي بكرة للفة جديدة 🎡');
+    document.getElementById('wheelSpin').addEventListener('click', function(){
+      if(spunToday()){ note('لفة واحدة بس في اليوم يا قمر 🌙 — بكرة أحسن'); return; }
+      var btn = this; btn.disabled = true;
+      var idx = Math.floor(Math.random() * SEG.length);
+      var target = (Math.PI * 2 * 6) + (Math.PI * 2 - (idx + 0.5) * 2 * Math.PI / SEG.length);
+      var start = null;
+      function frame(ts){
+        if(!start) start = ts;
+        var p = Math.min((ts - start) / 3800, 1);
+        var ease = 1 - Math.pow(1 - p, 3);
+        draw(target * ease);
+        if(p < 1) requestAnimationFrame(frame);
+        else {
+          var pts = parseInt(SEG[idx][0], 10);
+          try { localStorage.setItem(KEY, new Date().toDateString()); } catch(e){}
+          awardPoints(pts, 'عجلة الحظ 🎡');
+          confetti();
+          note('مبروووك! كسبتي ' + pts + ' نقطة 🎉 — ارجعي بكرة 🎡');
+          btn.disabled = false;
+        }
+      }
+      requestAnimationFrame(frame);
+    });
+  })();
+
+  /* ---- question of the day ---- */
+  (function(){
+    var Q = [
+      ['عاصمة اليابان إيه؟', ['طوكيو', 'بكين', 'سول', 'بانكوك'], 0],
+      ['أكبر محيط في العالم؟', ['الأطلسي', 'الهندي', 'الهادي', 'المتجمد'], 2],
+      ['كم عدد كواكب المجموعة الشمسية؟', ['٧', '٨', '٩', '١٠'], 1],
+      ['لغة البرازيل الرسمية؟', ['الإسبانية', 'البرتغالية', 'الفرنسية', 'الإنجليزية'], 1],
+      ['أطول نهر في العالم؟', ['الأمازون', 'الدانوب', 'النيل', 'اليانجتسي'], 2],
+      ['رمز الذهب الكيميائي؟', ['Ag', 'Fe', 'Au', 'Gd'], 2],
+      ['أكبر صحراء حارة في العالم؟', ['الكالاهاري', 'الصحراء الكبرى', 'جوبي', 'الربع الخالي'], 1],
+      ['كم لاعب في فريق الكورة الأساسي؟', ['٩', '١٠', '١١', '١٢'], 2],
+      ['عاصمة أستراليا؟', ['سيدني', 'ملبورن', 'كانبرا', 'بيرث'], 2],
+      ['أصغر دولة في العالم؟', ['موناكو', 'الفاتيكان', 'مالطا', 'البحرين'], 1],
+      ['اللغة الأكثر تحدثًا في العالم كلغة أم؟', ['الإنجليزية', 'الهندية', 'الإسبانية', 'الصينية'], 3],
+      ['سنة وصول الإنسان للقمر؟', ['١٩٥٩', '١٩٦٥', '١٩٦٩', '١٩٧٢'], 2],
+      ['أكبر جزيرة في العالم؟', ['مدغشقر', 'جرينلاند', 'بورنيو', 'سومطرة'], 1],
+      ['مخترع المصباح الكهربائي؟', ['تسلا', 'إديسون', 'بيل', 'نيوتن'], 1]
+    ];
+    var KEY = 'lingua_qotd_day';
+    var dayIdx = Math.floor(Date.now() / 86400000) % Q.length;
+    var q = Q[dayIdx];
+    var card = document.getElementById('qotdCard');
+    function answered(){ try { return localStorage.getItem(KEY) === new Date().toDateString(); } catch(e){ return false; } }
+    function render(){
+      if(answered()){
+        card.innerHTML = '<h3>💡 جاوبتي سؤال النهارده ✅</h3><p style="color:var(--muted)">ارجعي بكرة لسؤال جديد ومكافأة جديدة 🎁</p>';
+        return;
+      }
+      card.innerHTML = '<h3 style="line-height:1.7">' + q[0] + '</h3>' + q[1].map(function(o, i){
+        return '<button class="btn" style="width:100%;margin-bottom:8px;background:rgba(255,255,255,.06)" data-qo="' + i + '">' + o + '</button>';
+      }).join('');
+      card.querySelectorAll('[data-qo]').forEach(function(b){
+        b.addEventListener('click', function(){
+          try { localStorage.setItem(KEY, new Date().toDateString()); } catch(e){}
+          if(+b.dataset.qo === q[2]){
+            b.style.background = 'rgba(46,160,67,.4)';
+            awardPoints(15, 'سؤال اليوم 💡');
+            confetti();
+            setTimeout(render, 1200);
+          } else {
+            b.style.background = 'rgba(220,60,60,.35)';
+            toast('غلط — الإجابة الصح: ' + q[1][q[2]] + ' 💛');
+            setTimeout(render, 1500);
+          }
+        });
+      });
+    }
+    render();
+  })();
+
+  /* ---- jokes corner ---- */
+  (function(){
+    var J = {
+      en: [
+        ['Why did the student eat his homework? Because the teacher said it was a piece of cake!', 'ليه الطالب كل واجبه؟ عشان المدرّسة قالت إنه "قطعة كيك" — يعني سهل جدًا 😂'],
+        ['What do you call a fish without eyes? A fsh!', 'سمكة من غير عيون (eyes) تتقال إيه؟ "فش" — شيلنا حرف الـ i من fish 😂'],
+        ['Why is the computer cold? It left its Windows open!', 'ليه الكمبيوتر عيان من البرد؟ ساب "الويندوز" مفتوح — نوافذ ونظام تشغيل في نفس الوقت 😂'],
+        ['What did one wall say to the other? I will meet you at the corner!', 'الحيطة قالت لصاحبتها: هقابلك عند "الركن" — corner يعني ركن وزاوية 😂']
+      ],
+      fr: [
+        ['Pourquoi les plongeurs plongent-ils toujours en arrière? Parce que sinon ils tombent dans le bateau!', 'ليه الغطاسين بينزلوا دايمًا ضهرهم للمية؟ عشان لو نزلوا قدام هيقعوا جوه المركب 😂'],
+        ['Que dit une imprimante dans l\'eau? J\'ai papier!', 'الطابعة بتقول إيه في المية؟ "J\'ai papier" — عندي ورق، وصوتها زي "je ne sais pas" مش عارف 😂'],
+        ['Quel est le comble pour un électricien? Ne pas être au courant!', 'قمة ما يحصل لكهربائي؟ إنه "مش واخد باله" — au courant يعني مطّلع ويعني فيه تيار كهربي 😂']
+      ],
+      de: [
+        ['Warum können Geister so schlecht lügen? Weil man durch sie hindurchsehen kann!', 'ليه الأشباح وحشين في الكدب؟ عشان تقدر "تشوف من خلالهم" — شفافين حرفيًا 😂'],
+        ['Was ist schwarz-weiß und sitzt auf der Schaukel? Ein Schwinguin!', 'إيه الأبيض-في-أسود اللي قاعد على الأرجوحة؟ "شفينجوين" — دمج Schaukel (أرجوحة) مع Pinguin (بطريق) 😂'],
+        ['Was macht ein Mathematiker im Garten? Wurzeln ziehen!', 'الرياضي بيعمل إيه في الجنينة؟ "بيجدّر" — Wurzeln ziehen يعني يقلع الجذور ويعني يحسب الجذر التربيعي 😂']
+      ],
+      zh: [
+        ['有一天，面条遇到了肉包，它们打了一架。因为肉包"有馅"！', 'النودلز اتخانقت مع الباوزي المحشي... عشان "عنده حشوة" — 有馅 (عنده حشوة) صوتها زي 有闲 (فاضي) 😂'],
+        ['老师：为什么你的作业上有牛奶？学生：因为你说要"喝"书！', 'المدرس: ليه واجبك عليه لبن؟ الطالب: عشان قلتيلي "اشربي" الكتاب — لعب على كلمتي 喝 (يشرب) وقراءة الكتب 😂']
+      ]
+    };
+    var cur = 'en', idx = 0;
+    function render(){
+      var j = J[cur][idx % J[cur].length];
+      document.getElementById('jokeCard').innerHTML =
+        '<div dir="ltr" style="font-size:1.05rem;line-height:1.8;font-weight:700;margin-bottom:12px">' + j[0] + '</div>' +
+        '<div style="color:var(--gold);border-top:1px dashed rgba(212,175,55,.4);padding-top:12px;line-height:1.8">' + j[1] + '</div>';
+    }
+    document.getElementById('jokeLangs').addEventListener('click', function(e){
+      var b = e.target.closest('[data-jl]'); if(!b) return;
+      document.querySelectorAll('#jokeLangs .corner-flag').forEach(function(x){ x.classList.toggle('active', x === b); });
+      cur = b.dataset.jl; idx = 0; render();
+    });
+    document.getElementById('jokeNext').addEventListener('click', function(){ idx++; render(); });
+    render();
+  })();
+
+  /* ---- mood suggester ---- */
+  (function(){
+    var MOODS = [
+      ['😊', 'مبسوطة', [['corners', '🌍 جربي ركن لغة جديدة'], ['wheel', '🎡 لفّي عجلة الحظ'], ['songs', '🎵 اسمعي أغاني']]],
+      ['😴', 'كسلانة', [['today', '💎 كلمات اليوم بس — خفيف'], ['jokes', '😂 نكتة تفرفشك'], ['music', '🎧 استمعي لحاجة هادية']]],
+      ['💪', 'نشيطة', [['quiz', '📝 ادخلي اختبار وكسريه'], ['snake', '🐍 العبي الثعبان'], ['brain', '🧠 ألعاب ذكاء']]],
+      ['😢', 'زعلانة', [['vent', '💭 فضفضي — هتحسي بتحسن'], ['mushaf', '📖 المصحف يريّح القلب'], ['deen', '🕌 ركن الروح']]],
+      ['🤩', 'حماس', [['courses', '🎓 ابدئي كورس جديد'], ['scholar', '🏆 بصي على المنح'], ['games', '🎯 ألعاب اللغات']]],
+      ['😌', 'هادية', [['gbk', '💌 سيبي كلمة لكارما'], ['tips', '💡 نصايح اللغات'], ['gallery', '📸 اتفرجي بالصور']]]
+    ];
+    document.getElementById('moodGrid').innerHTML = MOODS.map(function(m, i){
+      return '<a class="menu-card" data-mood="' + i + '" style="cursor:pointer"><span class="m-ico">' + m[0] + '</span><span class="m-name">' + m[1] + '</span></a>';
+    }).join('');
+    document.getElementById('moodGrid').addEventListener('click', function(e){
+      var c = e.target.closest('[data-mood]'); if(!c) return;
+      var m = MOODS[+c.dataset.mood];
+      document.getElementById('moodSugg').innerHTML =
+        '<div class="acc-card" style="max-width:440px"><h3>' + m[0] + ' طالما إنتي ' + m[1] + '... جربي:</h3>' +
+        m[2].map(function(x){ return '<a class="btn" href="#' + x[0] + '" style="display:block;margin-bottom:8px;text-decoration:none">' + x[1] + '</a>'; }).join('') +
+        '</div>';
+      awardPoints(1, 'عرفتينا مودك 🧘‍♀️');
+    });
+  })();
+
+  /* ---- snake ---- */
+  (function(){
+    var cv = document.getElementById('snakeCv'), ctx = cv.getContext('2d');
+    var N = 20, S = 16, snake, dir, next, food, alive = false, speed, lastT, score;
+    function reset(){
+      snake = [[10, 10], [9, 10], [8, 10]]; dir = [1, 0]; next = [1, 0]; score = 0; speed = 170;
+      placeFood(); draw();
+      document.getElementById('snakeScore').textContent = '0 🍎';
+    }
+    function placeFood(){
+      while(true){
+        food = [Math.floor(Math.random() * N), Math.floor(Math.random() * N)];
+        if(!snake.some(function(s){ return s[0] === food[0] && s[1] === food[1]; })) break;
+      }
+    }
+    function draw(){
+      ctx.fillStyle = 'rgba(8,6,14,.9)'; ctx.fillRect(0, 0, 320, 320);
+      ctx.fillStyle = '#e0483e';
+      ctx.beginPath(); ctx.arc(food[0] * S + 8, food[1] * S + 8, 7, 0, 7); ctx.fill();
+      snake.forEach(function(s, i){
+        ctx.fillStyle = i === 0 ? '#d4af37' : 'rgba(212,175,55,' + (0.85 - i / snake.length * 0.5) + ')';
+        ctx.beginPath(); ctx.roundRect(s[0] * S + 1, s[1] * S + 1, S - 2, S - 2, 4); ctx.fill();
+      });
+    }
+    function step(){
+      dir = next;
+      var h = [snake[0][0] + dir[0], snake[0][1] + dir[1]];
+      if(h[0] < 0 || h[0] >= N || h[1] < 0 || h[1] >= N || snake.some(function(s){ return s[0] === h[0] && s[1] === h[1]; })){
+        alive = false;
+        toast('خسرتي! نتيجتك: ' + score + ' 🍎 — جربي تاني 🐍');
+        if(score >= 5) confetti();
+        return;
+      }
+      snake.unshift(h);
+      if(h[0] === food[0] && h[1] === food[1]){
+        score++;
+        document.getElementById('snakeScore').textContent = score + ' 🍎';
+        awardPoints(2, 'تفاحة ثعبان 🍎');
+        if(speed > 80) speed -= 5;
+        placeFood();
+      } else snake.pop();
+      draw();
+    }
+    function loop(ts){
+      if(!alive) return;
+      requestAnimationFrame(loop);
+      if(ts - lastT < speed) return;
+      lastT = ts; step();
+    }
+    function setDir(d){
+      var m = {up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0]}[d];
+      if(m && (m[0] !== -dir[0] || m[1] !== -dir[1])) next = m;
+    }
+    document.getElementById('snakeStart').addEventListener('click', function(){
+      reset(); alive = true; lastT = performance.now(); requestAnimationFrame(loop);
+    });
+    document.getElementById('snakePad').addEventListener('click', function(e){
+      var b = e.target.closest('[data-sd]'); if(b) setDir(b.dataset.sd);
+    });
+    document.addEventListener('keydown', function(e){
+      var m = {ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right'}[e.key];
+      if(m && document.getElementById('snake').classList.contains('view')) setDir(m);
+    });
+    var tx0 = 0, ty0 = 0;
+    cv.addEventListener('touchstart', function(e){ tx0 = e.touches[0].clientX; ty0 = e.touches[0].clientY; }, {passive: true});
+    cv.addEventListener('touchend', function(e){
+      var dx = e.changedTouches[0].clientX - tx0, dy = e.changedTouches[0].clientY - ty0;
+      if(Math.abs(dx) < 24 && Math.abs(dy) < 24) return;
+      setDir(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'));
+    }, {passive: true});
+    reset();
+  })();
+
+  /* ---- flashcards ---- */
+  (function(){
+    var LANGS = {en: 1, fr: 2, de: 3, zh: 4};
+    var cur = 'en';
+    function render(){
+      var words = DICT[cur].slice().sort(function(){ return Math.random() - 0.5; }).slice(0, 8);
+      document.getElementById('flashGrid').innerHTML = words.map(function(w){
+        return '<div class="fcard" style="perspective:600px;cursor:pointer;height:110px">' +
+          '<div class="fcard-in" style="position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d">' +
+          '<div style="position:absolute;inset:0;backface-visibility:hidden;background:linear-gradient(135deg,rgba(212,175,55,.22),rgba(212,175,55,.07));border:1px solid rgba(212,175,55,.45);border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.05rem;padding:8px;text-align:center" dir="ltr">' + w[0] + '</div>' +
+          '<div style="position:absolute;inset:0;backface-visibility:hidden;transform:rotateY(180deg);background:rgba(255,255,255,.07);border:1px solid rgba(212,175,55,.3);border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--gold);padding:8px;text-align:center">' + w[1] + '</div>' +
+          '</div></div>';
+      }).join('');
+      document.querySelectorAll('#flashGrid .fcard').forEach(function(c){
+        c.addEventListener('click', function(){
+          var inn = c.firstElementChild;
+          inn.style.transform = inn.style.transform === 'rotateY(180deg)' ? '' : 'rotateY(180deg)';
+        });
+      });
+    }
+    document.getElementById('flashLangs').addEventListener('click', function(e){
+      var b = e.target.closest('[data-fl]'); if(!b) return;
+      document.querySelectorAll('#flashLangs .corner-flag').forEach(function(x){ x.classList.toggle('active', x === b); });
+      cur = b.dataset.fl; render();
+    });
+    document.getElementById('flashShuffle').addEventListener('click', function(){ render(); awardPoints(1, 'كروت جديدة 🃏'); });
+    render();
+  })();
+})();
+
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v11.3</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v12.0</div>
 </body>
 </html>
