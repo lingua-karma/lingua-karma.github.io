@@ -3,326 +3,398 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Marhey:wght@500;600;700&display=swap" rel="stylesheet">
 <title>Lingua | لينجوا — تعلّم لغات العالم بفخامة</title>
 <style>
   :root{
-    --bg:#0b0b12;
-    --bg2:#12121d;
-    --card:#171724;
-    --card2:#1d1d2e;
+    --bg:#08060f;
+    --bg2:#0e0a1a;
+    --card:rgba(23,17,40,.72);
+    --card2:rgba(31,23,54,.85);
     --gold:#d4af37;
-    --gold2:#f0d97a;
-    --text:#f3efe4;
-    --muted:#a9a49a;
+    --gold2:#f5e08c;
+    --violet:#7c5cd6;
+    --text:#f6f1e3;
+    --muted:#b3abc6;
     --ok:#4ade80;
     --bad:#f87171;
-    --radius:18px;
+    --radius:22px;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html{scroll-behavior:smooth}
   body{
     background:var(--bg);
     color:var(--text);
-    font-family:'Segoe UI',Tahoma,Arial,sans-serif;
-    line-height:1.7;
+    font-family:'Cairo','Segoe UI',Tahoma,Arial,sans-serif;
+    line-height:1.8;
     overflow-x:hidden;
   }
+  /* ambient background orbs */
+  body::before,body::after{
+    content:'';position:fixed;z-index:-1;border-radius:50%;filter:blur(120px);opacity:.35;pointer-events:none;
+  }
+  body::before{width:520px;height:520px;background:#5a3cb8;top:-160px;inset-inline-start:-160px}
+  body::after{width:460px;height:460px;background:#8a6a1f;bottom:-140px;inset-inline-end:-140px}
+  ::selection{background:rgba(212,175,55,.4)}
   /* ===== Header ===== */
   header{
     position:sticky;top:0;z-index:50;
-    background:rgba(11,11,18,.92);
-    backdrop-filter:blur(10px);
-    border-bottom:1px solid rgba(212,175,55,.25);
-    padding:14px 20px;
-    display:flex;align-items:center;justify-content:space-between;
+    background:rgba(8,6,15,.78);
+    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid rgba(212,175,55,.3);
+    padding:12px 4vw;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
   }
   .logo{
-    font-size:1.6rem;font-weight:800;letter-spacing:1px;
-    background:linear-gradient(120deg,var(--gold2),var(--gold) 60%,#b8860b);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-  }
-  .logo small{display:block;font-size:.7rem;color:var(--muted);font-weight:400;letter-spacing:0}
-  nav{display:flex;gap:6px}
-  nav a{
-    color:var(--muted);text-decoration:none;font-size:.85rem;padding:8px 12px;border-radius:999px;
-    transition:.2s;
-  }
-  nav a:active,nav a:hover{color:var(--gold2);background:rgba(212,175,55,.1)}
-  /* ===== Hero ===== */
-  .hero{
-    text-align:center;padding:70px 20px 50px;
-    background:
-      radial-gradient(600px 300px at 50% -50px, rgba(212,175,55,.18), transparent 70%),
-      radial-gradient(400px 200px at 90% 100%, rgba(90,60,180,.12), transparent 70%);
-  }
-  .hero h1{
-    font-size:clamp(2rem,7vw,3.4rem);font-weight:900;line-height:1.3;
-    background:linear-gradient(120deg,#fff,var(--gold2) 55%,var(--gold));
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-  }
-  .hero p{color:var(--muted);max-width:560px;margin:16px auto 28px;font-size:1.05rem}
-  .cta{
-    display:inline-block;text-decoration:none;font-weight:700;font-size:1rem;
-    color:#1a1405;padding:14px 38px;border-radius:999px;
-    background:linear-gradient(120deg,var(--gold2),var(--gold));
-    box-shadow:0 8px 30px rgba(212,175,55,.35);
-    transition:.2s;
-  }
-  .cta:active{transform:scale(.97)}
-  .flags{margin-top:26px;font-size:2rem;letter-spacing:12px}
-  .stats{
-    display:flex;justify-content:center;gap:14px;flex-wrap:wrap;
-    margin-top:34px;
-  }
-  .stat{
-    background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.25);
-    border-radius:14px;padding:12px 22px;min-width:110px;
-  }
-  .stat b{display:block;font-size:1.4rem;color:var(--gold2)}
-  .stat span{font-size:.75rem;color:var(--muted)}
-  /* ===== Feature cards ===== */
-  .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
-  .feature{
-    background:linear-gradient(160deg,var(--card),var(--card2));
-    border:1px solid rgba(212,175,55,.18);border-radius:var(--radius);
-    padding:24px 18px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.3);
-  }
-  .feature .ico{font-size:2rem;margin-bottom:10px}
-  .feature h3{font-size:1rem;color:var(--gold2);margin-bottom:6px}
-  .feature p{font-size:.85rem;color:var(--muted)}
-  /* ===== Course cards ===== */
-  .courses{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
-  .course{
-    position:relative;border-radius:var(--radius);overflow:hidden;cursor:pointer;
-    border:1px solid rgba(212,175,55,.25);
-    background:linear-gradient(160deg,var(--card2),var(--card));
-    box-shadow:0 12px 34px rgba(0,0,0,.4);transition:.2s;
-  }
-  .course:active{transform:scale(.98)}
-  .course .banner{
-    padding:34px 20px 24px;text-align:center;font-size:3rem;
-    background:radial-gradient(300px 140px at 50% 0%, rgba(212,175,55,.22), transparent 70%);
-  }
-  .course .cbody{padding:0 20px 20px}
-  .course h3{color:#fff;font-size:1.15rem;margin-bottom:4px}
-  .course p{color:var(--muted);font-size:.85rem;margin-bottom:14px}
-  .course .meta{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--gold)}
-  .course .go{
-    background:linear-gradient(120deg,var(--gold2),var(--gold));color:#1a1405;
-    font-weight:700;font-size:.8rem;padding:8px 16px;border-radius:999px;
-  }
-  /* ===== Sections ===== */
-  section{padding:40px 18px;max-width:900px;margin:0 auto}
-  .sec-title{
-    text-align:center;font-size:1.6rem;font-weight:800;margin-bottom:6px;color:var(--gold2);
-  }
-  .sec-sub{text-align:center;color:var(--muted);margin-bottom:26px;font-size:.95rem}
-  /* ===== Language tabs ===== */
-  .tabs{display:flex;justify-content:center;gap:10px;margin-bottom:26px;flex-wrap:wrap}
-  .tab{
-    border:1px solid rgba(212,175,55,.35);background:var(--card);color:var(--text);
-    padding:12px 22px;border-radius:999px;font-size:1rem;font-weight:600;cursor:pointer;
-    font-family:inherit;transition:.2s;
-  }
-  .tab.active{
-    background:linear-gradient(120deg,var(--gold2),var(--gold));color:#1a1405;border-color:transparent;
-    box-shadow:0 6px 20px rgba(212,175,55,.3);
-  }
-  .lesson{transition:.25s}
-  .lesson:hover{transform:translateY(-3px);border-color:rgba(212,175,55,.45);box-shadow:0 16px 40px rgba(212,175,55,.12)}
-  .logo{
+    font-family:'Marhey','Cairo',sans-serif;
+    font-size:2rem;font-weight:700;letter-spacing:1px;line-height:1.1;
     background:linear-gradient(120deg,var(--gold2) 20%,var(--gold) 40%,#fff8dc 50%,var(--gold) 60%,var(--gold2) 80%);
     background-size:200% auto;
     -webkit-background-clip:text;background-clip:text;color:transparent;
     animation:shine 4s linear infinite;
   }
   @keyframes shine{to{background-position:200% center}}
-  .hero h1{text-shadow:0 0 60px rgba(212,175,55,.25)}
-  /* ===== Memory game ===== */
-  .mg-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;color:var(--muted);font-size:.9rem}
-  .mg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-  .mg-card{
-    aspect-ratio:3/4;border-radius:12px;cursor:pointer;position:relative;
-    perspective:600px;background:none;border:none;padding:0;font-family:inherit;
+  .logo small{display:block;font-size:.72rem;color:var(--muted);font-weight:400;letter-spacing:0;font-family:'Cairo',sans-serif}
+  nav{display:flex;gap:6px;flex-wrap:wrap}
+  nav a{
+    color:var(--muted);text-decoration:none;font-size:.92rem;font-weight:600;padding:8px 16px;border-radius:999px;
+    transition:.2s;border:1px solid transparent;
   }
-  .mg-inner{
-    position:absolute;inset:0;transition:transform .4s;transform-style:preserve-3d;
+  nav a:active,nav a:hover{color:var(--gold2);background:rgba(212,175,55,.12);border-color:rgba(212,175,55,.3)}
+  /* ===== Hero ===== */
+  .hero{
+    text-align:center;padding:110px 5vw 90px;position:relative;
+    background:
+      radial-gradient(900px 420px at 50% -120px, rgba(212,175,55,.22), transparent 70%),
+      radial-gradient(700px 400px at 88% 110%, rgba(124,92,214,.16), transparent 70%),
+      radial-gradient(500px 300px at 8% 100%, rgba(212,175,55,.1), transparent 70%);
   }
-  .mg-card.flipped .mg-inner{transform:rotateY(180deg)}
-  .mg-face{
-    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    border-radius:12px;backface-visibility:hidden;-webkit-backface-visibility:hidden;
-    font-size:1rem;font-weight:700;padding:6px;text-align:center;
+  .hero .kicker{
+    display:inline-block;font-size:.85rem;font-weight:700;color:var(--gold2);
+    border:1px solid rgba(212,175,55,.45);border-radius:999px;padding:6px 18px;margin-bottom:22px;
+    background:rgba(212,175,55,.08);letter-spacing:.5px;
   }
-  .mg-front{
-    background:linear-gradient(160deg,var(--card2),var(--card));
-    border:1px solid rgba(212,175,55,.3);color:var(--gold);font-size:1.5rem;
+  .hero h1{
+    font-family:'Marhey','Cairo',sans-serif;
+    font-size:clamp(2.6rem,8vw,5rem);font-weight:700;line-height:1.25;
+    background:linear-gradient(120deg,#fff,var(--gold2) 55%,var(--gold));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 0 80px rgba(212,175,55,.25);
   }
-  .mg-back{
-    background:rgba(212,175,55,.12);border:1px solid var(--gold);color:#fff;
-    transform:rotateY(180deg);font-size:.85rem;
+  .hero p{color:var(--muted);max-width:640px;margin:20px auto 34px;font-size:1.15rem}
+  .cta{
+    display:inline-block;text-decoration:none;font-weight:800;font-size:1.1rem;
+    color:#1a1405;padding:16px 46px;border-radius:999px;
+    background:linear-gradient(120deg,var(--gold2),var(--gold));
+    box-shadow:0 10px 40px rgba(212,175,55,.4), inset 0 1px 0 rgba(255,255,255,.5);
+    transition:.25s;
   }
-  .mg-card.matched .mg-back{background:rgba(74,222,128,.15);border-color:var(--ok);color:var(--ok)}
-  .mg-win{text-align:center;padding:20px 0}
-  .mg-win .score{font-size:2.4rem;font-weight:900;color:var(--gold2)}
-  .lang-panel{display:none;animation:fade .3s ease}
+  .cta:hover{transform:translateY(-2px);box-shadow:0 16px 50px rgba(212,175,55,.5)}
+  .cta:active{transform:scale(.97)}
+  .flags{margin-top:34px;font-size:2.4rem;letter-spacing:16px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.5))}
+  .stats{
+    display:flex;justify-content:center;gap:16px;flex-wrap:wrap;
+    margin-top:44px;
+  }
+  .stat{
+    background:rgba(212,175,55,.07);border:1px solid rgba(212,175,55,.3);
+    border-radius:18px;padding:16px 30px;min-width:130px;
+    backdrop-filter:blur(8px);
+  }
+  .stat b{display:block;font-size:1.8rem;color:var(--gold2);font-weight:900}
+  .stat span{font-size:.82rem;color:var(--muted)}
+  /* ===== Sections: full width ===== */
+  section{padding:80px 4vw;max-width:none}
+  section>*{max-width:1280px;margin-inline:auto}
+  section:nth-of-type(even){background:linear-gradient(180deg,rgba(124,92,214,.05),rgba(212,175,55,.04))}
+  .sec-title{
+    font-family:'Marhey','Cairo',sans-serif;
+    text-align:center;font-size:clamp(1.8rem,4.5vw,2.6rem);font-weight:700;margin-bottom:10px;
+    background:linear-gradient(120deg,#fff,var(--gold2) 60%,var(--gold));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .sec-sub{text-align:center;color:var(--muted);margin-bottom:40px;font-size:1.05rem}
+  /* ===== Feature cards ===== */
+  .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+  .feature{
+    background:var(--card);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(212,175,55,.2);border-radius:var(--radius);
+    padding:34px 24px;text-align:center;box-shadow:0 14px 40px rgba(0,0,0,.4);
+    transition:.3s;
+  }
+  .feature:hover{transform:translateY(-6px);border-color:rgba(212,175,55,.5);box-shadow:0 22px 55px rgba(212,175,55,.15)}
+  .feature .ico{
+    font-size:1.8rem;margin:0 auto 16px;width:72px;height:72px;line-height:72px;border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, rgba(245,224,140,.25), rgba(212,175,55,.08));
+    border:1px solid rgba(212,175,55,.4);
+    box-shadow:0 0 30px rgba(212,175,55,.15) inset;
+  }
+  .feature h3{font-size:1.15rem;color:var(--gold2);margin-bottom:8px;font-weight:800}
+  .feature p{font-size:.9rem;color:var(--muted)}
+  /* ===== Course cards ===== */
+  .courses{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
+  .course{
+    position:relative;border-radius:var(--radius);overflow:hidden;cursor:pointer;
+    border:1px solid rgba(212,175,55,.3);
+    background:linear-gradient(165deg,var(--card2),var(--card));
+    box-shadow:0 16px 44px rgba(0,0,0,.45);transition:.3s;
+  }
+  .course:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 26px 60px rgba(212,175,55,.2)}
+  .course:active{transform:scale(.98)}
+  .course .banner{
+    padding:44px 20px 34px;text-align:center;font-size:3.6rem;
+    background:
+      radial-gradient(320px 160px at 50% 0%, rgba(212,175,55,.3), transparent 70%),
+      linear-gradient(180deg, rgba(124,92,214,.12), transparent);
+  }
+  .course .cbody{padding:0 24px 24px}
+  .course h3{color:#fff;font-size:1.3rem;margin-bottom:6px;font-weight:800}
+  .course p{color:var(--muted);font-size:.9rem;margin-bottom:16px}
+  .course .meta{display:flex;justify-content:space-between;align-items:center;font-size:.82rem;color:var(--gold)}
+  .course .go{
+    background:linear-gradient(120deg,var(--gold2),var(--gold));color:#1a1405;
+    font-weight:800;font-size:.85rem;padding:9px 20px;border-radius:999px;
+    box-shadow:0 4px 16px rgba(212,175,55,.35);
+  }
+  /* ===== Language tabs ===== */
+  .tabs{display:flex;justify-content:center;gap:12px;margin-bottom:34px;flex-wrap:wrap}
+  .tab{
+    border:1px solid rgba(212,175,55,.4);background:var(--card);color:var(--text);
+    padding:13px 26px;border-radius:999px;font-size:1.05rem;font-weight:700;cursor:pointer;
+    font-family:inherit;transition:.25s;backdrop-filter:blur(8px);
+  }
+  .tab:hover{border-color:var(--gold2)}
+  .tab.active{
+    background:linear-gradient(120deg,var(--gold2),var(--gold));color:#1a1405;border-color:transparent;
+    box-shadow:0 8px 26px rgba(212,175,55,.4);
+  }
+  .lang-panel{display:none;animation:fade .35s ease}
   .lang-panel.active{display:block}
-  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
   .level-head{
-    display:flex;align-items:center;gap:10px;margin:26px 0 14px;
-    color:var(--gold2);font-weight:800;font-size:1.05rem;
+    display:flex;align-items:center;gap:12px;margin:34px 0 18px;
+    color:var(--gold2);font-weight:800;font-size:1.2rem;
   }
   .level-head .pill{
-    font-size:.7rem;font-weight:700;color:#1a1405;padding:4px 12px;border-radius:999px;
+    font-size:.75rem;font-weight:800;color:#1a1405;padding:5px 14px;border-radius:999px;
     background:linear-gradient(120deg,var(--gold2),var(--gold));
   }
-  .level-head .line{flex:1;height:1px;background:rgba(212,175,55,.25)}
-  .lock-note{color:var(--muted);font-size:.8rem;text-align:center;margin-top:6px}
+  .level-head .line{flex:1;height:1px;background:linear-gradient(to left,rgba(212,175,55,.4),transparent)}
+  .lock-note{color:var(--muted);font-size:.85rem;text-align:center;margin-top:8px}
   /* ===== Lesson cards ===== */
   .lesson{
-    background:linear-gradient(160deg,var(--card),var(--card2));
-    border:1px solid rgba(212,175,55,.18);
-    border-radius:var(--radius);padding:22px;margin-bottom:18px;
-    box-shadow:0 10px 30px rgba(0,0,0,.35);
+    background:var(--card);backdrop-filter:blur(12px);
+    border:1px solid rgba(212,175,55,.2);
+    border-radius:var(--radius);padding:28px;margin-bottom:22px;
+    box-shadow:0 14px 40px rgba(0,0,0,.4);
+    transition:.3s;
   }
-  .lesson h3{color:var(--gold2);font-size:1.15rem;margin-bottom:4px}
-  .lesson .lvl{color:var(--muted);font-size:.8rem;margin-bottom:14px}
-  table{width:100%;border-collapse:collapse;font-size:.95rem}
-  th,td{padding:10px 8px;text-align:right;border-bottom:1px solid rgba(255,255,255,.06)}
-  th{color:var(--gold);font-weight:700;font-size:.85rem}
-  td .foreign{direction:ltr;display:inline-block;font-weight:600;color:#fff}
+  .lesson:hover{transform:translateY(-4px);border-color:rgba(212,175,55,.5);box-shadow:0 20px 50px rgba(212,175,55,.14)}
+  .lesson h3{color:var(--gold2);font-size:1.3rem;margin-bottom:6px;font-weight:800}
+  .lesson .lvl{color:var(--muted);font-size:.85rem;margin-bottom:16px}
+  table{width:100%;border-collapse:collapse;font-size:1.02rem}
+  th,td{padding:12px 10px;text-align:right;border-bottom:1px solid rgba(255,255,255,.07)}
+  th{color:var(--gold);font-weight:800;font-size:.9rem}
+  td .foreign{direction:ltr;display:inline-block;font-weight:700;color:#fff}
   tr:last-child td{border-bottom:none}
+  tbody tr{transition:.2s}
+  tbody tr:hover{background:rgba(212,175,55,.06)}
   /* ===== Quiz ===== */
   .quiz-box{
-    background:linear-gradient(160deg,var(--card),var(--card2));
-    border:1px solid rgba(212,175,55,.18);border-radius:var(--radius);
-    padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.35);
+    background:var(--card);backdrop-filter:blur(12px);
+    border:1px solid rgba(212,175,55,.25);border-radius:var(--radius);
+    padding:32px;box-shadow:0 16px 44px rgba(0,0,0,.45);
+    max-width:760px;margin-inline:auto;
   }
-  .q-text{font-size:1.15rem;font-weight:700;margin-bottom:16px}
+  .q-text{font-size:1.3rem;font-weight:800;margin-bottom:20px;line-height:1.6}
   .q-foreign{direction:ltr;display:inline-block;color:var(--gold2)}
   .opt{
-    display:block;width:100%;text-align:right;margin-bottom:10px;
-    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
-    color:var(--text);padding:14px 16px;border-radius:12px;font-size:1rem;cursor:pointer;
-    font-family:inherit;transition:.15s;
+    display:block;width:100%;text-align:right;margin-bottom:12px;
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);
+    color:var(--text);padding:16px 20px;border-radius:14px;font-size:1.05rem;font-weight:600;cursor:pointer;
+    font-family:inherit;transition:.2s;
   }
+  .opt:hover{border-color:rgba(212,175,55,.5);background:rgba(212,175,55,.08)}
   .opt:active{transform:scale(.98)}
-  .opt.correct{background:rgba(74,222,128,.15);border-color:var(--ok);color:var(--ok)}
-  .opt.wrong{background:rgba(248,113,113,.12);border-color:var(--bad);color:var(--bad)}
-  .quiz-foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;color:var(--muted);font-size:.85rem}
+  .opt.correct{background:rgba(74,222,128,.16);border-color:var(--ok);color:var(--ok)}
+  .opt.wrong{background:rgba(248,113,113,.14);border-color:var(--bad);color:var(--bad)}
+  .quiz-foot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;color:var(--muted);font-size:.9rem}
   .btn{
-    border:none;cursor:pointer;font-family:inherit;font-weight:700;font-size:.95rem;
-    color:#1a1405;padding:12px 28px;border-radius:999px;
+    border:none;cursor:pointer;font-family:inherit;font-weight:800;font-size:1rem;
+    color:#1a1405;padding:14px 32px;border-radius:999px;
     background:linear-gradient(120deg,var(--gold2),var(--gold));
+    box-shadow:0 8px 26px rgba(212,175,55,.35);
+    transition:.2s;
   }
-  .result{text-align:center;padding:20px 0}
-  .result .score{font-size:3rem;font-weight:900;color:var(--gold2)}
-  .result p{color:var(--muted);margin-bottom:16px}
-  .best{color:var(--muted);font-size:.8rem;text-align:center;margin-top:8px}
+  .btn:hover{transform:translateY(-2px)}
+  .result{text-align:center;padding:24px 0}
+  .result .score{font-size:3.6rem;font-weight:900;color:var(--gold2)}
+  .result p{color:var(--muted);margin-bottom:20px;font-size:1.05rem}
+  .best{color:var(--muted);font-size:.85rem;text-align:center;margin-top:12px}
   /* ===== Videos ===== */
-  .video-grid{display:grid;gap:18px}
+  .video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:22px}
   .video-card{
-    background:var(--card);border:1px solid rgba(212,175,55,.18);
-    border-radius:var(--radius);overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.35);
+    background:var(--card);border:1px solid rgba(212,175,55,.22);
+    border-radius:var(--radius);overflow:hidden;box-shadow:0 14px 40px rgba(0,0,0,.4);
+    transition:.3s;
   }
-  .video-card .frame{position:relative;padding-top:56.25%}
+  .video-card:hover{transform:translateY(-4px);border-color:rgba(212,175,55,.5);box-shadow:0 20px 50px rgba(212,175,55,.15)}
+  .video-card .frame{position:relative;padding-top:56.25%;background:#000}
   .video-card iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-  .video-card .vtitle{padding:14px 16px;font-size:.95rem;font-weight:600}
-  .video-card .vlang{padding:0 16px 14px;color:var(--muted);font-size:.8rem}
-  /* ===== Footer ===== */
-  footer{
-    text-align:center;padding:34px 20px;border-top:1px solid rgba(212,175,55,.15);
-    color:var(--muted);font-size:.85rem;
+  .video-card .vtitle{padding:16px 18px 6px;font-size:1rem;font-weight:700}
+  .video-card .vlang{padding:0 18px 16px;color:var(--muted);font-size:.85rem}
+  .vgroup-title{
+    margin:36px 0 18px;font-size:1.35rem;color:var(--gold2);font-weight:800;
+    display:flex;align-items:center;gap:10px;
   }
-  footer .logo{font-size:1.3rem}
+  .vgroup-title::after{content:'';flex:1;height:1px;background:linear-gradient(to left,rgba(212,175,55,.5),transparent)}
+  .vbadge{
+    display:inline-block;font-size:.72rem;background:rgba(212,175,55,.15);color:var(--gold);
+    border:1px solid rgba(212,175,55,.4);border-radius:999px;padding:2px 12px;margin-inline-start:8px;font-weight:800;
+  }
+  /* ===== Pronunciation trainer ===== */
+  .speak-wrap{max-width:760px;margin:0 auto}
+  .speak-card{
+    background:var(--card);backdrop-filter:blur(12px);
+    border:1px solid rgba(212,175,55,.25);border-radius:var(--radius);
+    padding:32px;box-shadow:0 16px 44px rgba(0,0,0,.45);text-align:center;
+  }
+  .speak-phrase{font-size:1.7rem;font-weight:800;color:#fff;margin-bottom:6px;line-height:1.5}
+  .speak-mean{color:var(--muted);font-size:1rem;margin-bottom:22px}
+  .speak-phrase .foreign{direction:ltr;display:inline-block}
+  .speak-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
+  .btn.listen{background:linear-gradient(120deg,#b79bf0,var(--violet));color:#fff;box-shadow:0 8px 26px rgba(124,92,214,.4)}
+  .btn.rec{background:rgba(212,175,55,.1);color:var(--gold2);border:1px solid var(--gold)}
+  .btn.rec.listening{background:var(--bad);border-color:var(--bad);color:#fff;animation:pulse 1.2s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(248,113,113,.5)}50%{box-shadow:0 0 0 12px rgba(248,113,113,0)}}
+  .speak-result{min-height:60px;font-size:1rem;color:var(--muted)}
+  .speak-result .heard{display:block;margin:8px 0;font-size:1.05rem;color:#fff}
+  .speak-score{font-size:2rem;font-weight:900;margin-top:6px}
+  .speak-score.good{color:var(--ok)}
+  .speak-score.mid{color:var(--gold2)}
+  .speak-score.low{color:var(--bad)}
+  .speak-nav{display:flex;justify-content:space-between;align-items:center;margin-top:18px;color:var(--muted);font-size:.9rem}
+  .speak-nav button{
+    background:none;border:1px solid rgba(212,175,55,.4);color:var(--gold2);border-radius:999px;
+    padding:8px 18px;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.2s;
+  }
+  .speak-nav button:hover{background:rgba(212,175,55,.12)}
+  .speak-unsupported{
+    display:none;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.4);color:var(--bad);
+    border-radius:14px;padding:16px 20px;margin-top:16px;font-size:.95rem;line-height:1.8;
+  }
   /* ===== Games ===== */
-  .game-wrap{max-width:560px;margin:0 auto}
+  .game-wrap{max-width:680px;margin:0 auto}
   .game-bar{
     display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
-    margin:18px auto 14px;color:var(--muted);font-size:.9rem;
+    margin:18px auto 16px;color:var(--muted);font-size:.95rem;
   }
   .game-bar b{color:var(--gold)}
   .game-grid{
-    display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
   }
-  @media (max-width:480px){.game-grid{gap:7px}}
+  @media (max-width:480px){.game-grid{gap:8px}}
   .gcard{
-    aspect-ratio:3/4;perspective:600px;cursor:pointer;border:0;background:none;padding:0;
+    aspect-ratio:3/4;perspective:700px;cursor:pointer;border:0;background:none;padding:0;
   }
   .gcard .inner{
-    position:relative;width:100%;height:100%;border-radius:14px;
+    position:relative;width:100%;height:100%;border-radius:16px;
     transform-style:preserve-3d;transition:transform .45s cubic-bezier(.2,.8,.3,1.1);
   }
   .gcard.flipped .inner{transform:rotateY(180deg)}
   .gface{
     position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    border-radius:14px;backface-visibility:hidden;font-weight:700;text-align:center;
-    padding:6px;font-size:.95rem;line-height:1.35;
+    border-radius:16px;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    font-weight:800;text-align:center;padding:8px;font-size:1.05rem;line-height:1.4;
   }
   .gface.back{
-    background:linear-gradient(135deg,#1a1428,#241b38);border:1px solid rgba(212,175,55,.25);
-    color:var(--gold);font-size:1.5rem;
+    background:linear-gradient(135deg,#1c1430,#2b2050);border:1px solid rgba(212,175,55,.35);
+    color:var(--gold);font-size:1.7rem;
   }
   .gface.front{
-    background:linear-gradient(135deg,#2b2144,#171224);border:1px solid rgba(212,175,55,.45);
-    color:#fff;transform:rotateY(180deg);box-shadow:0 6px 18px rgba(0,0,0,.35);
+    background:linear-gradient(135deg,#2e2352,#171126);border:1px solid rgba(212,175,55,.55);
+    color:#fff;transform:rotateY(180deg);box-shadow:0 8px 22px rgba(0,0,0,.4);
   }
-  .gface.front.ar{font-family:inherit;color:var(--gold-light,#f0d98c)}
+  .gface.front.ar{color:var(--gold2)}
   .gcard.matched .inner{transform:rotateY(180deg)}
   .gcard.matched .gface.front{
-    border-color:#3ddc84;box-shadow:0 0 14px rgba(61,220,132,.35);
+    border-color:var(--ok);box-shadow:0 0 18px rgba(74,222,128,.4);
   }
-  .gcard{transition:opacity .3s}
   .game-win{
-    text-align:center;margin-top:16px;font-size:1.05rem;color:var(--gold);
+    text-align:center;margin-top:20px;font-size:1.15rem;color:var(--gold);font-weight:700;
   }
   /* ===== Certificate ===== */
   .cert-overlay{
-    position:fixed;inset:0;background:rgba(8,6,15,.85);backdrop-filter:blur(6px);
+    position:fixed;inset:0;background:rgba(5,3,10,.88);backdrop-filter:blur(8px);
     display:none;align-items:center;justify-content:center;z-index:1000;padding:18px;
   }
   .cert-overlay.show{display:flex}
   .cert{
-    background:linear-gradient(160deg,#171224,#0e0a18);color:#fff;
-    border:2px solid var(--gold);border-radius:20px;max-width:620px;width:100%;
-    padding:34px 28px;text-align:center;position:relative;overflow:hidden;
-    box-shadow:0 0 60px rgba(212,175,55,.25);
+    background:linear-gradient(160deg,#1b1430,#0d0918);color:#fff;
+    border:2px solid var(--gold);border-radius:24px;max-width:640px;width:100%;
+    padding:40px 30px;text-align:center;position:relative;overflow:hidden;
+    box-shadow:0 0 80px rgba(212,175,55,.3);
   }
   .cert::before{
-    content:'';position:absolute;inset:10px;border:1px solid rgba(212,175,55,.4);border-radius:14px;pointer-events:none;
+    content:'';position:absolute;inset:12px;border:1px solid rgba(212,175,55,.45);border-radius:16px;pointer-events:none;
   }
-  .cert .c-logo{font-size:1.6rem;font-weight:900;color:var(--gold);letter-spacing:2px}
-  .cert h3{color:var(--gold);font-size:1.35rem;margin:14px 0 6px}
-  .cert .c-body{color:#e8e2f5;font-size:1rem;line-height:1.9;margin:10px 0 4px}
-  .cert .c-name{font-size:1.5rem;font-weight:800;color:#fff;margin:8px 0 2px}
-  .cert .c-lang{font-size:1.15rem;color:var(--gold);font-weight:700}
-  .cert .c-date{color:var(--muted);font-size:.85rem;margin-top:14px}
+  .cert .c-logo{font-family:'Marhey','Cairo',sans-serif;font-size:1.9rem;font-weight:700;color:var(--gold);letter-spacing:2px}
+  .cert h3{color:var(--gold2);font-size:1.5rem;margin:16px 0 8px;font-weight:800}
+  .cert .c-body{color:#e8e2f5;font-size:1.05rem;line-height:1.9;margin:10px 0 4px}
+  .cert .c-name{font-size:1.7rem;font-weight:900;color:#fff;margin:8px 0 2px}
+  .cert .c-lang{font-size:1.2rem;color:var(--gold);font-weight:800}
+  .cert .c-date{color:var(--muted);font-size:.9rem;margin-top:16px}
   .cert .c-seal{
-    width:64px;height:64px;margin:14px auto 0;border-radius:50%;
-    border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.8rem;
-    background:radial-gradient(circle,rgba(212,175,55,.2),transparent 70%);
+    width:72px;height:72px;margin:16px auto 0;border-radius:50%;
+    border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:2rem;
+    background:radial-gradient(circle,rgba(212,175,55,.25),transparent 70%);
+    box-shadow:0 0 30px rgba(212,175,55,.3);
   }
-  .cert-actions{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+  .cert-actions{display:flex;gap:12px;justify-content:center;margin-top:22px;flex-wrap:wrap}
   .cert-name-input{
-    margin:10px auto 0;display:block;width:min(320px,90%);padding:10px 14px;border-radius:10px;
-    border:1px solid rgba(212,175,55,.4);background:#0e0a18;color:#fff;text-align:center;font-size:1rem;font-family:inherit;
+    margin:12px auto 0;display:block;width:min(340px,90%);padding:12px 16px;border-radius:12px;
+    border:1px solid rgba(212,175,55,.45);background:#0d0918;color:#fff;text-align:center;font-size:1.05rem;font-family:inherit;
   }
   @media print{
     body *{visibility:hidden}
+    body::before,body::after{display:none}
     .cert,.cert *{visibility:visible}
     .cert{position:fixed;inset:0;box-shadow:none;border-radius:0}
     .cert-actions,.cert-name-input{display:none!important}
-    .cert .c-name-input-done{display:block}
   }
-  /* ===== Video groups ===== */
-  .vgroup-title{
-    margin:26px 0 14px;font-size:1.1rem;color:var(--gold);font-weight:800;
-    display:flex;align-items:center;gap:8px;
+  /* ===== Footer ===== */
+  footer{
+    text-align:center;padding:44px 20px;border-top:1px solid rgba(212,175,55,.2);
+    color:var(--muted);font-size:.9rem;
+    background:linear-gradient(180deg,transparent,rgba(212,175,55,.05));
   }
-  .vgroup-title::after{content:'';flex:1;height:1px;background:linear-gradient(to left,rgba(212,175,55,.5),transparent)}
-  .vbadge{
-    display:inline-block;font-size:.7rem;background:rgba(212,175,55,.15);color:var(--gold);
-    border:1px solid rgba(212,175,55,.35);border-radius:999px;padding:2px 10px;margin-inline-start:6px;font-weight:700;
+  footer .logo{font-size:1.5rem}
+  /* ===== Interactive lessons ===== */
+  .row-listen{
+    border:none;background:rgba(212,175,55,.12);color:var(--gold2);border-radius:50%;
+    width:32px;height:32px;cursor:pointer;font-size:.9rem;margin-inline-start:10px;
+    vertical-align:middle;transition:.2s;line-height:1;
+  }
+  .row-listen:hover{background:rgba(212,175,55,.3);transform:scale(1.1)}
+  .reveal-toggle{
+    display:inline-block;border:1px dashed rgba(212,175,55,.45);background:rgba(212,175,55,.06);
+    color:var(--gold2);border-radius:999px;padding:8px 18px;font-size:.85rem;font-weight:700;
+    cursor:pointer;font-family:inherit;margin-bottom:12px;transition:.2s;
+  }
+  .reveal-toggle:hover{background:rgba(212,175,55,.15)}
+  table.blur-mean .mean-cell{filter:blur(7px);cursor:pointer;transition:filter .25s;user-select:none}
+  table.blur-mean .mean-cell.peek{filter:none}
+  /* ===== Mobile tuning ===== */
+  @media (max-width:640px){
+    header{padding:12px 16px}
+    nav a{padding:7px 12px;font-size:.85rem}
+    section{padding:56px 16px}
+    .hero{padding:80px 16px 64px}
+    .quiz-box,.speak-card{padding:22px 18px}
+    .speak-phrase{font-size:1.35rem}
   }
 </style>
 </head>
@@ -334,6 +406,7 @@
     <a href="#lessons">الدروس</a>
     <a href="#quiz">الاختبارات</a>
     <a href="#games">الألعاب</a>
+    <a href="#speak">تدريب النطق</a>
     <a href="#videos">الفيديوهات</a>
   </nav>
 </header>
@@ -349,7 +422,7 @@
     <div class="stat"><b>٤</b><span>لغات عالمية</span></div>
     <div class="stat"><b>٢٠</b><span>درسًا بمستويات</span></div>
     <div class="stat"><b>٦٠</b><span>سؤال تفاعلي</span></div>
-    <div class="stat"><b>١١</b><span>فيديو وكورس</span></div>
+    <div class="stat"><b>١٨</b><span>فيديو وكورس</span></div>
   </div>
 </div>
 
@@ -774,68 +847,122 @@
   </div>
 </section>
 
+<!-- ===================== PRONUNCIATION TRAINER ===================== -->
+<section id="speak">
+  <h2 class="sec-title">✦ تدريب النطق بالصوت ✦</h2>
+  <p class="sec-sub">اسمعي الجملة، أعيديها بصوتك، والموقع يقيّم نطقك فورًا 🎙️</p>
+
+  <div class="tabs" id="speakTabs">
+    <button class="tab active" data-lang="en">🇬🇧 الإنجليزية</button>
+    <button class="tab" data-lang="fr">🇫🇷 الفرنسية</button>
+    <button class="tab" data-lang="de">🇩🇪 الألمانية</button>
+    <button class="tab" data-lang="zh">🇨🇳 الصينية</button>
+  </div>
+
+  <div class="speak-wrap">
+    <div class="speak-card">
+      <div class="speak-phrase" id="speakPhrase"></div>
+      <div class="speak-mean" id="speakMean"></div>
+      <div class="speak-btns">
+        <button class="btn listen" id="speakListen">🔊 استمعي</button>
+        <button class="btn rec" id="speakRec">🎙️ سجّلي صوتك</button>
+      </div>
+      <div class="speak-result" id="speakResult">اضغطي «استمعي» ثم «سجّلي صوتك» وقولي الجملة بنفسك</div>
+      <div class="speak-nav">
+        <button id="speakPrev">‹ السابقة</button>
+        <span id="speakCount"></span>
+        <button id="speakNext">التالية ›</button>
+      </div>
+      <div class="speak-unsupported" id="speakUnsupported">
+        ⚠️ متصفحك لا يدعم التعرّف على الصوت. خاصية تقييم النطق تعمل على متصفح كروم (Chrome) — جرّبي فتح الموقع من كروم. الاستماع للجمل يعمل في كل المتصفحات.
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== VIDEOS ===================== -->
 <section id="videos">
-  <h2 class="sec-title">✦ فيديوهات التعلم ✦</h2>
-  <p class="sec-sub">دروس وكورسات فيديو طويلة مختارة من يوتيوب — من الصفر حتى الطلاقة</p>
-
+  <h2 class="sec-title">✦ فيديوهات وكورسات التعلم ✦</h2>
+  <p class="sec-sub">١٨ فيديو وكورس كامل مختار من يوتيوب — من أول حرف حتى الطلاقة 🎬</p>
   <h3 class="vgroup-title">🇬🇧 الإنجليزية</h3>
   <div class="video-grid">
     <div class="video-card">
       <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/QkXfWALFQ68" title="تعلم الإنجليزية في 10 ساعات" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
-      <div class="vtitle">تعلّم الإنجليزية في 10 ساعات — كورس مكثّف كامل<span class="vbadge">كورس طويل</span></div>
+      <div class="vtitle">تعلّم الإنجليزية في 10 ساعات — كورس مكثّف شامل<span class="vbadge">كورس طويل</span></div>
       <div class="vlang">🇬🇧 الإنجليزية • من الصفر</div>
     </div>
     <div class="video-card">
-      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/5pM8zllXIWc" title="كورس طلاقة إنجليزية بالعربية" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/5pM8zllXIWc" title="كورس الطلاقة الكامل" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
       <div class="vtitle">كورس الطلاقة الكامل — شرح بالعربية خطوة بخطوة<span class="vbadge">كورس طويل</span></div>
       <div class="vlang">🇬🇧 الإنجليزية • شرح بالعربية</div>
     </div>
     <div class="video-card">
-      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/uYEiKO--dAQ" title="درس إنجليزي A1 — أول محادثة" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/hWU8VZPBEoQ" title="كورس إنجليزي كامل" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="vtitle">كورس إنجليزي كامل من الألف للياء — شرح بالعربي<span class="vbadge">كورس طويل</span></div>
+      <div class="vlang">🇬🇧 الإنجليزية • شرح بالعربية</div>
+    </div>
+    <div class="video-card">
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/WfOS2tbkbbw" title="محادثات إنجليزية يومية" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="vtitle">محادثات إنجليزية يومية للمبتدئين — استمعي ورددي</div>
+      <div class="vlang">🇬🇧 الإنجليزية • محادثة</div>
+    </div>
+    <div class="video-card">
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/uYEiKO--dAQ" title="درس إنجليزي A1" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
       <div class="vtitle">أول محادثة إنجليزية: التحيات والتعارف والحروف</div>
       <div class="vlang">🇬🇧 الإنجليزية • مستوى A1</div>
     </div>
     <div class="video-card">
-      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/IeaadwctbD4" title="درس إنجليزي للمبتدئين — سررت بمقابلتك" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/IeaadwctbD4" title="درس إنجليزي مبتدئ" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
       <div class="vtitle">المستوى المبتدئ — الدرس الأول: سررت بمقابلتك</div>
       <div class="vlang">🇬🇧 الإنجليزية • شرح بالعربية</div>
     </div>
   </div>
-
   <h3 class="vgroup-title">🇫🇷 الفرنسية</h3>
   <div class="video-grid">
     <div class="video-card">
-      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/Sk6YQynZ1h8" title="تعلم الفرنسية من الصفر" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
-      <div class="vtitle">تعلّم الفرنسية من الصفر — دليل المبتدئين الكامل<span class="vbadge">كورس طويل</span></div>
-      <div class="vlang">🇫🇷 الفرنسية • FrenchPod101</div>
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/_lmN7zg6BiE" title="سلسلة تعلم الفرنسية" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="vtitle">سلسلة تعلّم الفرنسية من الصفر — دروس متسلسلة<span class="vbadge">سلسلة</span></div>
+      <div class="vlang">🇫🇷 الفرنسية • سلسلة دروس</div>
     </div>
     <div class="video-card">
-      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/c7Jc0U0CiAQ" title="أهم الجمل الفرنسية مع الترجمة" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/HnwqY-bmaj4" title="100 درس صوتي فرنسي" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="vtitle">100 درس صوتي لتعلم الفرنسية — مبتدئ ومتوسط<span class="vbadge">100 درس</span></div>
+      <div class="vlang">🇫🇷 الفرنسية • دروس صوتية</div>
+    </div>
+    <div class="video-card">
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/c7Jc0U0CiAQ" title="أهم الجمل الفرنسية" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
       <div class="vtitle">استمعي ورددي: أهم الجمل الفرنسية اليومية مع الترجمة</div>
       <div class="vlang">🇫🇷 الفرنسية • مبتدئ</div>
     </div>
   </div>
-
   <h3 class="vgroup-title">🇩🇪 الألمانية</h3>
   <div class="video-grid">
     <div class="video-card">
-      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/-KdGfbgL6sg" title="كورس ألماني A1 كامل 9.5 ساعات" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/-KdGfbgL6sg" title="كورس ألماني A1 كامل" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
       <div class="vtitle">الألمانية A1 كاملة في 9.5 ساعات — كورس شامل<span class="vbadge">كورس طويل</span></div>
       <div class="vlang">🇩🇪 الألمانية • مستوى A1</div>
     </div>
     <div class="video-card">
-      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/videoseries?list=PL_Lje8xtkLIrDBN78pbFG5r1xFOIHXIBj" title="كورس ألماني A1.1 للمبتدئين" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
-      <div class="vtitle">كورس متكامل: اللغة الألمانية للمبتدئين A1.1</div>
-      <div class="vlang">🇩🇪 الألمانية • قائمة تشغيل كاملة</div>
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/_qXTPZso9VU" title="ألمانية من الصفر للمتقدم" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="vtitle">من الصفر حتى B1 — كورس كامل مع القواعد<span class="vbadge">كورس طويل</span></div>
+      <div class="vlang">🇩🇪 الألمانية • A1 إلى B1</div>
     </div>
     <div class="video-card">
-      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/ZYYpP_hGvHs" title="تعلم الألمانية من الصفر — الأرقام" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/IgIFy0uxYIE" title="خطة إتقان الألمانية" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="vtitle">خطة إتقان الألمانية مجانًا من A1 إلى B2 — شرح بالعربية</div>
+      <div class="vlang">🇩🇪 الألمانية • شرح بالعربية</div>
+    </div>
+    <div class="video-card">
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/videoseries?list=PL_Lje8xtkLIrDBN78pbFG5r1xFOIHXIBj" title="كورس ألماني A1.1" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="vtitle">كورس متكامل: اللغة الألمانية للمبتدئين A1.1<span class="vbadge">قائمة كاملة</span></div>
+      <div class="vlang">🇩🇪 الألمانية • قائمة تشغيل</div>
+    </div>
+    <div class="video-card">
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/ZYYpP_hGvHs" title="تعلم الألمانية" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
       <div class="vtitle">الألمانية من الصفر — درس الأرقام بطريقة سهلة</div>
       <div class="vlang">🇩🇪 الألمانية • مستوى A1</div>
     </div>
   </div>
-
   <h3 class="vgroup-title">🇨🇳 الصينية</h3>
   <div class="video-grid">
     <div class="video-card">
@@ -844,9 +971,19 @@
       <div class="vlang">🇨🇳 الصينية • مبتدئ</div>
     </div>
     <div class="video-card">
-      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/afhK7h9q1Fk" title="أساسيات اللغة الصينية بالعربية" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/afhK7h9q1Fk" title="أساسيات الصينية" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
       <div class="vtitle">أساسيات الصينية: الحروف والنطق والتحيات بالعربية</div>
       <div class="vlang">🇨🇳 الصينية • شرح بالعربية</div>
+    </div>
+    <div class="video-card">
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/qeckXmjV5pI" title="أساسيات الصينية في 3 ساعات" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="vtitle">أساسيات الصينية كلها في 3 ساعات — بالإنجليزية<span class="vbadge">كورس طويل</span></div>
+      <div class="vlang">🇨🇳 الصينية • بالإنجليزية</div>
+    </div>
+    <div class="video-card">
+      <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/Y7bhBCGTzvw" title="الصينية من الصفر" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="vtitle">الصينية من الصفر — الحلقة الأولى: التعارف — بالإنجليزية</div>
+      <div class="vlang">🇨🇳 الصينية • بالإنجليزية</div>
     </div>
   </div>
 </section>
@@ -1203,6 +1340,168 @@ document.querySelectorAll('#gameTabs .tab').forEach(function(t){
 });
 document.getElementById('gameRestart').addEventListener('click', function(){ newGame(game.lang); });
 newGame('en');
+
+/* ================= Text-to-speech helper ================= */
+const TTS_LANGS = {en:'en-US', fr:'fr-FR', de:'de-DE', zh:'zh-CN'};
+function speakText(text, lang){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = TTS_LANGS[lang] || 'en-US';
+  u.rate = 0.85;
+  speechSynthesis.speak(u);
+}
+
+/* ================= Interactive lessons ================= */
+/* listen button on every vocabulary row + tap-to-reveal meanings */
+document.querySelectorAll('.lang-panel').forEach(function(panel){
+  const lang = panel.dataset.lang;
+  panel.querySelectorAll('table').forEach(function(tbl){
+    tbl.querySelectorAll('tbody tr').forEach(function(tr){
+      const tds = tr.querySelectorAll('td');
+      if(tds.length < 2) return;
+      /* pick the cell holding the foreign text */
+      let foreignIdx = 0;
+      if(/^[\d\u0660-\u0669\s.,:;\-؟?!]*$/.test(tds[0].textContent.trim())) foreignIdx = 1;
+      const foreign = tds[foreignIdx].textContent.trim();
+      const btn = document.createElement('button');
+      btn.className = 'row-listen';
+      btn.type = 'button';
+      btn.title = 'استمعي للنطق';
+      btn.textContent = '🔊';
+      btn.addEventListener('click', function(ev){
+        ev.stopPropagation();
+        speakText(foreign, lang);
+      });
+      tds[foreignIdx].appendChild(btn);
+    });
+  });
+  /* tap-to-reveal toggle for each lesson */
+  panel.querySelectorAll('.lesson').forEach(function(lesson){
+    const tbl = lesson.querySelector('table');
+    if(!tbl) return;
+    const t = document.createElement('button');
+    t.className = 'reveal-toggle';
+    t.type = 'button';
+    t.textContent = '🙈 اختبري نفسك: إخفاء المعاني';
+    let hidden = false;
+    t.addEventListener('click', function(){
+      hidden = !hidden;
+      tbl.classList.toggle('blur-mean', hidden);
+      t.textContent = hidden ? '👁️ إظهار المعاني' : '🙈 اختبري نفسك: إخفاء المعاني';
+    });
+    lesson.insertBefore(t, tbl);
+    tbl.querySelectorAll('tbody tr').forEach(function(tr){
+      const tds = tr.querySelectorAll('td');
+      if(tds.length < 2) return;
+      const meanTd = tds[1];
+      meanTd.classList.add('mean-cell');
+      meanTd.addEventListener('click', function(){
+        if(tbl.classList.contains('blur-mean')) meanTd.classList.add('peek');
+      });
+    });
+  });
+});
+
+/* ================= Pronunciation trainer ================= */
+const SPEAK_PHRASES = {
+  en: [['Hello','مرحبًا'],['Good morning','صباح الخير'],['How are you?','كيف حالك؟'],['Thank you very much','شكرًا جزيلًا'],["What's your name?",'ما اسمك؟'],['I love learning English','أنا أحب تعلّم الإنجليزية'],['See you later','أراكِ لاحقًا'],['Excuse me','لو سمحتِ']],
+  fr: [['Bonjour','مرحبًا'],['Merci beaucoup','شكرًا جزيلًا'],["Comment ça va?",'كيف حالك؟'],["S'il vous plaît",'من فضلك'],['Bonne nuit','تصبحين على خير'],['Enchanté','تشرّفت بمعرفتك'],['Au revoir','إلى اللقاء'],['Je suis contente','أنا سعيدة']],
+  de: [['Hallo','مرحبًا'],['Guten Morgen','صباح الخير'],["Wie geht's?",'كيف حالك؟'],['Danke schön','شكرًا جزيلًا'],['Auf Wiedersehen','إلى اللقاء'],['Entschuldigung','عذرًا'],['Gute Nacht','تصبحين على خير'],['Ich lerne Deutsch','أنا أتعلّم الألمانية']],
+  zh: [['你好','مرحبًا'],['谢谢','شكرًا'],['早上好','صباح الخير'],['你好吗','كيف حالك؟'],['再见','إلى اللقاء'],['对不起','عذرًا'],['没关系','لا بأس'],['我爱学中文','أنا أحب تعلّم الصينية']]
+};
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let sp = {lang:'en', i:0, listening:false};
+
+function renderSpeak(){
+  const p = SPEAK_PHRASES[sp.lang][sp.i];
+  document.getElementById('speakPhrase').innerHTML = '<span class="foreign">'+p[0]+'</span>';
+  document.getElementById('speakMean').textContent = p[1];
+  document.getElementById('speakCount').textContent = (sp.i+1)+' / '+SPEAK_PHRASES[sp.lang].length;
+}
+function norm(s){
+  return s.toLowerCase()
+    .replace(/[\u064B-\u0652\u0640]/g,'')
+    .replace(/[.,!?؟،;:'"«»()\-]/g,'')
+    .replace(/\s+/g,' ').trim();
+}
+function scorePron(target, heard){
+  const t = norm(target), h = norm(heard);
+  if(!h) return 0;
+  if(t === h) return 100;
+  if(sp.lang === 'zh'){
+    const tc = t.replace(/\s/g,'').split('');
+    const hc = h.replace(/\s/g,'');
+    let hit = 0;
+    tc.forEach(function(c){ if(hc.includes(c)) hit++; });
+    return Math.round(100*hit/Math.max(tc.length,1));
+  }
+  const tw = t.split(' '), hw = h.split(' ');
+  let hit = 0;
+  tw.forEach(function(w){ if(hw.some(function(x){return x===w || (w.length>3 && x.startsWith(w.slice(0,3)))})) hit++; });
+  return Math.round(100*hit/Math.max(tw.length,1));
+}
+function bindSpeak(){
+  document.getElementById('speakListen').addEventListener('click', function(){
+    speakText(SPEAK_PHRASES[sp.lang][sp.i][0], sp.lang);
+  });
+  document.getElementById('speakPrev').addEventListener('click', function(){
+    sp.i = (sp.i - 1 + SPEAK_PHRASES[sp.lang].length) % SPEAK_PHRASES[sp.lang].length;
+    renderSpeak();
+  });
+  document.getElementById('speakNext').addEventListener('click', function(){
+    sp.i = (sp.i + 1) % SPEAK_PHRASES[sp.lang].length;
+    renderSpeak();
+  });
+  document.querySelectorAll('#speakTabs .tab').forEach(function(t){
+    t.addEventListener('click', function(){
+      document.querySelectorAll('#speakTabs .tab').forEach(function(x){x.classList.remove('active')});
+      t.classList.add('active');
+      sp.lang = t.dataset.lang; sp.i = 0;
+      renderSpeak();
+    });
+  });
+  if(!SR){
+    document.getElementById('speakUnsupported').style.display = 'block';
+    document.getElementById('speakRec').style.display = 'none';
+    return;
+  }
+  const recBtn = document.getElementById('speakRec');
+  const result = document.getElementById('speakResult');
+  recBtn.addEventListener('click', function(){
+    if(sp.listening) return;
+    const rec = new SR();
+    rec.lang = TTS_LANGS[sp.lang];
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    sp.listening = true;
+    recBtn.classList.add('listening');
+    recBtn.textContent = '🎙️ أسمعك... قولي الجملة';
+    result.textContent = 'استمعي لنفسك...';
+    rec.onresult = function(ev){
+      const heard = ev.results[0][0].transcript;
+      const target = SPEAK_PHRASES[sp.lang][sp.i][0];
+      const s = scorePron(target, heard);
+      let cls = 'low', verdict = 'حاولي مرة أخرى — استمعي ثم أعيدي ببطء 💪';
+      if(s >= 80){ cls = 'good'; verdict = 'ممتاز! نطق رائع 🌟'; }
+      else if(s >= 50){ cls = 'mid'; verdict = 'قريب! ركّزي على المخارج أكثر 👍'; }
+      result.innerHTML =
+        '<span class="heard">سمعتك تقولين: «'+heard+'»</span>'+
+        'دقة النطق: <span class="speak-score '+cls+'">'+s+'%</span><br>'+verdict;
+    };
+    rec.onerror = function(){
+      result.textContent = 'لم أسمعك جيدًا — تأكدي من السماح بالميكروفون وحاولي مجددًا 🎤';
+    };
+    rec.onend = function(){
+      sp.listening = false;
+      recBtn.classList.remove('listening');
+      recBtn.textContent = '🎙️ سجّلي صوتك';
+    };
+    rec.start();
+  });
+}
+bindSpeak();
+renderSpeak();
 
 /* quiz level tabs */
 document.querySelectorAll('#quizLevelTabs .tab').forEach(function(t){
