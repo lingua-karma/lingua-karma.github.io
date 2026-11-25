@@ -611,6 +611,73 @@
   html[data-theme="ocean"] body{--bg:#04101a;--bg2:#0a1e2c;--card:rgba(14,36,52,.72);--card2:rgba(18,46,64,.85);--gold:#22b8cf;--gold2:#99e9f2;--goldA:34,184,207}
   html[data-theme="emerald"] body{--bg:#04120c;--bg2:#0a2016;--card:rgba(14,42,30,.72);--card2:rgba(18,54,38,.85);--gold:#34d399;--gold2:#a7f3d0;--goldA:52,211,153}
   html[data-theme="violet"] body{--bg:#0d0618;--bg2:#180b2e;--card:rgba(34,20,62,.72);--card2:rgba(44,26,78,.85);--gold:#9d7bff;--gold2:#d6c4ff;--goldA:157,123,255}
+  html[data-theme="royal"] body{--bg:#0a0a1a;--bg2:#161632;--card:rgba(26,26,56,.72);--card2:rgba(34,34,70,.85);--gold:#f7c948;--gold2:#ffe9a3;--goldA:247,201,72}
+  html[data-theme="sunset"] body{--bg:#1a0906;--bg2:#2c120a;--card:rgba(52,24,14,.72);--card2:rgba(66,30,18,.85);--gold:#ff7a3d;--gold2:#ffc9a8;--goldA:255,122,61}
+  html[data-theme="midnight"] body{--bg:#020617;--bg2:#0a1228;--card:rgba(12,20,44,.72);--card2:rgba(16,26,54,.85);--gold:#60a5fa;--gold2:#bfdbfe;--goldA:96,165,250}
+  /* ===== v6: flag-card language tabs ===== */
+  .tabs.lang-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:680px;margin:0 auto 34px}
+  @media (max-width:620px){.tabs.lang-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .tab.lang-tab{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 8px;border-radius:20px}
+  .tab.lang-tab .lf{font-size:2.2rem;line-height:1}
+  .tab.lang-tab .ln{font-size:.85rem;font-weight:800}
+  /* ===== v6: lesson word cards ===== */
+  .lesson table{display:block;border:none}
+  .lesson tr:has(th){display:none}
+  .lesson tbody{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+  .lesson tbody tr{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--card2);border:1px solid rgba(var(--goldA),.25);border-radius:16px;padding:14px 10px;text-align:center;transition:.2s}
+  .lesson tbody tr:hover{transform:translateY(-3px);border-color:var(--gold2)}
+  .lesson tbody td{display:block;padding:0;border:none;font-size:.88rem;color:var(--muted)}
+  .lesson tbody td:first-child{font-size:1.05rem}
+  .lesson tbody td .foreign{font-weight:800;color:var(--gold2);font-size:1.05rem}
+  .lesson th{padding:0}
+  /* ===== v6: router (each section its own page) ===== */
+  body.routed section{display:none}
+  body.routed section.view{display:block;animation:fade .35s ease}
+  body.routed .hero{display:none}
+  body.routed.home .hero{display:block}
+  /* ===== v6: home menu ===== */
+  .menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;max-width:980px;margin:0 auto}
+  .menu-card{display:flex;flex-direction:column;align-items:center;gap:8px;padding:22px 10px;background:var(--card);border:1px solid rgba(var(--goldA),.28);border-radius:22px;color:var(--text);text-decoration:none;font-weight:800;backdrop-filter:blur(8px);transition:.25s}
+  .menu-card:hover{transform:translateY(-4px);border-color:var(--gold2);box-shadow:0 16px 40px rgba(var(--goldA),.16)}
+  .menu-card .m-ico{font-size:2rem}
+  .menu-card .m-name{font-size:.92rem}
+  /* ===== v6: shop / badges / levels ===== */
+  .shop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;max-width:980px;margin:0 auto}
+  .shop-card{background:var(--card);border:1px solid rgba(var(--goldA),.28);border-radius:22px;padding:20px;text-align:center;backdrop-filter:blur(8px)}
+  .shop-card .s-ico{font-size:2.2rem}
+  .shop-card .s-name{font-weight:900;margin:8px 0 4px}
+  .shop-card .s-desc{font-size:.8rem;color:var(--muted);min-height:32px}
+  .shop-card .s-price{color:var(--gold2);font-weight:800;margin:10px 0}
+  .shop-card.owned{border-color:var(--ok);opacity:.9}
+  .badge-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;max-width:880px;margin:24px auto 0}
+  .badge-card{background:var(--card);border:1px solid rgba(var(--goldA),.25);border-radius:18px;padding:16px 8px;text-align:center}
+  .badge-card .b-ico{font-size:1.8rem}
+  .badge-card .b-name{font-size:.78rem;font-weight:800;margin-top:6px}
+  .badge-card.locked{filter:grayscale(1);opacity:.4}
+  .lvl-wrap{max-width:640px;margin:18px auto 0;text-align:center}
+  .lvl-bar{height:14px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;margin-top:8px}
+  .lvl-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:999px;transition:width .8s;width:0}
+  .hint-btn{display:block;margin:14px auto 0}
+  /* ===== v6: fun games ===== */
+  .fun-stage{max-width:560px;margin:0 auto 18px;background:var(--card2);border:1px solid rgba(var(--goldA),.3);border-radius:24px;padding:26px;text-align:center;font-size:2.4rem;min-height:120px}
+  .fun-word{max-width:560px;margin:0 auto 14px;text-align:center;font-size:1.4rem;font-weight:900;color:var(--gold2)}
+  .fun-opts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:560px;margin:0 auto}
+  @media (max-width:520px){.fun-opts{grid-template-columns:repeat(2,1fr)}}
+  .fun-opt{font-size:2.4rem;padding:16px;background:var(--card);border:2px solid rgba(var(--goldA),.3);border-radius:20px;cursor:pointer;transition:.2s}
+  .fun-opt:hover{border-color:var(--gold2);transform:scale(1.06)}
+  .fun-opt.right{background:rgba(74,222,128,.2);border-color:var(--ok)}
+  .fun-opt.wrong{background:rgba(248,113,113,.18);border-color:var(--bad)}
+  /* ===== v6: friends & outfit ===== */
+  .friend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;max-width:880px;margin:0 auto}
+  .friend-card{background:var(--card);border:1px solid rgba(var(--goldA),.28);border-radius:20px;padding:18px;text-align:center}
+  .friend-card .f-av{font-size:2.4rem}
+  .friend-card .f-name{font-weight:900;margin:6px 0 10px}
+  .pal-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:14px 0}
+  .pal-sw{width:64px;height:64px;border-radius:16px;border:2px solid rgba(255,255,255,.2)}
+  .pal-name{font-size:.8rem;color:var(--muted);text-align:center}
+  .outfit-drop{max-width:560px;margin:0 auto;border:2px dashed rgba(var(--goldA),.5);border-radius:24px;padding:34px;text-align:center;cursor:pointer;transition:.2s}
+  .outfit-drop:hover{border-color:var(--gold2);background:rgba(var(--goldA),.06)}
+  .outfit-res{max-width:640px;margin:20px auto 0}
   .theme-fab{position:fixed;bottom:18px;inset-inline-start:18px;z-index:999;width:52px;height:52px;border-radius:50%;border:1px solid rgba(var(--goldA),.5);background:var(--card2);backdrop-filter:blur(10px);font-size:1.4rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,0,0,.45);transition:.25s}
   .theme-fab:hover{transform:scale(1.1) rotate(-10deg)}
   .theme-pop{position:fixed;bottom:80px;inset-inline-start:18px;z-index:999;display:none;gap:10px;padding:12px 16px;border-radius:999px;border:1px solid rgba(var(--goldA),.4);background:var(--card2);backdrop-filter:blur(12px);box-shadow:0 12px 34px rgba(0,0,0,.5)}
@@ -722,7 +789,13 @@
     <a href="#deen">🕌 روحانيات</a>
     <a href="#songs">🎵 أغاني</a>
     <a href="#cinema">🎬 سينما</a>
+    <a href="#shop">🛍️ المتجر</a>
+    <a href="#friends">👯 أصحابي</a>
+    <a href="#fun">🎀 ألعاب حلوة</a>
+    <a href="#outfit">👚 تنسيق لبس</a>
+    <a href="#eng">⚙️ هندسة</a>
     <a href="#karma">ركن كرمة 👑</a>
+    <a href="#settings">🌐 اللغة</a>
     <a href="#videos">الفيديوهات</a>
   </nav>
 </header>
@@ -746,6 +819,13 @@
   <div class="marquee"><div class="marquee-track" id="marqTrack"></div></div>
 </div>
 
+
+<!-- ===================== v6: HOME MENU ===================== -->
+<section id="menu">
+  <h2 class="sec-title">✦ كل حاجة في مكانها ✦</h2>
+  <p class="sec-sub">اختاري القسم اللي عايزاه — كل قسم صفحة لوحده 🗂️</p>
+  <div class="menu-grid" id="menuGrid"></div>
+</section>
 
 <!-- ===================== WORD OF THE DAY ===================== -->
 <section id="today">
@@ -798,6 +878,20 @@
 
   <h3 class="level-head" style="margin-top:40px"><span class="pill">⚔️ أصحابك</span><span class="line"></span></h3>
   <div class="chal-list" id="chalList"></div>
+</section>
+
+<!-- ===================== v6: POINTS SHOP ===================== -->
+<section id="shop">
+  <h2 class="sec-title">✦ متجر النقاط ✦</h2>
+  <p class="sec-sub">نقاطك مش للزينة — اشتري بيها ثيمات وألقاب وتلميحات وأفتار 🛍️💎</p>
+  <div class="lvl-wrap">
+    <div style="font-weight:900">مستواك: <span id="lvlName" style="color:var(--gold2)">🌱 بداية الرحلة</span></div>
+    <div class="lvl-bar"><div class="lvl-fill" id="lvlFill"></div></div>
+    <div id="lvlText" style="font-size:.8rem;color:var(--muted);margin-top:6px"></div>
+  </div>
+  <div class="shop-grid" id="shopGrid" style="margin-top:26px"></div>
+  <h3 class="level-head" style="margin-top:40px"><span class="pill">🏅 أوسمتك</span><span class="line"></span></h3>
+  <div class="badge-grid" id="badgeGrid"></div>
 </section>
 
 <!-- ===================== LANGUAGE CORNERS ===================== -->
@@ -858,11 +952,11 @@
   <h2 class="sec-title">✦ الدروس ✦</h2>
   <p class="sec-sub">اختاري اللغة وابدئي من الدرس الأول — مفردات وجُمل أساسية للمبتدئين</p>
 
-  <div class="tabs" id="lessonTabs">
-    <button class="tab active" data-lang="en">🇬🇧 الإنجليزية</button>
-    <button class="tab" data-lang="fr">🇫🇷 الفرنسية</button>
-    <button class="tab" data-lang="de">🇩🇪 الألمانية</button>
-    <button class="tab" data-lang="zh">🇨🇳 الصينية</button>
+  <div class="tabs lang-tabs" id="lessonTabs">
+    <button class="tab lang-tab active" data-lang="en"><span class="lf">🇬🇧</span><span class="ln">الإنجليزية</span></button>
+    <button class="tab lang-tab" data-lang="fr"><span class="lf">🇫🇷</span><span class="ln">الفرنسية</span></button>
+    <button class="tab lang-tab" data-lang="de"><span class="lf">🇩🇪</span><span class="ln">الألمانية</span></button>
+    <button class="tab lang-tab" data-lang="zh"><span class="lf">🇨🇳</span><span class="ln">الصينية</span></button>
   </div>
 
   <!-- ENGLISH -->
@@ -1181,11 +1275,11 @@
   <h2 class="sec-title">✦ الاختبارات ✦</h2>
   <p class="sec-sub">اختبري نفسك في كل لغة — درجاتك تُحفظ على جهازك تلقائيًا</p>
 
-  <div class="tabs" id="quizTabs">
-    <button class="tab active" data-lang="en">🇬🇧 الإنجليزية</button>
-    <button class="tab" data-lang="fr">🇫🇷 الفرنسية</button>
-    <button class="tab" data-lang="de">🇩🇪 الألمانية</button>
-    <button class="tab" data-lang="zh">🇨🇳 الصينية</button>
+  <div class="tabs lang-tabs" id="quizTabs">
+    <button class="tab lang-tab active" data-lang="en"><span class="lf">🇬🇧</span><span class="ln">الإنجليزية</span></button>
+    <button class="tab lang-tab" data-lang="fr"><span class="lf">🇫🇷</span><span class="ln">الفرنسية</span></button>
+    <button class="tab lang-tab" data-lang="de"><span class="lf">🇩🇪</span><span class="ln">الألمانية</span></button>
+    <button class="tab lang-tab" data-lang="zh"><span class="lf">🇨🇳</span><span class="ln">الصينية</span></button>
   </div>
   <div class="weekly-card">
     <div class="wc-title">🏆 تحدي الأسبوع</div>
@@ -1209,11 +1303,11 @@
   <h2 class="sec-title">✦ الألعاب ✦</h2>
   <p class="sec-sub">٨ ألعاب لكل لغة — العبي، اكسبي نقاط، وتحدّي صحابك 🎮🔥</p>
 
-  <div class="tabs" id="gameTabs">
-    <button class="tab active" data-lang="en">🇬🇧 الإنجليزية</button>
-    <button class="tab" data-lang="fr">🇫🇷 الفرنسية</button>
-    <button class="tab" data-lang="de">🇩🇪 الألمانية</button>
-    <button class="tab" data-lang="zh">🇨🇳 الصينية</button>
+  <div class="tabs lang-tabs" id="gameTabs">
+    <button class="tab lang-tab active" data-lang="en"><span class="lf">🇬🇧</span><span class="ln">الإنجليزية</span></button>
+    <button class="tab lang-tab" data-lang="fr"><span class="lf">🇫🇷</span><span class="ln">الفرنسية</span></button>
+    <button class="tab lang-tab" data-lang="de"><span class="lf">🇩🇪</span><span class="ln">الألمانية</span></button>
+    <button class="tab lang-tab" data-lang="zh"><span class="lf">🇨🇳</span><span class="ln">الصينية</span></button>
   </div>
 
   <div class="tabs" id="gameTypeTabs" style="margin-top:-14px">
@@ -1391,6 +1485,7 @@
     <button class="tab active" data-deen="adhkar">📿 الأذكار</button>
     <button class="tab" data-deen="duas">🤲 الأدعية</button>
     <button class="tab" data-deen="quran">📖 قرآن قصير</button>
+    <button class="tab" data-deen="seerah">🌟 السيرة النبوية</button>
   </div>
 
   <div id="deenAdhkar" class="deen-wrap">
@@ -1405,17 +1500,18 @@
 
   <div id="deenDuas" class="deen-wrap" style="display:none"></div>
   <div id="deenQuran" class="deen-wrap" style="display:none"></div>
+  <div id="deenSeerah" class="deen-wrap" style="display:none"></div>
 </section>
 
 <!-- ===================== SONGS CORNER ===================== -->
 <section id="songs">
   <h2 class="sec-title">✦ ركن الأغاني ✦</h2>
   <p class="sec-sub">اتعلمي بالموسيقى — أغاني مشهورة بلغات الموقع 🎵</p>
-  <div class="tabs" id="songTabs">
-    <button class="tab active" data-lang="en">🇬🇧 إنجليزي</button>
-    <button class="tab" data-lang="fr">🇫🇷 فرنسي</button>
-    <button class="tab" data-lang="de">🇩🇪 ألماني</button>
-    <button class="tab" data-lang="zh">🇨🇳 صيني</button>
+  <div class="tabs lang-tabs" id="songTabs">
+    <button class="tab lang-tab active" data-lang="en"><span class="lf">🇬🇧</span><span class="ln">إنجليزي</span></button>
+    <button class="tab lang-tab" data-lang="fr"><span class="lf">🇫🇷</span><span class="ln">فرنسي</span></button>
+    <button class="tab lang-tab" data-lang="de"><span class="lf">🇩🇪</span><span class="ln">ألماني</span></button>
+    <button class="tab lang-tab" data-lang="zh"><span class="lf">🇨🇳</span><span class="ln">صيني</span></button>
   </div>
   <div class="video-grid" id="songGrid"></div>
 </section>
@@ -1423,7 +1519,14 @@
 <!-- ===================== CINEMA ===================== -->
 <section id="cinema">
   <h2 class="sec-title">✦ سينما لينجوا ✦</h2>
-  <p class="sec-sub">إعلانات أفلام أسطورية — اتفرجي واسمعي اللغة الأصلية 🎬🍿</p>
+  <p class="sec-sub">أفلام وكرتون بكل اللغات — اتفرجي واسمعي اللغة الأصلية 🎬🍿</p>
+  <div class="tabs lang-tabs" id="cinemaTabs">
+    <button class="tab lang-tab active" data-cinema="en"><span class="lf">🇬🇧</span><span class="ln">إنجليزي</span></button>
+    <button class="tab lang-tab" data-cinema="fr"><span class="lf">🇫🇷</span><span class="ln">فرنسي</span></button>
+    <button class="tab lang-tab" data-cinema="de"><span class="lf">🇩🇪</span><span class="ln">ألماني</span></button>
+    <button class="tab lang-tab" data-cinema="zh"><span class="lf">🇨🇳</span><span class="ln">صيني</span></button>
+    <button class="tab lang-tab" data-cinema="anime"><span class="lf">🎌</span><span class="ln">أنمي</span></button>
+  </div>
   <div class="video-grid" id="movieGrid"></div>
 </section>
 
@@ -1431,11 +1534,11 @@
 <section id="dict">
   <h2 class="sec-title">✦ القاموس ✦</h2>
   <p class="sec-sub">ابحثي في كلمات كل لغة — ترجمة فورية ونطق بالصوت 📖</p>
-  <div class="tabs" id="dictTabs">
-    <button class="tab active" data-lang="en">🇬🇧 الإنجليزية</button>
-    <button class="tab" data-lang="fr">🇫🇷 الفرنسية</button>
-    <button class="tab" data-lang="de">🇩🇪 الألمانية</button>
-    <button class="tab" data-lang="zh">🇨🇳 الصينية</button>
+  <div class="tabs lang-tabs" id="dictTabs">
+    <button class="tab lang-tab active" data-lang="en"><span class="lf">🇬🇧</span><span class="ln">الإنجليزية</span></button>
+    <button class="tab lang-tab" data-lang="fr"><span class="lf">🇫🇷</span><span class="ln">الفرنسية</span></button>
+    <button class="tab lang-tab" data-lang="de"><span class="lf">🇩🇪</span><span class="ln">الألمانية</span></button>
+    <button class="tab lang-tab" data-lang="zh"><span class="lf">🇨🇳</span><span class="ln">الصينية</span></button>
   </div>
   <div class="dict-wrap">
     <input class="dict-search" id="dictSearch" placeholder="ابحثي بالعربية أو باللغة الأجنبية… 🔍">
@@ -1447,11 +1550,11 @@
 <section id="gallery">
   <h2 class="sec-title">✦ تعلّمي بالصور ✦</h2>
   <p class="sec-sub">كلمات حية بالصورة والصوت — شوفي، اسمعي، واحفظي 📸</p>
-  <div class="tabs" id="galTabs">
-    <button class="tab active" data-lang="en">🇬🇧 الإنجليزية</button>
-    <button class="tab" data-lang="fr">🇫🇷 الفرنسية</button>
-    <button class="tab" data-lang="de">🇩🇪 الألمانية</button>
-    <button class="tab" data-lang="zh">🇨🇳 الصينية</button>
+  <div class="tabs lang-tabs" id="galTabs">
+    <button class="tab lang-tab active" data-lang="en"><span class="lf">🇬🇧</span><span class="ln">الإنجليزية</span></button>
+    <button class="tab lang-tab" data-lang="fr"><span class="lf">🇫🇷</span><span class="ln">الفرنسية</span></button>
+    <button class="tab lang-tab" data-lang="de"><span class="lf">🇩🇪</span><span class="ln">الألمانية</span></button>
+    <button class="tab lang-tab" data-lang="zh"><span class="lf">🇨🇳</span><span class="ln">الصينية</span></button>
   </div>
   <div class="gal-grid" id="galGrid"></div>
 </section>
@@ -1474,11 +1577,11 @@
   <h2 class="sec-title">✦ تدريب النطق بالصوت ✦</h2>
   <p class="sec-sub">اسمعي الجملة، أعيديها بصوتك، والموقع يقيّم نطقك فورًا 🎙️</p>
 
-  <div class="tabs" id="speakTabs">
-    <button class="tab active" data-lang="en">🇬🇧 الإنجليزية</button>
-    <button class="tab" data-lang="fr">🇫🇷 الفرنسية</button>
-    <button class="tab" data-lang="de">🇩🇪 الألمانية</button>
-    <button class="tab" data-lang="zh">🇨🇳 الصينية</button>
+  <div class="tabs lang-tabs" id="speakTabs">
+    <button class="tab lang-tab active" data-lang="en"><span class="lf">🇬🇧</span><span class="ln">الإنجليزية</span></button>
+    <button class="tab lang-tab" data-lang="fr"><span class="lf">🇫🇷</span><span class="ln">الفرنسية</span></button>
+    <button class="tab lang-tab" data-lang="de"><span class="lf">🇩🇪</span><span class="ln">الألمانية</span></button>
+    <button class="tab lang-tab" data-lang="zh"><span class="lf">🇨🇳</span><span class="ln">الصينية</span></button>
   </div>
 
   <div class="speak-wrap">
@@ -1612,6 +1715,66 @@
 
 
 <!-- ===================== TESTIMONIALS ===================== -->
+<!-- ===================== v6: FRIENDS ===================== -->
+<section id="friends">
+  <h2 class="sec-title">✦ أصحابي ✦</h2>
+  <p class="sec-sub">ضيفي صحابك وتحدّيهم في الاختبارات — كل صاحبة ليها كارت 👯‍♀️</p>
+  <div style="text-align:center;margin-bottom:22px"><button class="btn" id="friendAdd">➕ ضيفي صاحبة</button></div>
+  <div class="friend-grid" id="friendGrid"></div>
+</section>
+
+<!-- ===================== v6: FUN GAMES ===================== -->
+<section id="fun">
+  <h2 class="sec-title">✦ ألعاب حلوة ✦</h2>
+  <p class="sec-sub">تلبيس وطبخ وتصميم بيوت وكورة — اتلعبي واتعلمي كلمات جديدة 🎀</p>
+  <div class="tabs lang-tabs" id="funTabs">
+    <button class="tab lang-tab active" data-fun="dress"><span class="lf">👗</span><span class="ln">تلبيس</span></button>
+    <button class="tab lang-tab" data-fun="cook"><span class="lf">🍳</span><span class="ln">طبخ</span></button>
+    <button class="tab lang-tab" data-fun="house"><span class="lf">🏠</span><span class="ln">تصميم بيوت</span></button>
+    <button class="tab lang-tab" data-fun="football"><span class="lf">⚽</span><span class="ln">كورة</span></button>
+  </div>
+  <div class="tabs lang-tabs" id="funLangTabs">
+    <button class="tab lang-tab active" data-lang="en"><span class="lf">🇬🇧</span><span class="ln">الإنجليزية</span></button>
+    <button class="tab lang-tab" data-lang="fr"><span class="lf">🇫🇷</span><span class="ln">الفرنسية</span></button>
+    <button class="tab lang-tab" data-lang="de"><span class="lf">🇩🇪</span><span class="ln">الألمانية</span></button>
+    <button class="tab lang-tab" data-lang="zh"><span class="lf">🇨🇳</span><span class="ln">الصينية</span></button>
+  </div>
+  <div class="fun-stage" id="funStage">🎀</div>
+  <div class="fun-word" id="funWord"></div>
+  <div class="fun-opts" id="funOpts"></div>
+</section>
+
+<!-- ===================== v6: OUTFIT STYLER ===================== -->
+<section id="outfit">
+  <h2 class="sec-title">✦ منسّقة اللبس ✦</h2>
+  <p class="sec-sub">صوّري أي قطعة لبس — نطلّع ألوانها ونقترح عليكي ينفع معاها إيه 👚🎨</p>
+  <div class="outfit-drop" id="outfitDrop">
+    <div style="font-size:2.4rem">📸</div>
+    <div style="font-weight:900;margin-top:8px">اضغطي هنا واختاري صورة القطعة</div>
+    <div style="font-size:.8rem;color:var(--muted);margin-top:4px">الصورة بتتحلل على جهازك — مش بترفع في أي حتة 🔒</div>
+    <input type="file" id="outfitFile" accept="image/*" style="display:none">
+  </div>
+  <div class="outfit-res" id="outfitRes"></div>
+</section>
+
+<!-- ===================== v6: ENGINEERING COURSES ===================== -->
+<section id="eng">
+  <h2 class="sec-title">✦ كورسات كلية الهندسة ✦</h2>
+  <p class="sec-sub">محاضرات مختارة لكل الأقسام — مدني، كهربا، ميكانيكا، معماري، اتصالات وحاسبات ⚙️🎓</p>
+  <div id="engWrap"></div>
+</section>
+
+<!-- ===================== v6: UI LANGUAGE ===================== -->
+<section id="settings">
+  <h2 class="sec-title">✦ لغة التطبيق ✦</h2>
+  <p class="sec-sub">بدّلي واجهة الموقع بين العربية والإنجليزية 🌐</p>
+  <div class="tabs lang-tabs" id="uiTabs" style="max-width:400px">
+    <button class="tab lang-tab active" data-ui="ar"><span class="lf">🇪🇬</span><span class="ln">العربية</span></button>
+    <button class="tab lang-tab" data-ui="en"><span class="lf">🇬🇧</span><span class="ln">English</span></button>
+  </div>
+  <p class="sec-sub" style="font-size:.8rem">الترجمة بتغطي القوائم والعناوين الرئيسية — المحتوى التعليمي يفضل بالعربية 📚</p>
+</section>
+
 <section id="love">
   <h2 class="sec-title">✦ قالوا عن Lingua ✦</h2>
   <p class="sec-sub">متعلّمات بدأوا من الصفر زيك بالظبط 💜</p>
@@ -1890,6 +2053,18 @@ function renderQ(){
   });
   html += '<div class="quiz-foot"><span>سؤال '+(cur.i+1)+' من '+qs.length+'</span><span>النقاط: '+cur.score+'</span></div>';
   box.innerHTML = html;
+  if(getHints() > 0){
+    const hb = document.createElement('button');
+    hb.className = 'btn hint-btn';
+    hb.textContent = '💡 استخدمي تلميح (عندك ' + getHints() + ')';
+    hb.addEventListener('click', function(){
+      if(!spendHint()) return;
+      const q2 = QUIZZES[cur.lang][cur.level][cur.i];
+      box.querySelectorAll('.opt')[q2.a].classList.add('correct');
+      hb.remove();
+    });
+    box.appendChild(hb);
+  }
   box.querySelectorAll('.opt').forEach(function(btn){
     btn.addEventListener('click', function(){ answer(parseInt(btn.dataset.i,10)); });
   });
@@ -2188,10 +2363,19 @@ window.refreshDash = function(){
   document.getElementById('dGames').textContent = games;
   const pts = parseInt(localStorage.getItem('lingua_points')||'0',10);
   document.getElementById('dPoints').textContent = pts;
-  const badges = [[1000,'أسطورة اللغات 👑'],[600,'نجمة لينجوا 💫'],[300,'مجتهدة 🔥'],[100,'صاعدة ⭐'],[0,'بداية رحلتك 🌱']];
-  let badge = badges[badges.length-1][1];
-  for(const b of badges){ if(pts >= b[0]){ badge = b[1]; break; } }
-  document.getElementById('dashBadge').textContent = 'لقبك الحالي: ' + badge;
+  const lvl = levelOf(getLifetime());
+  let customTitle = '';
+  try { customTitle = localStorage.getItem('lingua_title') || ''; } catch(e){}
+  document.getElementById('dashBadge').textContent = 'لقبك الحالي: ' + (customTitle || lvl.name);
+  if(document.getElementById('lvlName')){
+    document.getElementById('lvlName').textContent = lvl.name;
+    document.getElementById('lvlFill').style.width = lvl.pct + '%';
+    document.getElementById('lvlText').textContent = lvl.next
+      ? ('فاضل ' + (lvl.next - getLifetime()) + ' نقطة على مستوى ' + lvl.nextName + ' — مجموع نقاطك الكلي ' + getLifetime())
+      : ('وصلتي لأعلى مستوى! مجموع نقاطك الكلي ' + getLifetime() + ' 👑');
+  }
+  if(window.renderShop) window.renderShop();
+  if(window.renderBadges) window.renderBadges();
   /* per-language progress bars */
   const flags = {en:'🇬🇧 الإنجليزية', fr:'🇫🇷 الفرنسية', de:'🇩🇪 الألمانية', zh:'🇨🇳 الصينية'};
   let html = '';
@@ -2385,6 +2569,8 @@ function getPoints(){ return parseInt(localStorage.getItem('lingua_points')||'0'
 function awardPoints(n, label){
   if(!n || n <= 0) return;
   localStorage.setItem('lingua_points', String(getPoints()+n));
+  localStorage.setItem('lingua_lifetime', String(getLifetime()+n));
+  checkBadges();
   toast('+'+n+' نقطة 🎉'+(label?' — '+label:''));
   if(window.refreshDash) window.refreshDash();
 }
@@ -2959,24 +3145,34 @@ document.getElementById('lstPlay').addEventListener('click', function(){
 })();
 
 /* ================= v4: themes ================= */
-const THEMES = {gold:'👑 ذهبي', rose:'🌸 فوشيا', ocean:'🌊 محيط', emerald:'💚 زمرد', violet:'💜 بنفسجي'};
-const THEME_COLORS = {gold:'#d4af37', rose:'#e85d9e', ocean:'#22b8cf', emerald:'#34d399', violet:'#9d7bff'};
+const THEMES = {gold:'👑 ذهبي', rose:'🌸 فوشيا', ocean:'🌊 محيط', emerald:'💚 زمرد', violet:'💜 بنفسجي', royal:'🏰 ملكي', sunset:'🌅 غروب', midnight:'🌌 منتصف الليل'};
+const THEME_COLORS = {gold:'#d4af37', rose:'#e85d9e', ocean:'#22b8cf', emerald:'#34d399', violet:'#9d7bff', royal:'#f7c948', sunset:'#ff7a3d', midnight:'#60a5fa'};
+const PREMIUM_THEMES = {royal:150, sunset:300, midnight:500};
+const BASE_THEMES = ['gold','rose','ocean','emerald','violet'];
+function getOwnedThemes(){ try{ return JSON.parse(localStorage.getItem('lingua_owned_themes')||'[]'); }catch(e){ return []; } }
 function applyTheme(name){
   document.documentElement.setAttribute('data-theme', name === 'gold' ? '' : name);
   try { localStorage.setItem('lingua_theme', name); } catch(e){}
   document.querySelectorAll('.theme-dot').forEach(function(d){ d.classList.toggle('on', d.dataset.t === name); });
 }
 (function(){
-  const pop = document.getElementById('themePop');
-  Object.keys(THEMES).forEach(function(k){
-    const d = document.createElement('button');
-    d.className = 'theme-dot';
-    d.dataset.t = k;
-    d.title = THEMES[k];
-    d.style.background = THEME_COLORS[k];
-    d.addEventListener('click', function(){ applyTheme(k); sndGood(); });
-    pop.appendChild(d);
-  });
+  window.buildThemeDots = function(){
+    const pop = document.getElementById('themePop');
+    pop.innerHTML = '';
+    const owned = getOwnedThemes();
+    Object.keys(THEMES).forEach(function(k){
+      if(PREMIUM_THEMES[k] && owned.indexOf(k) < 0) return;
+      const d = document.createElement('button');
+      d.className = 'theme-dot';
+      d.dataset.t = k;
+      d.title = THEMES[k];
+      d.style.background = THEME_COLORS[k];
+      d.addEventListener('click', function(){ applyTheme(k); sndGood(); });
+      pop.appendChild(d);
+    });
+    applyTheme(document.documentElement.getAttribute('data-theme') || 'gold');
+  };
+  buildThemeDots();
   document.getElementById('themeFab').addEventListener('click', function(){
     document.getElementById('themePop').classList.toggle('open');
   });
@@ -3443,14 +3639,68 @@ document.querySelectorAll('#songTabs .tab').forEach(function(t){
   });
 });
 renderSongs();
-const MOVIES = [
-  {t:'Titanic — الإعلان الرسمي', id:'2e-eXJ6HgkQ'},
-  {t:'The Lion King — الإعلان الرسمي', id:'7TavVZMewpY'},
-  {t:'Frozen — الإعلان الرسمي', id:'TbQm5doF_Uc'}
-];
-document.getElementById('movieGrid').innerHTML = MOVIES.map(function(v){
-  return '<div class="video-card"><div class="vthumb"><iframe loading="lazy" src="https://www.youtube.com/embed/' + v.id + '" title="' + v.t + '" allowfullscreen></iframe></div><div class="vbody"><h3>' + v.t + '</h3></div></div>';
-}).join('');
+const CINEMA = {
+  en: [
+    {t:'تايتانيك — الإعلان الرسمي', id:'2e-eXJ6HgkQ'},
+    {t:'الأسد الملك — الإعلان الرسمي', id:'7TavVZMewpY'},
+    {t:'ملكة الثلج — الإعلان الرسمي', id:'TbQm5doF_Uc'},
+    {t:'ملكة الثلج ٢ — الإعلان الرسمي', id:'Zi4LMpSDccc'},
+    {t:'حكاية لعبة ٤ — الإعلان الرسمي', id:'wmiIUN-7qhE'},
+    {t:'هاري بوتر وحجر الفيلسوف — الإعلان', id:'VyHV0BRtdxo'},
+    {t:'شريك — الإعلان الرسمي', id:'CwXOrWvPBPk'},
+    {t:'وحدي بالبيت — الإعلان الرسمي', id:'jEDaVHmw7r4'},
+    {t:'البحث عن نيمو — الإعلان الرسمي', id:'2zLkasScy7A'},
+    {t:'موانا — الإعلان الرسمي', id:'LKFuXETZUsI'},
+    {t:'زوتوبيا — الإعلان الرسمي', id:'g9lmhBYB11U'},
+    {t:'إنكانتو — الإعلان الرسمي', id:'CaimKeDcudo'},
+    {t:'الطفل الزعيم — الإعلان الرسمي', id:'k397HRbTtWI'},
+    {t:'المينيونز — الإعلان الرسمي', id:'eisKxhjBnZ0'},
+    {t:'سيارات ٣ — الإعلان الرسمي', id:'2LeOH9AGJQM'},
+    {t:'قلبًا وقالبًا — الإعلان الرسمي', id:'seMwpP0yeu4'},
+    {t:'كوكو — الإعلان الرسمي', id:'Rvr68u6k5sI'},
+    {t:'المنتقمون: حرب اللانهاية — الإعلان', id:'6ZfuNTqbHE8'}
+  ],
+  fr: [
+    {t:'أميلي — الإعلان الرسمي', id:'HUECWi5pX7o'},
+    {t:'تروترو — ٣٠ حلقة كرتون كاملة', id:'l03x_-pom5s'},
+    {t:'الدب الصغير براون — ساعة حلقات', id:'sA3iRyFuuwE'},
+    {t:'الدب الصغير براون — ساعتين حلقات', id:'sXm3-Eg0_ng'}
+  ],
+  de: [
+    {t:'النحلة مايا — حلقة أجواء الميلاد ٣', id:'wVKPZDqIv2I'},
+    {t:'النحلة مايا — حلقة أجواء الميلاد ٢', id:'XOJIZL0Ee38'},
+    {t:'النحلة مايا — مغامرة العسل الكبيرة', id:'8YER_1_r2wU'},
+    {t:'النحلة مايا — ويللي يصبح بطلًا', id:'ITAm-fc1cno'},
+    {t:'النحلة مايا — حبوب اللقاح المفقودة', id:'Do4jw7SvPv8'}
+  ],
+  zh: [
+    {t:'الدببة بوني: فانتاستيكا — فيلم كامل', id:'iO0Ze5PBmCU'},
+    {t:'الدببة بوني: روبو رامبل — فيلم كامل', id:'KYtOGYeNkbI'},
+    {t:'الدببة بوني — حلقة ٣٣', id:'4uCaErG0YLQ'},
+    {t:'الدببة بوني: شيفرة الحماية — فيلم كامل', id:'oIkLFRD65a8'},
+    {t:'الدببة بوني: الانكماش الكبير — فيلم كامل', id:'xnW5V35H9sU'},
+    {t:'الدببة بوني: إلى الإنقاذ — فيلم كامل', id:'U2ipRvgCjnc'}
+  ],
+  anime: [
+    {t:'المخطوفة (سبيريتد أواي) — الإعلان', id:'ByXuk9QqQkk'},
+    {t:'قلعة هاول المتحركة — الإعلان', id:'iwROgK94zcM'}
+  ]
+};
+let cinTab = 'en';
+function renderCinema(){
+  document.getElementById('movieGrid').innerHTML = CINEMA[cinTab].map(function(v){
+    return '<div class="video-card"><div class="vthumb"><iframe loading="lazy" src="https://www.youtube.com/embed/' + v.id + '" title="' + v.t + '" allowfullscreen></iframe></div><div class="vbody"><h3>' + v.t + '</h3></div></div>';
+  }).join('');
+}
+document.querySelectorAll('#cinemaTabs .tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('#cinemaTabs .tab').forEach(function(x){x.classList.remove('active')});
+    t.classList.add('active');
+    cinTab = t.dataset.cinema;
+    renderCinema();
+  });
+});
+renderCinema();
 
 /* ================= v4.3: daily gift + goal + quote ================= */
 (function(){
@@ -3685,6 +3935,540 @@ document.querySelectorAll('.lang-panel .lesson').forEach(function(lesson){
   if(toggle) toggle.parentNode.insertBefore(b, toggle.nextSibling);
   else lesson.insertBefore(b, lesson.firstChild);
 });
+
+
+/* ================= v6: points economy core ================= */
+function getLifetime(){
+  const l = parseInt(localStorage.getItem('lingua_lifetime')||'0',10);
+  return Math.max(l, getPoints());
+}
+function spendPoints(n){
+  const cur = getPoints();
+  if(cur < n){ toast('نقاطك مش كفاية — العبي واكسبي أكتر 💪'); sndBad(); return false; }
+  localStorage.setItem('lingua_points', String(cur-n));
+  toast('-'+n+' نقطة 🛍️');
+  if(window.refreshDash) window.refreshDash();
+  return true;
+}
+function getHints(){ return parseInt(localStorage.getItem('lingua_hints')||'0',10); }
+function spendHint(){
+  const h = getHints();
+  if(h <= 0) return false;
+  localStorage.setItem('lingua_hints', String(h-1));
+  if(window.renderShop) window.renderShop();
+  return true;
+}
+const LEVELS = [[0,'🌱 بداية الرحلة'],[100,'⭐ صاعدة'],[250,'🌿 مثابرة'],[450,'🔥 مجتهدة'],[700,'💪 قوية'],[1000,'💫 نجمة لينجوا'],[1500,'🎯 عبقرية'],[2200,'🚀 خارقة'],[3000,'👑 أسطورة اللغات']];
+function levelOf(life){
+  let cur = LEVELS[0], next = null, nextName = '';
+  for(let i = 0; i < LEVELS.length; i++){
+    if(life >= LEVELS[i][0]){ cur = LEVELS[i]; next = i < LEVELS.length-1 ? LEVELS[i+1][0] : null; nextName = i < LEVELS.length-1 ? LEVELS[i+1][1] : ''; }
+  }
+  const pct = next ? Math.min(100, Math.round(100*(life-cur[0])/(next-cur[0]))) : 100;
+  return {name:cur[1], next:next, nextName:nextName, pct:pct};
+}
+
+/* ================= v6: shop ================= */
+const SHOP = [
+  {kind:'theme', id:'royal', ico:'🏰', name:'ثيم ملكي', desc:'ثيم ذهبي ملكي يليق بيكي', price:150},
+  {kind:'theme', id:'sunset', ico:'🌅', name:'ثيم الغروب', desc:'ألوان الغروب الدافية', price:300},
+  {kind:'theme', id:'midnight', ico:'🌌', name:'ثيم منتصف الليل', desc:'أزرق ليلي هادي وفخم', price:500},
+  {kind:'hint', id:'hint', ico:'💡', name:'تلميح للاختبار', desc:'يكشف الإجابة الصح في سؤال واحد', price:20},
+  {kind:'avatar', id:'a1', av:'🦄', ico:'🦄', name:'أفتار يونيكورن', desc:'أفتار مميز لحسابك', price:30},
+  {kind:'avatar', id:'a2', av:'🐉', ico:'🐉', name:'أفتار تنين', desc:'أفتار قوي وجريء', price:30},
+  {kind:'avatar', id:'a3', av:'🦢', ico:'🦢', name:'أفتار بجعة', desc:'أفتار راقٍ وناعم', price:30},
+  {kind:'avatar', id:'a4', av:'🐆', ico:'🐆', name:'أفتار فهد', desc:'أفتار سريع وشيك', price:30},
+  {kind:'avatar', id:'a5', av:'🌺', ico:'🌺', name:'أفتار وردة', desc:'أفتار أنيق وملون', price:30},
+  {kind:'title', id:'t1', title:'ملكة اللغات 👑', ico:'👑', name:'لقب: ملكة اللغات', desc:'أفخم لقب — يظهر في لوحتك', price:800},
+  {kind:'title', id:'t2', title:'عبقرية لينجوا 🧠', ico:'🧠', name:'لقب: عبقرية لينجوا', desc:'لقب للمتميزات', price:400},
+  {kind:'title', id:'t3', title:'فراشة الكلمات 🦋', ico:'🦋', name:'لقب: فراشة الكلمات', desc:'لقب لطيف وناعم', price:150}
+];
+function getOwnedItems(){ try{ return JSON.parse(localStorage.getItem('lingua_owned')||'[]'); }catch(e){ return []; } }
+function ownItem(id){ const o = getOwnedItems(); if(o.indexOf(id)<0){ o.push(id); localStorage.setItem('lingua_owned', JSON.stringify(o)); } }
+window.renderShop = function(){
+  const grid = document.getElementById('shopGrid');
+  if(!grid) return;
+  const owned = getOwnedItems();
+  const pts = getPoints();
+  grid.innerHTML = SHOP.map(function(it){
+    const isOwned = it.kind !== 'hint' && owned.indexOf(it.id) >= 0;
+    const can = pts >= it.price;
+    const btn = isOwned
+      ? '<button class="btn" style="width:100%;background:rgba(255,255,255,.1);color:var(--gold2)" data-use="'+it.id+'">✅ عندك — استخدميه</button>'
+      : '<button class="btn" style="width:100%'+(can?'':';opacity:.5')+'" data-buy="'+it.id+'">'+(can?'اشتريه':'محتاجة')+' — '+it.price+' 💎</button>';
+    return '<div class="shop-card'+(isOwned?' owned':'')+'"><div class="s-ico">'+it.ico+'</div><div class="s-name">'+it.name+'</div><div class="s-desc">'+it.desc+'</div><div class="s-price">'+(it.kind==='hint'?'عندك '+getHints()+' تلميح • ':'')+it.price+' نقطة</div>'+btn+'</div>';
+  }).join('');
+  grid.querySelectorAll('[data-buy]').forEach(function(b){
+    b.addEventListener('click', function(){ buyItem(b.dataset.buy); });
+  });
+  grid.querySelectorAll('[data-use]').forEach(function(b){
+    b.addEventListener('click', function(){ useItem(b.dataset.use); });
+  });
+};
+function buyItem(id){
+  const it = SHOP.find(function(x){ return x.id === id; });
+  if(!it) return;
+  if(!spendPoints(it.price)) return;
+  if(it.kind === 'hint'){
+    localStorage.setItem('lingua_hints', String(getHints()+1));
+    toast('💡 تلميح جديد في جيبك! استخدميه جوه أي اختبار');
+  } else {
+    ownItem(it.id);
+    if(it.kind === 'theme'){
+      const o = getOwnedThemes();
+      if(o.indexOf(it.id) < 0){ o.push(it.id); localStorage.setItem('lingua_owned_themes', JSON.stringify(o)); }
+      if(window.buildThemeDots) window.buildThemeDots();
+      toast('🎨 ثيم جديد اتفتح! دوّري عليه في زرار الثيمات');
+    }
+    if(it.kind === 'avatar'){ useItem(it.id); }
+    if(it.kind === 'title'){ useItem(it.id); }
+  }
+  sndGood(); confetti();
+  window.renderShop();
+  if(window.refreshDash) window.refreshDash();
+}
+function useItem(id){
+  const it = SHOP.find(function(x){ return x.id === id; });
+  if(!it) return;
+  if(it.kind === 'theme'){ applyTheme(it.id); toast('🎨 الثيم اتطبق!'); }
+  if(it.kind === 'avatar'){
+    try { localStorage.setItem('lingua_profile_avatar', it.av); } catch(e){}
+    if(window.loadProfile) window.loadProfile();
+    document.getElementById('pfAvatar').textContent = it.av;
+    toast('أفتارك الجديد '+it.av+' ✨');
+  }
+  if(it.kind === 'title'){
+    try { localStorage.setItem('lingua_title', it.title); } catch(e){}
+    if(window.refreshDash) window.refreshDash();
+    toast('لقبك بقى: '+it.title);
+  }
+  sndGood();
+}
+
+/* ================= v6: badges ================= */
+const BADGES = [
+  {id:'b10', ico:'🌟', name:'أول ١٠ نقاط', test:function(s){ return s.life >= 10; }},
+  {id:'b100', ico:'⭐', name:'مية نقطة', test:function(s){ return s.life >= 100; }},
+  {id:'b300', ico:'💫', name:'٣٠٠ نقطة', test:function(s){ return s.life >= 300; }},
+  {id:'b600', ico:'🔥', name:'٦٠٠ نقطة', test:function(s){ return s.life >= 600; }},
+  {id:'b1000', ico:'👑', name:'١٠٠٠ نقطة', test:function(s){ return s.life >= 1000; }},
+  {id:'bpoly', ico:'🌍', name:'رباعية اللغات', test:function(s){ return s.langs >= 4; }},
+  {id:'bperf', ico:'💯', name:'علامة كاملة', test:function(s){ return s.perfect >= 1; }},
+  {id:'bgame', ico:'🎮', name:'ملكة الألعاب', test:function(s){ return s.games >= 1; }},
+  {id:'bweek', ico:'📅', name:'أسبوع متواصل', test:function(s){ return s.streak >= 7; }}
+];
+function collectStats(){
+  let quizzes = 0, perfect = 0, games = 0;
+  const levelsDone = {en:0, fr:0, de:0, zh:0};
+  ['en','fr','de','zh'].forEach(function(l){
+    ['beg','mid','adv'].forEach(function(v){
+      const b = localStorage.getItem('lingua_best_'+l+'_'+v);
+      if(b !== null){ quizzes++; levelsDone[l]++; if(parseInt(b,10) === QUIZZES[l][v].length) perfect++; }
+    });
+    if(localStorage.getItem('lingua_game_best_'+l) !== null) games++;
+  });
+  let streak = 0;
+  try { streak = (JSON.parse(localStorage.getItem('lingua_streak'))||{}).count || 0; } catch(e){}
+  let langs = 0;
+  ['en','fr','de','zh'].forEach(function(l){ if(levelsDone[l] > 0) langs++; });
+  return {life:getLifetime(), quizzes:quizzes, perfect:perfect, games:games, streak:streak, langs:langs};
+}
+function checkBadges(){
+  const st = collectStats();
+  let earned = [];
+  try { earned = JSON.parse(localStorage.getItem('lingua_badges')||'[]'); } catch(e){}
+  let fresh = false;
+  BADGES.forEach(function(b){
+    if(earned.indexOf(b.id) < 0 && b.test(st)){
+      earned.push(b.id); fresh = true;
+      toast('🏅 وسام جديد: ' + b.name);
+      confetti();
+    }
+  });
+  if(fresh) localStorage.setItem('lingua_badges', JSON.stringify(earned));
+}
+window.renderBadges = function(){
+  const grid = document.getElementById('badgeGrid');
+  if(!grid) return;
+  const st = collectStats();
+  let earned = [];
+  try { earned = JSON.parse(localStorage.getItem('lingua_badges')||'[]'); } catch(e){}
+  grid.innerHTML = BADGES.map(function(b){
+    const has = earned.indexOf(b.id) >= 0 || b.test(st);
+    return '<div class="badge-card'+(has?'':' locked')+'"><div class="b-ico">'+b.ico+'</div><div class="b-name">'+b.name+'</div></div>';
+  }).join('');
+};
+
+/* ================= v6: router — كل قسم صفحة لوحده ================= */
+const MENU = [
+  ['dash','💎','لوحة إنجازك'],['corners','🌍','أقسام اللغات'],['courses','🎓','الكورسات'],
+  ['lessons','📚','الدروس'],['quiz','📝','الاختبارات'],['games','🎮','الألعاب'],
+  ['brain','🧠','ألعاب ذكاء'],['fun','🎀','ألعاب حلوة'],['dict','📖','القاموس'],
+  ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
+  ['songs','🎵','أغاني'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
+  ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],
+  ['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['karma','👑','ركن كرمة'],['settings','🌐','لغة التطبيق']
+];
+document.getElementById('menuGrid').innerHTML = MENU.map(function(m){
+  return '<a class="menu-card" href="#'+m[0]+'"><span class="m-ico">'+m[1]+'</span><span class="m-name">'+m[2]+'</span></a>';
+}).join('');
+const VIEWIDS = MENU.map(function(m){ return m[0]; }).concat(['today','features','menu']);
+function showView(id){
+  document.body.classList.add('routed');
+  const home = !id;
+  document.body.classList.toggle('home', home);
+  document.querySelectorAll('section').forEach(function(sec){
+    const on = home ? (sec.id==='menu'||sec.id==='today'||sec.id==='features') : (sec.id===id);
+    sec.classList.toggle('view', on);
+  });
+  window.scrollTo(0,0);
+}
+function routeFromHash(){
+  const id = location.hash.slice(1);
+  showView(VIEWIDS.indexOf(id) >= 0 ? id : null);
+}
+window.addEventListener('hashchange', routeFromHash);
+document.addEventListener('click', function(e){
+  const g = e.target.closest ? e.target.closest('.corner-go') : null;
+  if(g && g.dataset && g.dataset.target){ location.hash = g.dataset.target.replace('#',''); }
+});
+routeFromHash();
+
+/* ================= v6: friends ================= */
+const FRIEND_AVS = ['👧','🧕','👩','🌸','🦋','🎀','💃','🌙'];
+function getFriends(){ try{ return JSON.parse(localStorage.getItem('lingua_friends')||'[]'); }catch(e){ return []; } }
+function renderFriends(){
+  const grid = document.getElementById('friendGrid');
+  const fs = getFriends();
+  if(!fs.length){
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--muted)">لسه مفيش صحاب — ضيفي أول صاحبة وابدئي التحدي 👯‍♀️</div>';
+    return;
+  }
+  grid.innerHTML = fs.map(function(f, i){
+    return '<div class="friend-card"><div class="f-av">'+FRIEND_AVS[i % FRIEND_AVS.length]+'</div><div class="f-name">'+f+'</div>'+
+      '<button class="btn" style="width:100%;padding:9px;font-size:.82rem" data-chal="'+i+'">⚔️ تحديها</button>'+
+      '<button class="btn" style="width:100%;padding:7px;font-size:.75rem;margin-top:6px;background:rgba(255,255,255,.08);color:var(--muted)" data-unf="'+i+'">🗑️ شيليها</button></div>';
+  }).join('');
+  grid.querySelectorAll('[data-chal]').forEach(function(b){
+    b.addEventListener('click', function(){ location.hash = 'quiz'; toast('اختاري اللغة والمستوى وابدئي التحدي ⚔️'); });
+  });
+  grid.querySelectorAll('[data-unf]').forEach(function(b){
+    b.addEventListener('click', function(){
+      const fs2 = getFriends();
+      fs2.splice(parseInt(b.dataset.unf,10), 1);
+      localStorage.setItem('lingua_friends', JSON.stringify(fs2));
+      renderFriends();
+    });
+  });
+}
+document.getElementById('friendAdd').addEventListener('click', function(){
+  const n = prompt('اسم صاحبتك؟');
+  if(n && n.trim()){
+    const fs = getFriends();
+    fs.push(n.trim().slice(0,20));
+    localStorage.setItem('lingua_friends', JSON.stringify(fs));
+    renderFriends();
+    toast('انضمت '+n.trim()+' لصحابك 💞');
+  }
+});
+renderFriends();
+
+/* ================= v6: fun games (تلبيس/طبخ/بيوت/كورة) ================= */
+const FUN_ITEMS = {
+  dress: [
+    ['👗','Dress','Robe','Kleid','连衣裙'],['👒','Hat','Chapeau','Hut','帽子'],
+    ['👟','Shoes','Chaussures','Schuhe','鞋子'],['👕','Shirt','Chemise','Hemd','衬衫'],
+    ['👖','Pants','Pantalon','Hose','裤子'],['🧣','Scarf','Écharpe','Schal','围巾'],
+    ['👜','Bag','Sac','Tasche','包'],['🧤','Gloves','Gants','Handschuhe','手套']
+  ],
+  cook: [
+    ['🍎','Apple','Pomme','Apfel','苹果'],['🍌','Banana','Banane','Banane','香蕉'],
+    ['🥛','Milk','Lait','Milch','牛奶'],['🧀','Cheese','Fromage','Käse','奶酪'],
+    ['🥚','Egg','Œuf','Ei','鸡蛋'],['🍚','Rice','Riz','Reis','米饭'],
+    ['🐟','Fish','Poisson','Fisch','鱼'],['🍞','Bread','Pain','Brot','面包']
+  ],
+  house: [
+    ['🛏️','Bed','Lit','Bett','床'],['🛋️','Sofa','Canapé','Sofa','沙发'],
+    ['📺','TV','Télévision','Fernseher','电视'],['💡','Lamp','Lampe','Lampe','灯'],
+    ['🚪','Door','Porte','Tür','门'],['🪟','Window','Fenêtre','Fenster','窗户'],
+    ['🪴','Plant','Plante','Pflanze','植物'],['🕰️','Clock','Horloge','Uhr','钟']
+  ],
+  football: [
+    ['⚽','Ball','Ballon','Ball','球'],['🥅','Goal','But','Tor','球门'],
+    ['👟','Boots','Crampons','Schuhe','球鞋'],['🧤','Gloves','Gants','Handschuhe','手套'],
+    ['🏆','Trophy','Trophée','Pokal','奖杯'],['🟨','Yellow card','Carton jaune','Gelbe Karte','黄牌'],
+    ['🎽','Jersey','Maillot','Trikot','球衣'],['📣','Fans','Supporters','Fans','球迷']
+  ]
+};
+const FUN_STAGE0 = {dress:'👧', cook:'🥣', house:'🏠', football:'🥅'};
+const FUN_DONE = {dress:'👸', cook:'🍲', house:'🏡', football:'🏆'};
+const FUN_LANGI = {en:1, fr:2, de:3, zh:4};
+let funGame = 'dress', funLang = 'en', funIdx = 0, funGot = [];
+function funStageDraw(){
+  document.getElementById('funStage').textContent = FUN_STAGE0[funGame] + ' ' + funGot.join(' ');
+}
+function funNext(){
+  const items = FUN_ITEMS[funGame];
+  const w = document.getElementById('funWord');
+  const o = document.getElementById('funOpts');
+  if(funIdx >= items.length){
+    document.getElementById('funStage').textContent = FUN_DONE[funGame] + ' ' + funGot.join(' ');
+    w.innerHTML = 'برافو عليكي! خلصتي الجولة 🎉 +٢٠ نقطة';
+    awardPoints(20, 'لعبة حلوة');
+    confetti(); sndWin();
+    o.innerHTML = '<button class="btn" id="funAgain" style="grid-column:1/-1">العبي تاني 🔁</button>';
+    document.getElementById('funAgain').addEventListener('click', funStart);
+    return;
+  }
+  const item = items[funIdx];
+  const word = item[FUN_LANGI[funLang]];
+  w.innerHTML = 'اختاري: <span style="color:#fff">'+word+'</span> <button class="speak-btn" id="funSpeak" style="padding:4px 10px;font-size:.9rem">🔊</button>';
+  const others = items.map(function(x){ return x[0]; }).filter(function(e){ return e !== item[0]; });
+  others.sort(function(){ return Math.random() - 0.5; });
+  const opts = [item[0]].concat(others.slice(0,3)).sort(function(){ return Math.random() - 0.5; });
+  o.innerHTML = opts.map(function(e){ return '<button class="fun-opt" data-e="'+e+'">'+e+'</button>'; }).join('');
+  document.getElementById('funSpeak').addEventListener('click', function(){ speakText(word, funLang); });
+  o.querySelectorAll('.fun-opt').forEach(function(b){
+    b.addEventListener('click', function(){
+      if(b.dataset.e === item[0]){
+        b.classList.add('right');
+        funGot.push(item[0]);
+        awardPoints(5, 'إجابة صح');
+        sndGood();
+        setTimeout(function(){ funIdx++; funStageDraw(); funNext(); }, 550);
+      } else {
+        b.classList.add('wrong');
+        sndBad();
+      }
+    });
+  });
+}
+function funStart(){ funIdx = 0; funGot = []; funStageDraw(); funNext(); }
+document.querySelectorAll('#funTabs .tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('#funTabs .tab').forEach(function(x){ x.classList.remove('active'); });
+    t.classList.add('active');
+    funGame = t.dataset.fun;
+    funStart();
+  });
+});
+document.querySelectorAll('#funLangTabs .tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('#funLangTabs .tab').forEach(function(x){ x.classList.remove('active'); });
+    t.classList.add('active');
+    funLang = t.dataset.lang;
+    funStart();
+  });
+});
+funStart();
+
+/* ================= v6: outfit styler ================= */
+(function(){
+  const drop = document.getElementById('outfitDrop');
+  const file = document.getElementById('outfitFile');
+  const res = document.getElementById('outfitRes');
+  drop.addEventListener('click', function(){ file.click(); });
+  function colorName(r, g, b){
+    const mx = Math.max(r,g,b), mn = Math.min(r,g,b), l = (mx+mn)/510;
+    if(mx - mn < 24){
+      if(l > 0.85) return 'أبيض'; if(l < 0.15) return 'أسود'; return 'رمادي';
+    }
+    let h = 0;
+    const d = mx - mn;
+    if(mx === r) h = ((g-b)/d) % 6; else if(mx === g) h = (b-r)/d + 2; else h = (r-g)/d + 4;
+    h = Math.round(h*60); if(h < 0) h += 360;
+    let name = 'أحمر';
+    if(h >= 345 || h < 15) name = 'أحمر'; else if(h < 40) name = 'برتقالي'; else if(h < 70) name = 'أصفر';
+    else if(h < 160) name = 'أخضر'; else if(h < 190) name = 'تركواز'; else if(h < 250) name = 'أزرق';
+    else if(h < 290) name = 'بنفسجي'; else name = 'وردي';
+    if(l > 0.75) name += ' فاتح'; else if(l < 0.3) name += ' غامق';
+    return name;
+  }
+  function matchTips(name){
+    const tips = {
+      'أحمر': 'ينفع معاه: أسود، أبيض، كحلي، دهبي ✨', 'برتقالي': 'ينفع معاه: كحلي، بيج، أبيض، بني 🤎',
+      'أصفر': 'ينفع معاه: كحلي، رمادي، أبيض، جينز أزرق 💛', 'أخضر': 'ينفع معاه: بيج، أبيض، دهبي، بني 💚',
+      'تركواز': 'ينفع معاه: أبيض، فضي، كحلي، كورال 🩵', 'أزرق': 'ينفع معاه: أبيض، رمادي، بيج، سيلفر 💙',
+      'بنفسجي': 'ينفع معاه: أبيض، رمادي، وردي فاتح، فضي 💜', 'وردي': 'ينفع معاه: أبيض، رمادي، كحلي، نيود 🩷',
+      'أبيض': 'بيمشي مع أي لون! جربي ألوان صريحة معاه 🤍', 'أسود': 'بيمشي مع أي لون! زوّدي لون صارخ أو دهبي 🖤',
+      'رمادي': 'ينفع معاه: وردي، أصفر، كحلي، أبيض 🩶'
+    };
+    for(const k in tips){ if(name.indexOf(k) >= 0) return tips[k]; }
+    return 'جربيه مع ألوان هادية زي الأبيض والبيج ✨';
+  }
+  file.addEventListener('change', function(){
+    if(!file.files.length) return;
+    const img = new Image();
+    img.onload = function(){
+      const c = document.createElement('canvas');
+      c.width = 48; c.height = 48;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(img, 0, 0, 48, 48);
+      const data = ctx.getImageData(0, 0, 48, 48).data;
+      const buckets = {};
+      for(let i = 0; i < data.length; i += 4){
+        const key = ((data[i]>>6)*4) + '-' + ((data[i+1]>>6)*4) + '-' + ((data[i+2]>>6)*4);
+        if(!buckets[key]) buckets[key] = {r:0, g:0, b:0, n:0};
+        buckets[key].r += data[i]; buckets[key].g += data[i+1]; buckets[key].b += data[i+2]; buckets[key].n++;
+      }
+      const top = Object.values(buckets).sort(function(a,b){ return b.n - a.n; }).slice(0,3);
+      const cols = top.map(function(t){
+        return {r:Math.round(t.r/t.n), g:Math.round(t.g/t.n), b:Math.round(t.b/t.n)};
+      });
+      URL.revokeObjectURL(img.src);
+      res.innerHTML = '<div style="text-align:center;font-weight:900;margin-top:10px">🎨 ألوان القطعة:</div>' +
+        '<div class="pal-row">' + cols.map(function(cl){
+          const hex = 'rgb('+cl.r+','+cl.g+','+cl.b+')';
+          return '<div><div class="pal-sw" style="background:'+hex+'"></div><div class="pal-name">'+colorName(cl.r,cl.g,cl.b)+'</div></div>';
+        }).join('') + '</div>' +
+        cols.map(function(cl){
+          const nm = colorName(cl.r,cl.g,cl.b);
+          return '<div style="background:var(--card);border:1px solid rgba(var(--goldA),.25);border-radius:16px;padding:14px;margin:10px 0;text-align:center">لون <b style="color:var(--gold2)">'+nm+'</b> — '+matchTips(nm)+'</div>';
+        }).join('') +
+        '<div style="text-align:center;color:var(--muted);font-size:.8rem;margin-top:12px">💡 نصيحة: كونسي لون واحد صريح في اللوك والباقي هادي</div>';
+      toast('طلّعنا ألوان القطعة! 🎨');
+      awardPoints(10, 'تنسيق لبس');
+    };
+    img.src = URL.createObjectURL(file.files[0]);
+  });
+})();
+
+/* ================= v6: engineering courses ================= */
+const ENG = [
+  {dept:'🏗️ هندسة مدنية', vids:[
+    {t:'استاتيكا: أسس وضع الأعمدة — هشام طارق', id:'AsuAq1vxxL4'},
+    {t:'الجمالون (Truss) — طريقة المقاطع', id:'Mor4WzWFJZc'}]},
+  {dept:'⚡ هندسة كهربائية', vids:[
+    {t:'تحليل الدوائر الكهربائية — المقدمة', id:'OLsuvugJR9I'},
+    {t:'الدوائر الكهربائية ١ — د. زينب الزاوي', id:'xocYwOYzvhY'}]},
+  {dept:'⚙️ هندسة ميكانيكا', vids:[
+    {t:'الميكانيك الهندسي — مقدمة وأنواع القوى', id:'XbCdh7h-Nx0'},
+    {t:'Engineering Mechanics I — Lecture 01', id:'nGfVTNfNwnk'}]},
+  {dept:'📐 هندسة معمارية', vids:[
+    {t:'تاريخ ونظريات العمارة — محاضرة', id:'7kA6ytlaGl0'},
+    {t:'تدريب Revit Architecture بالعربي', id:'XsDIr8Tr7WE'}]},
+  {dept:'📡 اتصالات وحاسبات', vids:[
+    {t:'بنية الحواسيب وتنظيمها — محاضرة', id:'55ld_GN7nQs'},
+    {t:'أساسيات الشبكات', id:'DG--5d3U88A'},
+    {t:'أساسيات شبكات الحاسب — توجيه الرسائل', id:'mMfP0IXYJp8'}]},
+  {dept:'🧭 اختاري تخصصك', vids:[
+    {t:'الفرق بين الهندسة المعمارية والعمران', id:'wfp0Exd9Sio'},
+    {t:'هندسة الاتصالات والإلكترونيات', id:'G2WdqnZ-4tw'}]}
+];
+document.getElementById('engWrap').innerHTML = ENG.map(function(g){
+  return '<h3 class="level-head"><span class="pill">'+g.dept+'</span><span class="line"></span></h3>' +
+    '<div class="video-grid">' + g.vids.map(function(v){
+      return '<div class="video-card"><div class="vthumb"><iframe loading="lazy" src="https://www.youtube.com/embed/' + v.id + '" title="' + v.t + '" allowfullscreen></iframe></div><div class="vbody"><h3>' + v.t + '</h3></div></div>';
+    }).join('') + '</div>';
+}).join('');
+
+/* ================= v6: seerah ================= */
+const SEERAH = [
+  {t:'🕯️ المولد النبوي', d:'وُلد النبي محمد ﷺ في مكة المكرمة عام الفيل، يتيم الأب، وتكفّله جده ثم عمه أبو طالب.'},
+  {t:'📖 البعثة', d:'في غار حراء نزل عليه الوحي وهو في الأربعين من عمره: «اقرأ باسم ربك الذي خلق».'},
+  {t:'🐪 الهجرة النبوية', d:'هاجر ﷺ إلى المدينة المنورة، فأسست الهجرة لأول مجتمع إسلامي، ومنها بدأ التاريخ الهجري.'},
+  {t:'⚔️ غزوة بدر الكبرى', d:'أول معركة فاصلة في الإسلام؛ نصر الله فيها المؤمنين رغم قلة العدد والعُدد.'},
+  {t:'🕊️ فتح مكة', d:'دخل ﷺ مكة عافيًا صافحًا وقال كلمته الخالدة: «اذهبوا فأنتم الطلقاء».'},
+  {t:'🌄 حجة الوداع', d:'خطب ﷺ في الناس خطبة الوداع: بلّغ الرسالة، وأدّى الأمانة، وتركهم على المحجة البيضاء.'},
+  {t:'🌙 الوفاة', d:'توفي ﷺ في المدينة المنورة عن ثلاثة وستين عامًا، بعدما تمّ الدين واكتملت النعمة.'}
+];
+document.getElementById('deenSeerah').innerHTML = SEERAH.map(function(x){
+  return '<div class="dua-card" style="margin-bottom:14px"><div style="font-weight:900;color:var(--gold2);margin-bottom:6px">'+x.t+'</div><div style="font-size:.92rem;line-height:1.9">'+x.d+'</div></div>';
+}).join('');
+document.querySelectorAll('#deenTabs .tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('#deenTabs .tab').forEach(function(x){ x.classList.remove('active'); });
+    t.classList.add('active');
+    const m = {adhkar:'deenAdhkar', duas:'deenDuas', quran:'deenQuran', seerah:'deenSeerah'};
+    Object.keys(m).forEach(function(k){
+      document.getElementById(m[k]).style.display = (k === t.dataset.deen) ? '' : 'none';
+    });
+  });
+});
+
+/* ================= v6: lesson levels as tabs (مفيش حاجة تحت بعض) ================= */
+document.querySelectorAll('#lessons .lang-panel').forEach(function(panel){
+  const groups = [];
+  let curG = null;
+  Array.from(panel.children).forEach(function(el){
+    if(el.classList && el.classList.contains('level-head')){
+      curG = {label: el.querySelector('.pill') ? el.querySelector('.pill').textContent.trim() : 'مستوى', holder: document.createElement('div')};
+      groups.push(curG);
+    } else if(curG){
+      curG.holder.appendChild(el);
+    }
+  });
+  if(groups.length < 2) return;
+  const tabs = document.createElement('div');
+  tabs.className = 'tabs lvl-tabs';
+  groups.forEach(function(g, i){
+    g.holder.style.display = i === 0 ? '' : 'none';
+    const b = document.createElement('button');
+    b.className = 'tab' + (i === 0 ? ' active' : '');
+    b.textContent = g.label;
+    b.addEventListener('click', function(){
+      tabs.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      groups.forEach(function(gg, j){ gg.holder.style.display = j === i ? '' : 'none'; });
+    });
+    tabs.appendChild(b);
+  });
+  panel.innerHTML = '';
+  panel.appendChild(tabs);
+  groups.forEach(function(g){ panel.appendChild(g.holder); });
+});
+
+/* ================= v6: UI language ================= */
+const UI_PAIRS = [
+  ['👤 حسابك','👤 Account'],['الدروس','Lessons'],['الاختبارات','Quizzes'],['الألعاب','Games'],
+  ['تدريب النطق','Speaking'],['القاموس','Dictionary'],['📸 بالصور','📸 Photos'],['🧠 ذكاء','🧠 Brain'],
+  ['💬 الكلام','💬 Wall'],['🕌 روحانيات','🕌 Spirit'],['🎵 أغاني','🎵 Songs'],['🎬 سينما','🎬 Cinema'],
+  ['ركن كرمة 👑','Karma 👑'],['الفيديوهات','Videos'],['🛍️ المتجر','🛍️ Shop'],['👯 أصحابي','👯 Friends'],
+  ['🎀 ألعاب حلوة','🎀 Fun Games'],['👚 تنسيق لبس','👚 Stylist'],['⚙️ هندسة','⚙️ Engineering'],['🌐 اللغة','🌐 Language'],
+  ['✦ كلمات اليوم ✦','✦ Words of the Day ✦'],['لماذا Lingua؟','Why Lingua?'],['✦ لوحة إنجازك ✦','✦ Your Dashboard ✦'],
+  ['✦ أقسام اللغات ✦','✦ Language Corners ✦'],['اختاري لغتك','Choose Your Language'],['✦ الدروس ✦','✦ Lessons ✦'],
+  ['✦ الاختبارات ✦','✦ Quizzes ✦'],['✦ الألعاب ✦','✦ Games ✦'],['✦ القاموس ✦','✦ Dictionary ✦'],
+  ['✦ تعلّمي بالصور ✦','✦ Learn with Photos ✦'],['✦ سينما لينجوا ✦','✦ Lingua Cinema ✦'],['✦ ركن الروح ✦','✦ Soul Corner ✦'],
+  ['✦ كل حاجة في مكانها ✦','✦ Everything in Its Place ✦'],['✦ متجر النقاط ✦','✦ Points Shop ✦'],
+  ['✦ أصحابي ✦','✦ My Friends ✦'],['✦ ألعاب حلوة ✦','✦ Fun Games ✦'],['✦ منسّقة اللبس ✦','✦ Outfit Stylist ✦'],
+  ['✦ كورسات كلية الهندسة ✦','✦ Engineering Courses ✦'],['✦ لغة التطبيق ✦','✦ App Language ✦']
+];
+function uiSwap(txt, toEn){
+  for(const pr of UI_PAIRS){
+    if(txt === (toEn ? pr[0] : pr[1])) return toEn ? pr[1] : pr[0];
+  }
+  return null;
+}
+function applyUILang(l){
+  try { localStorage.setItem('lingua_uilang', l); } catch(e){}
+  const toEn = l === 'en';
+  document.querySelectorAll('#uiTabs .tab').forEach(function(x){ x.classList.toggle('active', x.dataset.ui === l); });
+  document.querySelectorAll('nav a').forEach(function(a){
+    const r = uiSwap(a.textContent.trim(), toEn);
+    if(r !== null) a.textContent = r;
+  });
+  document.querySelectorAll('h2.sec-title').forEach(function(h){
+    const r = uiSwap(h.textContent.trim(), toEn);
+    if(r !== null) h.textContent = r;
+  });
+  document.querySelectorAll('#menuGrid .m-name').forEach(function(m){
+    MENU.forEach(function(mm){
+      if(m.textContent.trim() === mm[2]) m.textContent = toEn ? mm[0] : mm[2];
+    });
+  });
+  document.documentElement.dir = toEn ? 'ltr' : 'rtl';
+}
+document.querySelectorAll('#uiTabs .tab').forEach(function(t){
+  t.addEventListener('click', function(){ applyUILang(t.dataset.ui); });
+});
+try {
+  const savedUi = localStorage.getItem('lingua_uilang');
+  if(savedUi === 'en') applyUILang('en');
+} catch(e){}
+
+window.renderShop();
+window.renderBadges();
+checkBadges();
 
 </script>
 </body>
