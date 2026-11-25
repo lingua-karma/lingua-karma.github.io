@@ -4438,44 +4438,7 @@ document.addEventListener('click', function(e){
 });
 routeFromHash();
 
-/* ================= v6: friends ================= */
-const FRIEND_AVS = ['👧','🧕','👩','🌸','🦋','🎀','💃','🌙'];
-function getFriends(){ try{ return JSON.parse(localStorage.getItem('lingua_friends')||'[]'); }catch(e){ return []; } }
-function renderFriends(){
-  const grid = document.getElementById('friendGrid');
-  const fs = getFriends();
-  if(!fs.length){
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--muted)">لسه مفيش صحاب — ضيفي أول صاحبة وابدئي التحدي 👯‍♀️</div>';
-    return;
-  }
-  grid.innerHTML = fs.map(function(f, i){
-    return '<div class="friend-card"><div class="f-av">'+FRIEND_AVS[i % FRIEND_AVS.length]+'</div><div class="f-name">'+f+'</div>'+
-      '<button class="btn" style="width:100%;padding:9px;font-size:.82rem" data-chal="'+i+'">⚔️ تحديها</button>'+
-      '<button class="btn" style="width:100%;padding:7px;font-size:.75rem;margin-top:6px;background:rgba(255,255,255,.08);color:var(--muted)" data-unf="'+i+'">🗑️ شيليها</button></div>';
-  }).join('');
-  grid.querySelectorAll('[data-chal]').forEach(function(b){
-    b.addEventListener('click', function(){ location.hash = 'quiz'; toast('اختاري اللغة والمستوى وابدئي التحدي ⚔️'); });
-  });
-  grid.querySelectorAll('[data-unf]').forEach(function(b){
-    b.addEventListener('click', function(){
-      const fs2 = getFriends();
-      fs2.splice(parseInt(b.dataset.unf,10), 1);
-      localStorage.setItem('lingua_friends', JSON.stringify(fs2));
-      renderFriends();
-    });
-  });
-}
-document.getElementById('friendAdd').addEventListener('click', function(){
-  const n = prompt('اسم صاحبتك؟');
-  if(n && n.trim()){
-    const fs = getFriends();
-    fs.push(n.trim().slice(0,20));
-    localStorage.setItem('lingua_friends', JSON.stringify(fs));
-    renderFriends();
-    toast('انضمت '+n.trim()+' لصحابك 💞');
-  }
-});
-renderFriends();
+/* v6 manual friends removed in v11 - invite-only real friends now (see account hub) */
 
 /* ================= v6: fun games (تلبيس/طبخ/بيوت/كورة) ================= */
 const FUN_ITEMS = {
