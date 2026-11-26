@@ -10023,9 +10023,10 @@ window.KM_POOL = [
     answered: S.answered, correct: S.correct, done: S.done, ms: S.ms, t: Date.now() }; }
   function track(){ if(S.chan){ try { S.chan.track(me()); } catch(e){} } }
 
-  function connect(code, isHost){
+  function connect(code, isHost, preserve){
     if(!S.uid) S.uid = uid();
-    S.code = code; S.host = isHost; S.st = 'lobby';
+    S.code = code; S.host = isHost;
+    if(!preserve) S.st = 'lobby';
     S.chan = sb.channel('study-' + code, { config: { presence: { key: S.uid } } });
     var myChan = S.chan;
     S.chan.on('presence', { event: 'sync' }, function(){
@@ -10059,10 +10060,14 @@ window.KM_POOL = [
     });
     S.chan.subscribe(function(status){
       if(S.chan !== myChan) return;
-      if(status === 'SUBSCRIBED'){ S.retry = 0; track(); if(S.st === 'lobby') renderLobby(); }
-      if(status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED'){
+      if(status === 'SUBSCRIBED'){
+        S.retry = 0; track();
+        if(S.st === 'lobby') renderLobby();
+        else if(S.st === 'playing') renderQ();
+      }
+      if(status === 'CHANNEL_ERROR' || status === 'TIMED_OUT'){
         if(S.retry++ < 4){
-          setTimeout(function(){ if(S.chan === myChan && S.code) connect(S.code, S.host); }, 2500 * S.retry);
+          setTimeout(function(){ if(S.chan === myChan && S.code) connect(S.code, S.host, true); }, 2500 * S.retry);
         }
       }
     });
