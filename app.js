@@ -2396,7 +2396,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['places','🏛️','أماكن'],['premium','💎','بريميوم'],['quotes','🎬','اقتباسات'],['ai','🤖','لمى'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
+  ['map','🪜','مسار التعلم'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['places','🏛️','أماكن'],['premium','💎','بريميوم'],['quotes','🎬','اقتباسات'],['ai','🤖','لمى'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
 ];
 
 /* ================= v16: free books library ================= */
@@ -5582,4 +5582,239 @@ gbkRender();
   }
   btn.addEventListener('click',function(){ isOn()?disable():enable(); });
   render();
+})();
+
+/* ================= v37: Duolingo-style learning path ================= */
+(function(){
+  var PATH_UNITS = ['family','colors','animals','time','school','feelings','food2','places2','transport','sports','work','weather2','health','tech','nature','travel'];
+  var LIDX = {en:0, fr:1, de:2, zh:3, ko:4};
+  var TTS = {en:'en-US', fr:'fr-FR', de:'de-DE', zh:'zh-CN', ko:'ko-KR'};
+  var SENTS = {
+    en: [['I','love','learning','languages'],['How','are','you','today'],['Thank','you','very','much'],['Good','morning','my','friend'],['Where','is','the','library']],
+    fr: [['Je','suis','très','content'],['Comment','ça','va'],['Merci','beaucoup','mon','ami'],['Bonjour','tout','le','monde'],['Où','est','la','gare']],
+    de: [['Ich','lerne','gern','Deutsch'],['Wie','geht','es','dir'],['Danke','sehr','mein','Freund'],['Guten','Morgen','alle','zusammen'],['Wo','ist','der','Bahnhof']],
+    zh: [['我','爱','学习','语言'],['你','好','吗'],['非常','谢谢','你'],['早上好','朋友'],['图书馆','在','哪里']],
+    ko: [['저는','언어를','배워요'],['잘','지내요'],['정말','고마워요'],['좋은','아침이에요'],['도서관이','어디예요']]
+  };
+  var lang = 'en';
+  function escH(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function shuf(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function store(){ try{ return JSON.parse(localStorage.getItem('lingua_path_'+lang))||{}; }catch(e){ return {}; } }
+  function saveS(s){ try{ localStorage.setItem('lingua_path_'+lang, JSON.stringify(s)); }catch(e){} }
+  function unitDone(s,key){ var a=s[key]||[]; return !!(a[0]&&a[1]&&a[2]); }
+  function unitOpen(s,u){ return u===0 || unitDone(s, PATH_UNITS[u-1]); }
+  function say(t){ try{ var u=new SpeechSynthesisUtterance(t.replace(/ *\(.*?\)/g,'')); u.lang=TTS[lang]; u.rate=.85; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){} }
+  function norm(s){ return String(s).toLowerCase().trim().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ß/g,'ss').replace(/[.!?,؛،'’]/g,'').replace(/\s+/g,' '); }
+  function badge(name){
+    try{ var b=JSON.parse(localStorage.getItem('lingua_badges'))||[]; if(b.indexOf(name)<0){ b.push(name); localStorage.setItem('lingua_badges', JSON.stringify(b)); } }catch(e){}
+  }
+
+  function renderPath(){
+    var s = store();
+    var doneCount = PATH_UNITS.filter(function(k){ return unitDone(s,k); }).length;
+    var html = '<div class="map-bar"><i style="width:'+(doneCount/PATH_UNITS.length*100)+'%"></i></div>'
+      + '<div class="path-count">🏅 '+doneCount+' / '+PATH_UNITS.length+' وحدة</div>';
+    PATH_UNITS.forEach(function(key,u){
+      var th = THEMES[key]; if(!th) return;
+      var st = s[key]||[false,false,false];
+      var done = unitDone(s,key), open = unitOpen(s,u);
+      var dots = [0,1,2].map(function(i){ return '<i class="'+(st[i]?'on':'')+'"></i>'; }).join('');
+      html += '<div class="pu-row '+(u%2?'r':'l')+'">'
+        + '<button class="pu-node '+(done?'done':open?'open':'locked')+'" data-punit="'+u+'"'+(open?'':' disabled')+'>'
+        + '<span>'+(done?'🏅':(open?th.rows[0][6]:'🔒'))+'</span></button>'
+        + '<div class="pu-info"><b>'+escH(th.name)+'</b><span class="pu-dots">'+dots+'</span></div></div>';
+      if(open && !done){
+        html += '<div class="pu-lessons">'+[0,1,2].map(function(l){
+          var lopen = l===0 || st[l-1];
+          return '<button class="pl-btn '+(st[l]?'done':lopen?'open':'locked')+'" data-ulesson="'+u+':'+l+'"'+(lopen?'':' disabled')+'>'
+            +(st[l]?'⭐':(lopen?'▶':'🔒'))+' درس '+(l+1)+'</button>';
+        }).join('')+'</div>';
+      }
+    });
+    document.getElementById('mapPath').innerHTML = html;
+  }
+
+  /* ---- lesson engine ---- */
+  var LS = null;
+  var overlay, plBody, plBar, plHearts;
+  function mkMcq(w, words, dir){
+    var others = shuf(words.filter(function(x){ return x!==w; })).slice(0,3);
+    var opts = shuf([w].concat(others));
+    return {type:'mcq', dir:dir, w:w, opts:opts};
+  }
+  function mkListen(w, words){
+    var others = shuf(words.filter(function(x){ return x!==w; })).slice(0,3);
+    return {type:'listen', w:w, opts:shuf([w].concat(others))};
+  }
+  function mkType(w){ return {type:'type', w:w}; }
+  function mkOrder(ui){ var s = SENTS[lang][ui % SENTS[lang].length]; return {type:'order', tiles:shuf(s), ans:s, picked:[]}; }
+  function mkMatch(ws){ return {type:'match', pairs:ws, f:shuf(ws), a:shuf(ws), sel:null, got:0}; }
+
+  function startLesson(ui, li){
+    var key = PATH_UNITS[ui], th = THEMES[key];
+    var words = th.rows.slice(li*10, li*10+10).map(function(r){ return {f:r[LIDX[lang]], a:r[5], e:r[6]}; });
+    var exs = [mkMcq(words[0],words), mkMcq(words[1],words), mkListen(words[2],words)];
+    exs.push((lang==='zh'||lang==='ko') ? mkListen(words[3],words) : mkType(words[3]));
+    exs.push(mkOrder(ui));
+    exs.push(mkMatch(words.slice(4,8)));
+    LS = {ui:ui, li:li, key:key, exs:exs, i:0, hearts:5, xp:0};
+    overlay.classList.add('show');
+    document.body.style.overflow='hidden';
+    renderEx();
+  }
+  function drawTop(){
+    plBar.style.width = (LS.i/LS.exs.length*100)+'%';
+    plHearts.textContent = '❤️'.repeat(LS.hearts)+'🖤'.repeat(5-LS.hearts);
+  }
+  function correct(){ LS.xp+=10; if(window.awardPoints) awardPoints(10,'تمرين المسار 🪜'); }
+  function advance(delay){
+    setTimeout(function(){
+      LS.i++;
+      if(LS.i>=LS.exs.length) return endLesson(true);
+      renderEx();
+    }, delay||900);
+  }
+  function renderEx(){
+    drawTop();
+    var ex = LS.exs[LS.i];
+    if(ex.type==='mcq' && ex.dir==='f2a'){
+      plBody.innerHTML = '<div class="pl-q">إيه معنى <b class="pl-w">'+escH(ex.w.e)+' '+escH(ex.w.f)+'</b>؟</div><button class="pl-say" id="plSay">🔊 اسمعيها</button>'
+        + '<div class="pl-opts">'+ex.opts.map(function(o,i){ return '<button class="pl-opt" data-o="'+i+'">'+escH(o.a)+'</button>'; }).join('')+'</div>';
+      document.getElementById('plSay').addEventListener('click', function(){ say(ex.w.f); });
+      bindOpts(ex.opts.indexOf(ex.w));
+    } else if(ex.type==='mcq'){
+      plBody.innerHTML = '<div class="pl-q">اختاري ترجمة <b class="pl-w">'+escH(ex.w.a)+'</b></div>'
+        + '<div class="pl-opts">'+ex.opts.map(function(o,i){ return '<button class="pl-opt" data-o="'+i+'">'+escH(o.e)+' '+escH(o.f)+'</button>'; }).join('')+'</div>';
+      bindOpts(ex.opts.indexOf(ex.w));
+    } else if(ex.type==='listen'){
+      plBody.innerHTML = '<div class="pl-q">اسمعي واختاري الكلمة الصح 🎧</div><button class="pl-say big" id="plSay">🔊</button>'
+        + '<div class="pl-opts">'+ex.opts.map(function(o,i){ return '<button class="pl-opt" data-o="'+i+'">'+escH(o.f)+'</button>'; }).join('')+'</div>';
+      document.getElementById('plSay').addEventListener('click', function(){ say(ex.w.f); });
+      setTimeout(function(){ say(ex.w.f); }, 300);
+      bindOpts(ex.opts.indexOf(ex.w));
+    } else if(ex.type==='type'){
+      plBody.innerHTML = '<div class="pl-q">اكتبي ترجمة <b class="pl-w">'+escH(ex.w.a)+'</b> بالحروف اللاتينية ✍️</div>'
+        + '<input id="plIn" class="pl-in" type="text" autocomplete="off" autocapitalize="none" placeholder="اكتبي هنا..." style="text-align:center">'
+        + '<button class="btn pl-check" id="plCheck">تحققي ✓</button><div class="pl-fb" id="plFb"></div>';
+      var inp=document.getElementById('plIn'); inp.focus();
+      document.getElementById('plCheck').addEventListener('click', check);
+      inp.addEventListener('keydown', function(e){ if(e.key==='Enter') check(); });
+      function check(){
+        if(norm(inp.value)===norm(ex.w.f.replace(/ *\(.*?\)/g,''))){ correct(); document.getElementById('plFb').innerHTML='<span class="ok">صح! 🎉</span>'; advance(700); }
+        else { loseHeart(); document.getElementById('plFb').innerHTML='<span class="no">الصح: '+escH(ex.w.f)+'</span>'; if(LS.hearts>0) advance(1400); }
+      }
+    } else if(ex.type==='order'){
+      plBody.innerHTML = '<div class="pl-q">رتّبي الجملة 🧩</div><div class="pl-ans" id="plAns"></div>'
+        + '<div class="pl-tiles" id="plTiles">'+ex.tiles.map(function(t,i){ return '<button class="pl-tile" data-t="'+i+'">'+escH(t)+'</button>'; }).join('')+'</div>'
+        + '<button class="btn pl-check" id="plCheck">تحققي ✓</button><div class="pl-fb" id="plFb"></div>';
+      var ans=document.getElementById('plAns'), tiles=document.getElementById('plTiles');
+      tiles.addEventListener('click', function(e){
+        var b=e.target.closest('.pl-tile'); if(!b) return;
+        ex.picked.push(ex.tiles[+b.dataset.t]); b.remove();
+        ans.innerHTML=ex.picked.map(function(t,i){ return '<button class="pl-tile in" data-p="'+i+'">'+escH(t)+'</button>'; }).join('');
+      });
+      ans.addEventListener('click', function(e){
+        var b=e.target.closest('.pl-tile'); if(!b) return;
+        var t=ex.picked.splice(+b.dataset.p,1)[0];
+        b.remove();
+        tiles.innerHTML += '<button class="pl-tile" data-t="'+ex.tiles.indexOf(t)+'">'+escH(t)+'</button>';
+      });
+      document.getElementById('plCheck').addEventListener('click', function(){
+        if(ex.picked.join('|')===ex.ans.join('|')){ correct(); document.getElementById('plFb').innerHTML='<span class="ok">صح! 🎉</span>'; advance(700); }
+        else { loseHeart(); document.getElementById('plFb').innerHTML='<span class="no">الترتيب الصح: '+escH(ex.ans.join(' '))+'</span>'; if(LS.hearts>0) advance(1600); }
+      });
+    } else if(ex.type==='match'){
+      plBody.innerHTML = '<div class="pl-q">وصّلي كل كلمة بمعناها 🔗</div><div class="pl-match"><div class="pm-col">'
+        + ex.f.map(function(w,i){ return '<button class="pl-opt pm-f" data-f="'+i+'">'+escH(w.f)+'</button>'; }).join('')
+        + '</div><div class="pm-col">'
+        + ex.a.map(function(w,i){ return '<button class="pl-opt pm-a" data-a="'+i+'">'+escH(w.a)+'</button>'; }).join('')
+        + '</div></div><div class="pl-fb" id="plFb"></div>';
+      plBody.querySelector('.pl-match').addEventListener('click', function(e){
+        var b=e.target.closest('.pl-opt'); if(!b||b.classList.contains('got')) return;
+        if(b.dataset.f!==undefined){
+          plBody.querySelectorAll('.pm-f').forEach(function(x){x.classList.remove('sel');});
+          b.classList.add('sel'); ex.sel=ex.f[+b.dataset.f];
+        } else {
+          if(!ex.sel) return;
+          var w=ex.a[+b.dataset.a];
+          if(w===ex.sel){
+            b.classList.add('got'); plBody.querySelectorAll('.pm-f').forEach(function(x){ if(ex.f[+x.dataset.f]===w){ x.classList.add('got'); x.classList.remove('sel'); } });
+            ex.sel=null; ex.got++;
+            if(ex.got===ex.pairs.length){ correct(); advance(700); }
+          } else {
+            loseHeart(); b.classList.add('no1'); setTimeout(function(){ b.classList.remove('no1'); },500);
+            if(LS.hearts<=0) return;
+          }
+        }
+      });
+    }
+  }
+  function bindOpts(correctIdx){
+    plBody.querySelectorAll('.pl-opt').forEach(function(b){
+      b.addEventListener('click', function(){
+        if(b.classList.contains('got')||b.classList.contains('no1')) return;
+        if(+b.dataset.o===correctIdx){ b.classList.add('got'); correct(); advance(700); }
+        else {
+          b.classList.add('no1'); loseHeart();
+          plBody.querySelectorAll('.pl-opt')[correctIdx].classList.add('got');
+          if(LS.hearts>0) advance(1300);
+        }
+      });
+    });
+  }
+  function loseHeart(){
+    LS.hearts--; drawTop();
+    if(LS.hearts<=0){ setTimeout(function(){ endLesson(false); }, 700); }
+  }
+  function endLesson(won){
+    plBar.style.width='100%';
+    if(won){
+      var s=store(); var st=s[LS.key]||[false,false,false]; st[LS.li]=true; s[LS.key]=st; saveS(s);
+      if(window.awardPoints) awardPoints(20,'إكمال درس 🪜');
+      var unitComplete = st[0]&&st[1]&&st[2];
+      var bHtml='';
+      if(unitComplete){
+        var nm=THEMES[LS.key].name;
+        badge(nm);
+        if(window.awardPoints) awardPoints(30,'وسام وحدة 🏅');
+        bHtml='<div class="pl-badge">🏅<div>وسام جديد!<br><b>'+escH(nm)+'</b></div></div>';
+      }
+      plBody.innerHTML='<div class="pl-end"><div class="pl-star">🌟</div><h3>درس كامل!</h3><p>+'+(LS.xp+20)+' نقطة</p>'+bHtml
+        +'<button class="btn pl-check" id="plDone">كمّلي 💪</button></div>';
+      if(window.refreshDash) refreshDash();
+      document.getElementById('plDone').addEventListener('click', closeLesson);
+    } else {
+      plBody.innerHTML='<div class="pl-end"><div class="pl-star">💔</div><h3>القلوب خلصت</h3><p>معلش، المحاولة أهم من النتيجة — جربي تاني</p>'
+        +'<button class="btn pl-check" id="plRetry">🔁 أعيدي الدرس</button> <button class="btn pl-check ghost" id="plDone">خروج</button></div>';
+      document.getElementById('plRetry').addEventListener('click', function(){ startLesson(LS.ui, LS.li); });
+      document.getElementById('plDone').addEventListener('click', closeLesson);
+    }
+  }
+  function closeLesson(){
+    overlay.classList.remove('show');
+    document.body.style.overflow='';
+    renderPath();
+  }
+
+  /* ---- wire up (override old map) ---- */
+  overlay=document.getElementById('plOverlay'); plBody=document.getElementById('plBody');
+  plBar=document.getElementById('plBar'); plHearts=document.getElementById('plHearts');
+  if(!overlay) return;
+  document.getElementById('plClose').addEventListener('click', closeLesson);
+  var tabs=document.getElementById('mapTabs');
+  tabs.querySelectorAll('.tab').forEach(function(t){
+    var c=t.cloneNode(true); t.replaceWith(c);
+    if(c.dataset.mlang===lang) c.classList.add('active'); else c.classList.remove('active');
+    c.addEventListener('click', function(){
+      tabs.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active');});
+      c.classList.add('active'); lang=c.dataset.mlang; renderPath();
+    });
+  });
+  document.getElementById('mapPath').addEventListener('click', function(e){
+    var lb=e.target.closest('[data-ulesson]');
+    if(lb && !lb.disabled){ var p=lb.dataset.ulesson.split(':'); startLesson(+p[0], +p[1]); return; }
+    var nb=e.target.closest('[data-punit]');
+    if(nb && !nb.disabled){ /* scroll lessons into view */ var row=nb.closest('.pu-row'); var ls=row&&row.nextElementSibling; if(ls&&ls.classList.contains('pu-lessons')) ls.scrollIntoView({behavior:'smooth', block:'center'}); }
+  });
+  renderPath();
 })();

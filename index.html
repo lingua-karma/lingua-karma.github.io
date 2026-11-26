@@ -846,6 +846,63 @@
   .rem-btn.on{background:linear-gradient(120deg,#4ade80,#16a34a);color:#052e12}
 }
 </style>
+<style>
+/* v37: learning path + lesson overlay */
+.path-count{text-align:center;color:var(--gold);font-weight:800;margin:10px 0 18px;font-size:.95rem}
+.pu-row{display:flex;align-items:center;gap:14px;max-width:340px;margin:0 auto 4px;position:relative}
+.pu-row.r{flex-direction:row-reverse}
+.pu-row::after{content:'';position:absolute;top:100%;inset-inline-start:50%;width:2px;height:14px;background:linear-gradient(180deg,rgba(212,175,55,.5),transparent)}
+.pu-row:last-of-type::after{display:none}
+.pu-node{width:64px;height:64px;border-radius:50%;border:3px solid rgba(212,175,55,.45);background:radial-gradient(circle at 30% 25%,#2b2140,#151024);font-size:1.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:0 0 auto;transition:transform .15s}
+.pu-node.open{border-color:var(--gold);box-shadow:0 0 18px rgba(212,175,55,.35)}
+.pu-node.open:active{transform:scale(.94)}
+.pu-node.done{border-color:#4ade80;box-shadow:0 0 14px rgba(74,222,128,.3)}
+.pu-node.locked{opacity:.45;filter:grayscale(.7);cursor:default}
+.pu-info b{display:block;font-size:.95rem}
+.pu-dots i{display:inline-block;width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);margin-inline-end:4px}
+.pu-dots i.on{background:var(--gold)}
+.pu-lessons{display:flex;gap:8px;justify-content:center;margin:2px 0 14px}
+.pl-btn{padding:8px 16px;border-radius:999px;border:1px solid rgba(212,175,55,.35);background:rgba(255,255,255,.05);color:#fff;font-family:inherit;font-size:.85rem;cursor:pointer}
+.pl-btn.open{border-color:var(--gold);background:linear-gradient(135deg,rgba(212,175,55,.25),rgba(212,175,55,.08))}
+.pl-btn.done{border-color:#4ade80;background:rgba(74,222,128,.12)}
+.pl-btn.locked{opacity:.4;cursor:default}
+.pl-overlay{position:fixed;inset:0;z-index:9500;background:#0d0a18;display:none;flex-direction:column;padding:14px 16px;overflow-y:auto}
+.pl-overlay.show{display:flex}
+.pl-top{display:flex;align-items:center;gap:12px;max-width:560px;width:100%;margin:0 auto 18px}
+.pl-x{background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;opacity:.7}
+.pl-prog{flex:1;height:12px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.pl-prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#f0d98c);border-radius:99px;transition:width .3s}
+.pl-hearts{font-size:.9rem;letter-spacing:1px}
+.pl-body{max-width:560px;width:100%;margin:0 auto;flex:1}
+.pl-q{font-size:1.15rem;font-weight:800;text-align:center;margin:18px 0 16px;line-height:1.8}
+.pl-w{color:var(--gold)}
+.pl-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pl-opt{padding:16px 12px;border-radius:16px;border:1.5px solid rgba(212,175,55,.3);background:rgba(255,255,255,.04);color:#fff;font-family:inherit;font-size:1rem;cursor:pointer}
+.pl-opt.got{border-color:#4ade80;background:rgba(74,222,128,.15)}
+.pl-opt.no1{border-color:#f87171;background:rgba(248,113,113,.12)}
+.pl-opt.sel{border-color:var(--gold);background:rgba(212,175,55,.18)}
+.pl-say{display:block;margin:0 auto 14px;padding:10px 20px;border-radius:999px;border:1px solid rgba(212,175,55,.4);background:rgba(255,255,255,.05);color:#fff;font-family:inherit;cursor:pointer}
+.pl-say.big{font-size:1.6rem;padding:16px 28px;border-radius:20px}
+.pl-in{display:block;width:100%;max-width:340px;margin:0 auto 14px;padding:14px 18px;border-radius:16px;border:1.5px solid rgba(212,175,55,.35);background:rgba(255,255,255,.06);color:#fff;font-family:inherit;font-size:1.1rem}
+.pl-check{display:block;margin:16px auto 0;min-width:180px}
+.pl-check.ghost{background:rgba(255,255,255,.08)}
+.pl-fb{text-align:center;min-height:28px;margin-top:12px;font-weight:700}
+.pl-fb .ok{color:#4ade80}
+.pl-fb .no{color:#f87171}
+.pl-ans{min-height:52px;border-bottom:2px solid rgba(212,175,55,.4);margin:0 auto 14px;max-width:420px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;padding:6px}
+.pl-tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:420px;margin:0 auto}
+.pl-tile{padding:10px 16px;border-radius:12px;border:1.5px solid rgba(212,175,55,.35);background:rgba(255,255,255,.06);color:#fff;font-family:inherit;font-size:1rem;cursor:pointer}
+.pl-tile.in{border-color:var(--gold)}
+.pl-match{display:flex;gap:14px;justify-content:center}
+.pm-col{display:flex;flex-direction:column;gap:10px;flex:1;max-width:230px}
+.pl-end{text-align:center;padding-top:40px}
+.pl-star{font-size:4rem}
+.pl-end h3{color:var(--gold);margin:12px 0 4px}
+.pl-end p{opacity:.8;margin-bottom:14px}
+.pl-badge{display:inline-flex;align-items:center;gap:10px;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.45);border-radius:18px;padding:12px 18px;font-size:1.5rem;margin-bottom:14px}
+.pl-badge div{font-size:.9rem;text-align:start}
+.pl-badge b{color:var(--gold)}
+</style>
 </head>
 <body>
 
@@ -2120,8 +2177,8 @@
 
 <!-- ===================== v13: LEARNING MAP ===================== -->
 <section id="map">
-  <h2 class="sec-title">✦ خريطة رحلتك ✦</h2>
-  <p class="sec-sub">طريقك في كل لغة — خلصي مستوى عشان يتفتح اللي بعده 🗺️✨</p>
+  <h2 class="sec-title">✦ مسار التعلم ✦</h2>
+  <p class="sec-sub">وحدة ورا وحدة، دروس قصيرة وتمارين متنوعة — قلوب، نقاط، وأوسمة 🪜✨</p>
   <div class="tabs lang-tabs" id="mapTabs">
     <button class="tab lang-tab active" data-mlang="en"><span class="lf">🇬🇧</span><span class="ln">إنجليزي</span></button>
     <button class="tab lang-tab" data-mlang="fr"><span class="lf">🇫🇷</span><span class="ln">فرنسي</span></button>
@@ -2924,6 +2981,10 @@
 .pz-score{font-size:.78rem;color:var(--muted);margin-top:10px}
 
 </style>
-<script src="./app.js?v=36" defer></script>
+<div id="plOverlay" class="pl-overlay">
+  <div class="pl-top"><button id="plClose" class="pl-x">✕</button><div class="pl-prog"><i id="plBar"></i></div><div class="pl-hearts" id="plHearts"></div></div>
+  <div id="plBody" class="pl-body"></div>
+</div>
+<script src="./app.js?v=37" defer></script>
 </body>
 </html>
