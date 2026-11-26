@@ -5545,3 +5545,41 @@ gbkRender();
   });
 })();
 
+
+/* ================= v36: daily reminder opt-in (web push) ================= */
+(function(){
+  var VAPID_PUBLIC="BIoJA8cl-2Rx9ewmvgRwwBx7otSdTIaZO6IITCfCFRRtKjTdZ6XxsQn4rpxoMoE_aQjnNgo3Pf1ewukgkY_01pk";
+  var SUPA='https://yzzlgalxjaaevmytdazf.supabase.co';
+  var ANON='sb_publishable_EmbKVWREHSs3sZ_nBKFyqg_zxv3Z38-';
+  var btn=document.getElementById('remToggle'); if(!btn) return;
+  var KEY='lingua_push_on';
+  function isOn(){ return localStorage.getItem(KEY)==='1'; }
+  function render(){ btn.textContent=isOn()?'إيقاف التذكير 🔕':'فعّلي التذكير 🔔'; btn.classList.toggle('on',isOn()); }
+  function b64ToU8(b){ var p='='.repeat((4-b.length%4)%4); var raw=atob((b+p).replace(/-/g,'+').replace(/_/g,'/')); var a=new Uint8Array(raw.length); for(var i=0;i<raw.length;i++)a[i]=raw.charCodeAt(i); return a; }
+  async function enable(){
+    if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window)){ toast('المتصفح ده مش بيدعم الإشعارات 🥺'); return; }
+    var perm=await Notification.requestPermission();
+    if(perm!=='granted'){ toast('الإشعارات متقفولة من المتصفح — فعّليها من إعدادات المتصفح الأول'); return; }
+    try{
+      var reg=await navigator.serviceWorker.ready;
+      var sub=await reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:b64ToU8(VAPID_PUBLIC)});
+      var j=sub.toJSON();
+      var r=await fetch(SUPA+'/rest/v1/push_subscriptions',{method:'POST',headers:{'apikey':ANON,'Authorization':'Bearer '+ANON,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},body:JSON.stringify({endpoint:j.endpoint,p256dh:j.keys.p256dh,auth:j.keys.auth})});
+      if(!r.ok) throw 0;
+      localStorage.setItem(KEY,'1'); render(); toast('تمام! هنفتكرك كل يوم ٦ مساءً 💜');
+    }catch(e){ toast('حصلت مشكلة — جربي تاني 🥺'); }
+  }
+  async function disable(){
+    try{
+      var reg=await navigator.serviceWorker.ready;
+      var sub=await reg.pushManager.getSubscription();
+      if(sub){
+        await fetch(SUPA+'/rest/v1/push_subscriptions?endpoint=eq.'+encodeURIComponent(sub.endpoint),{method:'DELETE',headers:{'apikey':ANON,'Authorization':'Bearer '+ANON}});
+        await sub.unsubscribe();
+      }
+    }catch(e){}
+    localStorage.setItem(KEY,'0'); render(); toast('وقّفنا التذكير — تقدري ترجّعيه أي وقت');
+  }
+  btn.addEventListener('click',function(){ isOn()?disable():enable(); });
+  render();
+})();

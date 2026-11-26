@@ -840,6 +840,10 @@
 @media (max-width:768px){
   *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
   .fw-card,.menu-card,.theme-card,.book-card,.story-card{content-visibility:auto;contain-intrinsic-size:120px}
+  .rem-card{max-width:420px;margin:26px auto 0;background:var(--card);border:1px solid rgba(var(--goldA),.3);border-radius:22px;padding:22px;text-align:center}
+  .rem-t{font-weight:800;font-size:1.1rem;color:var(--gold);margin-bottom:8px}
+  .rem-s{font-size:.85rem;opacity:.75;margin-bottom:14px;line-height:1.7}
+  .rem-btn.on{background:linear-gradient(120deg,#4ade80,#16a34a);color:#052e12}
 }
 </style>
 </head>
@@ -2554,6 +2558,11 @@
     <button class="tab lang-tab" data-ui="en"><span class="lf">🇬🇧</span><span class="ln">English</span></button>
   </div>
   <p class="sec-sub" style="font-size:.8rem">الترجمة بتغطي القوائم والعناوين الرئيسية — المحتوى التعليمي يفضل بالعربية 📚</p>
+  <div class="rem-card">
+    <div class="rem-t">🔔 ذكّريني أراجع كل يوم</div>
+    <p class="rem-s">إشعار لطيف كل يوم الساعة ٦ مساءً بيفتّح تحدّي الـ٣٠ يوم على طول — وتقدري توقّفيه في أي وقت من هنا.</p>
+    <button class="btn rem-btn" id="remToggle">فعّلي التذكير 🔔</button>
+  </div>
 </section>
 
 <!-- ===================== v7: DRESS-UP STUDIO ===================== -->
@@ -2915,6 +2924,6 @@
 .pz-score{font-size:.78rem;color:var(--muted);margin-top:10px}
 
 </style>
-<script src="./app.js?v=35" defer></script>
+<script src="./app.js?v=36" defer></script>
 </body>
 </html>
