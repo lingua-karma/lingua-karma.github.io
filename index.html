@@ -2166,6 +2166,26 @@
   <canvas class="game-canvas" id="rnCanvas" height="300"></canvas>
   <button class="game-start" id="rnStart">▶️ ابدئي</button>
 </section>
+<section id="fashion">
+  <h2 class="sec-title">✦ ستايل وموضة ✦</h2>
+  <p class="sec-sub">نصايح ستايل + كلمات الموضة بكل اللغات 👠✨</p>
+  <div class="fash-grid" id="fashGrid"></div>
+  <h3 style="text-align:center;font-size:.95rem;color:var(--gold2);margin:16px 0 10px">كلمات موضة 👗</h3>
+  <div class="tabs lang-tabs lib-langs" id="fashLangs"></div>
+  <div class="food-words" id="fashWords"></div>
+</section>
+<section id="trip">
+  <h2 class="sec-title">✦ رحلة افتراضية ✦</h2>
+  <p class="sec-sub">لفّي العالم من مكانك — أشهر المعالم بكل دولة ✈️🌍</p>
+  <div class="tabs lang-tabs lib-langs" id="tripLangs"></div>
+  <div class="trip-grid" id="tripGrid"></div>
+</section>
+<section id="quotes">
+  <h2 class="sec-title">✦ اقتباسات من السينما ✦</h2>
+  <p class="sec-sub">أشهر الجمل السينمائية وترجمتها 🎬</p>
+  <div id="quotesList"></div>
+</section>
+
 
 
 
@@ -2619,6 +2639,22 @@
 .game-hud{display:flex;justify-content:space-between;max-width:640px;margin:8px auto 6px;font-size:.82rem;color:var(--muted)}
 .game-hud b{color:var(--gold2)}
 .game-start{display:block;margin:10px auto;background:linear-gradient(135deg,var(--gold),#b8860b);border:none;border-radius:999px;padding:10px 28px;font-weight:800;font-size:.9rem;cursor:pointer;color:#1a1225;font-family:inherit}
+
+
+/* v23: fashion, trip, quotes */
+.fash-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:640px;margin:0 auto}
+.fash-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px}
+.fash-card h4{margin:0 0 6px;font-size:.88rem;color:var(--gold2)}
+.fash-card p{margin:0;font-size:.78rem;color:var(--muted);line-height:1.55}
+.trip-grid{display:grid;grid-template-columns:1fr;gap:10px;max-width:640px;margin:0 auto}
+.trip-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;display:flex;gap:12px;align-items:flex-start}
+.trip-flag{font-size:2rem;line-height:1}
+.trip-card h4{margin:0 0 4px;font-size:.95rem;color:var(--gold2)}
+.trip-card p{margin:0;font-size:.79rem;color:var(--muted);line-height:1.55}
+.quote-card{max-width:640px;margin:0 auto 10px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px}
+.quote-text{font-size:1rem;font-weight:700;line-height:1.6}
+.quote-tr{font-size:.82rem;color:var(--muted);margin-top:6px}
+.quote-src{font-size:.7rem;color:var(--gold2);margin-top:8px;font-weight:700}
 
 </style>
 <script>
@@ -5018,7 +5054,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
+  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['quotes','🎬','اقتباسات'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
 ];
 
 /* ================= v16: free books library ================= */
@@ -5651,6 +5687,123 @@ const MENU = [
       cancelAnimationFrame(rraf); rloop();
     });
     rfit();
+  }
+})();
+
+
+/* ================= v23: fashion, virtual trip, movie quotes ================= */
+(function(){
+  function esc(t){ var d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+  /* ---- fashion tips ---- */
+  var TIPS=[
+    ['قاعدة التلات ألوان 🎨','متلبسيش أكتر من ٣ ألوان في نفس اللوك — اللوك البسيط هو الفخم.'],
+    ['الأسود صديقك 🖤','قطعة سوداء أساسية (بليزر أو فستان) بتشيك أي لبس في ثانية.'],
+    ['المقاس قبل المودة 📏','هدوم مظبوطة على مقاسك أحسن من أغلى براند مقاسه غلط.'],
+    ['إكسسوار واحد مميز ✨','سلسلة أو شنطة أو ساعة مميزة — واحدة بس تكفي.'],
+    ['الأبيض والبيج 🤍','الألوان المحايدة بتداري وبتديكي شكل غني وهادي.'],
+    ['راحتك أولاً 👟','لو مش مرتاحة في اللبس مش هتبقي واثقة — والثقة هي الستايل الحقيقي.']
+  ];
+  var fg=document.getElementById('fashGrid');
+  if(fg){
+    fg.innerHTML = TIPS.map(function(t){ return '<div class="fash-card"><h4>'+t[0]+'</h4><p>'+t[1]+'</p></div>'; }).join('');
+  }
+  /* ---- fashion words ---- */
+  var FASHW = {
+    en:[['Dress','فستان','👗'],['Shoes','جزمة','👟'],['Bag','شنطة','👜'],['Hat','برنيطة','👒'],['Jacket','جاكيت','🧥'],['Ring','خاتم','💍']],
+    fr:[['Robe','فستان','👗'],['Chaussures','جزمة','👟'],['Sac','شنطة','👜'],['Chapeau','برنيطة','👒'],['Veste','جاكيت','🧥'],['Bague','خاتم','💍']],
+    de:[['Kleid','فستان','👗'],['Schuhe','جزمة','👟'],['Tasche','شنطة','👜'],['Hut','برنيطة','👒'],['Jacke','جاكيت','🧥'],['Ring','خاتم','💍']],
+    zh:[['连衣裙 (liányīqún)','فستان','👗'],['鞋 (xié)','جزمة','👟'],['包 (bāo)','شنطة','👜'],['帽子 (màozi)','برنيطة','👒'],['夹克 (jiákè)','جاكيت','🧥'],['戒指 (jièzhi)','خاتم','💍']],
+    ko:[['드레스 (deureseu)','فستان','👗'],['신발 (sinbal)','جزمة','👟'],['가방 (gabang)','شنطة','👜'],['모자 (moja)','برنيطة','👒'],['재킷 (jaekit)','جاكيت','🧥'],['반지 (banji)','خاتم','💍']]
+  };
+  var FWNAME = {en:'إنجليزي 🇬🇧',fr:'فرنسي 🇫🇷',de:'ألماني 🇩🇪',zh:'صيني 🇨🇳',ko:'كوري 🇰🇷'};
+  var fLang='en';
+  var fl=document.getElementById('fashLangs'), fw=document.getElementById('fashWords');
+  if(fl){
+    fl.innerHTML = Object.keys(FASHW).map(function(k){
+      return '<button class="tab lang-tab'+(k===fLang?' active':'')+'" data-fl="'+k+'"><span class="ln">'+FWNAME[k]+'</span></button>';
+    }).join('');
+    function renderFashW(){
+      fw.innerHTML = FASHW[fLang].map(function(w){
+        return '<div class="fw-card"><span style="font-size:1.5rem">'+w[2]+'</span><div class="fw-t"><b>'+esc(w[0])+'</b><span>'+esc(w[1])+'</span></div><button class="fw-say" data-say="'+esc(w[0].replace(/ *\(.*?\)/,''))+'">🔊</button></div>';
+      }).join('');
+    }
+    fl.addEventListener('click', function(e){
+      var b=e.target.closest('[data-fl]'); if(!b) return;
+      fLang=b.dataset.fl;
+      fl.querySelectorAll('.lang-tab').forEach(function(t){ t.classList.toggle('active', t===b); });
+      renderFashW();
+    });
+    fw.addEventListener('click', function(e){
+      var b=e.target.closest('.fw-say'); if(!b) return;
+      try{ var u=new SpeechSynthesisUtterance(b.dataset.say); u.lang={en:'en-US',fr:'fr-FR',de:'de-DE',zh:'zh-CN',ko:'ko-KR'}[fLang]; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){}
+    });
+    renderFashW();
+  }
+  /* ---- virtual trip ---- */
+  var TRIPS = {
+    uk: {name:'بريطانيا 🇬🇧', spots:[
+      ['بيغ بن 🕰️','أشهر ساعة في العالم — برج إليزابيث في قلب لندن جنب البرلمان.'],
+      ['العجلة London Eye 🎡','عجلة عملاقة على نهر التايمز — منظر لندن كله من فوق.'],
+      ['برج لندن 🏰','قلعة عمرها ٩٠٠ سنة فيها جواهر التاج البريطاني.'],
+      ['ستونهنج 🪨','حجارة غامضة عمرها ٥٠٠٠ سنة — محدش عارف اتبنت إزاي!']]},
+    fr: {name:'فرنسا 🇫🇷', spots:[
+      ['برج إيفل 🗼','٣٣٠ متر حديد — رمز باريس وأكتر معلم بيتزار في العالم.'],
+      ['متحف اللوفر 🖼️','أكبر متحف في العالم — بيت الموناليزا.'],
+      ['قصر فرساي 👑','قصر ملوك فرنسا — قاعة المرايا الأسطورية.'],
+      ['مون سان ميشيل 🏝️','جزيرة عليها دير من العصور الوسطى — زي القصص الخيالية.']]},
+    de: {name:'ألمانيا 🇩🇪', spots:[
+      ['بوابة براندنبورج 🏛️','رمز برلين ووحدة ألمانيا.'],
+      ['قلعة نويشفانشتاين 🏰','القلعة اللي ألهمت قلعة ديزني — في جبال بافاريا.'],
+      ['كاتدرائية كولونيا ⛪','أطول كاتدرائية جوثيك — اتبنت على ٦٠٠ سنة.'],
+      ['الغابة السوداء 🌲','غابات أسطورية — موطن ساعات الكوكو وقصص جريم.']]},
+    zh: {name:'الصين 🇨🇳', spots:[
+      ['سور الصين العظيم 🧱','٢١ ألف كيلومتر — أعظم بناء في تاريخ البشرية.'],
+      ['المدينة المحرمة 🏯','قصر ٢٤ إمبراطور في قلب بكين — ٩٩٩٩ أوضة.'],
+      ['جيش التيراكوتا ⚔️','٨٠٠٠ جندي طيني مدفونين من ٢٢٠٠ سنة.'],
+      ['برج اللؤلؤة الشرقي 🌆','رمز شنغهاي الحديثة على نهر هوانجبو.']]},
+    kr: {name:'كوريا 🇰🇷', spots:[
+      ['قصر جيونج بوك 🏯','أجمل قصور أسرة جوسون — الحراس بيغيروا بزي تقليدي.'],
+      ['برج نامسان (N Seoul) 🗼','برج الحب — الأزواج بيعلقوا أقفال عليه.'],
+      ['جزيرة جيجو 🌋','جزيرة بركانية — هاواي كوريا.'],
+      ['قرية بوكشون هانوك 🏘️','بيوت كورية تقليدية عمرها ٦٠٠ سنة في وسط سول.']]}
+  };
+  var tLang='uk';
+  var tl=document.getElementById('tripLangs'), tg=document.getElementById('tripGrid');
+  if(tl){
+    tl.innerHTML = Object.keys(TRIPS).map(function(k){
+      return '<button class="tab lang-tab'+(k===tLang?' active':'')+'" data-tl="'+k+'"><span class="ln">'+TRIPS[k].name+'</span></button>';
+    }).join('');
+    function renderTrip(){
+      tg.innerHTML = TRIPS[tLang].spots.map(function(sp){
+        return '<div class="trip-card"><div class="trip-flag">'+sp[0].split(' ').pop()+'</div><div><h4>'+esc(sp[0])+'</h4><p>'+esc(sp[1])+'</p></div></div>';
+      }).join('');
+    }
+    tl.addEventListener('click', function(e){
+      var b=e.target.closest('[data-tl]'); if(!b) return;
+      tLang=b.dataset.tl;
+      tl.querySelectorAll('.lang-tab').forEach(function(t){ t.classList.toggle('active', t===b); });
+      renderTrip();
+    });
+    renderTrip();
+  }
+  /* ---- movie quotes ---- */
+  var QUOTES=[
+    ['"May the Force be with you."','القوة تكون معاكي.','Star Wars ⭐'],
+    ['"I\'ll be back."','هرجع تاني.','The Terminator 🤖'],
+    ['"To infinity and beyond!"','للمالانهاية وأبعد!','Toy Story 🚀'],
+    ['"Just keep swimming."','خلّيكي عاومة على طول (كمّلي ومتستسلميش).','Finding Nemo 🐠'],
+    ['"Hakuna Matata!"','لاش على بال (مفيش هموم).','The Lion King 🦁'],
+    ['"Why so serious?"','ليه الجدية دي كلها؟','The Dark Knight 🃏'],
+    ['"I\'m the king of the world!"','أنا ملك الدنيا!','Titanic 🚢'],
+    ['"Elementary, my dear Watson."','بديهي يا صديقي واطسون (واضحة أوي).','Sherlock Holmes 🔍'],
+    ['"There\'s no place like home."','مفيش زي البيت.','The Wizard of Oz 🌈'],
+    ['"Carpe diem. Seize the day."','عيشي يومك واقتنصي اللحظة.','Dead Poets Society 📜']
+  ];
+  var ql=document.getElementById('quotesList');
+  if(ql){
+    ql.innerHTML = QUOTES.map(function(q){
+      return '<div class="quote-card"><div class="quote-text">'+esc(q[0])+'</div><div class="quote-tr">'+esc(q[1])+'</div><div class="quote-src">'+esc(q[2])+'</div></div>';
+    }).join('');
   }
 })();
 
@@ -7425,7 +7578,7 @@ gbkRender();
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v22.0</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v23.0</div>
 <script>
 
 /* ================= v13: learning map, personality quiz, XO, korean ================= */
