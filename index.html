@@ -2132,6 +2132,22 @@
 <section id="friends">
   <h2 class="sec-title">✦ أصحابي ✦</h2>
   <p class="sec-sub">صحابك الحقيقيين — الإضافة بدعوة واتساب بس، وهم بينضموا معاكي فعلًا 👯‍♀️💜</p>
+  <style>
+    .wk-card{background:rgba(255,255,255,.045);border:1px solid rgba(212,175,55,.3);border-radius:18px;padding:16px 18px;max-width:480px;margin:0 auto 18px}
+    .wk-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .wk-head h3{color:var(--gold);margin:0;font-size:1.02rem}
+    .wk-refresh{background:rgba(255,255,255,.06);border:1px solid rgba(212,175,55,.3);border-radius:10px;color:var(--gold);cursor:pointer;padding:5px 12px;font-family:inherit;font-size:.75rem}
+    .wk-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1px solid rgba(212,175,55,.2);border-radius:14px;padding:10px 14px;margin-bottom:8px}
+    .wk-row.me{border-color:var(--gold);background:linear-gradient(135deg,rgba(212,175,55,.18),rgba(212,175,55,.06))}
+    .wk-rank{width:30px;text-align:center;font-size:1.1rem;font-weight:800;flex-shrink:0}
+    .wk-name{flex:1;font-weight:600;font-size:.92rem}
+    .wk-xp{color:var(--gold);font-size:.85rem;font-weight:700}
+    .wk-foot{text-align:center;color:var(--muted);font-size:.75rem;margin-top:8px}
+  </style>
+  <div class="wk-card">
+    <div class="wk-head"><h3>🏆 ترتيب الأسبوع</h3><button class="wk-refresh" id="weekRefresh">🔄 تحديث</button></div>
+    <div id="weekBoard"><div class="gbk-empty">بيتم التحميل... 🏆</div></div>
+  </div>
   <div id="friendsReal"><div class="gbk-empty">سجلي حسابك من قسم «حسابي» الأول، وبعدين ابعتي دعوة واتساب لصحابك — أول ما يدخلوا من اللينك هتلاقيهم هنا 💌</div></div>
 </section>
 
@@ -2990,6 +3006,6 @@
   <div class="pl-top"><button id="plClose" class="pl-x">✕</button><div class="pl-prog"><i id="plBar"></i></div><div class="pl-hearts" id="plHearts"></div></div>
   <div id="plBody" class="pl-body"></div>
 </div>
-<script src="./app.js?v=43" defer></script>
+<script src="./app.js?v=44" defer></script>
 </body>
 </html>

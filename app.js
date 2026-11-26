@@ -5906,3 +5906,113 @@ gbkRender();
   });
   renderPath();
 })();
+
+
+/* ================= v41: Weekly friends leaderboard (ترتيب الأسبوع) ================= */
+(function(){
+  var SUPA_URL = 'https://yzzlgalxjaaevmytdazf.supabase.co';
+  var SUPA_KEY = 'sb_publishable_EmbKVWREHSs3sZ_nBKFyqg_zxv3Z38-';
+  var wsb = null, wme = null, wTimer = null;
+  function wEsc(x){ return String(x == null ? '' : x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  /* Monday (UTC) of the current week, 'YYYY-MM-DD' */
+  function wkStart(){
+    var d = new Date();
+    var day = (d.getUTCDay() + 6) % 7; /* 0 = Monday */
+    d.setUTCDate(d.getUTCDate() - day);
+    return d.toISOString().slice(0, 10);
+  }
+  function wkLoad(){
+    try { var w = JSON.parse(localStorage.getItem('lingua_weekxp') || 'null'); if(w && w.week === wkStart()) return w; } catch(e){}
+    return {week: wkStart(), xp: 0};
+  }
+  function wkSave(w){ try { localStorage.setItem('lingua_weekxp', JSON.stringify(w)); } catch(e){} }
+
+  function queueWeekSync(){
+    if(!wme) return;
+    clearTimeout(wTimer);
+    wTimer = setTimeout(function(){
+      var w = wkLoad();
+      wsb.from('profiles').update({week_xp: w.xp, week_start: w.week}).eq('id', wme.id).then(function(){});
+    }, 2500);
+  }
+  /* wrap awardPoints (chained after the accounts wrapper) */
+  try {
+    var _wAward = window.awardPoints;
+    window.awardPoints = function(n, label){
+      if(typeof _wAward === 'function') _wAward(n, label);
+      var w = wkLoad(); w.xp += Math.max(0, n | 0); wkSave(w);
+      queueWeekSync();
+    };
+  } catch(e){}
+
+  var MEDALS = ['🥇','🥈','🥉'];
+  function renderWeekBoard(){
+    var el = document.getElementById('weekBoard');
+    if(!el) return;
+    if(!wme){
+      el.innerHTML = '<div class="gbk-empty">سجلي حسابك من «👑 حسابي» وشوفي ترتيب الأسبوع بينك وبين صحابك 🏆</div>';
+      return;
+    }
+    el.innerHTML = '<div class="gbk-empty">بيتم التحميل... 🏆</div>';
+    wsb.from('friendships').select('user_id,friend_id').or('user_id.eq.' + wme.id + ',friend_id.eq.' + wme.id).then(function(r){
+      if(r.error){ el.innerHTML = '<div class="gbk-empty">حصلت مشكلة — جربي تاني 💛</div>'; return; }
+      var ids = {}; ids[wme.id] = 1;
+      (r.data || []).forEach(function(f){ ids[f.user_id] = 1; ids[f.friend_id] = 1; });
+      wsb.from('profiles').select('id,display_name,week_xp,week_start').in('id', Object.keys(ids)).then(function(pr){
+        if(pr.error){ el.innerHTML = '<div class="gbk-empty">حصلت مشكلة — جربي تاني 💛</div>'; return; }
+        var cur = wkStart(), mine = wkLoad();
+        var rows = (pr.data || []).map(function(p){
+          var xp = (p.week_start === cur) ? (p.week_xp || 0) : 0;
+          if(p.id === wme.id) xp = Math.max(xp, mine.xp);
+          return {id: p.id, name: p.display_name || 'صديقة', xp: xp, me: p.id === wme.id};
+        }).sort(function(a, b){ return b.xp - a.xp; });
+        var html = '';
+        if(rows.length < 2){
+          html = '<div class="gbk-empty">لسه مفيش صحاب — ابعتي دعوة واتساب من تاب «👯 صحابي» وهتتنافسوا على ترتيب الأسبوع 🏆👯‍♀️</div>';
+        } else {
+          html = rows.map(function(p, i){
+            var medal = MEDALS[i] || ('<span style="color:var(--muted)">' + (i + 1) + '</span>');
+            return '<div class="wk-row' + (p.me ? ' me' : '') + '"><div class="wk-rank">' + medal + '</div>' +
+              '<div class="wk-name">' + wEsc(p.name) + (p.me ? ' <span style="color:var(--gold);font-size:.75rem">(انتي)</span>' : '') + '</div>' +
+              '<div class="wk-xp">💎 ' + p.xp + '</div></div>';
+          }).join('');
+        }
+        html += '<div class="wk-foot">🏆 بيتجدد كل يوم اثنين — اللي تجمع نقاط أكتر الأسبوع ده تتصدر!</div>';
+        el.innerHTML = html;
+      });
+    });
+  }
+
+  function boot(){
+    if(!window.supabase){ setTimeout(boot, 400); return; }
+    wsb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+    wsb.auth.getSession().then(function(r){
+      if(r.data && r.data.session){
+        wme = r.data.session.user;
+        /* adopt the server's weekly total if it is ahead (other device), or push our reset after rollover */
+        wsb.from('profiles').select('week_xp,week_start').eq('id', wme.id).maybeSingle().then(function(pr){
+          var w = wkLoad();
+          if(pr.data && pr.data.week_start === w.week && (pr.data.week_xp || 0) > w.xp){
+            w.xp = pr.data.week_xp; wkSave(w);
+          } else {
+            queueWeekSync();
+          }
+          renderWeekBoard();
+        });
+      } else {
+        renderWeekBoard();
+      }
+    });
+  }
+  document.getElementById('accTabs').addEventListener('click', function(e){
+    var b = e.target.closest('.tab');
+    if(b && b.dataset.at === 'friends') renderWeekBoard();
+  });
+  window.addEventListener('hashchange', function(){
+    if(location.hash === '#friends' || location.hash === '#account') renderWeekBoard();
+  });
+  var rb = document.getElementById('weekRefresh');
+  if(rb) rb.onclick = function(){ renderWeekBoard(); };
+  boot();
+})();
