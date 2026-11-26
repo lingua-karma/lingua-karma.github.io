@@ -10301,3 +10301,235 @@ window.KM_POOL = [
     }
   }, 5000);
 })();
+/* ===== v98: daily streak + gentle break-prevention reminder ===== */
+(function(){
+  'use strict';
+
+  /* ---- storage ---- */
+  var KEY = 'lingua_streak_v1';
+  var PTSKEY = 'lingua_streak_pts';
+  var NOTIFDAY = 'lingua_streak_notif_day';
+  var DISMISS = 'lingua_streak_dismiss_day';
+
+  function dstr(d){
+    var m = String(d.getMonth()+1).padStart(2,'0');
+    var day = String(d.getDate()).padStart(2,'0');
+    return d.getFullYear() + '-' + m + '-' + day;
+  }
+  function today(){ return dstr(new Date()); }
+  function yesterday(){ var d = new Date(); d.setDate(d.getDate()-1); return dstr(d); }
+
+  function load(){
+    try {
+      var s = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if(s && typeof s.count === 'number') return s;
+    } catch(e){}
+    return {count:0, last:'', best:0, days:[]};
+  }
+  function save(s){ try{ localStorage.setItem(KEY, JSON.stringify(s)); }catch(e){} }
+
+  /* normalize on load: a streak older than yesterday is broken */
+  var S = load();
+  if(S.last && S.last < yesterday() && S.count !== 0){
+    S.count = 0;
+    save(S);
+  }
+
+  function status(){
+    if(S.last === today()) return 'done';
+    if(S.last === yesterday()) return 'risk';
+    return 'fresh';
+  }
+
+  /* ---- activity hook: any points earned = today's activity ---- */
+  function lastPts(){
+    var v = parseInt(localStorage.getItem(PTSKEY) || '', 10);
+    if(isNaN(v)){ v = parseInt(localStorage.getItem('lingua_points') || '0', 10) || 0; localStorage.setItem(PTSKEY, String(v)); }
+    return v;
+  }
+  function pollPoints(){
+    try {
+      var cur = parseInt(localStorage.getItem('lingua_points') || '0', 10) || 0;
+      if(cur > lastPts()){ localStorage.setItem(PTSKEY, String(cur)); bump(); }
+      else if(cur < lastPts()){ localStorage.setItem(PTSKEY, String(cur)); }
+    } catch(e){}
+  }
+
+  function bump(){
+    var t = today();
+    if(S.last === t){ render(); return; }
+    if(S.last === yesterday()) S.count += 1; else S.count = 1;
+    S.last = t;
+    if(S.days.indexOf(t) < 0){ S.days.push(t); if(S.days.length > 30) S.days = S.days.slice(-30); }
+    if(S.count > (S.best || 0)) S.best = S.count;
+    save(S);
+    render();
+    if(S.count > 1 && S.count % 7 === 0){
+      toast('🎉 مبروك! سلسلتك وصلت ' + S.count + ' يوم — إنتي نار 🔥', true);
+    }
+  }
+
+  /* ---- styles ---- */
+  var css = ''
+    + '.stk-chip{display:flex;align-items:center;gap:4px;background:rgba(255,140,0,.1);border:1px solid rgba(255,140,0,.4);border-radius:999px;padding:4px 10px;cursor:pointer;font:inherit;color:inherit}'
+    + '.stk-chip b{color:#ffb84d;font-size:.95rem}'
+    + '.stk-chip.dim{opacity:.55;border-style:dashed}'
+    + '.stk-pop{position:fixed;top:70px;inset-inline-start:12px;z-index:9999;width:min(300px,86vw);background:#241d3d;border:1px solid rgba(212,175,55,.45);border-radius:18px;padding:16px;box-shadow:0 12px 40px rgba(0,0,0,.5);direction:rtl}'
+    + '.stk-pop h4{margin:0 0 4px;color:#f4e3ae;font-size:1.05rem}'
+    + '.stk-pop .stk-big{font-size:2rem;font-weight:900;color:#ffb84d;margin:6px 0}'
+    + '.stk-pop .stk-sub{color:#c9bde8;font-size:.85rem;margin-bottom:10px}'
+    + '.stk-dots{display:flex;gap:6px;justify-content:center;margin:10px 0 12px}'
+    + '.stk-dot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;border:1px solid #4a3f6e;color:#8f84b8;background:#1a1530}'
+    + '.stk-dot.on{background:rgba(255,140,0,.25);border-color:#ff8c00;color:#ffb84d}'
+    + '.stk-dot.today{border-color:var(--gold,#d4af37)}'
+    + '.stk-bell{width:100%;padding:9px;border-radius:12px;border:1px solid rgba(212,175,55,.5);background:rgba(212,175,55,.12);color:#f4e3ae;font:inherit;font-weight:700;cursor:pointer}'
+    + '.stk-bell.off{opacity:.6}'
+    + '.stk-close{position:absolute;top:8px;inset-inline-end:10px;background:none;border:none;color:#8f84b8;font-size:1.1rem;cursor:pointer}'
+    + '.stk-toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:10000;width:min(360px,92vw);background:linear-gradient(135deg,#2d2450,#241d3d);border:1px solid rgba(255,140,0,.55);border-radius:16px;padding:12px 14px;direction:rtl;box-shadow:0 10px 34px rgba(0,0,0,.55);display:flex;align-items:center;gap:10px;animation:stkIn .35s ease}'
+    + '@keyframes stkIn{from{opacity:0;transform:translate(-50%,-12px)}to{opacity:1;transform:translate(-50%,0)}}'
+    + '.stk-toast p{margin:0;flex:1;font-size:.88rem;color:#f4e3ae;line-height:1.5}'
+    + '.stk-toast button{flex:none;background:none;border:none;color:#8f84b8;font-size:1rem;cursor:pointer}'
+    + '.stk-toast a{flex:none;color:#ffb84d;font-weight:800;font-size:.82rem;text-decoration:none;border:1px solid rgba(255,140,0,.5);border-radius:10px;padding:5px 10px}';
+  var st = document.createElement('style');
+  st.textContent = css;
+  document.head.appendChild(st);
+
+  /* ---- header chip ---- */
+  function buildChip(){
+    var header = document.querySelector('header');
+    var anchor = document.getElementById('lxChip');
+    if(!header || document.getElementById('stkChip')) return;
+    var b = document.createElement('button');
+    b.id = 'stkChip';
+    b.className = 'stk-chip';
+    b.type = 'button';
+    b.setAttribute('aria-label', 'سلسلة الأيام');
+    b.addEventListener('click', togglePop);
+    if(anchor && anchor.parentNode) anchor.parentNode.insertBefore(b, anchor);
+    else header.appendChild(b);
+    render();
+  }
+
+  function render(){
+    var c = document.getElementById('stkChip');
+    if(!c) return;
+    var s = status();
+    c.classList.toggle('dim', s !== 'done');
+    c.innerHTML = (s === 'done' ? '🔥' : '🔥') + ' <b>' + S.count + '</b>';
+    var pop = document.getElementById('stkPop');
+    if(pop) fillPop(pop);
+  }
+
+  /* ---- popup ---- */
+  function togglePop(){
+    var pop = document.getElementById('stkPop');
+    if(pop){ pop.remove(); return; }
+    pop = document.createElement('div');
+    pop.id = 'stkPop';
+    pop.className = 'stk-pop';
+    document.body.appendChild(pop);
+    fillPop(pop);
+    setTimeout(function(){
+      document.addEventListener('click', function h(e){
+        if(!pop.contains(e.target) && e.target.id !== 'stkChip' && !e.target.closest('#stkChip')){
+          pop.remove();
+          document.removeEventListener('click', h);
+        }
+      });
+    }, 50);
+  }
+
+  function fillPop(pop){
+    var s = status();
+    var dots = '';
+    for(var i = 6; i >= 0; i--){
+      var d = new Date(); d.setDate(d.getDate()-i);
+      var ds = dstr(d);
+      var on = S.days.indexOf(ds) >= 0;
+      dots += '<span class="stk-dot' + (on ? ' on' : '') + (i === 0 ? ' today' : '') + '">'
+        + (on ? '🔥' : d.getDate()) + '</span>';
+    }
+    var stateLine = s === 'done'
+      ? 'خلصتي نشاط النهاردة ✅ السلسلة في أمان'
+      : (s === 'risk' ? 'لسه مخلصتيش النهاردة — دقيقة واحدة وتحافظي عليها ✨' : 'ابدأي سلسلة جديدة النهاردة ✨');
+    var notifOn = (typeof Notification !== 'undefined' && Notification.permission === 'granted');
+    pop.innerHTML = '<button class="stk-close" type="button">✕</button>'
+      + '<h4>🔥 سلسلة المذاكرة</h4>'
+      + '<div class="stk-big">' + S.count + ' يوم</div>'
+      + '<div class="stk-sub">أحسن سلسلة: ' + (S.best || S.count) + ' يوم • ' + stateLine + '</div>'
+      + '<div class="stk-dots">' + dots + '</div>'
+      + '<button class="stk-bell' + (notifOn ? '' : ' off') + '" type="button">'
+      + (notifOn ? '🔔 التذكير شغال' : '🔕 فعّلي تذكير المتصفح') + '</button>';
+    pop.querySelector('.stk-close').addEventListener('click', function(){ pop.remove(); });
+    pop.querySelector('.stk-bell').addEventListener('click', function(){
+      if(typeof Notification === 'undefined'){ toast('المتصفح ده مش بيدعم إشعارات للأسف', false); return; }
+      if(Notification.permission === 'granted'){ toast('التذكير شغال بالفعل 🔔', false); return; }
+      Notification.requestPermission().then(function(p){
+        if(p === 'granted'){ toast('تمام! هنفكرك قبل ما السلسلة تتقطع 🔔', false); fillPop(pop); }
+        else toast('الإشعارات اترفضت من المتصفح — تقدري تفعيلها من إعداداته', false);
+      });
+    });
+  }
+
+  /* ---- gentle reminder (in-app, once per day) + browser notification ---- */
+  var toastEl = null;
+  function toast(msg, celebrate){
+    if(toastEl) toastEl.remove();
+    toastEl = document.createElement('div');
+    toastEl.className = 'stk-toast';
+    toastEl.innerHTML = '<p>' + msg + '</p>'
+      + (celebrate ? '' : '<a href="#lessons">ابدأي دلوقتي</a>')
+      + '<button type="button">✕</button>';
+    toastEl.querySelector('button').addEventListener('click', function(){
+      toastEl.remove(); toastEl = null;
+      try{ localStorage.setItem(DISMISS, today()); }catch(e){}
+    });
+    var lk = toastEl.querySelector('a');
+    if(lk) lk.addEventListener('click', function(){
+      try{ localStorage.setItem(DISMISS, today()); }catch(e){}
+      toastEl.remove(); toastEl = null;
+    });
+    document.body.appendChild(toastEl);
+    setTimeout(function(){ if(toastEl){ toastEl.remove(); toastEl = null; } }, 12000);
+  }
+
+  function maybeRemind(){
+    if(status() !== 'risk') return;
+    /* browser notification, once per day, only if permission already granted */
+    try {
+      if(typeof Notification !== 'undefined' && Notification.permission === 'granted'
+         && localStorage.getItem(NOTIFDAY) !== today()){
+        localStorage.setItem(NOTIFDAY, today());
+        var body = 'سلسلتك ' + S.count + ' يوم لسه شغالة! خلصي أي نشاط قبل نص الليل 🔥';
+        if(navigator.serviceWorker && navigator.serviceWorker.ready){
+          navigator.serviceWorker.ready.then(function(r){
+            r.showNotification('Lingua 🔥', {body: body, tag: 'lingua-streak', icon: 'icon-192.png'});
+          }).catch(function(){ new Notification('Lingua 🔥', {body: body, tag: 'lingua-streak'}); });
+        } else {
+          new Notification('Lingua 🔥', {body: body, tag: 'lingua-streak'});
+        }
+      }
+    } catch(e){}
+    /* in-app banner, once per day unless dismissed */
+    try {
+      if(localStorage.getItem(DISMISS) !== today()){
+        toast('🔥 سلسلتك ' + S.count + ' يوم! لسه مخلصتيش نشاط النهاردة — دقيقة واحدة وتحافظي عليها', false);
+      }
+    } catch(e){}
+  }
+
+  /* ---- boot ---- */
+  function boot(){
+    buildChip();
+    setTimeout(maybeRemind, 2500);
+    setInterval(pollPoints, 15000);
+    document.addEventListener('visibilitychange', function(){
+      if(!document.hidden){ pollPoints(); render(); }
+    });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+
+  window.LinguaStreak = {bump: bump, status: status, get: function(){ return S; }};
+})();
+window.LINGUA_VERSION='v98';
