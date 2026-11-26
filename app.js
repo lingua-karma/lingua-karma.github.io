@@ -4438,6 +4438,8 @@ gbkRender();
   var SUPA_URL = 'https://yzzlgalxjaaevmytdazf.supabase.co';
   var SUPA_KEY = 'sb_publishable_EmbKVWREHSs3sZ_nBKFyqg_zxv3Z38-';
   var sb = null, me = null, myProfile = null, myFriends = [], chatWith = null, msgChan = null, syncTimer = null;
+  window.__linguaGetSb = function(){ return sb; };
+  window.__linguaGetMe = function(){ return me; };
 
   function esc(x){ return String(x == null ? '' : x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function needLogin(el){ el.innerHTML = '<div class="gbk-empty">الجزء ده بيشتغل بحساب — سجلي من تاب «👑 حسابي» الأول 💜</div>'; }
@@ -4581,6 +4583,7 @@ gbkRender();
   }
 
   function afterAuth(msg){
+    if(window.__onAuth) try{ window.__onAuth(); }catch(e){}
     toast(msg);
     confetti();
     renderAll();
@@ -7786,7 +7789,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v68';
+  window.LINGUA_VERSION = 'v69';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
@@ -8224,4 +8227,75 @@ window.KM_POOL = [
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ lsHome(); mHome(); });
   else { lsHome(); mHome(); }
   window.lsHome = lsHome; window.mHome = mHome;
+})();
+
+
+/* ================= v69: Karma-corner owner inbox (gbk messages -> Supabase, owner-only inbox) ================= */
+(function(){
+  var OWNER_EMAIL = 'carmengreeme125@gmail.com';
+
+  /* 1) gbk form: also send the message to Supabase (fire and forget) */
+  function hookGbk(){
+    var form = document.getElementById('gbkForm');
+    if(!form || form.__gbkHooked) return;
+    form.__gbkHooked = true;
+    form.addEventListener('submit', function(){
+      try {
+        var n = (document.getElementById('gbkName').value || '').trim().slice(0, 30);
+        var m = (document.getElementById('gbkMsg').value || '').trim().slice(0, 300);
+        if(!m) return;
+        var _sb = window.__linguaGetSb && window.__linguaGetSb();
+        if(_sb){
+          _sb.from('gbk_messages').insert({name: n || 'زائرة', msg: m}).then(function(){});
+        }
+      } catch(e){}
+    });
+  }
+
+  /* 2) owner inbox inside #karma */
+  function inboxVisible(){
+    var _me = window.__linguaGetMe && window.__linguaGetMe();
+    return _me && _me.email && _me.email.toLowerCase() === OWNER_EMAIL;
+  }
+  function gbkInboxRender(){
+    var box = document.getElementById('karmaInbox');
+    if(!box) return;
+    if(!inboxVisible()){
+      box.innerHTML = '<div class="ki-title">📬 صندوق رسايل كارما</div>'
+        + '<div class="ki-lock">🔒 دي منطقة خاصة بصاحبة الموقع — الرسايل اللي الناس بتسيبها في "كلمة لكارما" بتظهر هنا لكارما بس بعد ما تسجل دخولها 💌</div>';
+      return;
+    }
+    box.innerHTML = '<div class="ki-title">📬 صندوق رسايلك يا كارما 💌</div>'
+      + '<div class="ki-lock">جاري التحميل...</div>';
+    var _sb2 = window.__linguaGetSb && window.__linguaGetSb();
+    if(!_sb2){ box.innerHTML = '<div class="ki-title">📬 صندوق رسايلك يا كارما 💌</div><div class="ki-lock">حصلت مشكلة في التحميل — جربي تاني 🔄</div>'; return; }
+    _sb2.from('gbk_messages').select('name,msg,created_at').order('created_at', {ascending: false}).limit(60).then(function(r){
+      if(r.error){
+        box.innerHTML = '<div class="ki-title">📬 صندوق رسايلك يا كارما 💌</div>'
+          + '<div class="ki-lock">حصلت مشكلة في التحميل — جربي تاني 🔄</div>';
+        return;
+      }
+      var items = r.data || [];
+      var h = '<div class="ki-title">📬 صندوق رسايلك يا كارما 💌 <small>(' + items.length + ')</small></div>';
+      h += items.length ? items.map(function(x){
+        var d = '';
+        try { d = new Date(x.created_at).toLocaleDateString('ar-EG', {day:'numeric', month:'long', hour:'numeric', minute:'2-digit'}); } catch(e){}
+        return '<div class="gbk-card"><div class="gbk-msg">' + x.msg + '</div><div class="gbk-who">— ' + (x.name || 'زائرة') + ' • ' + d + ' 💌</div></div>';
+      }).join('') : '<div class="gbk-empty">لسه مفيش رسايل — أول كلمة حلوة هتظهر هنا 💜</div>';
+      box.innerHTML = h;
+    });
+  }
+  window.gbkInboxRender = gbkInboxRender;
+
+  /* re-render inbox after login and when opening ركن كارما */
+  if(!window.__inboxHooked){
+    window.__inboxHooked = true;
+    window.__onAuth = function(){ setTimeout(gbkInboxRender, 800); };
+  }
+  window.addEventListener('hashchange', function(){
+    if(location.hash === '#karma') setTimeout(gbkInboxRender, 100);
+  });
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ hookGbk(); gbkInboxRender(); });
+  else { hookGbk(); gbkInboxRender(); }
 })();
