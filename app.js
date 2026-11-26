@@ -6472,7 +6472,7 @@ window.KM_POOL = [
       '<h3>' + GAMES[S.game].i + ' ' + GAMES[S.game].n + '</h3>' +
       '<div class="du-code">' + S.code + '</div>' +
       '<div class="du-sub">' + (GAMES[S.game].vocab ? LANGS[S.lang] + ' • ' : '') + GAMES[S.game].d + '</div>' +
-      '<div class="du-conn" id="duConn" style="font-size:.82rem;color:#b9a878;margin-top:6px;cursor:pointer">⏳ جاري الاتصال...</div>' +
+      '<div class="du-conn" id="duConn" style="font-size:.82rem;margin-top:6px;cursor:pointer;color:' + (S._joined ? '#7dd6a0' : '#b9a878') + '">' + (S._joined ? '🟢 متصلين — جاهزين للعب' : '⏳ جاري الاتصال...') + '</div>' +
       '<a class="btn du-big" href="' + share + '" target="_blank" rel="noopener">💌 ابعتي الدعوة واتساب</a>' +
       '<div class="du-players" id="duPlayers"></div>' +
       '<button class="btn du-big" id="duReady" style="background:linear-gradient(135deg,#34d399,#0e9f6e)">✋ أنا جاهزة!</button>' +
@@ -6505,11 +6505,13 @@ window.KM_POOL = [
     chan.send({type: 'broadcast', event: 'du', payload: Object.assign({t: type, by: S.uid, name: S.myName}, payload)});
   }
   /* ---------- v59: reliability (slow networks, reconnects, dropped ready) ---------- */
+  var _sid = null;
+  try { _sid = sessionStorage.getItem('lingua_duel_sid'); if(!_sid){ _sid = Math.random().toString(36).slice(2,5); sessionStorage.setItem('lingua_duel_sid', _sid); } } catch(e){ _sid = '??'; }
   function duelLog(m){
     try{
       var log = JSON.parse(localStorage.getItem('lingua_duel_log')||'[]');
-      log.push(new Date().toISOString().slice(11,19) + ' ' + m);
-      if(log.length > 40) log = log.slice(-40);
+      log.push(new Date().toISOString().slice(11,19) + ' [' + _sid + '] ' + m);
+      if(log.length > 60) log = log.slice(-60);
       localStorage.setItem('lingua_duel_log', JSON.stringify(log));
     }catch(e){}
   }
@@ -6541,12 +6543,22 @@ window.KM_POOL = [
       maybeStart();
     }, 4000);
   }
-  function connect(code, isHost){
-    var freshRoom = (S.code !== code);
+  function scheduleReconnect(why){
+    if(S._rc) return;
+    S._rc = setTimeout(function(){
+      S._rc = null;
+      if(!S.code || S.st === 'home') return;
+      duelLog('auto-reconnect (' + why + ')');
+      if(chan){ try { dsb.removeChannel(chan); } catch(e){} chan = null; }
+      connect(S.code, S.host, true);
+    }, 2500);
+  }
+  function connect(code, isHost, preserve){
     if(freshRoom){ S._iReady = false; S._oppReady = false; }
-    S.code = code; S.host = isHost; S.st = 'lobby';
-    S._joined = false; S._subOnce = false;
-    duelLog('connect ' + code + (isHost ? ' host' : ' guest'));
+    if(!preserve){ S.st = 'lobby'; }
+    S.code = code; S.host = isHost;
+    S._joined = false; if(!preserve) S._subOnce = false;
+    duelLog('connect ' + code + (isHost ? ' host' : ' guest') + (preserve ? ' (re)' : ''));
     chan = dsb.channel('duel-' + code, {config: {presence: {key: S.uid}}});
     chan.on('presence', {event: 'sync'}, function(){
       var st = chan.presenceState(), arr = [];
@@ -6609,32 +6621,44 @@ window.KM_POOL = [
         S._joined = true;
         if(S._wdog){ clearTimeout(S._wdog); S._wdog = null; }
         trackState();
+        if(S.st === 'lobby'){
+          if(!S._subOnce){ S._subOnce = true; render(); } else { renderPlayers(); }
+        }
         duelConnUI(true);
-        if(!S._subOnce){ S._subOnce = true; render(); } else { renderPlayers(); }
         startHeartbeat();
       } else if(status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED'){
         S._joined = false;
         duelConnUI(false, status);
+        scheduleReconnect(status);
       }
     });
     if(S._wdog){ clearTimeout(S._wdog); S._wdog = null; }
     S._wdog = setTimeout(function(){
-      if(chan && !S._joined && S.st === 'lobby'){
+      if(chan && !S._joined && S.st !== 'home'){
         duelLog('watchdog retry ' + code);
         try { dsb.removeChannel(chan); } catch(e){}
         chan = null;
-        connect(code, isHost);
+        connect(code, isHost, true);
       }
     }, 12000);
   }
   window.duelRetry = function(){
-    if(S.st === 'lobby' && S.code){
+    if(S.code && S.st !== 'home'){
       duelLog('manual retry');
       if(chan){ try { dsb.removeChannel(chan); } catch(e){} chan = null; }
       var c = el('duConn'); if(c){ c.textContent = '⏳ جاري الاتصال...'; c.style.color = '#b9a878'; }
-      connect(S.code, S.host);
+      connect(S.code, S.host, true);
     }
   };
+  /* coming back from WhatsApp / another app: heal a dead channel immediately */
+  document.addEventListener('visibilitychange', function(){
+    if(!document.hidden && S.code && S.st !== 'home' && !S._joined){
+      duelLog('visible+not joined -> reconnect');
+      scheduleReconnect('visible');
+    }
+  });
+  /* test/debug hook: simulate a background-killed channel */
+  window._duelClose = function(){ if(chan){ try { chan.unsubscribe(); } catch(e){} } };
   function maybeStart(){
     if(!S.host || S.st !== 'lobby') return;
     if(S._iReady && S._oppReady){
@@ -6652,6 +6676,7 @@ window.KM_POOL = [
     clearTimers();
     if(S._hb){ clearInterval(S._hb); S._hb = null; }
     if(S._wdog){ clearTimeout(S._wdog); S._wdog = null; }
+    if(S._rc){ clearTimeout(S._rc); S._rc = null; }
     if(chan){ try { dsb.removeChannel(chan); } catch(e){} chan = null; }
     var keep = {game: S.game, lang: S.lang, uid: S.uid, myName: S.myName};
     S = {st:'home', game:keep.game, code:null, lang:keep.lang, host:false, uid:keep.uid, myName:keep.myName, opp:null, players:[],
@@ -7639,7 +7664,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v59';
+  window.LINGUA_VERSION = 'v60';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
