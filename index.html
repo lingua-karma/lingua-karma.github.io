@@ -2058,6 +2058,14 @@
   </div>
   <div id="krWrap" style="max-width:640px;margin:0 auto"></div>
 </section>
+<section id="library">
+  <h2 class="sec-title">✦ مكتبة لينجوا ✦</h2>
+  <p class="sec-sub">كتب مجانية قانونية بالكامل — اقرئي باللغة اللي بتتعلميها 📕✨</p>
+  <div class="tabs lang-tabs lib-langs" id="libTabs"></div>
+  <div class="lib-books" id="libBooks"></div>
+  <a class="lib-more" id="libMore" href="#" target="_blank" rel="noopener">المزيد من الكتب ↗</a>
+</section>
+
 <style>
   .kr-card{background:rgba(255,255,255,.05);border:1px solid rgba(212,175,55,.25);border-radius:16px;padding:14px 18px;margin-bottom:10px;display:flex;align-items:center;gap:14px}
   .kr-word{font-size:1.5rem;font-weight:800;color:var(--gold2);min-width:110px}
@@ -2403,6 +2411,20 @@
   .yt-lite:hover .yt-play{transform:translate(-50%,-50%) scale(1.12)}
   .yt-lite.playing{cursor:default}
   .yt-lite.playing .yt-play{display:none}
+
+/* v16: library */
+.lib-langs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:14px}
+.lib-books{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:640px;margin:0 auto}
+.book-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:transform .2s}
+.book-card:active{transform:scale(.97)}
+.book-cover{height:88px;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;color:#fff}
+.book-info{padding:10px 10px 12px;display:flex;flex-direction:column;gap:3px;flex:1}
+.book-title{font-size:.82rem;font-weight:700;line-height:1.35}
+.book-author{font-size:.7rem;color:var(--muted)}
+.book-read{margin-top:auto;font-size:.72rem;color:var(--gold2);font-weight:700}
+.lib-more{display:block;text-align:center;margin:14px auto 0;font-size:.82rem;color:var(--gold2);text-decoration:none;font-weight:700}
+
+
 </style>
 <script>
 function ytLite(id){return '<div class="yt-lite" data-vid="'+id+'"><img loading="lazy" src="https://i.ytimg.com/vi/'+id+'/hqdefault.jpg" alt=""><span class="yt-play">&#9654;</span></div>';}
@@ -2987,8 +3009,8 @@ window.refreshDash = function(){
   document.getElementById('dStreak').textContent = st.count;
   /* quiz stats */
   let quizzes = 0, perfect = 0, games = 0;
-  const levelsDone = {en:0, fr:0, de:0, zh:0};
-  ['en','fr','de','zh'].forEach(function(l){
+  const levelsDone = {en:0, fr:0, de:0, zh:0, ko:0};
+  ['en','fr','de','zh','ko'].forEach(function(l){
     ['beg','mid','adv'].forEach(function(v){
       const b = localStorage.getItem('lingua_best_'+l+'_'+v);
       if(b !== null){ quizzes++; levelsDone[l]++; if(parseInt(b,10) === QUIZZES[l][v].length) perfect++; }
@@ -3018,7 +3040,7 @@ window.refreshDash = function(){
   /* per-language progress bars */
   const flags = {en:'🇬🇧 الإنجليزية', fr:'🇫🇷 الفرنسية', de:'🇩🇪 الألمانية', zh:'🇨🇳 الصينية', ko:'🇰🇷 الكورية'};
   let html = '';
-  ['en','fr','de','zh'].forEach(function(l){
+  ['en','fr','de','zh','ko'].forEach(function(l){
     const pct = Math.round(100*levelsDone[l]/3);
     html += '<div class="prog-row"><div class="p-head"><span>'+flags[l]+'</span><span>'+pct+'%</span></div>' +
       '<div class="p-track"><div class="p-fill" data-w="'+pct+'"></div></div></div>';
@@ -4753,8 +4775,8 @@ const BADGES = [
 ];
 function collectStats(){
   let quizzes = 0, perfect = 0, games = 0;
-  const levelsDone = {en:0, fr:0, de:0, zh:0};
-  ['en','fr','de','zh'].forEach(function(l){
+  const levelsDone = {en:0, fr:0, de:0, zh:0, ko:0};
+  ['en','fr','de','zh','ko'].forEach(function(l){
     ['beg','mid','adv'].forEach(function(v){
       const b = localStorage.getItem('lingua_best_'+l+'_'+v);
       if(b !== null){ quizzes++; levelsDone[l]++; if(parseInt(b,10) === QUIZZES[l][v].length) perfect++; }
@@ -4801,8 +4823,77 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
+  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
 ];
+
+/* ================= v16: free books library ================= */
+(function(){
+  var LIB = {
+    en: {name:'إنجليزي 🇬🇧', more:'https://www.gutenberg.org/browse/languages/en', books:[
+      ['Pride and Prejudice','Jane Austen','https://www.gutenberg.org/ebooks/1342','#7c5cff'],
+      ['Frankenstein','Mary Shelley','https://www.gutenberg.org/ebooks/84','#2dd4bf'],
+      ['Sherlock Holmes','Arthur Conan Doyle','https://www.gutenberg.org/ebooks/1661','#f5a623'],
+      ['Alice in Wonderland','Lewis Carroll','https://www.gutenberg.org/ebooks/11','#ff5c8a'],
+      ['A Tale of Two Cities','Charles Dickens','https://www.gutenberg.org/ebooks/98','#4cc9f0'],
+      ['Moby Dick','Herman Melville','https://www.gutenberg.org/ebooks/2701','#9b5cff']]},
+    fr: {name:'فرنسي 🇫🇷', more:'https://www.gutenberg.org/browse/languages/fr', books:[
+      ['Les Misérables','Victor Hugo','https://fr.wikisource.org/wiki/Les_Mis%C3%A9rables','#7c5cff'],
+      ['Le Comte de Monte-Cristo','Alexandre Dumas','https://fr.wikisource.org/wiki/Le_Comte_de_Monte-Cristo','#2dd4bf'],
+      ['Les Trois Mousquetaires','Alexandre Dumas','https://fr.wikisource.org/wiki/Les_Trois_Mousquetaires','#f5a623'],
+      ['Vingt mille lieues sous les mers','Jules Verne','https://fr.wikisource.org/wiki/Vingt_mille_lieues_sous_les_mers','#ff5c8a'],
+      ['Candide','Voltaire','https://fr.wikisource.org/wiki/Candide','#4cc9f0'],
+      ['Le Tour du monde en 80 jours','Jules Verne','https://fr.wikisource.org/wiki/Le_Tour_du_monde_en_quatre-vingts_jours','#9b5cff']]},
+    de: {name:'ألماني 🇩🇪', more:'https://www.gutenberg.org/browse/languages/de', books:[
+      ['Faust I','Goethe','https://de.wikisource.org/wiki/Faust_-_Der_Trag%C3%B6die_erster_Teil','#7c5cff'],
+      ['Die Verwandlung','Franz Kafka','https://de.wikisource.org/wiki/Die_Verwandlung','#2dd4bf'],
+      ['Der Process','Franz Kafka','https://de.wikisource.org/wiki/Der_Process','#f5a623'],
+      ['Siddhartha','Hermann Hesse','https://de.wikisource.org/wiki/Siddhartha','#ff5c8a'],
+      ['Kinder- und Hausmärchen','Brüder Grimm','https://de.wikisource.org/wiki/Kinder-_und_Hausm%C3%A4rchen','#4cc9f0'],
+      ['Die Leiden des jungen Werther','Goethe','https://de.wikisource.org/wiki/Die_Leiden_des_jungen_Werthers','#9b5cff']]},
+    zh: {name:'صيني 🇨🇳', more:'https://zh.wikisource.org', books:[
+      ['紅樓夢 — حلم الغرفة الحمراء','曹雪芹','https://zh.wikisource.org/wiki/%E7%B4%85%E6%A8%93%E5%A4%A2','#7c5cff'],
+      ['三國演義 — ملحمة الممالك الثلاث','羅貫中','https://zh.wikisource.org/wiki/%E4%B8%89%E5%9C%8B%E6%BC%94%E7%BE%A9','#2dd4bf'],
+      ['西遊記 — رحلة إلى الغرب','吳承恩','https://zh.wikisource.org/wiki/%E8%A5%BF%E9%81%8A%E8%A8%98','#f5a623'],
+      ['水滸傳 — على ضفاف النهر','施耐庵','https://zh.wikisource.org/wiki/%E6%B0%B4%E6%BB%B8%E5%82%B3','#ff5c8a'],
+      ['論語 — محاورات كونفوشيوس','孔子','https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E','#4cc9f0'],
+      ['唐詩三百首 — ٣٠٠ قصيدة تانغ','شعراء تانغ','https://zh.wikisource.org/wiki/%E5%94%90%E8%A9%A9%E4%B8%89%E7%99%BE%E9%A6%96','#9b5cff']]},
+    ko: {name:'كوري 🇰🇷', more:'https://ko.wikisource.org', books:[
+      ['홍길동전 — حكاية هونغ غيل-دونغ','허균','https://ko.wikisource.org/wiki/%ED%99%8D%EA%B8%B8%EB%8F%99%EC%A0%84','#7c5cff'],
+      ['춘향전 — حكاية تشونهيانغ','فولكلور كوري','https://ko.wikisource.org/wiki/%EC%B6%98%ED%96%A5%EC%A0%84','#2dd4bf'],
+      ['흥부전 — حكاية هونغبو','فولكلور كوري','https://ko.wikisource.org/wiki/%ED%9D%A5%EB%B6%80%EC%A0%84','#f5a623'],
+      ['심청전 — حكاية شيم تشونغ','فولكلور كوري','https://ko.wikisource.org/wiki/%EC%8B%AC%EC%B2%AD%EC%A0%84','#ff5c8a'],
+      ['토끼전 — حكاية الأرنب','فولكلور كوري','https://ko.wikisource.org/wiki/%ED%86%A0%EB%81%BC%EC%A0%84','#4cc9f0']]}
+  };
+  var cur = 'en';
+  var tabs = document.getElementById('libTabs');
+  var grid = document.getElementById('libBooks');
+  var more = document.getElementById('libMore');
+  if(!tabs || !grid) return;
+  tabs.innerHTML = Object.keys(LIB).map(function(k){
+    return '<button class="tab lang-tab'+(k===cur?' active':'')+'" data-lib="'+k+'"><span class="ln">'+LIB[k].name+'</span></button>';
+  }).join('');
+  function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  function renderLib(){
+    var L = LIB[cur];
+    grid.innerHTML = L.books.map(function(b){
+      var ch = esc(b[0].trim().charAt(0));
+      return '<a class="book-card" href="'+b[2]+'" target="_blank" rel="noopener">'
+        + '<div class="book-cover" style="background:linear-gradient(135deg,'+b[3]+',#1a1225)">'+ch+'</div>'
+        + '<div class="book-info"><div class="book-title">'+esc(b[0])+'</div><div class="book-author">'+esc(b[1])+'</div>'
+        + '<div class="book-read">اقرئي مجانًا ↗</div></div></a>';
+    }).join('');
+    more.href = L.more;
+  }
+  tabs.addEventListener('click', function(e){
+    var b = e.target.closest('[data-lib]');
+    if(!b) return;
+    cur = b.dataset.lib;
+    tabs.querySelectorAll('.lang-tab').forEach(function(t){ t.classList.toggle('active', t===b); });
+    renderLib();
+  });
+  renderLib();
+})();
+
 document.getElementById('menuGrid').innerHTML = MENU.map(function(m){
   return '<a class="menu-card" href="#'+m[0]+'"><span class="m-ico">'+m[1]+'</span><span class="m-name">'+m[2]+'</span></a>';
 }).join('');
@@ -6574,8 +6665,9 @@ gbkRender();
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v15.0</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v16.0</div>
 <script>
+
 /* ================= v13: learning map, personality quiz, XO, korean ================= */
 (function(){
   /* ---- learning map ---- */
