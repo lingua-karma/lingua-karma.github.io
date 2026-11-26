@@ -6639,7 +6639,18 @@ window.KM_POOL = [
       if(p.t === 'ans'){ S.oppAns[p.q] = {ok: p.ok, ms: p.ms}; if(S.st === 'game') updOppTick(); }
       if(p.t === 'prog'){ S.oppN = p.n; updRaceOpp(); }
       if(p.t === 'claim'){ onOppClaim(p.pair); }
-      if(p.t === 'done'){ S.oppDone = true; S.oppAns = p.ans || S.oppAns; S.oppN = p.n || S.oppN; S.oppMs = p.ms || 0; S.oppPairs = p.pairs; maybeFinish(); }
+      if(p.t === 'done'){
+        /* v74: xo must finish from the board, not the quiz scorer — carry the final moves so 'done' is self-healing */
+        if(S.game === 'xo'){
+          if(p.mv) xoRecv(p.mv);
+          if(S.st === 'game' && S.xo){
+            var w2 = xoWinner(xoBoard(S.xo.mv));
+            if(w2 || S.xo.mv.length === 9) xoFinish(w2 || null);
+          }
+          return;
+        }
+        S.oppDone = true; S.oppAns = p.ans || S.oppAns; S.oppN = p.n || S.oppN; S.oppMs = p.ms || 0; S.oppPairs = p.pairs; maybeFinish();
+      }
       if(p.t === 'tans'){ S.tAns[p.by] = {name: p.name, txt: p.txt, skip: p.skip}; truthMaybeReveal(); }
       if(p.t === 'tnext'){ if(!S.host) truthRound(p.r); }
       if(p.t === 'kready'){ S._oppKReady = true; knowMaybePhase2(); }
@@ -6800,7 +6811,7 @@ window.KM_POOL = [
     clearTimers();
     var won = win && win.p === xoMyMark();
     var draw = !win;
-    send('done', {ans: [], n: 0, ms: 0, pairs: 0});
+    send('done', {ans: [], n: 0, ms: 0, pairs: 0, mv: (S.xo ? S.xo.mv.slice() : [])});
     showResult(won ? 1 : (draw ? 0.5 : 0), won ? 0 : (draw ? 0.5 : 1), '⭐');
   }
 
@@ -7848,7 +7859,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v73';
+  window.LINGUA_VERSION = 'v74';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
