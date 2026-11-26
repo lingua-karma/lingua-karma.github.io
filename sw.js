@@ -1,6 +1,6 @@
 /* Lingua service worker: network-first for HTML (updates always flow), cache-first for static assets */
-const CACHE = 'lingua-v73';
-const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png', './app.js?v=92'];
+const CACHE = 'lingua-v74';
+const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png', './app.js?v=93'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
@@ -30,7 +30,7 @@ self.addEventListener('fetch', e => {
       }).catch(() => caches.match('./index.html'))
     );
   } else {
-    e.respondWith(caches.match(e.request).then(m => m || fetch(e.request)));
+    e.respondWith(caches.match(e.request).then(m => m || fetch(e.request).then(r => { const cp = r.clone(); caches.open(CACHE).then(c => c.put(e.request, cp)); return r; })));
   }
 });
 /* push groundwork (daily reminders) */

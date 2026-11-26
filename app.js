@@ -2418,7 +2418,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['map','🚀','مسار التعلم'],['placement','🎯','مستواي'],['quests','📋','مهام اليوم'],['listen','🎧','استماع'],['mistakes','🩹','أخطائي'],['german','🇩🇪','ركن الألماني'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['karaoke','🎤','كاريوكي'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['places','🏛️','أماكن'],['premium','💎','بريميوم'],['quotes','🎬','اقتباسات'],['ai','🤖','لمى'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق'],['pet','🥚','رفيقتي']
+  ['map','🚀','مسار التعلم'],['placement','🎯','مستواي'],['quests','📋','مهام اليوم'],['listen','🎧','استماع'],['mistakes','🩹','أخطائي'],['german','🇩🇪','ركن الألماني'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['karaoke','🎤','كاريوكي'],['lexams','📝','امتحانات'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['places','🏛️','أماكن'],['premium','💎','بريميوم'],['quotes','🎬','اقتباسات'],['ai','🤖','لمى'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق'],['pet','🥚','رفيقتي']
 ];
 
 /* ================= v16: free books library ================= */
@@ -6177,7 +6177,7 @@ window.KM_POOL = [
   };
 
   var GROUPS = [
-    {id:'learn', icon:'book', title:'تعلّم 📚', items:['dash','quests','placement','listen','mistakes','german','corners','courses','lessons','quiz','map','dict','gallery','speak','videos','songs','music','cinema','tarab','karaoke','korean','library','stories','capitals','food','fashion','trip','places','quotes','hobbies','themes','tips','eng','engx','scholar','ch30','flash','puzzle','qotd']},
+    {id:'learn', icon:'book', title:'تعلّم 📚', items:['dash','quests','placement','listen','mistakes','german','corners','courses','lessons','quiz','map','dict','gallery','speak','videos','songs','music','cinema','tarab','karaoke','lexams','korean','library','stories','capitals','food','fashion','trip','places','quotes','hobbies','themes','tips','eng','engx','scholar','ch30','flash','puzzle','qotd']},
     {id:'play', icon:'gamepad', title:'العب 🎮', items:['games','brain','fun','dressup','outfit','wheel','snake','xo','shooter','runner','piano','color','duel']},
     {id:'social', icon:'chat', title:'صحابي 💜', items:['friends','wall','mood','jokes','vent','diary','gbk','karma','pquiz','pet']},
     {id:'life', icon:'sparkle', title:'حياتي ✨', items:['deen','mushaf','khatma','weather','shop','premium','offline','settings','ai']}
@@ -8211,7 +8211,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v92';
+  window.LINGUA_VERSION = 'v93';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
@@ -9619,4 +9619,298 @@ window.KM_POOL = [
   }
 
   picker();
+})();
+/* ================= v93: امتحانات اللغات — engine (بنوك بتتحمّل lazy لكل لغة) ================= */
+(function(){
+  var host = document.getElementById('lexBox');
+  if(!host) return;
+
+  var LANGS = [
+    {id:'en', flag:'🇬🇧', name:'الإنجليزية', tts:'en-US'},
+    {id:'fr', flag:'🇫🇷', name:'الفرنسية', tts:'fr-FR'},
+    {id:'de', flag:'🇩🇪', name:'الألمانية', tts:'de-DE'},
+    {id:'zh', flag:'🇨🇳', name:'الصينية', tts:'zh-CN'},
+    {id:'ko', flag:'🇰🇷', name:'الكورية', tts:'ko-KR'}
+  ];
+  var LEVELS = [{id:'easy',n:'سهل 🌱'},{id:'medium',n:'متوسط 💪'},{id:'hard',n:'صعب 🔥'}];
+  var EXAMS_PER_LEVEL = 40;
+
+  function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  function hash(s){ var h=2166136261; for(var i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
+  function rng(seed){ var a=seed>>>0; return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+  function pick(r, arr, n){ var c=arr.slice(), out=[]; while(out.length<n && c.length){ out.push(c.splice(Math.floor(r()*c.length),1)[0]); } return out; }
+  function shuf(r, arr){ var c=arr.slice(); for(var i=c.length-1;i>0;i--){ var j=Math.floor(r()*(i+1)); var t=c[i]; c[i]=c[j]; c[j]=t; } return c; }
+
+  var LS = 'lingua_lex_best';
+  function best(){ try { return JSON.parse(localStorage.getItem(LS)||'{}'); } catch(e){ return {}; } }
+  function setBest(k, v){ var b=best(); if((b[k]||0)<v){ b[k]=v; try{ localStorage.setItem(LS, JSON.stringify(b)); }catch(e){} } }
+
+  /* ---------- lazy bank loading ---------- */
+  var loading = {};
+  function loadBank(langId, cb){
+    if(window.LINGUA_EXAMS && window.LINGUA_EXAMS[langId]) return cb(window.LINGUA_EXAMS[langId]);
+    if(loading[langId]) return;
+    loading[langId] = true;
+    var s = document.createElement('script');
+    s.src = './exams_'+langId+'.js';
+    s.onload = function(){ cb(window.LINGUA_EXAMS[langId]); };
+    s.onerror = function(){ host.innerHTML = '<div class="kara-note">⚠️ امتحانات اللغة دي لسه بتتجهّز — جرّبي لغة تانية دلوقتي 🔜</div>'; };
+    document.head.appendChild(s);
+  }
+
+  /* ---------- بناء أسئلة الامتحان من البنك ---------- */
+  function buildExam(bank, level, examNo, lang){
+    var r = rng(hash(lang.id+'|'+level+'|'+examNo));
+    var B = bank[level];
+    var qs = [];
+    /* 5 vocab MCQ — اتجاهين */
+    pick(r, B.vocab, 5).forEach(function(pair, i){
+      var toAr = r() < 0.5;
+      var pool = B.vocab.map(function(p){ return toAr ? p[1] : p[0]; }).filter(function(x){ return x !== (toAr?pair[1]:pair[0]); });
+      var distr = pick(r, pool, 3);
+      var opts = shuf(r, [toAr?pair[1]:pair[0]].concat(distr));
+      qs.push({type:'mcq', tag:'مفردات 📖',
+        q: toAr ? 'إيه معنى «'+pair[0]+'»؟' : 'إزاي أقول «'+pair[1]+'» بالـ'+lang.name+'؟',
+        say: toAr ? pair[0] : null,
+        opts: opts, a: opts.indexOf(toAr?pair[1]:pair[0])});
+    });
+    /* 3 grammar MCQ */
+    pick(r, B.grammar, 3).forEach(function(g){
+      qs.push({type:'mcq', tag:'قواعد 📐', q:g.q, opts:g.opts, a:g.a});
+    });
+    /* 4 fill */
+    pick(r, B.fill, 4).forEach(function(f){
+      qs.push({type:'mcq', tag:'أكمل ✍️', q:'اختاري الكلمة المناسبة:\n'+f.s, opts:f.opts, a:f.a});
+    });
+    /* 1 passage + 3 questions */
+    var p = pick(r, B.passages, 1)[0];
+    qs.push({type:'passage', tag:'قطعة 📜', title:p.t, text:p.x, qs:p.qs.map(function(x){ return {q:x[0], opts:x[1], a:x[2]}; })});
+    /* 1 essay */
+    var e = pick(r, B.essays, 1)[0];
+    qs.push({type:'essay', tag:'مقالي 📝', prompt:e.p, model:e.m, keywords:e.k, tts:lang.tts});
+    return qs;
+  }
+
+  /* ---------- الشاشات ---------- */
+  var S = null;
+
+  function head(txt){
+    return '<div class="chef-head"><button class="engx-back" id="lexBack">‹ رجوع</button><span>'+txt+'</span></div>';
+  }
+
+  function pickLang(){
+    S = null;
+    host.innerHTML = '<div class="chef-title">📝 اختاري اللغة — كل لغة فيها ١٢٠ امتحان على ٣ مستويات</div>'
+      + '<div class="chef-grid">'
+      + LANGS.map(function(l){
+          return '<button class="chef-card" data-l="'+l.id+'"><span style="font-size:2rem">'+l.flag+'</span>'
+            + '<span class="chef-rname">'+l.name+'</span><span class="chef-rword">١٢٠ امتحان</span></button>';
+        }).join('') + '</div>';
+    host.querySelectorAll('[data-l]').forEach(function(b){
+      b.onclick = function(){ pickLevel(LANGS.filter(function(l){return l.id===b.dataset.l;})[0]); };
+    });
+  }
+
+  function pickLevel(lang){
+    host.innerHTML = head(lang.flag+' '+lang.name)
+      + '<div class="chef-title" style="font-size:1rem">اختاري المستوى</div>'
+      + '<div class="chef-grid">'
+      + LEVELS.map(function(lv){
+          return '<button class="chef-card" data-v="'+lv.id+'"><span class="chef-rname" style="font-size:1.1rem">'+lv.n+'</span><span class="chef-rword">٤٠ امتحان</span></button>';
+        }).join('') + '</div>';
+    document.getElementById('lexBack').onclick = pickLang;
+    host.querySelectorAll('[data-v]').forEach(function(b){
+      b.onclick = function(){ pickExam(lang, b.dataset.v); };
+    });
+  }
+
+  function pickExam(lang, level){
+    loadBank(lang.id, function(){
+      var b = best();
+      var lvName = LEVELS.filter(function(x){return x.id===level;})[0].n;
+      var html = head(lang.flag+' '+lang.name+' — '+lvName)
+        + '<div class="chef-title" style="font-size:1rem">اختاري رقم الامتحان</div><div class="lex-grid">';
+      for(var i=1;i<=EXAMS_PER_LEVEL;i++){
+        var k = lang.id+'|'+level+'|'+i, sc = b[k];
+        html += '<button class="lex-num" data-e="'+i+'">'+i+(sc!=null?'<span class="lex-best">'+(sc>=85?'🌟':sc>=60?'✅':'📌')+sc+'%</span>':'')+'</button>';
+      }
+      host.innerHTML = html + '</div>';
+      document.getElementById('lexBack').onclick = function(){ pickLevel(lang); };
+      host.querySelectorAll('[data-e]').forEach(function(btn){
+        btn.onclick = function(){ startExam(lang, level, +btn.dataset.e); };
+      });
+    });
+  }
+
+  function startExam(lang, level, examNo){
+    loadBank(lang.id, function(bank){
+      S = {lang:lang, level:level, no:examNo, qs:buildExam(bank, level, examNo, lang), idx:0, answers:[], essayScore:null};
+      renderQ();
+    });
+  }
+
+  function say(text, lang){
+    if(!('speechSynthesis' in window) || !text) return;
+    var u = new SpeechSynthesisUtterance(text); u.lang = lang; u.rate = 0.85;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  }
+
+  function renderQ(){
+    var q = S.qs[S.idx], total = S.qs.length;
+    var prog = '<div class="kara-progress">سؤال '+(S.idx+1)+' / '+total+' — '+q.tag+'</div>'
+      + '<div class="kara-bar"><div class="kara-fill" style="width:'+(S.idx/total*100)+'%"></div></div>';
+    var body = '';
+    if(q.type === 'mcq'){
+      body = '<div class="engx-q">'+esc(q.q).replace('\n','<br>')+(q.say?' <button class="lex-say" id="lexSay">🔊</button>':'')+'</div>'
+        + '<div class="engx-opts">'+q.opts.map(function(o,i){
+            return '<button class="engx-opt" data-o="'+i+'">'+esc(o)+'</button>';
+          }).join('')+'</div>';
+    } else if(q.type === 'passage'){
+      body = '<div class="lex-passage"><div class="lex-ptitle">📜 '+esc(q.title)+'</div><div class="lex-ptext" dir="ltr">'+esc(q.text)+'</div>'
+        + '<button class="btn ghost" id="lexHear">🔊 اسمعي القطعة</button></div>'
+        + q.qs.map(function(sub, si){
+            return '<div class="engx-q" style="margin-top:10px">'+(si+1)+'. '+esc(sub.q)+'</div>'
+              + '<div class="engx-opts">'+sub.opts.map(function(o,i){
+                  return '<button class="engx-opt" data-p="'+si+'" data-o="'+i+'">'+esc(o)+'</button>';
+                }).join('')+'</div>';
+          }).join('');
+    } else { /* essay */
+      body = '<div class="engx-q">'+esc(q.prompt)+'</div>'
+        + '<textarea id="lexEssay" class="lex-essay" rows="5" dir="ltr" placeholder="اكتبي إجابتك هنا باللغة الأجنبية..."></textarea>'
+        + '<div class="engx-acts"><button class="btn" id="lexEssayDone">سلّمي الإجابة 📤</button></div>';
+    }
+    host.innerHTML = head(S.lang.flag+' '+S.lang.name+' — امتحان '+S.no) + prog + body;
+    document.getElementById('lexBack').onclick = function(){ pickExam(S.lang, S.level); };
+
+    var sayBtn = document.getElementById('lexSay');
+    if(sayBtn) sayBtn.onclick = function(){ say(q.say, S.lang.tts); };
+    var hear = document.getElementById('lexHear');
+    if(hear) hear.onclick = function(){ say(q.text, S.lang.tts); };
+
+    host.querySelectorAll('.engx-opt[data-o]').forEach(function(btn){
+      btn.onclick = function(){
+        var pi = btn.dataset.p!=null ? +btn.dataset.p : null;
+        var oi = +btn.dataset.o;
+        var correct = q.type==='passage' ? q.qs[pi].a : q.a;
+        var key = q.type==='passage' ? 'p'+pi : 'q';
+        if(!S.answers[S.idx]) S.answers[S.idx] = {};
+        if(S.answers[S.idx][key] != null) return; /* answered already */
+        S.answers[S.idx][key] = (oi === correct);
+        var group = pi!=null ? host.querySelectorAll('.engx-opt[data-p="'+pi+'"]') : host.querySelectorAll('.engx-opt[data-o]:not([data-p])');
+        group.forEach(function(b){
+          b.disabled = true;
+          if(+b.dataset.o === correct) b.classList.add('ok');
+          else if(b === btn) b.classList.add('no');
+        });
+        /* كل أسئلة الشاشة اتجاوبت؟ */
+        var need = q.type==='passage' ? q.qs.length : 1;
+        if(Object.keys(S.answers[S.idx]).length >= need){
+          var nx = document.createElement('div');
+          nx.className = 'engx-acts';
+          nx.innerHTML = '<button class="btn" id="lexNext">'+(S.idx+1<total?'السؤال اللي بعده ⏭':'شوفي النتيجة 🏁')+'</button>';
+          host.appendChild(nx);
+          document.getElementById('lexNext').onclick = next;
+          nx.scrollIntoView({behavior:'smooth', block:'nearest'});
+        }
+      };
+    });
+
+    var ed = document.getElementById('lexEssayDone');
+    if(ed) ed.onclick = gradeEssay;
+  }
+
+  /* ---------- المقالي: تقييم تقريبي أوفلاين + نموذج إجابة + تقييم ذاتي (+ لمى أونلاين) ---------- */
+  function gradeEssay(){
+    var q = S.qs[S.idx];
+    var text = (document.getElementById('lexEssay').value||'').trim();
+    if(text.length < 5){ toast('اكتبي شوية الأول ✍️'); return; }
+    var words = text.split(/\s+/).filter(Boolean).length;
+    var low = ' '+text.toLowerCase()+' ';
+    var hit = q.keywords.filter(function(k){ return low.indexOf(k.toLowerCase()) >= 0; }).length;
+    var kwScore = hit >= Math.ceil(q.keywords.length*0.6) ? 2 : hit >= 1 ? 1 : 0;
+    var lenScore = words >= 25 ? 1 : words >= 10 ? 0.5 : 0;
+    var auto = kwScore + lenScore; /* 0..3 */
+    S.essayScore = auto;
+    S.answers[S.idx] = {essay:true, auto:auto, text:text};
+    host.innerHTML = head(S.lang.flag+' مقالي — التصحيح')
+      + '<div class="engx-q">تقييمك التقريبي: <b>'+auto+' / 3</b> '+(auto>=2.5?'🌟':auto>=1.5?'💪':'🌱')+'</div>'
+      + '<div class="kara-note">التقييم ده تقريبي (كلمات مفتاحية + طول الإجابة) — قارني إجابتك بنموذج الإجابة وقيّمي نفسك بنفسك، أو جرّبي تقييم لمى بالذكاء الاصطناعي 👇</div>'
+      + '<div class="lex-passage"><div class="lex-ptitle">✅ نموذج الإجابة</div><div class="lex-ptext" dir="ltr">'+esc(q.model)+'</div>'
+      + '<button class="btn ghost" id="lexHearModel">🔊 اسمعي النموذج</button></div>'
+      + '<div class="engx-acts">'
+      + '<button class="btn ghost" id="lexSelfGood">إجابتي كويسة ✅ (+1)</button>'
+      + '<button class="btn ghost" id="lexSelfMid">نص نص ➗ (+0.5)</button>'
+      + '<button class="btn ghost" id="lexSelfBad">محتاجة مراجعة 🔁 (+0)</button>'
+      + '</div>'
+      + '<div class="engx-acts"><button class="btn" id="lexAI">قيّميها بلمى 🤖 (أونلاين)</button></div>'
+      + '<div class="kara-note" id="lexAIOut" style="display:none"></div>';
+    document.getElementById('lexBack').onclick = function(){ pickExam(S.lang, S.level); };
+    document.getElementById('lexHearModel').onclick = function(){ say(q.model, q.tts); };
+    function selfCheck(bonus){
+      S.answers[S.idx].self = bonus;
+      finishExam();
+    }
+    document.getElementById('lexSelfGood').onclick = function(){ selfCheck(1); };
+    document.getElementById('lexSelfMid').onclick = function(){ selfCheck(0.5); };
+    document.getElementById('lexSelfBad').onclick = function(){ selfCheck(0); };
+    document.getElementById('lexAI').onclick = function(){
+      var out = document.getElementById('lexAIOut');
+      out.style.display = 'block'; out.textContent = 'لمى بتقرا إجابتك... ⏳';
+      fetch('https://yzzlgalxjaaevmytdazf.supabase.co/functions/v1/lingua-ai', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({messages:[
+          {role:'user', content:'صححي مقال الطالبة ده بلطف (من ١٠، وأهم غلطتين بس، وتشجيع قصير). السؤال: '+q.prompt+'\n\nإجابة الطالبة: '+text}
+        ]})
+      }).then(function(r){ return r.text(); })
+        .then(function(t){ out.innerHTML = '<b>لمى 🤖:</b> '+esc(t).replace(/\n/g,'<br>'); })
+        .catch(function(){ out.textContent = 'النت مش متاح دلوقتي — التقييم الذاتي شغال 👆'; });
+    };
+  }
+
+  function next(){
+    if(S.idx+1 < S.qs.length){ S.idx++; renderQ(); }
+    else finishExam();
+  }
+
+  function finishExam(){
+    var total = 0, got = 0, wrongs = [];
+    S.qs.forEach(function(q, i){
+      var a = S.answers[i] || {};
+      if(q.type === 'passage'){
+        q.qs.forEach(function(sub, si){
+          total++;
+          if(a['p'+si]) got++; else wrongs.push({tag:'قطعة', q:sub.q, right:sub.opts[sub.a]});
+        });
+      } else if(q.type === 'essay'){
+        total += 4;
+        got += (a.auto||0) + (a.self||0);
+      } else {
+        total++;
+        if(a.q) got++; else wrongs.push({tag:q.tag, q:q.q.split('\n')[0], right:q.opts[q.a]});
+      }
+    });
+    var pct = total ? Math.round(got/total*100) : 0;
+    var k = S.lang.id+'|'+S.level+'|'+S.no;
+    setBest(k, pct);
+    var pts = Math.max(2, Math.round(pct/5));
+    try { addPoints(pts); } catch(e){}
+    try { if(window.awardPoints) awardPoints(pts, 'امتحان '+S.lang.name+' 📝'); } catch(e){}
+    var st = pct >= 85 ? 3 : pct >= 60 ? 2 : 1;
+    host.innerHTML = head(S.lang.flag+' '+S.lang.name+' — امتحان '+S.no)
+      + '<div class="chef-title">النتيجة: '+pct+'% ('+got+' / '+total+')</div>'
+      + '<div class="chef-bigstars">'+[1,2,3].map(function(n){ return '<span class="'+(n<=st?'on':'')+'">★</span>'; }).join('')+'</div>'
+      + '<div class="chef-grade">'+(pct>=85?'ممتازة! نتيجة تفتح النفس 🌟':pct>=60?'كويسة أوي — راجعي الغلطات تحت 💪':'بداية طيبة — راجعي الغلطات وجربي تاني 🌱')+'</div>'
+      + '<div class="chef-points">+'+pts+' نقطة 💎</div>'
+      + (wrongs.length ? '<div class="chef-title" style="font-size:.95rem">راجعي غلطاتك ('+wrongs.length+')</div>'
+          + wrongs.map(function(w){
+              return '<div class="engx-rev"><div class="rev-q">'+esc(w.q)+'</div><div class="rev-a">✅ '+esc(w.right)+'</div></div>';
+            }).join('') : '<div class="chef-grade">مفيش ولا غلطة — برافو! 🤌</div>')
+      + '<div class="engx-acts"><button class="btn" id="lexRetry">إعادة الامتحان 🔄</button><button class="btn ghost" id="lexList">كل الامتحانات 📋</button></div>';
+    try { if(pct>=85 && window.confetti) confetti(); } catch(e){}
+    document.getElementById('lexBack').onclick = function(){ pickExam(S.lang, S.level); };
+    document.getElementById('lexRetry').onclick = function(){ startExam(S.lang, S.level, S.no); };
+    document.getElementById('lexList').onclick = function(){ pickExam(S.lang, S.level); };
+  }
+
+  pickLang();
 })();
