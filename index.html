@@ -7,6 +7,13 @@
 <meta http-equiv="Expires" content="0">
 <meta name="version" content="12.0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#d4af37">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Lingua">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@500;600;700&display=swap" rel="stylesheet">
@@ -1979,6 +1986,7 @@
     <button class="tab active" data-at="me">👑 حسابي</button>
     <button class="tab" data-at="friends">👯 صحابي</button>
     <button class="tab" data-at="discover">💫 اكتشفي</button>
+    <button class="tab" data-at="rooms">📚 غرفنا</button>
     <button class="tab" data-at="chat">💬 الشات</button>
     <button class="tab" data-at="top">🏆 لوحة الشرف</button>
     <button class="tab" data-at="feed">📣 منشورات</button>
@@ -1986,6 +1994,7 @@
   <div id="accMe" class="acc-panel"></div>
   <div id="accFriends" class="acc-panel" style="display:none"></div>
   <div id="accDiscover" class="acc-panel" style="display:none"></div>
+  <div id="accRooms" class="acc-panel" style="display:none"></div>
   <div id="accChat" class="acc-panel" style="display:none"><div class="chat-box" id="chatBox"><div class="gbk-empty">اختاري صاحبة من «صحابي» وابدئوا الكلام 💬</div></div></div>
   <div id="accTop" class="acc-panel" style="display:none"><div id="topList"><div class="gbk-empty">بيتم التحميل... 🏆</div></div></div>
   <div id="accFeed" class="acc-panel" style="display:none">
@@ -2247,7 +2256,8 @@
     <div class="c-seal">🏅</div>
     <div class="c-date" id="certDate"></div>
     <div class="cert-actions">
-      <button class="btn" id="certPrint">🖨️ تحميل / طباعة الشهادة</button>
+      <button class="btn" id="certPDF">📥 حمليها PDF</button>
+      <button class="btn" id="certPrint" style="background:rgba(255,255,255,.08)">🖨️ طباعة</button>
       <button class="btn ghost" id="certClose" style="background:none;border:1px solid rgba(var(--goldA),.5);color:var(--gold)">إغلاق</button>
     </div>
   </div>
@@ -2562,6 +2572,61 @@ document.getElementById('certClose').addEventListener('click', function(){
 });
 document.getElementById('certOverlay').addEventListener('click', function(e){
   if(e.target === this) this.classList.remove('show');
+});
+
+/* ---- v14: downloadable PDF certificate ---- */
+function loadJsPDF(){
+  return new Promise(function(res, rej){
+    if(window.jspdf) return res(window.jspdf.jsPDF);
+    var sc = document.createElement('script');
+    sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    sc.onload = function(){ res(window.jspdf.jsPDF); };
+    sc.onerror = rej;
+    document.head.appendChild(sc);
+  });
+}
+function drawCertCanvas(){
+  var W = 1600, H = 1131;
+  var cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  var x = cv.getContext('2d');
+  x.fillStyle = '#0c0914'; x.fillRect(0,0,W,H);
+  var g = x.createRadialGradient(W/2,H/2,80,W/2,H/2,900);
+  g.addColorStop(0,'rgba(90,60,184,.28)'); g.addColorStop(1,'rgba(12,9,20,0)');
+  x.fillStyle = g; x.fillRect(0,0,W,H);
+  x.strokeStyle = '#d4af37'; x.lineWidth = 10; x.strokeRect(46,46,W-92,H-92);
+  x.strokeStyle = 'rgba(212,175,55,.45)'; x.lineWidth = 3; x.strokeRect(66,66,W-132,H-132);
+  x.textAlign = 'center'; x.direction = 'rtl';
+  x.fillStyle = '#f5d76e'; x.font = '700 64px "Readex Pro", "IBM Plex Sans Arabic", sans-serif';
+  x.fillText('LINGUA ✦ لينجوا', W/2, 180);
+  x.fillStyle = '#fff'; x.font = '800 88px "Readex Pro", "IBM Plex Sans Arabic", sans-serif';
+  x.fillText('شهادة إتمام مستوى', W/2, 330);
+  x.fillStyle = '#b9b2cc'; x.font = '500 44px "IBM Plex Sans Arabic", sans-serif';
+  x.fillText('تشهد منصة لينجوا بأن', W/2, 440);
+  x.fillStyle = '#f5d76e'; x.font = '900 96px "Readex Pro", "IBM Plex Sans Arabic", sans-serif';
+  x.fillText(document.getElementById('certName').textContent, W/2, 590);
+  x.strokeStyle = '#d4af37'; x.lineWidth = 2;
+  x.beginPath(); x.moveTo(W/2-380, 640); x.lineTo(W/2+380, 640); x.stroke();
+  x.fillStyle = '#fff'; x.font = '600 46px "IBM Plex Sans Arabic", sans-serif';
+  x.fillText('أتمّت بنجاح اختبار ' + document.getElementById('certLang').textContent + ' — المستوى ' + document.getElementById('certLevel').textContent + ' بعلامة كاملة', W/2, 740);
+  x.font = '110px serif'; x.fillText('🏅', W/2, 900);
+  x.fillStyle = '#b9b2cc'; x.font = '500 38px "IBM Plex Sans Arabic", sans-serif';
+  x.fillText(document.getElementById('certDate').textContent, W/2, 1000);
+  return cv;
+}
+document.getElementById('certPDF').addEventListener('click', function(){
+  var btn = this; btn.textContent = '⏳ بنجهزها...';
+  loadJsPDF().then(function(jsPDF){
+    var cv = drawCertCanvas();
+    var pdf = new jsPDF({orientation:'landscape', unit:'mm', format:'a4'});
+    pdf.addImage(cv.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 297, 210);
+    pdf.save('lingua-certificate.pdf');
+    btn.textContent = '📥 حمليها PDF';
+  }).catch(function(){
+    var cv = drawCertCanvas();
+    var a = document.createElement('a');
+    a.download = 'lingua-certificate.png'; a.href = cv.toDataURL('image/png'); a.click();
+    btn.textContent = '📥 حمليها PDF';
+  });
 });
 
 /* ================= Memory game ================= */
@@ -5496,12 +5561,13 @@ gbkRender();
   document.getElementById('accTabs').addEventListener('click', function(e){
     var b = e.target.closest('.tab'); if(!b) return;
     document.querySelectorAll('#accTabs .tab').forEach(function(t){ t.classList.toggle('active', t === b); });
-    var map = {me:'accMe', friends:'accFriends', chat:'accChat', top:'accTop', feed:'accFeed', discover:'accDiscover'};
+    var map = {me:'accMe', friends:'accFriends', chat:'accChat', top:'accTop', feed:'accFeed', discover:'accDiscover', rooms:'accRooms'};
     Object.keys(map).forEach(function(k){ document.getElementById(map[k]).style.display = (k === b.dataset.at) ? 'block' : 'none'; });
     if(b.dataset.at === 'top') loadTop();
     if(b.dataset.at === 'feed') loadFeed();
     if(b.dataset.at === 'friends') renderFriendsReal();
     if(b.dataset.at === 'discover') renderDiscover();
+    if(b.dataset.at === 'rooms') renderRooms();
   });
 
   /* ---- pending referral from invite link ---- */
@@ -5678,6 +5744,105 @@ gbkRender();
       var txt = 'يلا بينا نتعلم لغات سوا على Lingua! 💜 اعملي حساب من اللينك ده وهنبقى صحاب على طول ونتنافس في النقاط: ' + link;
       window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank');
     };
+  }
+
+  /* ---- study rooms ---- */
+  var roomChan = null, curRoom = null;
+  var ROOM_LANGS = [['any','🌍 كل اللغات'],['en','🇬🇧 إنجليزي'],['fr','🇫🇷 فرنسي'],['de','🇩🇪 ألماني'],['zh','🇨🇳 صيني'],['ko','🇰🇷 كوري']];
+  function renderRooms(){
+    var el = document.getElementById('accRooms');
+    if(!me){ needLogin(el); return; }
+    el.innerHTML =
+      '<div class="acc-card" style="max-width:520px"><h3>📚 اعملي غرفة مذاكرة</h3>' +
+      '<input class="acc-in" id="roomName" maxlength="40" placeholder="اسم الغرفة — مثال: مراجعة إنجليزي قبل الامتحان 📖">' +
+      '<div class="acc-row" style="margin-bottom:10px">' + ROOM_LANGS.map(function(l,i){ return '<button class="tab room-lang' + (i===0?' active':'') + '" data-rl="' + l[0] + '">' + l[1] + '</button>'; }).join('') + '</div>' +
+      '<button class="btn" id="roomCreate" style="width:100%">✨ افتحي الغرفة</button></div>' +
+      '<div id="roomList"><div class="gbk-empty">بيتم التحميل... 📚</div></div>' +
+      '<div id="roomOpen"></div>';
+    var selLang = 'any';
+    el.querySelectorAll('.room-lang').forEach(function(b){
+      b.onclick = function(){ el.querySelectorAll('.room-lang').forEach(function(x){x.classList.remove('active');}); b.classList.add('active'); selLang = b.dataset.rl; };
+    });
+    document.getElementById('roomCreate').onclick = function(){
+      var nm = document.getElementById('roomName').value.trim();
+      if(!nm){ toast('اكتبي اسم الغرفة الأول 😊'); return; }
+      sb.from('rooms').insert({name: nm, lang: selLang, created_by: me.id}).select().single().then(function(r){
+        if(r.error){ toast('حاجة غلط — جربي تاني'); return; }
+        sb.from('room_members').insert({room_id: r.data.id, user_id: me.id}).then(function(){
+          toast('غرفتك اتفتحت 🎉'); renderRooms();
+        });
+      });
+    };
+    Promise.all([
+      sb.from('rooms').select('*').order('created_at', {ascending:false}).limit(30),
+      sb.from('room_members').select('room_id,user_id'),
+      sb.from('profiles').select('id,display_name')
+    ]).then(function(rs){
+      var rooms = rs[0].data || [], members = rs[1].data || [], profs = {};
+      (rs[2].data || []).forEach(function(u){ profs[u.id] = u.display_name; });
+      var list = document.getElementById('roomList');
+      if(!rooms.length){ list.innerHTML = '<div class="gbk-empty">لسه مفيش غرف — كوني أول واحدة تفتح غرفة 📚✨</div>'; return; }
+      list.innerHTML = rooms.map(function(r){
+        var cnt = members.filter(function(m){ return m.room_id === r.id; }).length;
+        var mine = members.some(function(m){ return m.room_id === r.id && m.user_id === me.id; });
+        var langName = (ROOM_LANGS.find(function(l){return l[0]===r.lang;})||ROOM_LANGS[0])[1];
+        return '<div class="fr-item"><div class="fr-av">📚</div><div class="fr-name">' + esc(r.name) +
+          '<div style="color:var(--muted);font-size:.72rem">' + langName + ' • ' + cnt + ' عضوة • فتحتها ' + esc(profs[r.created_by]||'؟') + '</div></div>' +
+          (mine
+            ? '<button class="btn" style="padding:7px 14px;font-size:.8rem" data-openroom="' + r.id + '" data-nm="' + esc(r.name) + '">💬 ادخلي</button>'
+            : '<button class="btn" style="padding:7px 14px;font-size:.8rem" data-joinroom="' + r.id + '">➕ انضمي</button>') +
+          '</div>';
+      }).join('');
+      list.querySelectorAll('[data-joinroom]').forEach(function(b){
+        b.onclick = function(){
+          b.disabled = true;
+          sb.from('room_members').insert({room_id: b.dataset.joinroom, user_id: me.id}).then(function(){ toast('انضميتي! 🎉'); renderRooms(); });
+        };
+      });
+      list.querySelectorAll('[data-openroom]').forEach(function(b){
+        b.onclick = function(){ openRoom(b.dataset.openroom, b.dataset.nm); };
+      });
+    });
+  }
+  function openRoom(rid, name){
+    curRoom = rid;
+    var box = document.getElementById('roomOpen');
+    box.innerHTML =
+      '<div class="acc-card" style="max-width:560px;margin-top:14px"><h3>📚 ' + esc(name) + '</h3>' +
+      '<div class="chat-msgs" id="roomMsgs" style="max-height:300px;overflow-y:auto;margin-bottom:12px"><div class="gbk-empty">بيتم التحميل...</div></div>' +
+      '<div class="chat-send"><input class="acc-in" id="roomIn" maxlength="500" placeholder="اكتبي للمجموعة..." style="margin-bottom:0"><button class="btn" id="roomGo">ابعتي 💌</button></div></div>';
+    box.scrollIntoView({behavior:'smooth'});
+    function draw(list){
+      var el2 = document.getElementById('roomMsgs');
+      if(!el2) return;
+      el2.innerHTML = list.length ? list.map(function(m){
+        return '<div class="cm ' + (m.sender === me.id ? 'me' : 'them') + '"><div class="cm-b"><div style="font-size:.66rem;opacity:.75">' + esc(m._nm||'') + '</div>' + esc(m.body) + '</div></div>';
+      }).join('') : '<div class="gbk-empty">أول رسالة في الغرفة بتفتح المذاكرة 📚✨</div>';
+      el2.scrollTop = el2.scrollHeight;
+    }
+    function loadRoomMsgs(){
+      sb.from('room_messages').select('*').eq('room_id', rid).order('created_at', {ascending:true}).limit(200).then(function(r){
+        var list = r.data || [];
+        var senders = []; list.forEach(function(m){ if(senders.indexOf(m.sender)<0) senders.push(m.sender); });
+        if(!senders.length){ draw(list); return; }
+        sb.from('profiles').select('id,display_name').in('id', senders).then(function(pr){
+          var nm = {}; (pr.data||[]).forEach(function(u){ nm[u.id]=u.display_name; });
+          list.forEach(function(m){ m._nm = nm[m.sender]||''; });
+          draw(list);
+        });
+      });
+    }
+    document.getElementById('roomGo').onclick = sendRoom;
+    document.getElementById('roomIn').addEventListener('keydown', function(e){ if(e.key === 'Enter') sendRoom(); });
+    function sendRoom(){
+      var v = document.getElementById('roomIn').value.trim();
+      if(!v) return;
+      document.getElementById('roomIn').value = '';
+      sb.from('room_messages').insert({room_id: rid, sender: me.id, body: v}).then(function(){});
+    }
+    if(roomChan) sb.removeChannel(roomChan);
+    roomChan = sb.channel('room-' + rid).on('postgres_changes', {event:'INSERT', schema:'public', table:'room_messages', filter:'room_id=eq.' + rid}, function(){ loadRoomMsgs(); }).subscribe();
+    loadRoomMsgs();
   }
 
   /* ---- discover new friends (opt-in) ---- */
@@ -6235,7 +6400,7 @@ gbkRender();
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v13.3</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v14.0</div>
 <script>
 /* ================= v13: learning map, personality quiz, XO, korean ================= */
 (function(){
@@ -6392,6 +6557,41 @@ gbkRender();
     });
   });
   renderKR('greet');
+})();
+</script>
+<script>
+/* v14: PWA install + offline */
+(function(){
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      reg.addEventListener('updatefound', function(){
+        var nw = reg.installing;
+        if(!nw) return;
+        nw.addEventListener('statechange', function(){
+          if(nw.state === 'activated' && navigator.serviceWorker.controller){
+            try{ if(window.toast) toast('نسخة جديدة اتثبتت — حدثي الصفحة ✨'); }catch(e){}
+          }
+        });
+      });
+    }).catch(function(){});
+    var reloaded = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function(){
+      if(reloaded) return; reloaded = true;
+      try{ location.reload(); }catch(e){}
+    });
+  }
+  var deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault(); deferredPrompt = e;
+    if(document.getElementById('pwaBanner') || localStorage.getItem('lingua_pwa_dismiss')) return;
+    var b = document.createElement('div');
+    b.id = 'pwaBanner';
+    b.style.cssText = 'position:fixed;bottom:86px;left:50%;transform:translateX(-50%);z-index:70;background:linear-gradient(135deg,#1c1530,#14101c);border:1px solid rgba(212,175,55,.55);border-radius:18px;padding:12px 18px;display:flex;gap:10px;align-items:center;box-shadow:0 10px 40px rgba(0,0,0,.6);max-width:92vw';
+    b.innerHTML = '<span style="font-size:.85rem;font-weight:700">نزلي Lingua كتطبيق على موبايلك 📲</span><button class="btn" id="pwaGo" style="padding:8px 16px;font-size:.8rem">تثبيت ✨</button><button id="pwaNo" style="background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:4px">✕</button>';
+    document.body.appendChild(b);
+    document.getElementById('pwaGo').onclick = function(){ b.remove(); if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt = null; } };
+    document.getElementById('pwaNo').onclick = function(){ b.remove(); try{ localStorage.setItem('lingua_pwa_dismiss','1'); }catch(e){} };
+  });
 })();
 </script>
 </body>
