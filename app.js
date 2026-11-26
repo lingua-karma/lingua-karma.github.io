@@ -2417,7 +2417,7 @@ const MENU = [
   ['brain','🧠','ألعاب ذكاء'],['fun','🎮','العاب'],['dressup','👗','ستوديو التلبيس'],['dict','📖','القاموس'],
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
-  ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
+  ['friends','👯','أصحابي'],['chatlist','💬','الشات'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
   ['map','🚀','مسار التعلم'],['placement','🎯','مستواي'],['quests','📋','مهام اليوم'],['listen','🎧','استماع'],['mistakes','🩹','أخطائي'],['german','🇩🇪','ركن الألماني'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['karaoke','🎤','كاريوكي'],['lexams','📝','امتحانات'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['places','🏛️','أماكن'],['premium','💎','بريميوم'],['quotes','🎬','اقتباسات'],['ai','🤖','لمى'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق'],['pet','🥚','رفيقتي']
 ];
 
@@ -2570,7 +2570,7 @@ const MENU = [
   }).join('');
   function renderFW(){
     fwGrid.innerHTML = FW[fwLang].map(function(w){
-      return '<div class="fw-card"><span style="font-size:1.6rem">'+w[2]+'</span><div class="fw-t"><b>'+esc(w[0])+'</b><span>'+esc(w[1])+'</span></div><button class="fw-say" data-say="'+esc(w[0].replace(/ *\(.*?\)/,''))+'">🔊</button></div>';
+      return '<div class="fw-card"><span style="font-size:1.6rem">'+w[2]+'</span><div class="fw-t"><b>'+esc(w[0])+'</b><span>'+esc(w[1])+'</span></div><button class="fw-say" data-say="'+esc(w[0].replace(/ *\(.*?\)/,''))+'">🔊</button><button class="fw-save" data-w="'+esc(w[0])+'" data-a="'+esc(w[1])+'" title="احفظيها">💾</button></div>';
     }).join('');
   }
   fwTabs.addEventListener('click', function(e){
@@ -3106,7 +3106,7 @@ const MENU = [
     }).join('');
     function renderFashW(){
       fw.innerHTML = FASHW[fLang].map(function(w){
-        return '<div class="fw-card"><span style="font-size:1.5rem">'+w[2]+'</span><div class="fw-t"><b>'+esc(w[0])+'</b><span>'+esc(w[1])+'</span></div><button class="fw-say" data-say="'+esc(w[0].replace(/ *\(.*?\)/,''))+'">🔊</button></div>';
+        return '<div class="fw-card"><span style="font-size:1.5rem">'+w[2]+'</span><div class="fw-t"><b>'+esc(w[0])+'</b><span>'+esc(w[1])+'</span></div><button class="fw-say" data-say="'+esc(w[0].replace(/ *\(.*?\)/,''))+'">🔊</button><button class="fw-save" data-w="'+esc(w[0])+'" data-a="'+esc(w[1])+'" title="احفظيها">💾</button></div>';
       }).join('');
     }
     fl.addEventListener('click', function(e){
@@ -3347,7 +3347,7 @@ const MENU = [
     }).join('');
     function renderHb(){
       hw.innerHTML = HB[hLang].map(function(w){
-        return '<div class="fw-card"><span style="font-size:1.5rem">'+w[2]+'</span><div class="fw-t"><b>'+esc(w[0])+'</b><span>'+esc(w[1])+'</span></div><button class="fw-say" data-say="'+esc(w[0].replace(/ *\(.*?\)/,''))+'">🔊</button></div>';
+        return '<div class="fw-card"><span style="font-size:1.5rem">'+w[2]+'</span><div class="fw-t"><b>'+esc(w[0])+'</b><span>'+esc(w[1])+'</span></div><button class="fw-say" data-say="'+esc(w[0].replace(/ *\(.*?\)/,''))+'">🔊</button><button class="fw-save" data-w="'+esc(w[0])+'" data-a="'+esc(w[1])+'" title="احفظيها">💾</button></div>';
       }).join('');
     }
     hl.addEventListener('click', function(e){
@@ -10868,3 +10868,259 @@ window.LINGUA_VERSION='v98';
 })();
 
 window.LINGUA_VERSION='v99';
+/* ===== v100: weekly friends challenge + word of the day + tap-to-save words ===== */
+(function(){
+  'use strict';
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function sb(){ return window.__linguaGetSb && window.__linguaGetSb(); }
+  function me(){ return window.__linguaGetMe && window.__linguaGetMe(); }
+
+  var css = ''
+    + '.wotd-card{max-width:480px;margin:0 auto 20px;background:linear-gradient(135deg,rgba(212,175,55,.16),rgba(122,90,248,.1));border:1px solid rgba(212,175,55,.5);border-radius:20px;padding:18px;text-align:center;position:relative;overflow:hidden}'
+    + '.wotd-tag{color:#ffb84d;font-size:.72rem;font-weight:800;letter-spacing:1px;margin-bottom:6px}'
+    + '.wotd-word{font-size:1.7rem;font-weight:900;color:#f4e3ae;margin:4px 0 2px;direction:ltr}'
+    + '.wotd-ar{color:#c9bde8;font-size:.95rem;margin-bottom:4px}'
+    + '.wotd-ex{color:#8f84b8;font-size:.78rem;margin-bottom:12px;direction:ltr}'
+    + '.wotd-btns{display:flex;gap:8px;justify-content:center}'
+    + '.wotd-b{background:rgba(212,175,55,.14);border:1px solid rgba(212,175,55,.5);border-radius:12px;color:#f4e3ae;padding:8px 16px;font:inherit;font-weight:700;font-size:.85rem;cursor:pointer}'
+    + '.wotd-b.done{opacity:.55;border-style:dashed}'
+    + '.wch-card{max-width:480px;margin:0 auto 18px;background:rgba(255,255,255,.045);border:1px solid rgba(212,175,55,.35);border-radius:18px;padding:16px 18px}'
+    + '.wch-card h3{color:var(--gold,#d4af37);margin:0 0 4px;font-size:1.02rem}'
+    + '.wch-sub{color:#b3a8d8;font-size:.78rem;margin-bottom:12px}'
+    + '.wch-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}'
+    + '.wch-nm{width:90px;font-size:.85rem;font-weight:700;color:#f4e3ae;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
+    + '.wch-bar{flex:1;height:10px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden;border:1px solid rgba(212,175,55,.2)}'
+    + '.wch-fill{height:100%;background:linear-gradient(90deg,#b8860b,#ffd700);border-radius:99px;transition:width .6s ease}'
+    + '.wch-xp{font-size:.75rem;color:#ffb84d;font-weight:800;width:64px;text-align:left}'
+    + '.fw-save{background:none;border:none;cursor:pointer;font-size:.95rem;opacity:.7;transition:.15s}'
+    + '.fw-save:hover{opacity:1;transform:scale(1.15)}'
+    + '.fw-save.on{color:#ffd700;opacity:1}'
+    + '.svd-box{max-width:520px;margin:0 auto 16px}'
+    + '.svd-t{color:#ffb84d;font-size:.8rem;font-weight:800;margin-bottom:8px;text-align:center}'
+    + '.svd-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}'
+    + '.svd-chip{display:flex;align-items:center;gap:5px;background:rgba(122,90,248,.14);border:1px solid rgba(122,90,248,.4);border-radius:999px;padding:4px 10px;font-size:.78rem;color:#efe9fb}'
+    + '.svd-chip button{background:none;border:none;color:#8f84b8;cursor:pointer;font-size:.8rem;padding:0}';
+  var st = document.createElement('style');
+  st.textContent = css;
+  document.head.appendChild(st);
+
+  /* ---------- word of the day ---------- */
+  var WORDS = [
+    ['en','🇬🇧','serendipity','مصادفة حلوة','Finding her old letter was pure serendipity.'],
+    ['en','🇬🇧','bloom','يتفتح (زهرة)','The jasmine blooms at night.'],
+    ['en','🇬🇧','brave','شجاعة','She was brave enough to try again.'],
+    ['en','🇬🇧','journey','رحلة','Learning a language is a journey.'],
+    ['en','🇬🇧','wonder','دهشة','Her eyes were full of wonder.'],
+    ['en','🇬🇧','shine','يلمع / يتألق','Your hard work will shine.'],
+    ['fr','🇫🇷','soleil','الشمس','Le soleil brille aujourd’hui.'],
+    ['fr','🇫🇷','rêve','حلم','Mon rêve est de voyager.'],
+    ['fr','🇫🇷','amitié','صداقة','Notre amitié est précieuse.'],
+    ['fr','🇫🇷','étoile','نجمة','Chaque étoile raconte une histoire.'],
+    ['fr','🇫🇷','douceur','نعومة / حلاوة','La douceur du matin.'],
+    ['fr','🇫🇷','courage','شجاعة','Elle a le courage d’essayer.'],
+    ['de','🇩🇪','Freundschaft','صداقة','Freundschaft ist wichtig.'],
+    ['de','🇩🇪','Sonnenschein','ضوء الشمس','Der Sonnenschein macht mich glücklich.'],
+    ['de','🇩🇪','Träumerei','حلم يقظة','Sie sitzt in einer Träumerei.'],
+    ['de','🇩🇪','Herz','قلب','Sie hat ein gutes Herz.'],
+    ['de','🇩🇪','Abenteuer','مغامرة','Das Leben ist ein Abenteuer.'],
+    ['de','🇩🇪','Stärke','قوة','Deine Stärke wächst jeden Tag.'],
+    ['zh','🇨🇳','朋友','صديقة (péngyou)','她是我的朋友。'],
+    ['zh','🇨🇳','美丽','جميلة (měilì)','花园很美丽。'],
+    ['zh','🇨🇳','学习','تعلّم (xuéxí)','我们学习语言。'],
+    ['zh','🇨🇳','梦想','حلم (mèngxiǎng)','我的梦想很大。'],
+    ['zh','🇨🇳','开心','سعيدة (kāixīn)','今天我很开心。'],
+    ['zh','🇨🇳','勇气','شجاعة (yǒngqì)','她有勇气。'],
+    ['ko','🇰🇷','친구','صديقة (chingu)','그녀는 내 친구예요.'],
+    ['ko','🇰🇷','꽃','زهرة (kkot)','꽃이 피었어요.'],
+    ['ko','🇰🇷','꿈','حلم (kkum)','나는 꿈이 있어요.'],
+    ['ko','🇰🇷','행복','سعادة (haengbok)','행복은 가까이 있어요.'],
+    ['ko','🇰🇷','빛','ضوء (bit)','빛이 반짝여요.'],
+    ['ko','🇰🇷','용기','شجاعة (yonggi)','용기를 내세요.']
+  ];
+  var TTS = {en:'en-US', fr:'fr-FR', de:'de-DE', zh:'zh-CN', ko:'ko-KR'};
+  var NAMES = {en:'إنجليزي', fr:'فرنسي', de:'ألماني', zh:'صيني', ko:'كوري'};
+
+  function todayIdx(){
+    var d = Math.floor(Date.now() / 86400000);
+    return d % WORDS.length;
+  }
+
+  function sayWord(lang, text){
+    try {
+      var u = new SpeechSynthesisUtterance(text.replace(/ *\(.*?\)/, ''));
+      u.lang = TTS[lang] || 'en-US';
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    } catch(e){}
+  }
+
+  function renderWotd(){
+    var grid = document.getElementById('menuGrid');
+    if(!grid || document.getElementById('wotdCard')) return;
+    var w = WORDS[todayIdx()];
+    var done = localStorage.getItem('lingua_wotd_done') === new Date().toDateString();
+    var card = document.createElement('div');
+    card.id = 'wotdCard';
+    card.className = 'wotd-card';
+    card.innerHTML = '<div class="wotd-tag">✨ كلمة اليوم — ' + w[1] + ' ' + NAMES[w[0]] + '</div>'
+      + '<div class="wotd-word">' + esc(w[2]) + '</div>'
+      + '<div class="wotd-ar">' + esc(w[3]) + '</div>'
+      + '<div class="wotd-ex">' + esc(w[4]) + '</div>'
+      + '<div class="wotd-btns"><button class="wotd-b" id="wotdSay">🔊 اسمعيها</button>'
+      + '<button class="wotd-b' + (done ? ' done' : '') + '" id="wotdGot">' + (done ? '✅ اتعلمتها' : 'اتعلمتها! +2 💎') + '</button></div>';
+    grid.parentNode.insertBefore(card, grid);
+    document.getElementById('wotdSay').addEventListener('click', function(){ sayWord(w[0], w[2]); });
+    document.getElementById('wotdGot').addEventListener('click', function(){
+      if(localStorage.getItem('lingua_wotd_done') === new Date().toDateString()) return;
+      localStorage.setItem('lingua_wotd_done', new Date().toDateString());
+      try { if(window.awardPoints) window.awardPoints(2, 'كلمة اليوم'); else if(window.addPoints) window.addPoints(2); } catch(e){}
+      var b = document.getElementById('wotdGot');
+      if(b){ b.classList.add('done'); b.textContent = '✅ اتعلمتها'; }
+      renderWotdSaveChip(card, w);
+    });
+  }
+  function renderWotdSaveChip(card, w){
+    saveWord({l: w[0], w: w[2], a: w[3]});
+  }
+
+  /* ---------- saved words ---------- */
+  var SKEY = 'lingua_saved_words';
+  function savedWords(){ try { return JSON.parse(localStorage.getItem(SKEY) || '[]'); } catch(e){ return []; } }
+  function saveWord(x){
+    var list = savedWords();
+    if(!list.some(function(s){ return s.w === x.w; })){
+      list.unshift(x);
+      if(list.length > 60) list = list.slice(0, 60);
+      try { localStorage.setItem(SKEY, JSON.stringify(list)); } catch(e){}
+      toast100('اتحفظت في كلماتك 💾');
+      paintSaves();
+      renderSavedBox();
+    }
+  }
+  function unsaveWord(w){
+    var list = savedWords().filter(function(s){ return s.w !== w; });
+    try { localStorage.setItem(SKEY, JSON.stringify(list)); } catch(e){}
+    paintSaves();
+    renderSavedBox();
+  }
+  function paintSaves(){
+    var list = savedWords();
+    document.querySelectorAll('.fw-save').forEach(function(b){
+      b.classList.toggle('on', list.some(function(s){ return s.w === b.dataset.w; }));
+    });
+  }
+  function renderSavedBox(){
+    var host = document.getElementById('fwGrid') || document.querySelector('.fw-grid');
+    var sec = host ? host.closest('section') : null;
+    if(!sec) return;
+    var box = document.getElementById('svdBox');
+    if(!box){
+      box = document.createElement('div');
+      box.id = 'svdBox';
+      box.className = 'svd-box';
+      sec.insertBefore(box, sec.children[2] || null);
+    }
+    var list = savedWords();
+    box.innerHTML = list.length
+      ? '<div class="svd-t">💾 كلماتك المحفوظة (' + list.length + ')</div><div class="svd-chips">'
+        + list.slice(0, 30).map(function(s){
+            return '<span class="svd-chip"><b>' + esc(s.w) + '</b> ' + esc(s.a)
+              + ' <button class="svd-say" data-w="' + esc(s.w) + '" data-l="' + esc(s.l || 'en') + '">🔊</button>'
+              + ' <button class="svd-del" data-w="' + esc(s.w) + '">✕</button></span>';
+          }).join('') + '</div>'
+      : '';
+  }
+  document.addEventListener('click', function(e){
+    var sv = e.target.closest('.fw-save');
+    if(sv){ saveWord({w: sv.dataset.w, a: sv.dataset.a, l: sv.dataset.l || ''}); sv.classList.add('on'); return; }
+    var say = e.target.closest('.svd-say');
+    if(say){ sayWord(say.dataset.l, say.dataset.w); return; }
+    var del = e.target.closest('.svd-del');
+    if(del){ unsaveWord(del.dataset.w); return; }
+  });
+
+  function toast100(msg){
+    var t = document.createElement('div');
+    t.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#2d2450;border:1px solid rgba(212,175,55,.5);color:#f4e3ae;padding:9px 16px;border-radius:12px;z-index:10002;font-size:.85rem';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function(){ t.remove(); }, 2200);
+  }
+
+  /* ---------- weekly friends challenge ---------- */
+  var GOAL = 200;
+  function wkStartUTC(){
+    var d = new Date();
+    var day = (d.getUTCDay() + 6) % 7;
+    d.setUTCDate(d.getUTCDate() - day);
+    return d.toISOString().slice(0, 10);
+  }
+
+  function renderChallenge(){
+    var anchor = document.querySelector('#friends .wk-card');
+    if(!anchor) return;
+    var card = document.getElementById('wchCard');
+    if(!card){
+      card = document.createElement('div');
+      card.id = 'wchCard';
+      card.className = 'wch-card';
+      anchor.parentNode.insertBefore(card, anchor);
+    }
+    var m = me();
+    if(!m || !sb()){
+      card.innerHTML = '<h3>🎯 تحدي الأسبوع</h3><div class="wch-sub">سجلي حسابك وشاركي صحابك التحدي — أول واحدة توصل ' + GOAL + ' 💎 تاخد تاج الأسبوع 👑</div>';
+      return;
+    }
+    card.innerHTML = '<h3>🎯 تحدي الأسبوع</h3><div class="wch-sub">بيتم التحميل...</div>';
+    sb().from('friendships').select('user_id,friend_id').or('user_id.eq.' + m.id + ',friend_id.eq.' + m.id).then(function(r){
+      var ids = {}; ids[m.id] = 1;
+      (r.data || []).forEach(function(f){ ids[f.user_id] = 1; ids[f.friend_id] = 1; });
+      sb().from('profiles').select('id,display_name,week_xp,week_start').in('id', Object.keys(ids)).then(function(pr){
+        var cur = wkStartUTC();
+        var rows = (pr.data || []).map(function(p){
+          return {name: p.display_name || 'صديقة', xp: (p.week_start === cur ? (p.week_xp || 0) : 0), me: p.id === m.id};
+        }).sort(function(a, b){ return b.xp - a.xp; });
+        var h = '<h3>🎯 تحدي الأسبوع: أول واحدة توصل ' + GOAL + ' 💎</h3>'
+          + '<div class="wch-sub">اللي توصل للهدف تاخد تاج الأسبوع 👑 — بيتجدد كل اثنين</div>';
+        if(rows.length < 2){
+          h += '<div class="wch-sub">ضيفي صحابك من تاب «👯 صحابي» وابدأوا التحدي سوا 👯‍♀️</div>';
+        } else {
+          h += rows.map(function(p){
+            var pct = Math.min(100, Math.round((p.xp / GOAL) * 100));
+            var crown = p.xp >= GOAL ? ' 👑' : '';
+            return '<div class="wch-row"><span class="wch-nm">' + esc(p.name) + (p.me ? ' ✨' : '') + crown + '</span>'
+              + '<span class="wch-bar"><span class="wch-fill" style="width:' + pct + '%"></span></span>'
+              + '<span class="wch-xp">' + p.xp + '/' + GOAL + '</span></div>';
+          }).join('');
+        }
+        card.innerHTML = h;
+      });
+    });
+  }
+
+  /* ---------- boot ---------- */
+  function boot(){
+    renderWotd();
+    paintSaves();
+    if(location.hash === '#friends') renderChallenge();
+    window.addEventListener('hashchange', function(){
+      if(location.hash === '#friends') renderChallenge();
+      if(location.hash === '#menu' || location.hash === '' || location.hash === '#') renderWotd();
+      setTimeout(function(){ paintSaves(); renderSavedBox(); }, 400);
+    });
+    var wr = document.getElementById('weekRefresh');
+    if(wr) wr.addEventListener('click', function(){ setTimeout(renderChallenge, 600); });
+    setTimeout(function(){ paintSaves(); renderSavedBox(); }, 1200);
+    var tries = 0;
+    var iv = setInterval(function(){
+      tries++;
+      if(me()){ if(location.hash === '#friends') renderChallenge(); clearInterval(iv); }
+      else if(tries > 20) clearInterval(iv);
+    }, 1500);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+window.LINGUA_VERSION='v100';
