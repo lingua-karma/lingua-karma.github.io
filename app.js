@@ -5641,27 +5641,38 @@ gbkRender();
   /* ---- lesson engine ---- */
   var LS = null;
   var overlay, plBody, plBar, plHearts;
-  function mkMcq(w, words, dir){
-    var others = shuf(words.filter(function(x){ return x!==w; })).slice(0,3);
-    var opts = shuf([w].concat(others));
-    return {type:'mcq', dir:dir, w:w, opts:opts};
+  function distractors(w, pool, n){
+    var others = shuf(pool.filter(function(x){ return x.f!==w.f; })).slice(0,n||3);
+    while(others.length<(n||3)) others.push(others[others.length%(n||3)]||w);
+    return others;
   }
-  function mkListen(w, words){
-    var others = shuf(words.filter(function(x){ return x!==w; })).slice(0,3);
-    return {type:'listen', w:w, opts:shuf([w].concat(others))};
+  function mkMcq(w, pool, dir){
+    return {type:'mcq', dir:dir, w:w, opts:shuf([w].concat(distractors(w, pool)))};
+  }
+  function mkListen(w, pool){
+    return {type:'listen', w:w, opts:shuf([w].concat(distractors(w, pool)))};
   }
   function mkType(w){ return {type:'type', w:w}; }
   function mkOrder(ui){ var s = SENTS[lang][ui % SENTS[lang].length]; return {type:'order', tiles:shuf(s), ans:s, picked:[]}; }
   function mkMatch(ws){ return {type:'match', pairs:ws, f:shuf(ws), a:shuf(ws), sel:null, got:0}; }
 
+  function row2w(r){ return {f:r[LIDX[lang]], a:r[5], e:r[6]}; }
+  function themePool(key){ return ((window.VOCAB_THEMES||{})[key].rows||[]).map(row2w); }
+  function pickWords(key, n, offset){
+    var pool = themePool(key); var out = [];
+    if(!pool.length) return out;
+    for(var i=0;i<n;i++) out.push(pool[(offset+i)%pool.length]);
+    return out;
+  }
   function startBoss(ui){
-    var key = PATH_UNITS[ui], th = (window.VOCAB_THEMES||{})[key];
-    var words = shuf(th.rows).map(function(r){ return {f:r[LIDX[lang]], a:r[5], e:r[6]}; });
+    var key = PATH_UNITS[ui];
+    var words = shuf(pickWords(key, 12, ui*3));
+    var pool = themePool(key);
     var exs = [];
-    for(var i=0;i<4;i++) exs.push(mkMcq(words[i], words, 'f2a'));
-    exs.push(mkMcq(words[4], words, 'a2f')); exs.push(mkMcq(words[5], words, 'a2f'));
-    exs.push(mkListen(words[6], words)); exs.push(mkListen(words[7], words));
-    exs.push((lang==='zh'||lang==='ko') ? mkListen(words[8], words) : mkType(words[8]));
+    for(var i=0;i<4;i++) exs.push(mkMcq(words[i], pool, 'f2a'));
+    exs.push(mkMcq(words[4], pool, 'a2f')); exs.push(mkMcq(words[5], pool, 'a2f'));
+    exs.push(mkListen(words[6], pool)); exs.push(mkListen(words[7], pool));
+    exs.push((lang==='zh'||lang==='ko') ? mkListen(words[8], pool) : mkType(words[8]));
     exs.push(mkOrder(ui));
     LS = {ui:ui, li:3, key:key, exs:exs, i:0, hearts:5, xp:0, boss:true, score:0};
     overlay.classList.add('show');
@@ -5669,12 +5680,13 @@ gbkRender();
     renderEx();
   }
   function startLesson(ui, li){
-    var key = PATH_UNITS[ui], th = (window.VOCAB_THEMES||{})[key];
-    var words = th.rows.slice(li*10, li*10+10).map(function(r){ return {f:r[LIDX[lang]], a:r[5], e:r[6]}; });
-    var exs = [mkMcq(words[0],words), mkMcq(words[1],words), mkListen(words[2],words)];
-    exs.push((lang==='zh'||lang==='ko') ? mkListen(words[3],words) : mkType(words[3]));
+    var key = PATH_UNITS[ui];
+    var words = pickWords(key, 10, li*10);
+    var pool = themePool(key);
+    var exs = [mkMcq(words[0],pool,'f2a'), mkMcq(words[1],pool,'a2f'), mkListen(words[2],pool)];
+    exs.push((lang==='zh'||lang==='ko') ? mkListen(words[3],pool) : mkType(words[3]));
     exs.push(mkOrder(ui));
-    exs.push(mkMatch(words.slice(4,8)));
+    exs.push(mkMatch(shuf(pool).slice(0,4)));
     LS = {ui:ui, li:li, key:key, exs:exs, i:0, hearts:5, xp:0};
     overlay.classList.add('show');
     document.body.style.overflow='hidden';
