@@ -5591,18 +5591,33 @@ gbkRender();
   var LIDX = {en:0, fr:1, de:2, zh:3, ko:4};
   var TTS = {en:'en-US', fr:'fr-FR', de:'de-DE', zh:'zh-CN', ko:'ko-KR'};
   var SENTS = {
-    en: [['I','love','learning','languages'],['How','are','you','today'],['Thank','you','very','much'],['Good','morning','my','friend'],['Where','is','the','library']],
-    fr: [['Je','suis','très','content'],['Comment','ça','va'],['Merci','beaucoup','mon','ami'],['Bonjour','tout','le','monde'],['Où','est','la','gare']],
-    de: [['Ich','lerne','gern','Deutsch'],['Wie','geht','es','dir'],['Danke','sehr','mein','Freund'],['Guten','Morgen','alle','zusammen'],['Wo','ist','der','Bahnhof']],
-    zh: [['我','爱','学习','语言'],['你','好','吗'],['非常','谢谢','你'],['早上好','朋友'],['图书馆','在','哪里']],
-    ko: [['저는','언어를','배워요'],['잘','지내요'],['정말','고마워요'],['좋은','아침이에요'],['도서관이','어디예요']]
+    en: [['I','love','learning','languages'],['How','are','you','today'],['Thank','you','very','much'],['Good','morning','my','friend'],['Where','is','the','library'],['What','time','is','it'],['I','want','a','coffee'],['See','you','tomorrow'],['This','is','my','family'],['Where','do','you','live']],
+    fr: [['Je','suis','très','content'],['Comment','ça','va'],['Merci','beaucoup','mon','ami'],['Bonjour','tout','le','monde'],['Où','est','la','gare'],['Il','fait','beau'],['Je','veux','un','café'],['À','demain','matin'],['Voici','ma','famille'],['Tu','habites','où']],
+    de: [['Ich','lerne','gern','Deutsch'],['Wie','geht','es','dir'],['Danke','sehr','mein','Freund'],['Guten','Morgen','alle','zusammen'],['Wo','ist','der','Bahnhof'],['Es','ist','schönes','Wetter'],['Ich','möchte','einen','Kaffee'],['Bis','morgen','früh'],['Das','ist','meine','Familie'],['Wo','wohnst','du']],
+    zh: [['我','爱','学习','语言'],['你','好','吗'],['非常','谢谢','你'],['早上好','朋友'],['图书馆','在','哪里'],['今天','天气','很好'],['我','想','喝','咖啡'],['明天','早上','见'],['这','是','我的','家人'],['你','住在','哪里']],
+    ko: [['저는','언어를','배워요'],['잘','지내요'],['정말','고마워요'],['좋은','아침이에요'],['도서관이','어디예요'],['오늘','날씨가','좋아요'],['커피를','마시고','싶어요'],['내일','아침에','만나요'],['이건','제','가족이에요'],['어디에','살아요']]
   };
   var lang = 'en';
   function escH(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function shuf(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
-  function store(){ try{ return JSON.parse(localStorage.getItem('lingua_path_'+lang))||{}; }catch(e){ return {}; } }
-  function saveS(s){ try{ localStorage.setItem('lingua_path_'+lang, JSON.stringify(s)); }catch(e){} }
-  function unitDone(s,key){ var a=s[key]||[]; return !!(a[0]&&a[1]&&a[2]&&a[3]); }
+  var NLESS = 5; /* lessons per unit; boss flag at index NLESS */
+  function store(){
+    try{
+      var cur = JSON.parse(localStorage.getItem('lingua_path2_'+lang));
+      if(cur) return cur;
+      var old = JSON.parse(localStorage.getItem('lingua_path_'+lang));
+      if(old){
+        var mig = {};
+        Object.keys(old).forEach(function(k){ var a=old[k]||[]; mig[k]=[a[0]||false,a[1]||false,a[2]||false,false,false,a[3]||false]; });
+        localStorage.setItem('lingua_path2_'+lang, JSON.stringify(mig));
+        localStorage.removeItem('lingua_path_'+lang);
+        return mig;
+      }
+    }catch(e){}
+    return {};
+  }
+  function saveS(s){ try{ localStorage.setItem('lingua_path2_'+lang, JSON.stringify(s)); }catch(e){} }
+  function unitDone(s,key){ var a=s[key]||[]; for(var i=0;i<=NLESS;i++){ if(!a[i]) return false; } return true; }
   function unitOpen(s,u){ return u===0 || unitDone(s, PATH_UNITS[u-1]); }
   function say(t){ try{ var u=new SpeechSynthesisUtterance(t.replace(/ *\(.*?\)/g,'')); u.lang=TTS[lang]; u.rate=.85; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){} }
   function norm(s){ return String(s).toLowerCase().trim().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ß/g,'ss').replace(/[.!?,؛،'’]/g,'').replace(/\s+/g,' '); }
@@ -5619,20 +5634,22 @@ gbkRender();
       var th = VOC[key]; if(!th) return;
       var st = s[key]||[false,false,false];
       var done = unitDone(s,key), open = unitOpen(s,u);
-      var dots = [0,1,2,3].map(function(i){ return '<i class="'+(st[i]?'on':'')+(i===3?' boss':'')+'"></i>'; }).join('');
+      var dots = []; for(var di=0;di<=NLESS;di++) dots.push('<i class="'+(st[di]?'on':'')+(di===NLESS?' boss':'')+'"></i>'); dots=dots.join('');
       html += '<div class="pu-row '+(u%2?'r':'l')+'">'
         + '<button class="pu-node '+(done?'done':open?'open':'locked')+'" data-punit="'+u+'"'+(open?'':' disabled')+'>'
         + '<span>'+(done?'🏅':(open?th.rows[0][6]:'🔒'))+'</span></button>'
         + '<div class="pu-info"><b>'+escH(th.name)+'</b><span class="pu-dots">'+dots+'</span></div></div>';
       if(open && !done){
-        var bossOpen = st[0]&&st[1]&&st[2];
-        html += '<div class="pu-lessons">'+[0,1,2].map(function(l){
+        var bossOpen = true; for(var bi=0;bi<NLESS;bi++){ if(!st[bi]) bossOpen=false; }
+        var lrow='';
+        for(var l=0;l<NLESS;l++){
           var lopen = l===0 || st[l-1];
-          return '<button class="pl-btn '+(st[l]?'done':lopen?'open':'locked')+'" data-ulesson="'+u+':'+l+'"'+(lopen?'':' disabled')+'>'
-            +(st[l]?'⭐':(lopen?'▶':'🔒'))+' درس '+(l+1)+'</button>';
-        }).join('')
-        + '<button class="pl-btn boss '+(st[3]?'done':bossOpen?'open':'locked')+'" data-uboss="'+u+'"'+(bossOpen?'':' disabled')+'>'
-        + (st[3]?'👑':'👑')+' الاختبار</button></div>';
+          lrow += '<button class="pl-btn '+(st[l]?'done':lopen?'open':'locked')+'" data-ulesson="'+u+':'+l+'"'+(lopen?'':' disabled')+'>'
+            +(st[l]?'⭐':(lopen?'▶':'🔒'))+' '+(l+1)+'</button>';
+        }
+        html += '<div class="pu-lessons">'+lrow
+        + '<button class="pl-btn boss '+(st[NLESS]?'done':bossOpen?'open':'locked')+'" data-uboss="'+u+'"'+(bossOpen?'':' disabled')+'>'
+        + '👑</button></div>';
       }
     });
     document.getElementById('mapPath').innerHTML = html;
@@ -5674,14 +5691,14 @@ gbkRender();
     exs.push(mkListen(words[6], pool)); exs.push(mkListen(words[7], pool));
     exs.push((lang==='zh'||lang==='ko') ? mkListen(words[8], pool) : mkType(words[8]));
     exs.push(mkOrder(ui));
-    LS = {ui:ui, li:3, key:key, exs:exs, i:0, hearts:5, xp:0, boss:true, score:0};
+    LS = {ui:ui, li:NLESS, key:key, exs:exs, i:0, hearts:5, xp:0, boss:true, score:0};
     overlay.classList.add('show');
     document.body.style.overflow='hidden';
     renderEx();
   }
   function startLesson(ui, li){
     var key = PATH_UNITS[ui];
-    var words = pickWords(key, 10, li*10);
+    var words = pickWords(key, 8, li*6);
     var pool = themePool(key);
     var exs = [mkMcq(words[0],pool,'f2a'), mkMcq(words[1],pool,'a2f'), mkListen(words[2],pool)];
     exs.push((lang==='zh'||lang==='ko') ? mkListen(words[3],pool) : mkType(words[3]));
@@ -5801,7 +5818,7 @@ gbkRender();
     plBar.style.width='100%';
     var passed = LS.score>=7;
     if(passed){
-      var s=store(); var st=s[LS.key]||[false,false,false,false]; st[3]=true; s[LS.key]=st; saveS(s);
+      var s=store(); var st=s[LS.key]||[]; st[NLESS]=true; s[LS.key]=st; saveS(s);
       var nm=(window.VOCAB_THEMES||{})[LS.key].name;
       badge(nm);
       if(window.awardPoints) awardPoints(50,'اختبار الوحدة 👑');
@@ -5820,9 +5837,9 @@ gbkRender();
   function endLesson(won){
     plBar.style.width='100%';
     if(won){
-      var s=store(); var st=s[LS.key]||[false,false,false]; st[LS.li]=true; s[LS.key]=st; saveS(s);
+      var s=store(); var st=s[LS.key]||[]; st[LS.li]=true; s[LS.key]=st; saveS(s);
       if(window.awardPoints) awardPoints(20,'إكمال درس 🚀');
-      var unitComplete = st[0]&&st[1]&&st[2];
+      var unitComplete = true; for(var ci=0;ci<NLESS;ci++){ if(!st[ci]) unitComplete=false; }
       var bHtml='';
       if(unitComplete){
         var nm=(window.VOCAB_THEMES||{})[LS.key].name;
