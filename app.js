@@ -6353,6 +6353,61 @@ window.KM_POOL = [
     });
   }
 
+  /* ---------- per-match random + per-player seen tracking ---------- */
+  function poolLenFor(game){
+    if(game === 'gk') return window.GK_POOL.length;
+    if(game === 'truth') return window.TRUTH_POOL.length;
+    if(game === 'knowme') return window.KM_POOL.length;
+    return vocabPool().length;
+  }
+  function needFor(game){
+    if(game === 'quiz') return 12;
+    if(game === 'race') return 60;
+    if(game === 'memory') return 8;
+    if(game === 'gk') return 15;
+    if(game === 'truth') return 12;
+    if(game === 'knowme') return 10;
+    return 10;
+  }
+  function pickIds(game){
+    var poolLen = poolLenFor(game), need = Math.min(needFor(game), poolLen);
+    var key = 'lingua_seen_' + game, seen = [];
+    try { seen = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e){}
+    var avail = [], i;
+    for(i = 0; i < poolLen; i++) if(seen.indexOf(i) < 0) avail.push(i);
+    if(avail.length < need){ avail = []; for(i = 0; i < poolLen; i++) avail.push(i); }
+    for(var k = avail.length - 1; k > 0; k--){ var m = Math.floor(Math.random() * (k + 1)), t = avail[k]; avail[k] = avail[m]; avail[m] = t; }
+    return avail.slice(0, need);
+  }
+  function recordSeen(game, ids){
+    if(!ids || !ids.length) return;
+    var poolLen = poolLenFor(game), key = 'lingua_seen_' + game, seen = [];
+    try { seen = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e){}
+    ids.forEach(function(i){ if(seen.indexOf(i) < 0) seen.push(i); });
+    if(seen.length >= poolLen) seen = [];
+    try { localStorage.setItem(key, JSON.stringify(seen)); } catch(e){}
+  }
+  function buildMcqIds(lang, ids){
+    var pool = vocabPool(), li = LIDX[lang];
+    var r = rng(hash(ids.join(',') + ':' + lang));
+    return ids.map(function(i){
+      var row = pool[i]; if(!row) return null;
+      var opts = [row[5]], tries = 0;
+      while(opts.length < 4 && tries < 80){ var o = pool[Math.floor(r() * pool.length)][5]; if(opts.indexOf(o) < 0) opts.push(o); tries++; }
+      for(var k = opts.length - 1; k > 0; k--){ var m = Math.floor(r() * (k + 1)), tmp = opts[k]; opts[k] = opts[m]; opts[m] = tmp; }
+      return {w: row[li], e: row[6], a: row[5], opts: opts};
+    }).filter(Boolean);
+  }
+  function buildGkIds(ids){
+    var r = rng(hash(ids.join(',') + ':gk'));
+    return ids.map(function(i){
+      var q = window.GK_POOL[i]; if(!q) return null;
+      var opts = q.o.slice();
+      for(var k = opts.length - 1; k > 0; k--){ var m = Math.floor(r() * (k + 1)), t = opts[k]; opts[k] = opts[m]; opts[m] = t; }
+      return {w: q.q, e: '🧠', a: q.a, opts: opts};
+    }).filter(Boolean);
+  }
+
   /* ---------- home / lobby ---------- */
   function render(){
     var box = el('duelBox');
@@ -6465,6 +6520,7 @@ window.KM_POOL = [
             if(pr2.game && GAMES[pr2.game] && S.game !== pr2.game){ S.game = pr2.game; if(S.st === 'lobby') render(); }
             if(pr2.started && S.st === 'lobby'){
               if(pr2.lang && LANGS[pr2.lang]) S.lang = pr2.lang;
+              if(pr2.qi) S.qids = pr2.qi;
               beginGame(pr2.at || (Date.now() + 1500));
               return;
             }
@@ -6493,7 +6549,7 @@ window.KM_POOL = [
       var p = ev.payload;
       if(!p || p.by === S.uid) return;
       if(p.t === 'ready'){ S.opp = S.opp || {uid: p.by, name: p.name}; S._oppReady = true; maybeStart(); }
-      if(p.t === 'start'){ S.game = p.game || S.game; S.lang = p.lang || S.lang; if(!S.host) beginGame(p.at); }
+      if(p.t === 'start'){ S.game = p.game || S.game; S.lang = p.lang || S.lang; if(p.qi) S.qids = p.qi; if(!S.host) beginGame(p.at); }
       if(p.t === 'ans'){ S.oppAns[p.q] = {ok: p.ok, ms: p.ms}; if(S.st === 'game') updOppTick(); }
       if(p.t === 'prog'){ S.oppN = p.n; updRaceOpp(); }
       if(p.t === 'claim'){ onOppClaim(p.pair); }
@@ -6515,8 +6571,9 @@ window.KM_POOL = [
     if(S._iReady && S._oppReady){
       S.st = 'starting';
       var at = Date.now() + 2500;
-      send('start', {at: at, game: S.game, lang: S.lang});
-      try { chan.track({name: S.myName, ready: true, game: S.game, started: true, at: at, lang: S.lang}); } catch(e){}
+      S.qids = pickIds(S.game);
+      send('start', {at: at, game: S.game, lang: S.lang, qi: S.qids});
+      try { chan.track({name: S.myName, ready: true, game: S.game, started: true, at: at, lang: S.lang, qi: S.qids}); } catch(e){}
       beginGame(at);
     }
   }
@@ -6537,7 +6594,7 @@ window.KM_POOL = [
     S.st = 'game'; S.qi = 0; S.startT = at; S.myAns = []; S.oppAns = []; S.myScore = 0;
     S.oppDone = false; S.oppForfeit = false; S.raceN = 0; S.raceMs = 0; S.oppN = 0; S.oppMs = 0; S.mem = {flip:[], mine:[], opp:[], done:false};
     if(S.game === 'race'){
-      S.qs = buildMcq(S.code, 'race', S.lang, 60);
+      S.qs = S.qids ? buildMcqIds(S.lang, S.qids) : buildMcq(S.code, 'race', S.lang, 60);
       raceShell(at);
     } else if(S.game === 'memory'){
       memShell(at);
@@ -6546,9 +6603,10 @@ window.KM_POOL = [
     } else if(S.game === 'knowme'){
       knowShell(at);
     } else {
-      S.qs = (S.game === 'gk') ? buildGk(S.code) : buildMcq(S.code, 'quiz', S.lang, 12);
+      S.qs = (S.game === 'gk') ? (S.qids ? buildGkIds(S.qids) : buildGk(S.code)) : (S.qids ? buildMcqIds(S.lang, S.qids) : buildMcq(S.code, 'quiz', S.lang, 12));
       quizShell(at);
     }
+    recordSeen(S.game, S.qids);
   }
 
   /* ---------- shared quiz shell (quiz + gk) ---------- */
@@ -6678,8 +6736,11 @@ window.KM_POOL = [
 
   /* ---------- memory (shared claims) ---------- */
   function memShell(at){
-    var r = rng(hash(S.code + ':mem:' + S.lang));
+    var r = S.qids ? rng(hash(S.qids.join(',') + ':mem')) : rng(hash(S.code + ':mem:' + S.lang));
     var pool = vocabPool(), used = {}, pairs = [];
+    if(S.qids){
+      S.qids.forEach(function(i){ if(pool[i]) pairs.push({f: pool[i][LIDX[S.lang]], a: pool[i][5], e: pool[i][6]}); });
+    }
     while(pairs.length < 8){
       var i = Math.floor(r() * pool.length);
       if(used[i]) continue; used[i] = 1;
@@ -6764,12 +6825,19 @@ window.KM_POOL = [
   /* ---------- truth (group) ---------- */
   function truthShell(at){
     var r = rng(hash(S.code + ':truth'));
-    var fun = window.TRUTH_POOL.filter(function(q){ return q.c === 'fun'; });
-    var emb = window.TRUTH_POOL.filter(function(q){ return q.c === 'embar'; });
-    function shuf(a){ a = a.slice(); for(var k = a.length - 1; k > 0; k--){ var m = Math.floor(r() * (k + 1)), t = a[k]; a[k] = a[m]; a[m] = t; } return a; }
-    fun = shuf(fun); emb = shuf(emb);
+    var fun, emb;
+    if(S.qids){
+      fun = []; emb = [];
+      S.qids.forEach(function(i){ var q = window.TRUTH_POOL[i]; if(q) (q.c === 'embar' ? emb : fun).push(q); });
+    } else {
+      fun = window.TRUTH_POOL.filter(function(q){ return q.c === 'fun'; });
+      emb = window.TRUTH_POOL.filter(function(q){ return q.c === 'embar'; });
+      function shuf(a){ a = a.slice(); for(var k = a.length - 1; k > 0; k--){ var m = Math.floor(r() * (k + 1)), t = a[k]; a[k] = a[m]; a[m] = t; } return a; }
+      fun = shuf(fun); emb = shuf(emb);
+    }
     S.tQs = [];
-    for(var i = 0; i < 6; i++){ S.tQs.push(fun[i]); S.tQs.push(emb[i]); }
+    var nR = Math.min(6, fun.length, emb.length);
+    for(var i = 0; i < nR; i++){ S.tQs.push(fun[i]); S.tQs.push(emb[i]); }
     S.tR = 0; S.tAns = {}; S.tMine = false;
     el('duelBox').innerHTML = '<div class="du-card"><div id="duQ"></div><div id="duOpts"></div><div class="du-fb" id="duFb"></div></div>';
     var wait = at - Date.now();
@@ -6857,10 +6925,14 @@ window.KM_POOL = [
   /* ---------- know-me (2 players) ---------- */
   function knowShell(at){
     S.kMine = []; S.kGuess = []; S.oppK = null; S._oppKReady = false; S.kPhase = 1;
-    var rk = rng(hash(S.code + ':know'));
-    var ki = window.KM_POOL.map(function(_, i){ return i; });
-    for(var k = ki.length - 1; k > 0; k--){ var m = Math.floor(rk() * (k + 1)), t = ki[k]; ki[k] = ki[m]; ki[m] = t; }
-    S.kQs = ki.slice(0, 10).map(function(i){ return window.KM_POOL[i]; });
+    if(S.qids){
+      S.kQs = S.qids.map(function(i){ return window.KM_POOL[i]; }).filter(Boolean);
+    } else {
+      var rk = rng(hash(S.code + ':know'));
+      var ki = window.KM_POOL.map(function(_, i){ return i; });
+      for(var k = ki.length - 1; k > 0; k--){ var m = Math.floor(rk() * (k + 1)), t = ki[k]; ki[k] = ki[m]; ki[m] = t; }
+      S.kQs = ki.slice(0, 10).map(function(i){ return window.KM_POOL[i]; });
+    }
     var wait = at - Date.now();
     el('duelBox').innerHTML = '<div class="du-card"><div id="duQ"><div class="du-count">استعدي... 💜</div></div><div id="duOpts"></div><div class="du-fb" id="duFb"></div></div>';
     later(function(){ knowQ(0); }, Math.max(50, wait));
