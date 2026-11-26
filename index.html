@@ -2121,6 +2121,38 @@
     <div class="piano-song"><button id="pianoSong">🎵 اعزفيلي Happy Birthday</button></div>
   </div>
 </section>
+<section id="diary">
+  <h2 class="sec-title">✦ يومياتي ✦</h2>
+  <p class="sec-sub">مذكراتك الخاصة — محفوظة على موبايلك بس 📔🔒</p>
+  <div class="diary-box">
+    <textarea class="diary-ta" id="diaryTa" placeholder="اكتبي يومك هنا... إيه اللي حصل النهاردة؟ 🌸"></textarea>
+    <button class="diary-save" id="diarySave">💾 احفظي اليومية</button>
+    <div id="diaryList"></div>
+  </div>
+</section>
+<section id="khatma">
+  <h2 class="sec-title">✦ متابعة الختمة ✦</h2>
+  <p class="sec-sub">علّمي على كل جزء خلصتيه 📿</p>
+  <div class="ch30-stats" id="khatmaStats"></div>
+  <div class="ch30-bar"><div class="ch30-fill" id="khatmaFill"></div></div>
+  <div class="khatma-grid" id="khatmaGrid"></div>
+</section>
+<section id="weather">
+  <h2 class="sec-title">✦ الجو النهاردة ✦</h2>
+  <p class="sec-sub">عشان تعرفي تلبسي إيه وتتمرني إزاي 🌤️</p>
+  <div class="weather-box">
+    <select class="weather-city" id="wCity">
+      <option value="30.0444,31.2357">القاهرة</option>
+      <option value="27.1809,31.1897">أسيوط</option>
+      <option value="31.2001,29.9187">إسكندرية</option>
+      <option value="30.0131,31.2089">الجيزة</option>
+      <option value="32.3019,30.8450">السويس</option>
+      <option value="25.6872,32.6396">الأقصر</option>
+    </select>
+    <div id="wBody"><div style="color:var(--muted);font-size:.85rem">بنجيب الجو...</div></div>
+  </div>
+</section>
+
 
 
 
@@ -2547,6 +2579,24 @@
 .pk-label{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-size:.6rem;color:#8a7fb5;pointer-events:none}
 .piano-song{margin-top:12px;text-align:center}
 .piano-song button{background:#1a1428;border:1px solid var(--border);color:var(--ink);border-radius:999px;padding:7px 16px;font-size:.8rem;cursor:pointer;font-family:inherit}
+
+
+/* v21: diary, khatma, weather */
+.diary-box{max-width:640px;margin:0 auto}
+.diary-ta{width:100%;min-height:120px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;color:var(--ink);font-family:inherit;font-size:.9rem;resize:vertical}
+.diary-save{width:100%;margin-top:8px;background:linear-gradient(135deg,var(--gold),#b8860b);border:none;border-radius:12px;padding:11px;font-weight:800;font-size:.9rem;cursor:pointer;color:#1a1225;font-family:inherit}
+.diary-entry{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;margin-top:10px}
+.diary-entry .de-date{font-size:.68rem;color:var(--muted);margin-bottom:5px}
+.diary-entry .de-txt{font-size:.87rem;line-height:1.6;white-space:pre-wrap}
+.diary-entry .de-del{background:none;border:none;color:#e74c3c;font-size:.7rem;cursor:pointer;margin-top:6px;padding:0}
+.khatma-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;max-width:640px;margin:0 auto}
+.juz{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 2px;text-align:center;font-size:.82rem;font-weight:700;cursor:pointer}
+.juz.done{background:linear-gradient(135deg,#123f2a,#0c2c1e);border-color:#27ae60;color:#7bc950}
+.weather-box{max-width:480px;margin:0 auto;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;text-align:center}
+.weather-city{background:#1a1428;border:1px solid var(--border);border-radius:999px;padding:8px 16px;color:var(--ink);font-family:inherit;font-size:.85rem;margin-bottom:12px}
+.w-main{font-size:3rem;font-weight:800;color:var(--gold2)}
+.w-desc{font-size:.95rem;margin-top:2px}
+.w-details{display:flex;justify-content:center;gap:18px;margin-top:14px;font-size:.78rem;color:var(--muted)}
 
 </style>
 <script>
@@ -4946,7 +4996,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
+  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
 ];
 
 /* ================= v16: free books library ================= */
@@ -5328,6 +5378,89 @@ const MENU = [
       HB.forEach(function(n){ setTimeout(function(){ play(n[0], n[1]*.95); }, t*1000); t+=n[1]*.55; });
       setTimeout(function(){ playing=false; }, t*1000+300);
     });
+  }
+})();
+
+
+/* ================= v21: diary, khatma, weather ================= */
+(function(){
+  function esc(t){ var d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+  /* ---- diary ---- */
+  var DKEY='lingua_diary';
+  var entries=[];
+  try{ entries=JSON.parse(localStorage.getItem(DKEY)||'[]'); }catch(e){}
+  var dList=document.getElementById('diaryList');
+  if(dList){
+    function renderDiary(){
+      dList.innerHTML = entries.length ? entries.map(function(en,i){
+        return '<div class="diary-entry"><div class="de-date">'+en.d+'</div><div class="de-txt">'+esc(en.t)+'</div><button class="de-del" data-di="'+i+'">🗑️ امسحي</button></div>';
+      }).join('') : '<div style="text-align:center;color:var(--muted);font-size:.82rem;margin-top:12px">لسه مفيش يوميات — اكتبي أول واحدة 🌸</div>';
+    }
+    document.getElementById('diarySave').addEventListener('click', function(){
+      var t=document.getElementById('diaryTa').value.trim();
+      if(!t) return;
+      entries.unshift({d:new Date().toLocaleString('ar-EG',{dateStyle:'full',timeStyle:'short'}), t:t});
+      localStorage.setItem(DKEY, JSON.stringify(entries.slice(0,60)));
+      document.getElementById('diaryTa').value='';
+      try{ addPoints(3); }catch(e){}
+      renderDiary();
+    });
+    dList.addEventListener('click', function(e){
+      var b=e.target.closest('.de-del'); if(!b) return;
+      entries.splice(+b.dataset.di,1);
+      localStorage.setItem(DKEY, JSON.stringify(entries));
+      renderDiary();
+    });
+    renderDiary();
+  }
+  /* ---- khatma ---- */
+  var KKEY='lingua_khatma';
+  var kj=[];
+  try{ kj=JSON.parse(localStorage.getItem(KKEY)||'[]'); }catch(e){}
+  var kg=document.getElementById('khatmaGrid');
+  if(kg){
+    function renderKhatma(){
+      kg.innerHTML='';
+      for(var i=1;i<=30;i++){
+        var d=document.createElement('div');
+        var isDone=kj.indexOf(i)>=0;
+        d.className='juz'+(isDone?' done':'');
+        d.textContent=isDone?'✓':i;
+        (function(n,el){
+          el.addEventListener('click', function(){
+            var ix=kj.indexOf(n);
+            if(ix>=0) kj.splice(ix,1); else { kj.push(n); try{ addPoints(5); }catch(e){} }
+            localStorage.setItem(KKEY, JSON.stringify(kj));
+            renderKhatma();
+          });
+        })(i,d);
+        kg.appendChild(d);
+      }
+      var pct=Math.round(kj.length/30*100);
+      document.getElementById('khatmaFill').style.width=pct+'%';
+      document.getElementById('khatmaStats').innerHTML='خلصتي <b style="color:var(--gold2)">'+kj.length+'</b> جزء من ٣٠'+(kj.length>=30?' — 🤲 ختمة كاملة، تقبل الله!':'');
+    }
+    renderKhatma();
+  }
+  /* ---- weather ---- */
+  var WDESC={0:'صافي ☀️',1:'صافي غالبًا 🌤️',2:'غيوم جزئية ⛅',3:'غيوم ☁️',45:'ضباب 🌫️',48:'ضباب 🌫️',51:'رذاذ خفيف 🌦️',53:'رذاذ 🌦️',55:'رذاذ كثيف 🌦️',61:'مطر خفيف 🌧️',63:'مطر 🌧️',65:'مطر غزير 🌧️',71:'ثلج خفيف 🌨️',73:'ثلج 🌨️',75:'ثلج كثيف ❄️',80:'زخات مطر 🌦️',81:'زخات مطر 🌧️',82:'زخات غزيرة ⛈️',95:'عاصفة رعدية ⛈️'};
+  var wc=document.getElementById('wCity');
+  if(wc){
+    function loadWeather(){
+      var v=wc.value.split(',');
+      document.getElementById('wBody').innerHTML='<div style="color:var(--muted);font-size:.85rem">بنجيب الجو...</div>';
+      fetch('https://api.open-meteo.com/v1/forecast?latitude='+v[0]+'&longitude='+v[1]+'&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=Africa%2FCairo')
+      .then(function(r){return r.json();}).then(function(d){
+        var c=d.current;
+        document.getElementById('wBody').innerHTML='<div class="w-main">'+Math.round(c.temperature_2m)+'°</div>'
+          +'<div class="w-desc">'+(WDESC[c.weather_code]||'🌡️')+'</div>'
+          +'<div class="w-details"><span>💧 رطوبة '+c.relative_humidity_2m+'%</span><span>🌬️ رياح '+Math.round(c.wind_speed_10m)+' كم/س</span></div>';
+      }).catch(function(){
+        document.getElementById('wBody').innerHTML='<div style="color:var(--muted);font-size:.85rem">النت مش متاح دلوقتي 🥺</div>';
+      });
+    }
+    wc.addEventListener('change', loadWeather);
+    loadWeather();
   }
 })();
 
@@ -7102,7 +7235,7 @@ gbkRender();
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v20.0</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v21.0</div>
 <script>
 
 /* ================= v13: learning map, personality quiz, XO, korean ================= */
