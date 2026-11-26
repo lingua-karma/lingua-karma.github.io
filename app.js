@@ -10024,6 +10024,7 @@ window.KM_POOL = [
   function track(){ if(S.chan){ try { S.chan.track(me()); } catch(e){} } }
 
   function connect(code, isHost){
+    if(!S.uid) S.uid = uid();
     S.code = code; S.host = isHost; S.st = 'lobby';
     S.chan = sb.channel('study-' + code, { config: { presence: { key: S.uid } } });
     var myChan = S.chan;
