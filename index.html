@@ -4596,7 +4596,7 @@ function showView(id){
 }
 function routeFromHash(){
   const id = location.hash.slice(1);
-  showView(VIEWIDS.indexOf(id) >= 0 ? id : null);
+  showView((id && document.getElementById(id) && document.getElementById(id).tagName === 'SECTION') ? id : null);
 }
 window.addEventListener('hashchange', routeFromHash);
 document.addEventListener('click', function(e){
@@ -6235,7 +6235,7 @@ gbkRender();
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v13.2</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v13.3</div>
 <script>
 /* ================= v13: learning map, personality quiz, XO, korean ================= */
 (function(){
