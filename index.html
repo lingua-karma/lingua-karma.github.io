@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Marhey:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@500;600;700&display=swap" rel="stylesheet">
 <title>Lingua | لينجوا — تعلّم لغات العالم بفخامة</title>
 <style>
   :root{
@@ -32,7 +32,7 @@
   body{
     background:var(--bg);
     color:var(--text);
-    font-family:'Cairo','Segoe UI',Tahoma,Arial,sans-serif;
+    font-family:'IBM Plex Sans Arabic','Segoe UI',Tahoma,Arial,sans-serif;
     line-height:1.8;
     overflow-x:hidden;
   }
@@ -53,7 +53,7 @@
     display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
   }
   .logo{
-    font-family:'Marhey','Cairo',sans-serif;
+    font-family:'Readex Pro','IBM Plex Sans Arabic',sans-serif;
     font-size:2rem;font-weight:700;letter-spacing:1px;line-height:1.1;
     background:linear-gradient(120deg,var(--gold2) 20%,var(--gold) 40%,#fff8dc 50%,var(--gold) 60%,var(--gold2) 80%);
     background-size:200% auto;
@@ -61,13 +61,24 @@
     animation:shine 4s linear infinite;
   }
   @keyframes shine{to{background-position:200% center}}
-  .logo small{display:block;font-size:.72rem;color:var(--muted);font-weight:400;letter-spacing:0;font-family:'Cairo',sans-serif}
-  nav{display:flex;gap:6px;flex-wrap:wrap}
-  nav a{
-    color:var(--muted);text-decoration:none;font-size:.92rem;font-weight:600;padding:8px 16px;border-radius:999px;
-    transition:.2s;border:1px solid transparent;
+  .logo small{display:block;font-size:.72rem;color:var(--muted);font-weight:400;letter-spacing:0;font-family:'IBM Plex Sans Arabic',sans-serif}
+  .acc-pill{
+    background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;
+    padding:7px 16px;border-radius:999px;box-shadow:0 3px 14px rgba(var(--goldA),.4);
+    text-decoration:none;font-size:.9rem;white-space:nowrap;
   }
-  nav a:active,nav a:hover{color:var(--gold2);background:rgba(var(--goldA),.12);border-color:rgba(var(--goldA),.3)}
+  #topNav{
+    display:flex;gap:4px;flex-basis:100%;order:3;overflow-x:auto;scrollbar-width:none;
+    padding-top:8px;-webkit-overflow-scrolling:touch;
+  }
+  #topNav::-webkit-scrollbar{display:none}
+  #topNav a{
+    display:flex;flex-direction:column;align-items:center;gap:2px;min-width:56px;
+    padding:6px 8px;border-radius:14px;color:var(--muted);text-decoration:none;
+    font-size:.6rem;font-weight:700;white-space:nowrap;transition:.2s;border:1px solid transparent;
+  }
+  #topNav a .ti{font-size:1.12rem;line-height:1}
+  #topNav a:hover,#topNav a.active{color:var(--gold2);background:rgba(var(--goldA),.12);border-color:rgba(var(--goldA),.3)}
   /* ===== Hero ===== */
   .hero{
     text-align:center;padding:110px 5vw 90px;position:relative;
@@ -82,7 +93,7 @@
     background:rgba(var(--goldA),.08);letter-spacing:.5px;
   }
   .hero h1{
-    font-family:'Marhey','Cairo',sans-serif;
+    font-family:'Readex Pro','IBM Plex Sans Arabic',sans-serif;
     font-size:clamp(2.6rem,8vw,5rem);font-weight:700;line-height:1.25;
     background:linear-gradient(120deg,#fff,var(--gold2) 55%,var(--gold));
     -webkit-background-clip:text;background-clip:text;color:transparent;
@@ -115,7 +126,7 @@
   section>*{max-width:1280px;margin-inline:auto}
   section:nth-of-type(even){background:linear-gradient(180deg,rgba(124,92,214,.05),rgba(var(--goldA),.04))}
   .sec-title{
-    font-family:'Marhey','Cairo',sans-serif;
+    font-family:'Readex Pro','IBM Plex Sans Arabic',sans-serif;
     text-align:center;font-size:clamp(1.8rem,4.5vw,2.6rem);font-weight:700;margin-bottom:10px;
     background:linear-gradient(120deg,#fff,var(--gold2) 60%,var(--gold));
     -webkit-background-clip:text;background-clip:text;color:transparent;
@@ -346,7 +357,7 @@
   .cert::before{
     content:'';position:absolute;inset:12px;border:1px solid rgba(var(--goldA),.45);border-radius:16px;pointer-events:none;
   }
-  .cert .c-logo{font-family:'Marhey','Cairo',sans-serif;font-size:1.9rem;font-weight:700;color:var(--gold);letter-spacing:2px}
+  .cert .c-logo{font-family:'Readex Pro','IBM Plex Sans Arabic',sans-serif;font-size:1.9rem;font-weight:700;color:var(--gold);letter-spacing:2px}
   .cert h3{color:var(--gold2);font-size:1.5rem;margin:16px 0 8px;font-weight:800}
   .cert .c-body{color:#e8e2f5;font-size:1.05rem;line-height:1.9;margin:10px 0 4px}
   .cert .c-name{font-size:1.7rem;font-weight:900;color:#fff;margin:8px 0 2px}
@@ -801,29 +812,8 @@
 
 <header>
   <div class="logo">Lingua<small>لينجوا — بوابتك للغات العالم</small></div>
-  <nav>
-    <a href="#account" style="background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:7px 16px;border-radius:999px;box-shadow:0 3px 14px rgba(212,175,55,.4)">👑 حسابي</a>
-    <a href="#lessons">الدروس</a>
-    <a href="#quiz">الاختبارات</a>
-    <a href="#games">الألعاب</a>
-    <a href="#speak">تدريب النطق</a>
-    <a href="#dict">القاموس</a>
-    <a href="#gallery">📸 بالصور</a>
-    <a href="#brain">🧠 ذكاء</a>
-    <a href="#wall">💬 الكلام</a>
-    <a href="#deen">🕌 روحانيات</a>
-    <a href="#songs">🎵 أغاني</a>
-    <a href="#cinema">🎬 سينما</a>
-    <a href="#shop">🛍️ المتجر</a>
-    <a href="#friends">👯 أصحابي</a>
-    <a href="#fun">🎮 العاب</a>
-    <a href="#dressup">👗 ستوديو</a>
-    <a href="#outfit">👚 تنسيق لبس</a>
-    <a href="#eng">⚙️ هندسة</a>
-    <a href="#karma">ركن كارما 👑</a>
-    <a href="#settings">🌐 اللغة</a>
-    <a href="#videos">الفيديوهات</a>
-  </nav>
+  <a href="#account" class="acc-pill">👑 حسابي</a>
+  <nav id="topNav"></nav>
 </header>
 
 <button class="theme-fab" id="themeFab" title="غيّري ثيم الموقع">🎨</button>
@@ -4501,12 +4491,27 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
+  ['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
 ];
 document.getElementById('menuGrid').innerHTML = MENU.map(function(m){
   return '<a class="menu-card" href="#'+m[0]+'"><span class="m-ico">'+m[1]+'</span><span class="m-name">'+m[2]+'</span></a>';
 }).join('');
 const VIEWIDS = MENU.map(function(m){ return m[0]; }).concat(['today','features','menu']);
+(function(){
+  const nav = document.getElementById('topNav');
+  const items = [['home','🏠','الرئيسية']].concat(MENU);
+  nav.innerHTML = items.map(function(m){
+    return '<a href="#'+(m[0]==='home'?'':m[0])+'" data-id="'+m[0]+'"><span class="ti">'+m[1]+'</span><span class="tl">'+m[2]+'</span></a>';
+  }).join('');
+  window.markNavActive = function(){
+    const id = location.hash.slice(1) || 'home';
+    nav.querySelectorAll('a').forEach(function(a){ a.classList.toggle('active', a.dataset.id===id); });
+    const cur = nav.querySelector('a.active');
+    if(cur) try{ cur.scrollIntoView({inline:'center',block:'nearest'}); }catch(e){}
+  };
+  window.addEventListener('hashchange', window.markNavActive);
+  window.markNavActive();
+})();
 function showView(id){
   document.body.classList.add('routed');
   const home = !id;
@@ -4828,7 +4833,7 @@ function applyUILang(l){
   try { localStorage.setItem('lingua_uilang', l); } catch(e){}
   const toEn = l === 'en';
   document.querySelectorAll('#uiTabs .tab').forEach(function(x){ x.classList.toggle('active', x.dataset.ui === l); });
-  document.querySelectorAll('nav a').forEach(function(a){
+  document.querySelectorAll('#topNav a .tl').forEach(function(a){
     const r = uiSwap(a.textContent.trim(), toEn);
     if(r !== null) a.textContent = r;
   });
@@ -5781,33 +5786,6 @@ gbkRender();
     }).join(''));
   } catch(e){}
 
-  /* ---- birthday countdown (Aug 7) injected into #today ---- */
-  try {
-    var todaySec = document.getElementById('today');
-    var bd = document.createElement('div');
-    bd.id = 'bdayCard';
-    bd.style.cssText = 'max-width:520px;margin:0 auto 22px;background:linear-gradient(135deg,rgba(212,175,55,.16),rgba(212,175,55,.05));border:1px solid rgba(212,175,55,.4);border-radius:18px;padding:16px 20px;text-align:center';
-    todaySec.insertBefore(bd, todaySec.children[2] || null);
-    function bdTick(){
-      var now = new Date();
-      var y = now.getFullYear();
-      var next = new Date(y, 7, 7); // Aug 7
-      if(next <= now) next = new Date(y + 1, 7, 7);
-      var diff = next - now;
-      var d = Math.floor(diff / 86400000);
-      var h = Math.floor(diff % 86400000 / 3600000);
-      var m = Math.floor(diff % 3600000 / 60000);
-      var dd = Math.floor(diff / 86400000);
-      bd.innerHTML = dd === 0
-        ? '<div style="font-size:1.3rem;font-weight:900;color:var(--gold)">🎂 النهارده عيد ميلاد كارما! 🎉👑</div><div style="color:var(--muted);font-size:.85rem;margin-top:4px">كل سنة وانتي طيبة يا أجمل كارما 💜</div>'
-        : '<div style="font-weight:900;color:var(--gold);font-size:1.05rem">🎂 عيد ميلاد كارما بعد</div>' +
-          '<div style="font-size:1.5rem;font-weight:900;margin-top:4px">' + d + ' يوم • ' + h + ' ساعة • ' + m + ' دقيقة</div>' +
-          '<div style="color:var(--muted);font-size:.8rem;margin-top:4px">٧ أغسطس 👑✨</div>';
-    }
-    bdTick();
-    setInterval(bdTick, 30000);
-  } catch(e){}
-
   /* ---- prayer times in deen corner ---- */
   try {
     var deenSec = document.getElementById('deen');
@@ -6107,6 +6085,6 @@ gbkRender();
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v12.1</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v12.2</div>
 </body>
 </html>
