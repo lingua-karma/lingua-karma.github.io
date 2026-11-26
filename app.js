@@ -2410,7 +2410,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['map','🚀','مسار التعلم'],['placement','🎯','مستواي'],['quests','📋','مهام اليوم'],['listen','🎧','استماع'],['mistakes','🩹','أخطائي'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['places','🏛️','أماكن'],['premium','💎','بريميوم'],['quotes','🎬','اقتباسات'],['ai','🤖','لمى'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق'],['pet','🥚','رفيقتي']
+  ['map','🚀','مسار التعلم'],['placement','🎯','مستواي'],['quests','📋','مهام اليوم'],['listen','🎧','استماع'],['mistakes','🩹','أخطائي'],['german','🇩🇪','ركن الألماني'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['places','🏛️','أماكن'],['premium','💎','بريميوم'],['quotes','🎬','اقتباسات'],['ai','🤖','لمى'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق'],['pet','🥚','رفيقتي']
 ];
 
 /* ================= v16: free books library ================= */
@@ -6193,7 +6193,7 @@ window.KM_POOL = [
   };
 
   var GROUPS = [
-    {id:'learn', icon:'book', title:'تعلّم 📚', items:['dash','quests','placement','listen','mistakes','corners','courses','lessons','quiz','map','dict','gallery','speak','videos','songs','music','cinema','korean','library','stories','capitals','food','fashion','trip','places','quotes','hobbies','themes','tips','eng','scholar','ch30','flash','puzzle','qotd']},
+    {id:'learn', icon:'book', title:'تعلّم 📚', items:['dash','quests','placement','listen','mistakes','german','corners','courses','lessons','quiz','map','dict','gallery','speak','videos','songs','music','cinema','korean','library','stories','capitals','food','fashion','trip','places','quotes','hobbies','themes','tips','eng','scholar','ch30','flash','puzzle','qotd']},
     {id:'play', icon:'gamepad', title:'العب 🎮', items:['games','brain','fun','dressup','outfit','wheel','snake','xo','shooter','runner','piano','color','duel']},
     {id:'social', icon:'chat', title:'صحابي 💜', items:['friends','wall','mood','jokes','vent','diary','gbk','karma','pquiz','pet']},
     {id:'life', icon:'sparkle', title:'حياتي ✨', items:['deen','mushaf','khatma','weather','shop','premium','settings','ai']}
@@ -7789,7 +7789,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v70';
+  window.LINGUA_VERSION = 'v71';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
@@ -8298,4 +8298,43 @@ window.KM_POOL = [
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ hookGbk(); gbkInboxRender(); });
   else { hookGbk(); gbkInboxRender(); }
+})();
+
+
+/* ================= v71: German corner ركن الألماني (free legit resources) ================= */
+(function(){
+  var GERMAN = [
+    {ico:'🎬', lv:'A1–B1', t:'Nicos Weg — دويتشه فيله بالعربي',
+     d:'أشهر كورس ألماني مجاني في العالم: مسلسل قصصي بفيديوهات قصيرة وتمارين، والموقع كله متاح بالعربي. تبدئي من الصفر لحد B1.',
+     u:'https://learngerman.dw.com/ar/مُبتدئ/s-62611666'},
+    {ico:'📺', lv:'A1', t:'Easy German — ألماني من الشارع',
+     d:'فيديوهات يوتيوب بترجمة ألماني/إنجليزي — ناس حقيقيين في الشارع. قايمة A1 للمبتدئين خالص، وصوت واضح وبطيء.',
+     u:'https://www.youtube.com/playlist?list=PLk1fjOl39-50kWobutO8NVFzbw9PHtbbg'},
+    {ico:'🏙️', lv:'A1–A2', t:'Lern Deutsch — مدينة الكلمات (معهد جوته)',
+     d:'لعبة تفاعلية مجانية من معهد جوته الرسمي: بتتعلمي الألماني وأنتي بتستكشفي مدينة. بدون تسجيل.',
+     u:'https://www.goethe.de/en/spr/ueb/led.html'},
+    {ico:'🇩🇪', lv:'A2–B1', t:'Mein Deutschlandkurs (معهد جوته)',
+     d:'كورس مجاني من جوته عن الحياة في ألمانيا — مواقف يومية حقيقية وتمارين تفاعلية.',
+     u:'https://www.goethe.de/prj/mwd/de/deu/mdk.html'},
+    {ico:'📻', lv:'B1+', t:'Deutsch to go (دويتشه فيله)',
+     d:'حلقات صوتية قصيرة بمستويات، مع النص المكتوب — مثالية لتقوية السمع في السكة.',
+     u:'https://learngerman.dw.com/en/german-to-go-on-the-road-and-at-home/a-53162068'},
+    {ico:'📚', lv:'B2+', t:'Projekt Gutenberg — مكتبة ألمانية كاملة',
+     d:'آلاف الكتب الألمانية الكلاسيكية مجانًا وقانوني (ملكية عامة) — كافكا وجوته وهيسه وغيرهم.',
+     u:'https://projekt-gutenberg.org/bibliothek/'}
+  ];
+  function render(){
+    var box = document.getElementById('germanGrid');
+    if(!box) return;
+    box.innerHTML = GERMAN.map(function(g){
+      return '<a class="grn-card" href="' + g.u + '" target="_blank" rel="noopener">'
+        + '<div class="grn-top"><span class="grn-ico">' + g.ico + '</span><span class="grn-lv">' + g.lv + '</span></div>'
+        + '<div class="grn-t">' + g.t + '</div>'
+        + '<div class="grn-d">' + g.d + '</div>'
+        + '<div class="grn-go">افتحي المصدر ←</div>'
+        + '</a>';
+    }).join('');
+  }
+  window.addEventListener('hashchange', function(){ if(location.hash === '#german') setTimeout(render, 60); });
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', render); else render();
 })();

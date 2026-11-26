@@ -961,6 +961,17 @@
 /* v69: karma owner inbox */
 .ki-title{font-size:18px;font-weight:800;color:var(--gold,#e9c26a);margin:4px 0 12px;text-align:center}
 .ki-lock{color:#cfc6b3;font-size:14px;text-align:center;line-height:1.9;padding:8px}
+
+/* v71: german corner */
+.grn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.grn-card{background:rgba(255,255,255,.04);border:1px solid rgba(233,194,106,.3);border-radius:18px;padding:16px 14px;text-decoration:none;color:#fff;display:flex;flex-direction:column;gap:8px;transition:.2s}
+.grn-card:active{transform:scale(.97)}
+.grn-top{display:flex;justify-content:space-between;align-items:center}
+.grn-ico{font-size:26px}
+.grn-lv{font-size:11px;font-weight:800;color:var(--gold,#e9c26a);border:1px solid rgba(233,194,106,.5);border-radius:99px;padding:2px 8px}
+.grn-t{font-size:15px;font-weight:800;line-height:1.7}
+.grn-d{font-size:12.5px;color:#cfc6b3;line-height:1.8;flex:1}
+.grn-go{font-size:12px;color:var(--gold,#e9c26a);font-weight:700}
 </style>
 <style>
 /* v35 perf */
@@ -3076,6 +3087,15 @@
   </div>
 </section>
 
+<!-- v71: German corner -->
+<section id="german" class="page">
+  <div class="wrap">
+    <h2 class="sec-title">🇩🇪 ركن الألماني</h2>
+    <p class="du-sub">أحسن مصادر الألماني المجانية والقانونية — مختارة بعناية عشان تكملي رحلتك ✨</p>
+    <div class="grn-grid" id="germanGrid"></div>
+  </div>
+</section>
+
 <!-- AD SLOT: bottom banner (AdSense anchor / 728x90) قبل الفوتر — تُضاف الشيفرة بعد الموافقة على AdSense -->
 
 <!-- Certificate overlay -->
@@ -3280,6 +3300,6 @@
   <div class="pl-top"><button id="plClose" class="pl-x">✕</button><div class="pl-prog"><i id="plBar"></i></div><div class="pl-hearts" id="plHearts"></div></div>
   <div id="plBody" class="pl-body"></div>
 </div>
-<script src="./app.js?v=70" defer></script>
+<script src="./app.js?v=71" defer></script>
 </body>
 </html>
