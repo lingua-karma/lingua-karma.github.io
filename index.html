@@ -2143,11 +2143,32 @@
   <div class="weather-box">
     <select class="weather-city" id="wCity">
       <option value="Cairo">القاهرة</option>
-      <option value="Assiut">أسيوط</option>
-      <option value="Alexandria">إسكندرية</option>
       <option value="Giza">الجيزة</option>
+      <option value="Alexandria">إسكندرية</option>
+      <option value="Port Said">بورسعيد</option>
       <option value="Suez">السويس</option>
+      <option value="Damietta">دمياط</option>
+      <option value="Mansoura">المنصورة</option>
+      <option value="Zagazig">الزقازيق</option>
+      <option value="Tanta">طنطا</option>
+      <option value="Kafr El Sheikh">كفر الشيخ</option>
+      <option value="Shibin El Kom">شبين الكوم</option>
+      <option value="Damanhur">دمنهور</option>
+      <option value="Banha">بنها</option>
+      <option value="Ismailia">الإسماعيلية</option>
+      <option value="Faiyum">الفيوم</option>
+      <option value="Beni Suef">بني سويف</option>
+      <option value="Minya">المنيا</option>
+      <option value="Assiut">أسيوط</option>
+      <option value="Sohag">سوهاج</option>
+      <option value="Qena">قنا</option>
       <option value="Luxor">الأقصر</option>
+      <option value="Aswan">أسوان</option>
+      <option value="Hurghada">الغردقة</option>
+      <option value="Marsa Matrouh">مرسى مطروح</option>
+      <option value="Kharga">الخارجة</option>
+      <option value="Arish">العريش</option>
+      <option value="Sharm El Sheikh">شرم الشيخ</option>
     </select>
     <div id="wBody"><div style="color:var(--muted);font-size:.85rem">بنجيب الجو...</div></div>
   </div>
@@ -2185,6 +2206,32 @@
   <p class="sec-sub">أشهر الجمل السينمائية وترجمتها 🎬</p>
   <div id="quotesList"></div>
 </section>
+
+<section id="puzzle">
+  <h2 class="sec-title">✦ بازل الكلمات ✦</h2>
+  <p class="sec-sub">رتّبي الحروف وكوّني الكلمة الصح! 🧩</p>
+  <div class="tabs lang-tabs lib-langs" id="pzLangs"></div>
+  <div class="pz-box">
+    <div class="pz-mean" id="pzMean"></div>
+    <div class="pz-hint" id="pzHint"></div>
+    <div class="pz-answer" id="pzAnswer"></div>
+    <div class="pz-tiles" id="pzTiles"></div>
+    <div class="pz-actions">
+      <button class="pz-btn" id="pzClear">🗑️ امسحي</button>
+      <button class="pz-btn" id="pzSkip">⏭️ اللي بعدها</button>
+    </div>
+    <div class="pz-score" id="pzScore"></div>
+  </div>
+</section>
+<section id="hobbies">
+  <h2 class="sec-title">✦ ركن الهوايات ✦</h2>
+  <p class="sec-sub">كلمات هواياتك المفضلة بكل اللغات 🎨</p>
+  <div class="tabs lang-tabs lib-langs" id="hbLangs"></div>
+  <div class="food-words" id="hbWords"></div>
+</section>
+
+
+
 
 
 
@@ -2655,6 +2702,22 @@
 .quote-text{font-size:1rem;font-weight:700;line-height:1.6}
 .quote-tr{font-size:.82rem;color:var(--muted);margin-top:6px}
 .quote-src{font-size:.7rem;color:var(--gold2);margin-top:8px;font-weight:700}
+
+
+/* v25: word puzzle + hobbies */
+.pz-box{max-width:640px;margin:0 auto;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;text-align:center}
+.pz-mean{font-size:1.05rem;font-weight:800;color:var(--gold2);margin-bottom:4px}
+.pz-hint{font-size:.75rem;color:var(--muted);margin-bottom:14px}
+.pz-answer{min-height:52px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+.pz-slot{width:36px;height:44px;border-radius:10px;background:#1a1428;border:1px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:1.15rem;font-weight:800;color:var(--gold2)}
+.pz-slot.filled{border-style:solid;border-color:var(--gold)}
+.pz-tiles{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.pz-tile{width:42px;height:48px;border-radius:10px;background:#2b2350;border:1px solid var(--border);color:#fff;font-size:1.2rem;font-weight:800;cursor:pointer;font-family:inherit;transition:transform .12s}
+.pz-tile:active{transform:scale(.9)}
+.pz-tile.used{opacity:.25;pointer-events:none}
+.pz-actions{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.pz-btn{background:#1a1428;border:1px solid var(--border);color:var(--ink);border-radius:999px;padding:8px 18px;font-size:.8rem;cursor:pointer;font-family:inherit}
+.pz-score{font-size:.78rem;color:var(--muted);margin-top:10px}
 
 </style>
 <script>
@@ -5054,7 +5117,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['quotes','🎬','اقتباسات'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
+  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['quotes','🎬','اقتباسات'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
 ];
 
 /* ================= v16: free books library ================= */
@@ -5804,6 +5867,101 @@ const MENU = [
     ql.innerHTML = QUOTES.map(function(q){
       return '<div class="quote-card"><div class="quote-text">'+esc(q[0])+'</div><div class="quote-tr">'+esc(q[1])+'</div><div class="quote-src">'+esc(q[2])+'</div></div>';
     }).join('');
+  }
+})();
+
+
+/* ================= v25: word puzzle + hobbies ================= */
+(function(){
+  function esc(t){ var d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+  var LNAME = {en:'إنجليزي 🇬🇧',fr:'فرنسي 🇫🇷',de:'ألماني 🇩🇪',zh:'صيني 🇨🇳',ko:'كوري 🇰🇷'};
+  var LLANG = {en:'en-US',fr:'fr-FR',de:'de-DE',zh:'zh-CN',ko:'ko-KR'};
+  /* ---- word puzzle ---- */
+  var PZW = {
+    en:[['CAT','قطة'],['DOG','كلب'],['SUN','شمس'],['BOOK','كتاب'],['FISH','سمك'],['BIRD','عصفورة'],['MILK','لبن'],['CAKE','تورطة'],['MOON','قمر'],['STAR','نجمة']],
+    fr:[['CHAT','قطة'],['PAIN','عيش'],['SOLEIL','شمس'],['LIVRE','كتاب'],['LUNE','قمر'],['FLEUR','وردة'],['AMI','صاحب'],['ECOLE','مدرسة']],
+    de:[['KATZE','قطة'],['HUND','كلب'],['SONNE','شمس'],['BUCH','كتاب'],['WASSER','مية'],['BROT','عيش'],['FREUND','صاحب'],['SCHULE','مدرسة']],
+    zh:[['MAO','قطة (猫 māo)'],['GOU','كلب (狗 gǒu)'],['SHUI','مية (水 shuǐ)'],['SHU','كتاب (书 shū)'],['AI','حب (爱 ài)'],['HAO','كويس (好 hǎo)']],
+    ko:[['BAP','رز (밥)'],['MUL','مية (물)'],['SALAM','إنسان (사람)'],['CHINGU','صاحب (친구)'],['HAKGYO','مدرسة (학교)'],['SAGWA','تفاحة (사과)']]
+  };
+  var pLang='en', pzIdx=0, pzScoreN=0, picked=[];
+  var pl=document.getElementById('pzLangs');
+  if(pl){
+    pl.innerHTML = Object.keys(PZW).map(function(k){
+      return '<button class="tab lang-tab'+(k===pLang?' active':'')+'" data-pz="'+k+'"><span class="ln">'+LNAME[k]+'</span></button>';
+    }).join('');
+    function renderPz(){
+      var w = PZW[pLang][pzIdx % PZW[pLang].length];
+      document.getElementById('pzMean').textContent = w[1];
+      document.getElementById('pzHint').textContent = 'كوّني الكلمة من الحروف ('+w[0].length+' حروف)';
+      picked = [];
+      var ans = document.getElementById('pzAnswer');
+      ans.innerHTML = w[0].split('').map(function(){ return '<div class="pz-slot"></div>'; }).join('');
+      var tiles = w[0].split('').map(function(ch,i){ return {ch:ch, id:i}; }).sort(function(){return Math.random()-.5;});
+      document.getElementById('pzTiles').innerHTML = tiles.map(function(t){
+        return '<button class="pz-tile" data-tid="'+t.id+'">'+t.ch+'</button>';
+      }).join('');
+      document.getElementById('pzScore').textContent = 'نقطتك في البازل: '+pzScoreN+' 🧩';
+    }
+    document.getElementById('pzTiles').addEventListener('click', function(e){
+      var t=e.target.closest('.pz-tile'); if(!t||t.classList.contains('used')) return;
+      t.classList.add('used');
+      picked.push({id:t.dataset.tid, ch:t.textContent});
+      var slots=document.querySelectorAll('#pzAnswer .pz-slot');
+      slots[picked.length-1].textContent=t.textContent;
+      slots[picked.length-1].classList.add('filled');
+      var w = PZW[pLang][pzIdx % PZW[pLang].length];
+      if(picked.length===w[0].length){
+        var guess=picked.map(function(x){return x.ch;}).join('');
+        if(guess===w[0]){
+          pzScoreN+=10; try{ addPoints(3); }catch(e){}
+          try{ var u=new SpeechSynthesisUtterance(w[0]); u.lang=LLANG[pLang]; speechSynthesis.speak(u); }catch(e){}
+          setTimeout(function(){ pzIdx++; renderPz(); }, 800);
+        } else {
+          setTimeout(function(){ renderPz(); }, 700);
+        }
+      }
+    });
+    document.getElementById('pzClear').addEventListener('click', renderPz);
+    document.getElementById('pzSkip').addEventListener('click', function(){ pzIdx++; renderPz(); });
+    pl.addEventListener('click', function(e){
+      var b=e.target.closest('[data-pz]'); if(!b) return;
+      pLang=b.dataset.pz; pzIdx=0;
+      pl.querySelectorAll('.lang-tab').forEach(function(t){ t.classList.toggle('active', t===b); });
+      renderPz();
+    });
+    renderPz();
+  }
+  /* ---- hobbies ---- */
+  var HB = {
+    en:[['Drawing','رسم','🎨'],['Singing','غنا','🎤'],['Reading','قراية','📚'],['Cooking','طبخ','🍳'],['Dancing','رقص','💃'],['Swimming','عوم','🏊‍♀️'],['Photography','تصوير','📸'],['Gaming','جيمينج','🎮']],
+    fr:[['Dessin','رسم','🎨'],['Chanter','غنا','🎤'],['Lecture','قراية','📚'],['Cuisine','طبخ','🍳'],['Danse','رقص','💃'],['Natation','عوم','🏊‍♀️'],['Photo','تصوير','📸'],['Jeux','جيمينج','🎮']],
+    de:[['Zeichnen','رسم','🎨'],['Singen','غنا','🎤'],['Lesen','قراية','📚'],['Kochen','طبخ','🍳'],['Tanzen','رقص','💃'],['Schwimmen','عوم','🏊‍♀️'],['Fotografie','تصوير','📸'],['Spielen','جيمينج','🎮']],
+    zh:[['画画 (huàhuà)','رسم','🎨'],['唱歌 (chànggē)','غنا','🎤'],['阅读 (yuèdú)','قراية','📚'],['做饭 (zuòfàn)','طبخ','🍳'],['跳舞 (tiàowǔ)','رقص','💃'],['游泳 (yóuyǒng)','عوم','🏊‍♀️'],['摄影 (shèyǐng)','تصوير','📸'],['游戏 (yóuxì)','جيمينج','🎮']],
+    ko:[['그림 (geurim)','رسم','🎨'],['노래 (norae)','غنا','🎤'],['독서 (dokseo)','قراية','📚'],['요리 (yori)','طبخ','🍳'],['춤 (chum)','رقص','💃'],['수영 (suyeong)','عوم','🏊‍♀️'],['사진 (sajin)','تصوير','📸'],['게임 (geim)','جيمينج','🎮']]
+  };
+  var hLang='en';
+  var hl=document.getElementById('hbLangs'), hw=document.getElementById('hbWords');
+  if(hl){
+    hl.innerHTML = Object.keys(HB).map(function(k){
+      return '<button class="tab lang-tab'+(k===hLang?' active':'')+'" data-hb="'+k+'"><span class="ln">'+LNAME[k]+'</span></button>';
+    }).join('');
+    function renderHb(){
+      hw.innerHTML = HB[hLang].map(function(w){
+        return '<div class="fw-card"><span style="font-size:1.5rem">'+w[2]+'</span><div class="fw-t"><b>'+esc(w[0])+'</b><span>'+esc(w[1])+'</span></div><button class="fw-say" data-say="'+esc(w[0].replace(/ *\(.*?\)/,''))+'">🔊</button></div>';
+      }).join('');
+    }
+    hl.addEventListener('click', function(e){
+      var b=e.target.closest('[data-hb]'); if(!b) return;
+      hLang=b.dataset.hb;
+      hl.querySelectorAll('.lang-tab').forEach(function(t){ t.classList.toggle('active', t===b); });
+      renderHb();
+    });
+    hw.addEventListener('click', function(e){
+      var b=e.target.closest('.fw-say'); if(!b) return;
+      try{ var u=new SpeechSynthesisUtterance(b.dataset.say); u.lang=LLANG[hLang]; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){}
+    });
+    renderHb();
   }
 })();
 
@@ -7578,7 +7736,7 @@ gbkRender();
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v23.0</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v25.0</div>
 <script>
 
 /* ================= v13: learning map, personality quiz, XO, korean ================= */
