@@ -2209,6 +2209,56 @@
   .ex-perfect{text-align:center;color:#7bf1a8;font-weight:800;padding:14px}
   .engx-acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
   @media (prefers-reduced-motion:reduce){.engx-gear,.engx-tw{animation:none}}
+
+/* v90: شيف لينجوا */
+.chef-wrap{max-width:640px;margin:0 auto}
+.chef-title{font-weight:900;font-size:1.1rem;color:var(--gold);text-align:center;margin:6px 0 12px}
+.chef-head{display:flex;align-items:center;gap:8px;font-weight:800;font-size:.92rem;margin-bottom:10px}
+.chef-tip{text-align:center;font-size:.84rem;color:var(--muted);background:rgba(var(--goldA),.06);border:1px dashed rgba(var(--goldA),.3);border-radius:12px;padding:8px 12px;margin-bottom:12px}
+.chef-progress{text-align:center;font-weight:900;color:var(--gold);margin-bottom:8px}
+.chef-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chef-card{background:linear-gradient(160deg,rgba(var(--goldA),.1),rgba(var(--goldA),.03));border:1px solid rgba(var(--goldA),.35);border-radius:16px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;font-family:inherit;color:inherit;transition:transform .15s}
+.chef-card:active{transform:scale(.97)}
+.chef-card.locked{opacity:.45;filter:grayscale(.7)}
+.chef-dishart svg{width:100%;height:auto;display:block}
+.chef-rname{font-weight:900;font-size:.95rem}
+.chef-rword{font-size:.72rem;color:var(--muted);font-style:italic}
+.chef-lock{font-size:.7rem;color:var(--muted)}
+.chef-stars{color:var(--gold);letter-spacing:2px}
+.chef-shelf{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.chef-ing{background:rgba(var(--goldA),.06);border:1px solid rgba(var(--goldA),.3);border-radius:14px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;font-family:inherit;color:inherit;transition:transform .12s}
+.chef-ing:active{transform:scale(.94)}
+.chef-ing.picked{background:rgba(60,200,120,.15);border-color:#3cc878;opacity:.6}
+.chef-ing.wrong-pick{animation:chefShake .5s;border-color:#e23b3b;background:rgba(226,59,59,.12)}
+@keyframes chefShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.ci-ar{font-weight:800;font-size:.82rem}
+.ci-en{font-size:.68rem;color:var(--muted);font-style:italic}
+.chef-scene{width:100%;height:auto;display:block;background:radial-gradient(ellipse at 50% 30%,rgba(var(--goldA),.12),transparent 70%);border-radius:16px}
+.chef-flame{transform-origin:170px 150px;animation:flameFlick .55s ease-in-out infinite alternate}
+@keyframes flameFlick{from{transform:scaleY(.9) scaleX(1)}to{transform:scaleY(1.08) scaleX(.96)}}
+.chef-steam path{animation:steamRise 2.2s ease-in-out infinite}
+.chef-steam .st2{animation-delay:.7s}
+.chef-steam .st3{animation-delay:1.4s}
+@keyframes steamRise{0%{opacity:0;transform:translateY(6px)}35%{opacity:.55}100%{opacity:0;transform:translateY(-14px)}}
+.chef-simmer{animation:simmerCol 1.6s ease-in-out infinite alternate}
+@keyframes simmerCol{from{fill:#c96a1e}to{fill:#e8893a}}
+.chef-knife{transform-origin:99px 57px;animation:knifeChop .5s ease-in-out infinite alternate}
+@keyframes knifeChop{from{transform:rotate(0deg)}to{transform:rotate(9deg) translateY(3px)}}
+.chef-piece{animation:piecePop .3s ease-out both}
+@keyframes piecePop{from{opacity:0;transform:translateY(-10px) scale(.5)}to{opacity:1;transform:translateY(0) scale(1)}}
+.chef-garnish{animation:piecePop .4s ease-out both}
+.chef-timer{position:relative;height:22px;background:#17171d;border:1px solid rgba(var(--goldA),.3);border-radius:999px;margin:12px 0;overflow:hidden}
+.ct-zone{position:absolute;top:0;bottom:0;inset-inline-start:68%;width:24%;background:linear-gradient(90deg,rgba(var(--goldA),.35),rgba(var(--goldA),.75),rgba(var(--goldA),.35))}
+.ct-mark{position:absolute;top:2px;bottom:2px;width:4px;inset-inline-start:0;background:#fff;border-radius:2px;box-shadow:0 0 8px #fff}
+.chef-finaldish svg{width:100%;height:auto}
+.chef-bigstars{text-align:center;font-size:2.2rem;letter-spacing:6px;margin:6px 0}
+.chef-bigstars span{color:#3a3a44}
+.chef-bigstars span.on{color:var(--gold);text-shadow:0 0 14px rgba(var(--goldA),.6)}
+.chef-grade{text-align:center;font-weight:800;margin-bottom:8px}
+.chef-word{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-bottom:8px}
+.chef-word span{background:rgba(var(--goldA),.1);border:1px solid rgba(var(--goldA),.3);border-radius:999px;padding:3px 10px;font-size:.74rem}
+.chef-points{text-align:center;font-weight:900;color:var(--gold);margin-bottom:10px}
+@media (prefers-reduced-motion: reduce){.chef-flame,.chef-steam path,.chef-knife,.chef-simmer,.chef-piece,.chef-garnish{animation:none}}
 </style>
 
 <!-- ===================== OFFLINE (من غير نت) ===================== -->
@@ -3571,6 +3621,6 @@
   <div id="plBody" class="pl-body"></div>
 </div>
 <div id="offlineBar"><span>📵</span><span>أنتِ من غير نت دلوقتي — الدروس والألعاب والقاموس شغالين عادي ✨</span></div>
-<script src="./app.js?v=89" defer></script>
+<script src="./app.js?v=90" defer></script>
 </body>
 </html>

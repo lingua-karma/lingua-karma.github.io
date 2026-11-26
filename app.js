@@ -8211,7 +8211,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v89';
+  window.LINGUA_VERSION = 'v90';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
@@ -9052,4 +9052,306 @@ window.KM_POOL = [
 
   window.addEventListener('hashchange', function(){ if(location.hash === '#engx') setTimeout(pickYear, 60); });
   if(location.hash === '#engx') pickYear();
+})();
+/* ================= v90: شيف لينجوا — لعبة طبخ كاملة (وصفات، خطوات، نار، تقديم، نجوم، كلمات) ================= */
+(function(){
+  var host = document.getElementById('foodCook');
+  if(!host) return;
+
+  /* ---------- مكونات مرسومة ---------- */
+  function ic(inner){ return '<svg viewBox="0 0 60 60" width="40" height="40">'+inner+'</svg>'; }
+  var ING = {
+    lentils:{ar:'عدس', en:'Lentils', svg:'<ellipse cx="30" cy="36" rx="22" ry="14" fill="#c96a1e"/><circle cx="20" cy="32" r="5" fill="#e8893a"/><circle cx="32" cy="36" r="5" fill="#e8893a"/><circle cx="42" cy="33" r="5" fill="#e8893a"/><circle cx="26" cy="40" r="4" fill="#f0a35c"/><circle cx="38" cy="41" r="4" fill="#f0a35c"/>'},
+    onion:{ar:'بصل', en:'Onion', svg:'<ellipse cx="30" cy="36" rx="16" ry="17" fill="#e8c7e0" stroke="#b98ab0" stroke-width="2"/><path d="M30 19 q-6 8 0 34 M30 19 q6 8 0 34" stroke="#b98ab0" stroke-width="1.6" fill="none"/><path d="M28 14 q2 -5 4 0 q-2 5 -4 0" fill="#7bc950"/>'},
+    carrot:{ar:'جزر', en:'Carrot', svg:'<path d="M22 20 q14 4 18 12 q-2 16 -14 20 q-8 -2 -8 -8 q0 -14 4 -24z" fill="#f08c1e" stroke="#d97a10" stroke-width="2"/><path d="M24 18 q-4 -8 2 -10 M28 18 q0 -9 6 -10" stroke="#4caf50" stroke-width="3" fill="none" stroke-linecap="round"/>'},
+    water:{ar:'مية', en:'Water', svg:'<path d="M22 14 h16 v6 q8 6 8 16 a16 16 0 0 1 -32 0 q0 -10 8 -16z" fill="#bfe3f7" stroke="#7fc4e8" stroke-width="2"/><path d="M26 38 a8 8 0 0 0 8 6" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>'},
+    pasta:{ar:'مكرونة', en:'Pasta', svg:'<g stroke="#f0c75e" stroke-width="4" stroke-linecap="round" fill="none"><path d="M16 22 q14 -8 28 0"/><path d="M14 32 q16 -9 32 0"/><path d="M16 42 q14 -8 28 0"/></g><g stroke="#d9a531" stroke-width="2" fill="none"><path d="M16 26 q14 -8 28 0"/><path d="M16 46 q14 -8 28 0"/></g>'},
+    sauce:{ar:'صلصة', en:'Sauce', svg:'<path d="M20 16 h20 v8 q6 4 6 12 a16 14 0 0 1 -32 0 q0 -8 6 -12z" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/><rect x="24" y="10" width="12" height="6" rx="2" fill="#8e2f23"/>'},
+    garlic:{ar:'ثوم', en:'Garlic', svg:'<path d="M30 16 q14 6 14 20 a14 14 0 0 1 -28 0 q0 -14 14 -20z" fill="#f5f0e1" stroke="#d9cfae" stroke-width="2"/><path d="M30 20 q-5 10 0 26 M30 20 q5 10 0 26" stroke="#d9cfae" stroke-width="1.5" fill="none"/><path d="M28 14 q2 -5 4 0" fill="#c9bd96"/>'},
+    oil:{ar:'زيت', en:'Oil', svg:'<path d="M24 16 h12 v6 q6 6 6 14 a14 14 0 0 1 -24 0 q0 -8 6 -14z" fill="#e8c04b" stroke="#c99a2b" stroke-width="2"/><rect x="26" y="10" width="8" height="6" rx="2" fill="#8a6d1f"/><path d="M28 34 a6 6 0 0 0 5 4" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/>'},
+    rice:{ar:'رز', en:'Rice', svg:'<path d="M12 42 q18 -12 36 0 l-3 8 h-30z" fill="#fdf6e3" stroke="#e0d5b8" stroke-width="2"/><g fill="#fff"><ellipse cx="24" cy="34" rx="3" ry="1.8" transform="rotate(-20 24 34)"/><ellipse cx="33" cy="31" rx="3" ry="1.8" transform="rotate(10 33 31)"/><ellipse cx="40" cy="35" rx="3" ry="1.8" transform="rotate(-8 40 35)"/></g>'},
+    pepper:{ar:'فلفل', en:'Pepper', svg:'<path d="M24 22 a10 10 0 0 1 20 2 q4 14 -4 22 q-8 4 -14 0 q-8 -8 -2 -24z" fill="#e23b3b" stroke="#c02a2a" stroke-width="2"/><path d="M30 18 q-2 -6 4 -7" stroke="#4caf50" stroke-width="3.4" fill="none" stroke-linecap="round"/>'},
+    peas:{ar:'بسلة', en:'Peas', svg:'<path d="M10 36 q20 -14 40 0 q-20 12 -40 0z" fill="#7bc950" stroke="#5aa83a" stroke-width="2"/><circle cx="22" cy="35" r="3.4" fill="#a4dd7e"/><circle cx="31" cy="33" r="3.4" fill="#a4dd7e"/><circle cx="40" cy="35" r="3.4" fill="#a4dd7e"/>'},
+    dough:{ar:'عجينة', en:'Dough', svg:'<ellipse cx="30" cy="36" rx="24" ry="17" fill="#f0d9a8" stroke="#d9b878" stroke-width="2"/><path d="M18 32 q12 -6 24 0" stroke="#d9b878" stroke-width="2" fill="none"/>'},
+    cheese:{ar:'جبنة', en:'Cheese', svg:'<path d="M14 40 L46 24 L46 42 Q30 50 14 40z" fill="#f7c948" stroke="#e0a91c" stroke-width="2"/><circle cx="32" cy="36" r="3" fill="#e0a91c"/><circle cx="41" cy="33" r="2.4" fill="#e0a91c"/>'},
+    tomato:{ar:'طماطم', en:'Tomato', svg:'<circle cx="30" cy="35" r="15" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/><ellipse cx="25" cy="30" rx="5" ry="3" fill="#ff8a75" opacity=".7"/><path d="M26 20 q4 -5 8 0 l-4 3z" fill="#27ae60"/>'},
+    bun:{ar:'عيش برجر', en:'Bun', svg:'<path d="M12 32 a18 14 0 0 1 36 0z" fill="#e8b04b" stroke="#c98a2b" stroke-width="2"/><rect x="12" y="38" width="36" height="8" rx="4" fill="#e8b04b" stroke="#c98a2b" stroke-width="2"/><g fill="#fff2cf"><circle cx="22" cy="24" r="1.5"/><circle cx="31" cy="21" r="1.5"/><circle cx="39" cy="25" r="1.5"/></g>'},
+    patty:{ar:'لحمة', en:'Beef patty', svg:'<rect x="12" y="28" width="36" height="13" rx="6.5" fill="#6e3b1f" stroke="#54290f" stroke-width="2"/><path d="M18 34 q6 -3 12 0 q6 3 12 0" stroke="#8a5632" stroke-width="2" fill="none"/>'},
+    lettuce:{ar:'خس', en:'Lettuce', svg:'<path d="M12 38 q5 -14 10 -2 q5 -14 10 -2 q5 -14 10 -2 q5 -12 8 -2 q-18 16 -38 8z" fill="#7bc950" stroke="#5aa83a" stroke-width="2"/>'},
+    kunafa:{ar:'كنافة', en:'Kunafa', svg:'<circle cx="30" cy="34" r="17" fill="#e8a33d" stroke="#c97f1c" stroke-width="2"/><g stroke="#f7cd7e" stroke-width="1.6"><path d="M16 30 q14 -6 28 0 M15 36 q15 -6 30 0 M18 42 q12 -5 24 0 M20 24 q10 -4 20 0"/></g>'},
+    ghee:{ar:'سمنة', en:'Ghee', svg:'<rect x="16" y="26" width="28" height="18" rx="3" fill="#f7e3a1" stroke="#dcc26a" stroke-width="2"/><rect x="20" y="18" width="20" height="8" rx="2" fill="#fff3c9" stroke="#dcc26a" stroke-width="1.6"/>'},
+    syrup:{ar:'شربات', en:'Syrup', svg:'<path d="M22 14 h16 v6 q8 6 8 14 a16 14 0 0 1 -32 0 q0 -8 6 -14z" fill="#f0b93e" stroke="#d19823" stroke-width="2"/><path d="M26 36 a8 8 0 0 0 8 5" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" opacity=".8"/>'},
+    pistachio:{ar:'فستق', en:'Pistachio', svg:'<ellipse cx="24" cy="30" rx="7" ry="9" fill="#8ab54a" stroke="#6a9234" stroke-width="2"/><ellipse cx="38" cy="38" rx="7" ry="9" fill="#8ab54a" stroke="#6a9234" stroke-width="2"/><path d="M24 22 q2 8 0 16 M38 30 q2 8 0 16" stroke="#5a7c2c" stroke-width="1.6"/>'},
+    choco:{ar:'شوكولاتة', en:'Chocolate', svg:'<rect x="14" y="18" width="32" height="26" rx="3" fill="#6e3b1f" stroke="#54290f" stroke-width="2"/><path d="M14 27h32M14 36h32M24 18v26M35 18v26" stroke="#54290f" stroke-width="2"/>'},
+    honey:{ar:'عسل', en:'Honey', svg:'<path d="M20 22 h20 v6 q6 5 6 12 a16 13 0 0 1 -32 0 q0 -7 6 -13z" fill="#f0b93e" stroke="#d19823" stroke-width="2"/><rect x="24" y="14" width="12" height="8" rx="2" fill="#8a6d1f"/>'},
+    banana:{ar:'موز', en:'Banana', svg:'<path d="M16 20 q4 24 30 22 q-2 5 -8 5 q-22 -2 -24 -22 q0 -4 2 -5z" fill="#f7dc4b" stroke="#dfc02e" stroke-width="2"/>'},
+    fish:{ar:'سمك', en:'Fish', svg:'<path d="M12 34 q14 -13 28 0 q-14 13 -28 0z" fill="#ff8c69" stroke="#e06a45" stroke-width="2"/><path d="M40 34 l9 -7 v14z" fill="#e06a45"/><circle cx="19" cy="32" r="1.8" fill="#333"/>'},
+    lemon:{ar:'ليمون', en:'Lemon', svg:'<ellipse cx="30" cy="34" rx="16" ry="11" fill="#f7dc4b" stroke="#dfc02e" stroke-width="2"/><ellipse cx="25" cy="30" rx="5" ry="3" fill="#fdf0a0" opacity=".8"/>'},
+    parsley:{ar:'بقدونس', en:'Parsley', svg:'<g fill="#4caf50" stroke="#3d8b40" stroke-width="1.6"><circle cx="22" cy="28" r="7"/><circle cx="32" cy="22" r="7"/><circle cx="40" cy="30" r="7"/><circle cx="30" cy="34" r="7"/></g><path d="M30 40 q0 8 -4 12" stroke="#3d8b40" stroke-width="3" fill="none" stroke-linecap="round"/>'}
+  };
+
+  /* ---------- الوصفات ---------- */
+  var RECIPES = [
+    {id:'soup', ar:'شوربة عدس', word:{en:'Lentil Soup', fr:'Soupe de lentilles', de:'Linsensuppe', zh:'扁豆汤', ko:'렌즈콩 수프'},
+     need:['lentils','onion','carrot','water'], decoys:['choco','fish'], chop:['onion','carrot'], cookSec:10, vessel:'pot',
+     dish:'<ellipse cx="170" cy="150" rx="120" ry="22" fill="#0d0a14" opacity=".5"/><path d="M60 100 a110 60 0 0 0 220 0 l-14 52 a100 46 0 0 1 -192 0z" fill="#e8b04b" stroke="#c98a2b" stroke-width="3"/><ellipse cx="170" cy="100" rx="110" ry="30" fill="#f5edd8" stroke="#d9cba8" stroke-width="3"/><ellipse cx="170" cy="102" rx="92" ry="22" fill="#e8893a"/><ellipse cx="150" cy="98" rx="24" ry="7" fill="#f5a85c" opacity=".8"/><circle cx="196" cy="104" r="5" fill="#c96a1e"/><circle cx="150" cy="106" r="5" fill="#c96a1e"/><circle cx="172" cy="97" r="4" fill="#c96a1e"/>'},
+    {id:'pasta', ar:'مكرونة بالصلصة', word:{en:'Pasta', fr:'Pâtes', de:'Nudeln', zh:'意大利面', ko:'파스타'},
+     need:['pasta','sauce','garlic','oil'], decoys:['honey','banana'], chop:['garlic'], cookSec:12, vessel:'pot',
+     dish:'<ellipse cx="170" cy="150" rx="120" ry="22" fill="#0d0a14" opacity=".5"/><ellipse cx="170" cy="110" rx="115" ry="42" fill="#f5f0e8" stroke="#d9d0bd" stroke-width="3"/><ellipse cx="170" cy="112" rx="92" ry="30" fill="#fdfaf3"/><g stroke="#f0c75e" stroke-width="6" stroke-linecap="round" fill="none"><path d="M110 108 q30 -18 60 -4 q30 14 60 -2"/><path d="M115 122 q30 -16 58 -2 q28 12 55 -4"/><path d="M128 98 q26 -12 52 0"/></g><ellipse cx="170" cy="110" rx="30" ry="12" fill="#e74c3c"/><ellipse cx="170" cy="108" rx="18" ry="7" fill="#ff6b54"/>'},
+    {id:'rice', ar:'أرز بالخضار', word:{en:'Veggie Rice', fr:'Riz aux légumes', de:'Gemüsereis', zh:'蔬菜炒饭', ko:'야채 볶음밥'},
+     need:['rice','pepper','carrot','peas'], decoys:['choco','syrup'], chop:['pepper','carrot'], cookSec:12, vessel:'pan',
+     dish:'<ellipse cx="170" cy="150" rx="120" ry="22" fill="#0d0a14" opacity=".5"/><ellipse cx="170" cy="110" rx="115" ry="42" fill="#f5f0e8" stroke="#d9d0bd" stroke-width="3"/><path d="M92 112 q78 -46 156 0 q-78 34 -156 0z" fill="#fdf6e3"/><g><circle cx="140" cy="102" r="6" fill="#e23b3b"/><circle cx="185" cy="98" r="6" fill="#f08c1e"/><circle cx="210" cy="110" r="5" fill="#7bc950"/><circle cx="160" cy="112" r="5" fill="#7bc950"/><circle cx="198" cy="114" r="5" fill="#e23b3b"/><circle cx="128" cy="114" r="5" fill="#f08c1e"/></g>'},
+    {id:'pizza', ar:'بيتزا', word:{en:'Pizza', fr:'Pizza', de:'Pizza', zh:'披萨', ko:'피자'},
+     need:['dough','sauce','cheese','tomato'], decoys:['fish','honey'], chop:['tomato'], cookSec:14, vessel:'pan',
+     dish:'<ellipse cx="170" cy="150" rx="120" ry="22" fill="#0d0a14" opacity=".5"/><circle cx="170" cy="100" r="62" fill="#e8b04b" stroke="#c98a2b" stroke-width="4"/><circle cx="170" cy="100" r="50" fill="#f7c948"/><circle cx="170" cy="100" r="50" fill="#e74c3c" opacity=".35"/><g fill="#a93226"><circle cx="150" cy="84" r="8"/><circle cx="192" cy="90" r="8"/><circle cx="170" cy="118" r="8"/><circle cx="140" cy="112" r="8"/><circle cx="198" cy="114" r="8"/></g><g fill="#7bc950"><circle cx="168" cy="76" r="4"/><circle cx="150" cy="100" r="4"/><circle cx="186" cy="102" r="4"/></g><path d="M170 100 L170 38 M170 100 L224 128 M170 100 L116 128" stroke="#c98a2b" stroke-width="3"/>'},
+    {id:'burger', ar:'برجر', word:{en:'Burger', fr:'Burger', de:'Burger', zh:'汉堡', ko:'버거'},
+     need:['bun','patty','cheese','lettuce','tomato'], decoys:['syrup','banana'], chop:['tomato','lettuce'], cookSec:10, vessel:'pan',
+     dish:'<ellipse cx="170" cy="152" rx="115" ry="20" fill="#0d0a14" opacity=".5"/><ellipse cx="170" cy="120" rx="105" ry="34" fill="#f5f0e8" stroke="#d9d0bd" stroke-width="3"/><rect x="110" y="116" width="120" height="14" rx="7" fill="#e8b04b" stroke="#c98a2b" stroke-width="2.6"/><path d="M108 116 q10 -14 20 -2 q10 -14 20 -2 q10 -14 20 -2 q10 -14 20 -2 q10 -12 14 -4 l-6 10 h-88z" fill="#7bc950" stroke="#5aa83a" stroke-width="2"/><rect x="112" y="98" width="116" height="12" rx="6" fill="#6e3b1f" stroke="#54290f" stroke-width="2.4"/><path d="M114 98 l112 0 l-8 -10 l-96 0z" fill="#f7c948" stroke="#e0a91c" stroke-width="2"/><circle cx="140" cy="86" r="9" fill="#e74c3c"/><circle cx="200" cy="86" r="9" fill="#e74c3c"/><path d="M110 86 a60 40 0 0 1 120 0z" fill="#e8b04b" stroke="#c98a2b" stroke-width="3"/><g fill="#fff2cf"><circle cx="140" cy="66" r="2.2"/><circle cx="168" cy="58" r="2.2"/><circle cx="196" cy="66" r="2.2"/><circle cx="154" cy="72" r="2"/><circle cx="184" cy="72" r="2"/></g>'},
+    {id:'kunafa', ar:'كنافة بالفستق', word:{en:'Kunafa', fr:'Knafeh', de:'Künefe', zh:'库纳法', ko:'크나페'},
+     need:['kunafa','ghee','syrup','pistachio'], decoys:['fish','pasta'], chop:['pistachio'], cookSec:12, vessel:'pan',
+     dish:'<ellipse cx="170" cy="150" rx="120" ry="22" fill="#0d0a14" opacity=".5"/><ellipse cx="170" cy="112" rx="115" ry="40" fill="#f5f0e8" stroke="#d9d0bd" stroke-width="3"/><ellipse cx="170" cy="110" rx="88" ry="30" fill="#e8a33d" stroke="#c97f1c" stroke-width="3"/><g stroke="#f7cd7e" stroke-width="2.4" fill="none"><path d="M96 104 q74 -20 148 0"/><path d="M94 112 q76 -18 152 0"/><path d="M100 120 q70 -16 140 0"/><path d="M110 96 q60 -12 120 0"/></g><g fill="#8ab54a"><circle cx="140" cy="102" r="4.6"/><circle cx="168" cy="96" r="4.6"/><circle cx="196" cy="104" r="4.6"/><circle cx="156" cy="114" r="4.6"/><circle cx="186" cy="116" r="4.6"/><circle cx="212" cy="110" r="4.2"/><circle cx="126" cy="112" r="4.2"/></g><path d="M120 90 q50 -14 100 0" stroke="#fff" stroke-width="3" fill="none" opacity=".35" stroke-linecap="round"/>'}
+  ];
+
+  /* ---------- مشهد البوتاجاز (مرسوم + نار وبخار متحركين) ---------- */
+  function stoveScene(vessel, opts){
+    opts = opts || {};
+    var pot = vessel === 'pan'
+      ? '<g><ellipse cx="170" cy="118" rx="86" ry="16" fill="#2b2b33" stroke="#45454f" stroke-width="3"/><path d="M84 118 a86 30 0 0 0 172 0 l0 14 a86 30 0 0 1 -172 0z" fill="#1c1c22" stroke="#45454f" stroke-width="3"/><rect x="250" y="112" width="56" height="12" rx="6" fill="#3a3a44" stroke="#55555f" stroke-width="2"/><ellipse cx="170" cy="116" rx="72" ry="11" fill="'+(opts.full?'#c96a1e':'#3a3a44')+'" class="'+(opts.full?'chef-simmer':'')+'"/></g>'
+      : '<g><path d="M96 74 h148 v44 a74 26 0 0 1 -148 0z" fill="#c9a227" stroke="#8a6d1f" stroke-width="3"/><ellipse cx="170" cy="74" rx="74" ry="16" fill="#e3bc45" stroke="#8a6d1f" stroke-width="3"/><ellipse cx="170" cy="75" rx="60" ry="11" fill="'+(opts.full?'#c96a1e':'#2b2b33')+'" class="'+(opts.full?'chef-simmer':'')+'"/><rect x="82" y="82" width="18" height="10" rx="5" fill="#8a6d1f"/><rect x="240" y="82" width="18" height="10" rx="5" fill="#8a6d1f"/></g>';
+    var flame = opts.fire
+      ? '<g class="chef-flame">'+
+        '<path d="M170 150 q-26 -6 -22 -26 q2 -12 12 -18 q-2 12 8 14 q-4 -18 12 -26 q-2 14 8 20 q10 6 6 22 q-4 16 -24 14z" fill="#ff9d2e"/>'+
+        '<path d="M170 148 q-14 -4 -12 -16 q1 -8 7 -11 q-1 8 5 9 q-2 -12 8 -17 q0 10 5 14 q6 4 3 13 q-3 10 -16 8z" fill="#ffd23e"/>'+
+        '<path d="M170 146 q-6 -2 -5 -8 q3 -6 5 -9 q2 5 5 7 q3 4 -1 8 q-2 2 -4 2z" fill="#fff5cc"/>'+
+        '</g>'
+      : '<g><ellipse cx="170" cy="146" rx="34" ry="6" fill="#33333c"/><circle cx="170" cy="146" r="4" fill="#45454f"/></g>';
+    var steam = opts.steam
+      ? '<g class="chef-steam" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".55">'+
+        '<path class="st1" d="M140 58 q-6 -10 0 -18 q6 -8 0 -16"/>'+
+        '<path class="st2" d="M170 54 q-6 -10 0 -18 q6 -8 0 -16"/>'+
+        '<path class="st3" d="M200 58 q-6 -10 0 -18 q6 -8 0 -16"/></g>'
+      : '';
+    return '<svg viewBox="0 0 340 170" class="chef-scene">'
+      + '<rect x="60" y="140" width="220" height="18" rx="6" fill="#17171d" stroke="#2e2e38" stroke-width="2"/>'
+      + '<rect x="72" y="158" width="14" height="10" rx="3" fill="#17171d"/><rect x="254" y="158" width="14" height="10" rx="3" fill="#17171d"/>'
+      + flame + pot + steam + '</svg>';
+  }
+  /* ---------- رخامة التقطيع ---------- */
+  function boardScene(ingKey, pieces){
+    var cuts = '';
+    for(var i=0;i<pieces;i++){
+      var x = 120 + i*24, y = 108 - (i%2)*10;
+      cuts += '<g class="chef-piece" style="animation-delay:'+(i*0.05)+'s">' + ING[ingKey].svg.replace('viewBox="0 0 60 60"','viewBox="0 0 60 60" x="'+x+'" y="'+y+'" width="26" height="26"') + '</g>';
+    }
+    return '<svg viewBox="0 0 340 170" class="chef-scene">'
+      + '<rect x="70" y="96" width="200" height="52" rx="12" fill="#b5854a" stroke="#8a6234" stroke-width="3"/>'
+      + '<rect x="70" y="96" width="200" height="10" rx="5" fill="#c99a5c"/>'
+      + '<circle cx="252" cy="122" r="6" fill="#8a6234"/>'
+      + '<g class="chef-knife"><path d="M96 60 l64 22 q6 3 2 8 l-62 -14z" fill="#dfe6ee" stroke="#aab4c0" stroke-width="2"/><rect x="82" y="50" width="34" height="14" rx="7" transform="rotate(24 99 57)" fill="#54290f"/></g>'
+      + cuts + '</svg>';
+  }
+  /* ---------- طبق التقديم ---------- */
+  function plateScene(r, garnish){
+    var g = '';
+    if(garnish){
+      g = '<g class="chef-garnish">'
+        + '<circle cx="118" cy="84" r="5" fill="#4caf50"/><circle cx="128" cy="76" r="4" fill="#4caf50"/><circle cx="222" cy="86" r="5" fill="#4caf50"/><circle cx="232" cy="78" r="4" fill="#4caf50"/>'
+        + '<ellipse cx="238" cy="118" rx="12" ry="8" fill="#f7dc4b" stroke="#dfc02e" stroke-width="2"/>'
+        + '</g>';
+    }
+    return '<svg viewBox="0 0 340 170" class="chef-scene">' + r.dish + g + '</svg>';
+  }
+
+  /* ---------- حالة اللعبة ---------- */
+  var LS_STARS = 'lingua_chef_stars';
+  function stars(){ try { return JSON.parse(localStorage.getItem(LS_STARS)||'{}'); } catch(e){ return {}; } }
+  function setStars(id, n){ var s = stars(); if((s[id]||0) < n){ s[id] = n; try{ localStorage.setItem(LS_STARS, JSON.stringify(s)); }catch(e){} } }
+  function unlocked(i){ return i === 0 || (stars()[RECIPES[i-1].id]||0) >= 1; }
+  function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  var G = null;
+
+  /* ---------- شاشة اختيار وصفة ---------- */
+  function pickRecipe(){
+    G = null;
+    var s = stars();
+    host.innerHTML = '<div class="chef-wrap">'
+      + '<div class="chef-title">👩‍🍳 اختاري وصفة — كل وصفة بتفتح اللي بعدها</div>'
+      + '<div class="chef-grid">'
+      + RECIPES.map(function(r, i){
+          var un = unlocked(i), st = s[r.id]||0;
+          var starsHtml = '<span class="chef-stars">' + [1,2,3].map(function(n){ return n<=st?'★':'☆'; }).join('') + '</span>';
+          return '<button class="chef-card'+(un?'':' locked')+'" data-r="'+i+'">'
+            + '<span class="chef-dishart">'+plateScene(r,false)+'</span>'
+            + '<span class="chef-rname">'+r.ar+'</span>'
+            + '<span class="chef-rword">'+esc(r.word.en)+'</span>'
+            + (un ? starsHtml : '<span class="chef-lock">🔒 اخلقي الوصفة اللي قبلها</span>')
+            + '</button>';
+        }).join('')
+      + '</div></div>';
+    host.querySelectorAll('[data-r]').forEach(function(b){
+      b.onclick = function(){
+        var i = +b.dataset.r;
+        if(!unlocked(i)){ toast('الوصفة دي لسه مقفولة 🔒 كمّلي اللي قبلها الأول'); return; }
+        startRecipe(i);
+      };
+    });
+  }
+
+  /* ---------- بدء وصفة ---------- */
+  function startRecipe(i){
+    G = {r:RECIPES[i], ri:i, step:'pick', got:[], wrong:0, chopped:0, stars:3, garnish:false};
+    stepPick();
+  }
+  function head(txt){
+    return '<div class="chef-head"><button class="engx-back" id="chefBack">‹ الوصفات</button><span>'+G.r.ar+' — '+txt+'</span></div>';
+  }
+  function bindBack(){ var b=document.getElementById('chefBack'); if(b) b.onclick = pickRecipe; }
+
+  /* ---------- خطوة ١: اختيار المكونات ---------- */
+  function stepPick(){
+    var r = G.r;
+    var shelf = r.need.concat(r.decoys).map(function(k){ return {k:k, ok:r.need.indexOf(k)>=0}; })
+      .sort(function(){ return Math.random()-0.5; });
+    host.innerHTML = '<div class="chef-wrap">' + head('اختاري المكونات 🧺')
+      + '<div class="chef-tip">دوسي على المكونات الصح بس — كل غلطة بتنزل نجمة! الاسم بالإنجليزي تحت 👇</div>'
+      + '<div class="chef-progress">'+G.got.length+' / '+r.need.length+'</div>'
+      + '<div class="chef-shelf">'
+      + shelf.map(function(s){
+          return '<button class="chef-ing" data-k="'+s.k+'" data-ok="'+(s.ok?1:0)+'">'+ic(ING[s.k].svg)
+            + '<span class="ci-ar">'+ING[s.k].ar+'</span><span class="ci-en">'+esc(ING[s.k].en)+'</span></button>';
+        }).join('')
+      + '</div></div>';
+    bindBack();
+    host.querySelectorAll('.chef-ing').forEach(function(b){
+      b.onclick = function(){
+        if(b.disabled) return;
+        if(b.dataset.ok === '1'){
+          b.disabled = true; b.classList.add('picked');
+          G.got.push(b.dataset.k);
+          host.querySelector('.chef-progress').textContent = G.got.length+' / '+G.r.need.length;
+          if(G.got.length >= G.r.need.length){
+            if(G.r.chop.length){ setTimeout(stepChop, 500); } else { setTimeout(stepCook, 500); }
+          }
+        } else {
+          b.classList.add('wrong-pick');
+          setTimeout(function(){ b.classList.remove('wrong-pick'); }, 600);
+          G.stars = Math.max(1, G.stars-1); G.wrong++;
+          toast('ده مش من مكونات الوصفة! 🙈 ('+ING[b.dataset.k].ar+')');
+        }
+      };
+    });
+  }
+
+  /* ---------- خطوة ٢: التقطيع ---------- */
+  function stepChop(){
+    var target = G.r.chop[G.chopped];
+    var need = 5, hits = 0;
+    host.innerHTML = '<div class="chef-wrap">' + head('قطّعي '+ING[target].ar+' 🔪')
+      + '<div class="chef-tip">دوسي على الرخامة '+need+' مرات عشان تقطّعي '+ING[target].ar+' ('+esc(ING[target].en)+')</div>'
+      + '<div id="chefBoard">'+boardScene(target, 0)+'</div>'
+      + '<div class="chef-progress" id="chopProg">0 / '+need+'</div>'
+      + '</div>';
+    bindBack();
+    host.querySelector('#chefBoard').style.cursor = 'pointer';
+    host.querySelector('#chefBoard').addEventListener('click', function(){
+      hits++;
+      host.querySelector('#chefBoard').innerHTML = boardScene(target, hits);
+      host.querySelector('#chopProg').textContent = hits+' / '+need;
+      if(hits >= need){
+        G.chopped++;
+        if(G.chopped < G.r.chop.length){ setTimeout(stepChop, 500); }
+        else { setTimeout(stepCook, 500); }
+      }
+    });
+  }
+
+  /* ---------- خطوة ٣: على النار ---------- */
+  function stepCook(){
+    var r = G.r, t0 = null, running = true;
+    host.innerHTML = '<div class="chef-wrap">' + head('على النار 🔥')
+      + '<div class="chef-tip">الأكل نزل في '+(r.vessel==='pan'?'الطاسة':'الحلة')+'! استنّي لما المؤشر يدخل <b>المنطقة الدهبي</b> ودوسي «استوى» — بدري = نيّ، متأخر = بيتحرق!</div>'
+      + '<div id="chefStove">'+stoveScene(r.vessel, {fire:true, full:true, steam:true})+'</div>'
+      + '<div class="chef-timer"><div class="ct-zone"></div><div class="ct-mark" id="ctMark"></div></div>'
+      + '<div class="engx-acts"><button class="btn" id="chefDone">استوى! اطفي النار ✋</button></div>'
+      + '</div>';
+    bindBack();
+    var mark = document.getElementById('ctMark');
+    function tick(ts){
+      if(!running) return;
+      if(!t0) t0 = ts;
+      var p = Math.min(1, (ts-t0)/(r.cookSec*1000));
+      mark.style.insetInlineStart = (p*100)+'%';
+      if(p >= 1){ finish(p); return; }
+      requestAnimationFrame(tick);
+    }
+    function finish(p){
+      running = false;
+      var verdict;
+      if(p < 0.68){ verdict = 'raw'; G.stars = Math.max(1, G.stars-1); }
+      else if(p <= 0.92){ verdict = 'perfect'; }
+      else { verdict = 'burnt'; G.stars = Math.max(1, G.stars-2); }
+      document.getElementById('chefStove').innerHTML = stoveScene(r.vessel, {fire:false, full:true, steam: verdict!=='burnt'});
+      var msg = verdict==='perfect' ? 'مظبوطة على الآخر! استواء مثالي 🤌✨'
+        : verdict==='raw' ? 'طلعت نيّة شوية 🙈 المرات الجاية سيبيها أكتر (نجمة نزلت)'
+        : 'اتشطبت شوية 🔥 المرات الجاية طفي بدري (نجمتين نزلوا)';
+      host.querySelector('.chef-tip').innerHTML = msg;
+      var btn = document.getElementById('chefDone');
+      btn.textContent = 'قدّمي الأكل 🍽️';
+      btn.onclick = stepPlate;
+    }
+    document.getElementById('chefDone').onclick = function(){
+      if(!running) return;
+      var p = parseFloat(mark.style.insetInlineStart)/100 || 0;
+      finish(p);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  /* ---------- خطوة ٤: التقديم ---------- */
+  function stepPlate(){
+    host.innerHTML = '<div class="chef-wrap">' + head('التقديم 🍽️')
+      + '<div class="chef-tip">دوسي على الطبق تزيّنيه بالبقدونس والليمون، وبعدين قدّميه!</div>'
+      + '<div id="chefPlate" style="cursor:pointer">'+plateScene(G.r, false)+'</div>'
+      + '<div class="engx-acts"><button class="btn" id="chefServe">قدّمي الأكل 🎉</button></div>'
+      + '</div>';
+    bindBack();
+    document.getElementById('chefPlate').addEventListener('click', function(){
+      if(G.garnish) return;
+      G.garnish = true;
+      document.getElementById('chefPlate').innerHTML = plateScene(G.r, true);
+    });
+    document.getElementById('chefServe').onclick = function(){
+      if(!G.garnish){ G.stars = Math.max(1, G.stars); }
+      finishRecipe();
+    };
+  }
+
+  /* ---------- النتيجة ---------- */
+  function finishRecipe(){
+    var r = G.r, st = G.stars;
+    setStars(r.id, st);
+    try { addPoints(st*10); } catch(e){}
+    try { if(window.awardPoints) awardPoints(st*10, 'شيف لينجوا 👩‍🍳'); } catch(e){}
+    var nextExists = RECIPES[G.ri+1];
+    host.innerHTML = '<div class="chef-wrap">'
+      + '<div class="chef-title">'+r.ar+' جاهزة! 🎉</div>'
+      + '<div class="chef-finaldish">'+plateScene(r, true)+'</div>'
+      + '<div class="chef-bigstars">'+[1,2,3].map(function(n){ return '<span class="'+(n<=st?'on':'')+'">★</span>'; }).join('')+'</div>'
+      + '<div class="chef-grade">'+(st===3?'طبخة محترفة! 🤌✨':st===2?'حلوة أوي — جربي تظبطي التوقيت أكتر 💪':'كويسة كبداية — ركزي في المكونات والنار 🌱')+'</div>'
+      + '<div class="chef-word"><span>'+esc(r.word.en)+'</span><span>'+esc(r.word.fr)+'</span><span>'+esc(r.word.de)+'</span><span>'+esc(r.word.zh)+'</span><span>'+esc(r.word.ko)+'</span></div>'
+      + '<div class="chef-points">+'+(st*10)+' نقطة 💎</div>'
+      + '<div class="engx-acts">'
+      + (nextExists ? '<button class="btn" id="chefNext">الوصفة اللي بعدها: '+nextExists.ar+' 👩‍🍳</button>' : '<button class="btn" id="chefAgain">العبي تاني 🔄</button>')
+      + '<button class="btn ghost" id="chefMenu">كل الوصفات 📖</button>'
+      + '</div></div>';
+    try { if(st>=2 && window.confetti) confetti(); } catch(e){}
+    var nx = document.getElementById('chefNext'), ag = document.getElementById('chefAgain');
+    if(nx) nx.onclick = function(){ startRecipe(G.ri+1); };
+    if(ag) ag.onclick = function(){ startRecipe(G.ri); };
+    document.getElementById('chefMenu').onclick = pickRecipe;
+  }
+
+  /* ---------- استبدال لعبة المطبخ القديمة ---------- */
+  host.innerHTML = '';
+  pickRecipe();
 })();
