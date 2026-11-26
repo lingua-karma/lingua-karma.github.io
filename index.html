@@ -2206,7 +2206,11 @@
   <p class="sec-sub">أشهر الجمل السينمائية وترجمتها 🎬</p>
   <div id="quotesList"></div>
 </section>
-
+<section id="ai">
+  <h2 class="sec-title">✦ لمى — صاحبتك الذكية ✦</h2>
+  <p class="sec-sub">اسأليها أي حاجة عن اللغات — وهي كمان معاكي في كل الأقسام من الزرار البنفسجي 🤖💜</p>
+  <button class="lama-open-btn" id="lamaOpenBtn">💬 افتحي الشات مع لمى</button>
+</section>
 <section id="puzzle">
   <h2 class="sec-title">✦ بازل الكلمات ✦</h2>
   <p class="sec-sub">رتّبي الحروف وكوّني الكلمة الصح! 🧩</p>
@@ -2238,7 +2242,15 @@
 </section>
 
 
-
+<div id="lamaOverlay">
+  <div class="lama-box">
+    <div class="lama-head"><div class="lama-ava">🤖</div><div><b>لمى</b><span>متصلة وجاهزة تساعدك</span></div><button class="lama-close" id="lamaClose">✕</button></div>
+    <div class="lama-msgs" id="lamaMsgs"></div>
+    <div class="lama-sugs" id="lamaSugs"></div>
+    <form class="lama-form" id="lamaForm"><input id="lamaInput" placeholder="اكتبي سؤالك هنا..." autocomplete="off" maxlength="500"><button type="submit">➤</button></form>
+  </div>
+</div>
+<button id="lamaFab" title="لمى — مساعدتك الذكية">🤖</button>
 
 
 
@@ -2710,6 +2722,31 @@
 .quote-text{font-size:1rem;font-weight:700;line-height:1.6}
 .quote-tr{font-size:.82rem;color:var(--muted);margin-top:6px}
 .quote-src{font-size:.7rem;color:var(--gold2);margin-top:8px;font-weight:700}
+
+
+/* v24: lama floating assistant */
+#lamaFab{position:fixed;bottom:18px;left:16px;z-index:9999;width:52px;height:52px;border-radius:50%;border:1px solid rgba(155,92,255,.6);background:linear-gradient(135deg,#9b5cff,#5c2ea6);font-size:1.5rem;cursor:pointer;box-shadow:0 8px 26px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;transition:transform .2s}
+#lamaFab:active{transform:scale(.92)}
+#lamaOverlay{position:fixed;inset:0;z-index:10000;background:rgba(5,3,10,.7);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center}
+#lamaOverlay.open{display:flex}
+.lama-box{width:100%;max-width:640px;background:var(--card);border:1px solid var(--border);border-radius:22px 22px 0 0;display:flex;flex-direction:column;overflow:hidden;max-height:82vh}
+.lama-head{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border)}
+.lama-ava{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#9b5cff,#5c2ea6);display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.lama-head b{font-size:.95rem}
+.lama-head span{display:block;font-size:.68rem;color:#7bc950}
+.lama-close{margin-inline-start:auto;background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;padding:4px 8px}
+.lama-msgs{padding:12px;min-height:220px;max-height:46vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
+.lm{max-width:82%;padding:9px 13px;border-radius:16px;font-size:.88rem;line-height:1.55;white-space:pre-wrap}
+.lm.bot{background:#241d3a;border:1px solid var(--border);border-bottom-right-radius:4px;align-self:flex-start}
+.lm.me{background:linear-gradient(135deg,var(--gold),#b8860b);color:#1a1225;border-bottom-left-radius:4px;align-self:flex-end;font-weight:600}
+.lm.typing{color:var(--muted);font-style:italic}
+.lama-sugs{display:flex;gap:6px;flex-wrap:wrap;padding:0 12px 8px}
+.lama-sug{background:#1a1428;border:1px solid var(--border);border-radius:999px;padding:5px 12px;font-size:.72rem;cursor:pointer;color:var(--muted)}
+.lama-form{display:flex;gap:8px;padding:10px;border-top:1px solid var(--border)}
+.lama-form input{flex:1;background:#1a1428;border:1px solid var(--border);border-radius:999px;padding:10px 16px;color:var(--ink);font-family:inherit;font-size:.9rem}
+.lama-form input:focus{outline:none;border-color:var(--gold)}
+.lama-form button{background:linear-gradient(135deg,var(--gold),#b8860b);border:none;border-radius:50%;width:42px;height:42px;font-size:1.1rem;cursor:pointer;flex-shrink:0}
+.lama-open-btn{display:block;margin:14px auto;background:linear-gradient(135deg,#9b5cff,#5c2ea6);color:#fff;border:none;border-radius:999px;padding:12px 30px;font-weight:800;font-size:.95rem;cursor:pointer;font-family:inherit}
 
 
 /* v25: word puzzle + hobbies */
@@ -5125,7 +5162,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['quotes','🎬','اقتباسات'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
+  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['quotes','🎬','اقتباسات'],['ai','🤖','لمى'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
 ];
 
 /* ================= v16: free books library ================= */
@@ -5876,6 +5913,76 @@ const MENU = [
       return '<div class="quote-card"><div class="quote-text">'+esc(q[0])+'</div><div class="quote-tr">'+esc(q[1])+'</div><div class="quote-src">'+esc(q[2])+'</div></div>';
     }).join('');
   }
+})();
+
+
+/* ================= v24: lama floating assistant ================= */
+(function(){
+  var ENDPOINT = 'https://yzzlgalxjaaevmytdazf.supabase.co/functions/v1/lingua-ai';
+  var ANON = 'sb_publishable_EmbKVWREHSs3sZ_nBKFyqg_zxv3Z38-';
+  var overlay = document.getElementById('lamaOverlay');
+  var fab = document.getElementById('lamaFab');
+  var msgsEl = document.getElementById('lamaMsgs');
+  var form = document.getElementById('lamaForm');
+  var input = document.getElementById('lamaInput');
+  if(!overlay || !fab) return;
+  /* place next to حسابي FAB */
+  function place(){
+    var acc = document.getElementById('accFab');
+    if(acc){ fab.style.left = (acc.offsetLeft + acc.offsetWidth + 10) + 'px'; }
+  }
+  place(); window.addEventListener('resize', place);
+  function openLama(){ overlay.classList.add('open'); render(); setTimeout(function(){ input.focus(); }, 150); }
+  function closeLama(){ overlay.classList.remove('open'); }
+  fab.addEventListener('click', openLama);
+  document.getElementById('lamaOpenBtn').addEventListener('click', openLama);
+  document.getElementById('lamaClose').addEventListener('click', closeLama);
+  overlay.addEventListener('click', function(e){ if(e.target===overlay) closeLama(); });
+  var hist = [];
+  try{ hist = JSON.parse(localStorage.getItem('lama_hist')||'[]'); }catch(e){}
+  if(!hist.length) hist = [{role:'assistant', content:'أهلاً يا قمر! 👋 أنا لمى، صاحبتك في لينجوا. اسأليني أي حاجة عن الإنجليزي أو الفرنسي أو الألماني أو الصيني أو الكوري — ترجمة، نطق، قواعد، أي حاجة! 💜'}];
+  function esc(t){ var d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+  function render(){
+    msgsEl.innerHTML = hist.map(function(m){
+      return '<div class="lm '+(m.role==='user'?'me':'bot')+'">'+esc(m.content)+'</div>';
+    }).join('');
+    msgsEl.scrollTop = msgsEl.scrollHeight;
+  }
+  var SUGS = ['يعني إيه breakfast؟ 🍳','علميني تحيات بالكوري 🇰🇷','إزاي أقول بحبك بالفرنسي؟ 💕','عايزة ٣ كلمات صيني سهلة 🇨🇳'];
+  document.getElementById('lamaSugs').innerHTML = SUGS.map(function(q){ return '<span class="lama-sug">'+q+'</span>'; }).join('');
+  document.getElementById('lamaSugs').addEventListener('click', function(e){
+    var sg = e.target.closest('.lama-sug'); if(!sg) return;
+    input.value = sg.textContent.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,'').trim();
+    form.requestSubmit();
+  });
+  var busy = false;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var t = input.value.trim();
+    if(!t || busy) return;
+    busy = true; input.value='';
+    hist.push({role:'user', content:t});
+    render();
+    var ty = document.createElement('div');
+    ty.className='lm bot typing'; ty.textContent='لمى بتكتب...';
+    msgsEl.appendChild(ty); msgsEl.scrollTop = msgsEl.scrollHeight;
+    fetch(ENDPOINT, {method:'POST', headers:{'Content-Type':'application/json','apikey':ANON,'Authorization':'Bearer '+ANON},
+      body: JSON.stringify({messages: hist.slice(-9).map(function(m){return {role:m.role, content:m.content};})})})
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      ty.remove();
+      hist.push({role:'assistant', content: d.reply || 'معلش، حصلت مشكلة — جربي تاني 🥺'});
+      localStorage.setItem('lama_hist', JSON.stringify(hist.slice(-20)));
+      render(); busy=false;
+      try{ addPoints(2); }catch(e){}
+    })
+    .catch(function(){
+      ty.remove();
+      hist.push({role:'assistant', content:'النت قطع مني ثانية — جربي تاني 🥺'});
+      render(); busy=false;
+    });
+  });
+  render();
 })();
 
 
@@ -7830,7 +7937,7 @@ gbkRender();
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v26.0</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v27.0</div>
 <script>
 
 /* ================= v13: learning map, personality quiz, XO, korean ================= */
