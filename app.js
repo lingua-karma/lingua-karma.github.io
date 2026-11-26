@@ -6016,3 +6016,392 @@ gbkRender();
   if(rb) rb.onclick = function(){ renderWeekBoard(); };
   boot();
 })();
+
+
+/* ================= v45: Live friend duels (تحدي لايف) ================= */
+(function(){
+  var SUPA_URL = 'https://yzzlgalxjaaevmytdazf.supabase.co';
+  var SUPA_KEY = 'sb_publishable_EmbKVWREHSs3sZ_nBKFyqg_zxv3Z38-';
+  var LIDX = {en:0, fr:1, de:2, zh:3, ko:4};
+  var LANGS = {en:'🇬🇧 إنجليزي', fr:'🇫🇷 فرنسي', de:'🇩🇪 ألماني', zh:'🇨🇳 صيني', ko:'🇰🇷 كوري'};
+  var CODE_ABC = 'ABDEFGHJKMNPQRSTWXYZ23456789';
+  var dsb = null, chan = null;
+  var S = {st:'home', code:null, lang:'en', host:false, uid:null, myName:'', opp:null, players:[],
+           qs:[], qi:0, startT:0, myAns:[], oppAns:[], myScore:0, oppScore:null, oppDone:false, timers:[]};
+
+  function esc(x){ return String(x == null ? '' : x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function el(id){ return document.getElementById(id); }
+  function clearTimers(){ S.timers.forEach(clearTimeout); S.timers = []; }
+  function later(fn, ms){ S.timers.push(setTimeout(fn, ms)); }
+
+  /* tiny WebAudio feedback */
+  var AC = null;
+  function beep(f, dur, type){
+    try {
+      if(!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
+      var o = AC.createOscillator(), g = AC.createGain();
+      o.type = type || 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0.08, AC.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, AC.currentTime + (dur || 0.15));
+      o.connect(g); g.connect(AC.destination);
+      o.start(); o.stop(AC.currentTime + (dur || 0.15));
+    } catch(e){}
+  }
+  function sndOk(){ beep(660, 0.12); later(function(){ beep(880, 0.15); }, 90); }
+  function sndNo(){ beep(220, 0.25, 'square'); }
+  function sndTick(){ beep(520, 0.07); }
+  function sndWin(){ [523, 659, 784, 1047].forEach(function(f, i){ later(function(){ beep(f, 0.18); }, i * 120); }); }
+
+  function hash(s){ var h = 2166136261; for(var i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function rng(seed){ var a = seed; return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function mkCode(){ var c = ''; for(var i = 0; i < 6; i++) c += CODE_ABC[Math.floor(Math.random() * CODE_ABC.length)]; return c; }
+
+  function buildQuestions(code, lang){
+    var r = rng(hash(code + ':' + lang));
+    var pool = [];
+    Object.keys(window.VOCAB_THEMES).forEach(function(k){
+      window.VOCAB_THEMES[k].rows.forEach(function(row){ pool.push(row); });
+    });
+    var li = LIDX[lang], qs = [], used = {};
+    while(qs.length < 10 && pool.length > 4){
+      var i = Math.floor(r() * pool.length);
+      if(used[i]) continue; used[i] = 1;
+      var row = pool[i], opts = [row[5]], tries = 0;
+      while(opts.length < 4 && tries < 80){ var o = pool[Math.floor(r() * pool.length)][5]; if(opts.indexOf(o) < 0) opts.push(o); tries++; }
+      for(var k = opts.length - 1; k > 0; k--){ var m = Math.floor(r() * (k + 1)), tmp = opts[k]; opts[k] = opts[m]; opts[m] = tmp; }
+      qs.push({w: row[li], e: row[6], a: row[5], opts: opts});
+    }
+    return qs;
+  }
+
+  /* ---------- render ---------- */
+  function render(){
+    var box = el('duelBox');
+    if(!box) return;
+    if(S.st === 'home') return renderHome(box);
+    if(S.st === 'lobby') return renderLobby(box);
+    if(S.st === 'game') return; /* game renders its own updates */
+    if(S.st === 'result') return; /* result rendered by endGame */
+  }
+
+  function renderHome(box){
+    box.innerHTML =
+      '<div class="du-card">' +
+      '<h3>⚔️ تحدي لايف مع صاحبتك</h3>' +
+      '<p class="du-sub">١٠ كلمات، نفس الأسئلة في نفس اللحظة — اللي تجاوب صح وأسرع تكسب 💜</p>' +
+      '<input class="acc-in" id="duName" maxlength="20" placeholder="اسمك في التحدي" value="' + esc(S.myName) + '">' +
+      '<div class="du-langs" id="duLangs">' + Object.keys(LANGS).map(function(k){
+        return '<button class="tab lang-tab' + (k === S.lang ? ' active' : '') + '" data-dlang="' + k + '"><span class="ln">' + LANGS[k] + '</span></button>';
+      }).join('') + '</div>' +
+      '<button class="btn du-big" id="duCreate">🎮 اعملي تحدي جديد</button>' +
+      '<div class="du-or">— أو عندك كود من صاحبتك؟ —</div>' +
+      '<div class="du-join"><input class="acc-in" id="duCode" maxlength="6" placeholder="الكود (٦ حروف)" style="text-transform:uppercase;text-align:center;letter-spacing:4px">' +
+      '<button class="btn" id="duJoin">دخول ⚡</button></div>' +
+      '</div>';
+    el('duLangs').addEventListener('click', function(e){
+      var b = e.target.closest('[data-dlang]'); if(!b) return;
+      S.lang = b.dataset.dlang;
+      el('duLangs').querySelectorAll('.lang-tab').forEach(function(t){ t.classList.toggle('active', t === b); });
+    });
+    el('duName').addEventListener('input', function(){
+      S.myName = el('duName').value.trim();
+      try { localStorage.setItem('lingua_duel_name', S.myName); } catch(e){}
+    });
+    el('duCreate').onclick = function(){ if(!ensureName()) return; createDuel(); };
+    el('duJoin').onclick = function(){
+      if(!ensureName()) return;
+      var c = el('duCode').value.trim().toUpperCase();
+      if(c.length !== 6){ toast('الكود ٦ حروف 🔤'); return; }
+      joinDuel(c);
+    };
+  }
+
+  function ensureName(){
+    if(S.myName) return true;
+    var n = el('duName') && el('duName').value.trim();
+    if(n){ S.myName = n; try { localStorage.setItem('lingua_duel_name', n); } catch(e){} return true; }
+    toast('اكتبي اسمك الأول ✍️'); el('duName').focus(); return false;
+  }
+
+  function renderLobby(box){
+    var link = 'https://lingua-karma.github.io/?duel=' + S.code + '&lang=' + S.lang;
+    var share = 'https://wa.me/?text=' + encodeURIComponent('تحدّيني في Lingua! ⚔️ ١٠ كلمات ' + LANGS[S.lang] + ' ونشوف مين أسرع 💜\n' + link);
+    box.innerHTML =
+      '<div class="du-card">' +
+      '<h3>⏳ غرفة التحدي</h3>' +
+      '<div class="du-code">' + S.code + '</div>' +
+      '<div class="du-sub">' + LANGS[S.lang] + ' • ١٠ أسئلة • ١٢ ثانية لكل سؤال</div>' +
+      '<a class="btn du-big" id="duShare" href="' + share + '" target="_blank" rel="noopener">💌 ابعتي الدعوة واتساب</a>' +
+      '<div class="du-players" id="duPlayers"></div>' +
+      '<button class="btn du-big" id="duReady" style="background:linear-gradient(135deg,#34d399,#0e9f6e)">✋ أنا جاهزة!</button>' +
+      '<button class="du-leave" id="duLeave">← خروج من التحدي</button>' +
+      '</div>';
+    el('duShare').addEventListener('click', function(){ toast('ابعتي اللينك لصاحبتك 💌'); });
+    el('duLeave').onclick = function(){ leaveDuel(); };
+    el('duReady').onclick = function(){
+      el('duReady').disabled = true; el('duReady').textContent = '✅ جاهزة — مستنيين ' + (S.opp ? esc(S.opp.name) : 'صاحبتك');
+      S._iReady = true;
+      try { chan.track({name: S.myName, ready: true}); } catch(e){}
+      send('ready', {});
+      maybeStart();
+    };
+    renderPlayers();
+  }
+
+  function renderPlayers(){
+    var p = el('duPlayers');
+    if(!p) return;
+    p.innerHTML = S.players.map(function(pl){
+      return '<div class="du-p' + (pl.ready ? ' rdy' : '') + '"><div class="du-pav">' + esc(pl.name.charAt(0) || '؟') + '</div><div class="du-pn">' + esc(pl.name) + (pl.uid === S.uid ? ' (انتي)' : '') + '</div><div class="du-pr">' + (pl.ready ? '✅' : '⏳') + '</div></div>';
+    }).join('') || '<div class="du-sub">مستنية صاحبتك تدخل... 💜</div>';
+  }
+
+  /* ---------- channel ---------- */
+  function send(type, payload){
+    if(!chan) return;
+    chan.send({type: 'broadcast', event: 'du', payload: Object.assign({t: type, by: S.uid, name: S.myName}, payload)});
+  }
+
+  function connect(code, isHost){
+    S.code = code; S.host = isHost; S.st = 'lobby';
+    chan = dsb.channel('duel-' + code, {config: {presence: {key: S.uid}}});
+    chan.on('presence', {event: 'sync'}, function(){
+      var st = chan.presenceState(), arr = [];
+      Object.keys(st).forEach(function(k){
+        var pr = st[k][0];
+        arr.push({uid: k, name: (pr && pr.name) || 'صديقة', ready: !!(pr && pr.ready)});
+      });
+      S.players = arr;
+      var opp = arr.find(function(x){ return x.uid !== S.uid; });
+      if(opp && !S.opp){ S.opp = {uid: opp.uid, name: opp.name}; sndTick(); }
+      if(opp) S.opp.name = opp.name;
+      if(S.st === 'lobby') renderPlayers();
+      if(!opp && S.st === 'game' && !S.oppDone){
+        toast('صاحبتك خرجت — كملي لوحدك وهتكسبي بالانسحاب 👑');
+        S.oppDone = true; S.oppForfeit = true; maybeFinish();
+      }
+    });
+    chan.on('broadcast', {event: 'du'}, function(ev){
+      var p = ev.payload;
+      if(!p || p.by === S.uid) return;
+      if(p.t === 'ready'){ S.opp = S.opp || {uid: p.by, name: p.name}; S._oppReady = true; maybeStart(); }
+      if(p.t === 'start'){ if(!S.host) beginGame(p.at); }
+      if(p.t === 'ans'){ S.oppAns[p.q] = {ok: p.ok, ms: p.ms}; if(S.st === 'game') updOppTick(); }
+      if(p.t === 'done'){ S.oppDone = true; S.oppAns = p.ans || S.oppAns; maybeFinish(); }
+    });
+    chan.subscribe(function(status){
+      if(status === 'SUBSCRIBED'){
+        chan.track({name: S.myName, ready: false});
+        render();
+      }
+    });
+  }
+
+  function maybeStart(){
+    if(!S.host || S.st !== 'lobby') return;
+    if(S._iReady && S._oppReady){
+      S.st = 'starting';
+      var at = Date.now() + 2500;
+      send('start', {at: at});
+      beginGame(at);
+    }
+  }
+
+  function createDuel(){
+    var code = mkCode();
+    connect(code, true);
+  }
+  function joinDuel(code){
+    connect(code, false);
+  }
+
+  function leaveDuel(){
+    clearTimers();
+    if(chan){ try { dsb.removeChannel(chan); } catch(e){} chan = null; }
+    S = {st:'home', code:null, lang:S.lang, host:false, uid:S.uid, myName:S.myName, opp:null, players:[],
+         qs:[], qi:0, startT:0, myAns:[], oppAns:[], myScore:0, oppScore:null, oppDone:false, timers:[]};
+    render();
+  }
+
+  /* ---------- game ---------- */
+  var QTIME = 12000, GAP = 2000;
+  function beginGame(at){
+    clearTimers();
+    S.st = 'game'; S.qi = 0; S.startT = at; S.myAns = []; S.oppAns = []; S.myScore = 0; S.oppDone = false; S.oppForfeit = false;
+    S.qs = buildQuestions(S.code, S.lang);
+    var box = el('duelBox');
+    box.innerHTML =
+      '<div class="du-card du-game">' +
+      '<div class="du-top"><div class="du-me" id="duMeScore">💎 0</div>' +
+      '<div class="du-prog" id="duProg">١ / ١٠</div>' +
+      '<div class="du-opp" id="duOppScore">' + esc(S.opp ? S.opp.name : 'صاحبتك') + ': 💎 0</div></div>' +
+      '<div class="du-timer"><div class="du-tbar" id="duTbar"></div></div>' +
+      '<div class="du-q" id="duQ"></div>' +
+      '<div class="du-opts" id="duOpts"></div>' +
+      '<div class="du-fb" id="duFb"></div>' +
+      '</div>';
+    var wait = at - Date.now();
+    el('duQ').innerHTML = '<div class="du-count">استعدي... ⚡</div>';
+    if(wait > 0) el('duFb').textContent = 'البداية بعد ' + Math.ceil(wait / 1000) + '...';
+    later(function(){ runQ(0); }, Math.max(50, wait));
+  }
+
+  function runQ(i){
+    if(i >= 10 || S.st !== 'game') return endMyGame();
+    S.qi = i;
+    var q = S.qs[i];
+    el('duProg').textContent = (i + 1) + ' / ١٠';
+    el('duQ').innerHTML = '<div class="du-we">' + q.e + '</div><div class="du-word">' + esc(q.w) + '</div>';
+    el('duFb').textContent = '';
+    el('duOpts').innerHTML = q.opts.map(function(o, k){
+      return '<button class="du-opt" data-k="' + k + '">' + esc(o) + '</button>';
+    }).join('');
+    var t0 = Date.now(), answered = false;
+    var tbar = el('duTbar');
+    tbar.style.transition = 'none'; tbar.style.width = '100%';
+    requestAnimationFrame(function(){
+      tbar.style.transition = 'width ' + (QTIME / 1000) + 's linear';
+      tbar.style.width = '0%';
+    });
+    el('duOpts').onclick = function(e){
+      var b = e.target.closest('.du-opt');
+      if(!b || answered) return;
+      answered = true;
+      var pick = q.opts[+b.dataset.k], ok = (pick === q.a), ms = Date.now() - t0;
+      S.myAns[i] = {ok: ok, ms: ms};
+      el('duOpts').querySelectorAll('.du-opt').forEach(function(o){
+        o.disabled = true;
+        if(o.textContent === q.a) o.classList.add('right');
+      });
+      if(!ok) b.classList.add('wrong');
+      if(ok){ sndOk(); } else { sndNo(); }
+      el('duFb').textContent = ok ? 'صح! +' + 10 + ' 💎' : 'غلط — الصح: ' + q.a;
+      send('ans', {q: i, ok: ok, ms: ms});
+      updateMyScore();
+    };
+    later(function(){
+      if(!answered){
+        S.myAns[i] = {ok: false, ms: QTIME};
+        el('duOpts').querySelectorAll('.du-opt').forEach(function(o){
+          o.disabled = true;
+          if(o.textContent === q.a) o.classList.add('right');
+        });
+        el('duFb').textContent = 'الوقت خلص ⏰ الصح: ' + q.a;
+        send('ans', {q: i, ok: false, ms: QTIME});
+        updateMyScore();
+      }
+    }, QTIME);
+    later(function(){ runQ(i + 1); }, QTIME + GAP);
+  }
+
+  function calcScore(ans){
+    var s = 0;
+    for(var i = 0; i < 10; i++){ if(ans[i] && ans[i].ok) s += 10; }
+    return s;
+  }
+  function calcBonus(my, opp){
+    var b = 0;
+    for(var i = 0; i < 10; i++){
+      if(my[i] && my[i].ok && (!opp[i] || !opp[i].ok || my[i].ms < opp[i].ms)) b += 3;
+    }
+    return b;
+  }
+  function updateMyScore(){
+    S.myScore = calcScore(S.myAns);
+    var el1 = el('duMeScore');
+    if(el1) el1.textContent = '💎 ' + S.myScore;
+  }
+  function updOppTick(){
+    var el2 = el('duOppScore');
+    if(el2 && S.opp) el2.textContent = S.opp.name + ': ✓ ' + Object.keys(S.oppAns).length + '/١٠';
+  }
+
+  function endMyGame(){
+    if(S.st !== 'game') return;
+    S.st = 'ending';
+    S.myScore = calcScore(S.myAns) + calcBonus(S.myAns, S.oppAns);
+    send('done', {ans: S.myAns});
+    var f = el('duFb');
+    if(f) f.textContent = 'خلصتي! مستنيين نتيجة ' + (S.opp ? S.opp.name : 'صاحبتك') + '... ⏳';
+    later(maybeFinish, 9000); /* forfeit timeout */
+  }
+
+  function maybeFinish(){
+    if(S.st !== 'ending' && S.st !== 'game') return;
+    if(!S.oppDone) return;
+    S.st = 'result';
+    clearTimers();
+    var myBase = calcScore(S.myAns), oppBase = calcScore(S.oppAns);
+    var myTotal = myBase + calcBonus(S.myAns, S.oppAns);
+    var oppTotal = oppBase + calcBonus(S.oppAns, S.myAns);
+    if(S.oppForfeit) oppTotal = 0;
+    var oppName = S.opp ? S.opp.name : 'صاحبتك';
+    var won = myTotal > oppTotal, tie = myTotal === oppTotal;
+    var xp = won ? 30 : (tie ? 15 : 10);
+    if(typeof window.awardPoints === 'function') window.awardPoints(xp, won ? 'كسبتِ التحدي 👑' : (tie ? 'تعادل في التحدي' : 'لعبتِ تحدي'));
+    if(won){ sndWin(); try { confetti(); } catch(e){} }
+    var box = el('duelBox');
+    box.innerHTML =
+      '<div class="du-card du-result">' +
+      '<div class="du-crown">' + (won ? '👑' : (tie ? '🤝' : '💪')) + '</div>' +
+      '<h3>' + (won ? 'مبروووك! كسبتي التحدي 🎉' : (tie ? 'تعادل حلو! 🤝' : 'ماتش حلو! المرة الجاية ليكي 💪')) + '</h3>' +
+      '<div class="du-final">' +
+      '<div class="du-frow me"><span>' + esc(S.myName) + ' (انتي)</span><b>💎 ' + myTotal + '</b></div>' +
+      '<div class="du-frow"><span>' + esc(oppName) + '</span><b>💎 ' + oppTotal + '</b></div>' +
+      '</div>' +
+      '<div class="du-xp">+' + xp + ' نقطة في رصيدك ✨</div>' +
+      '<button class="btn du-big" id="duAgain">⚔️ تحدي جديد</button>' +
+      '<button class="du-leave" id="duHome">← رجوع</button>' +
+      '</div>';
+    el('duAgain').onclick = function(){
+      leaveDuel();
+      var c = mkCode();
+      var link = 'https://lingua-karma.github.io/?duel=' + c + '&lang=' + S.lang;
+      connect(c, true);
+      toast('تحدي جديد اتعمل — ابعتي اللينك تاني 💌');
+    };
+    el('duHome').onclick = function(){ leaveDuel(); };
+  }
+
+  /* ---------- boot ---------- */
+  function boot(){
+    if(!window.supabase){ setTimeout(boot, 400); return; }
+    dsb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+    S.uid = sessionStorage.getItem('lingua_duel_uid');
+    if(!S.uid){ S.uid = 'u' + Math.random().toString(36).slice(2, 12); sessionStorage.setItem('lingua_duel_uid', S.uid); }
+    S.myName = localStorage.getItem('lingua_duel_name') || '';
+    /* adopt profile name when logged in */
+    dsb.auth.getSession().then(function(r){
+      if(r.data && r.data.session){
+        dsb.from('profiles').select('display_name').eq('id', r.data.session.user.id).maybeSingle().then(function(pr){
+          if(pr.data && pr.data.display_name && !S.myName){
+            S.myName = pr.data.display_name;
+            var n = el('duName'); if(n) n.value = S.myName;
+          }
+        });
+      }
+    });
+    /* landed from an invite link */
+    try {
+      var q = new URLSearchParams(location.search);
+      var dc = q.get('duel'), dl = q.get('lang');
+      if(dl && LANGS[dl]) S.lang = dl;
+      if(dc && /^[A-Z0-9]{6}$/.test(dc.toUpperCase())){
+        render();
+        el('duCode').value = dc.toUpperCase();
+        location.hash = 'duel';
+        history.replaceState(null, '', location.pathname + '#duel');
+        toast('وصلكي تحدي! اكتبي اسمك ودوسي دخول ⚔️');
+      }
+    } catch(e){}
+    render();
+  }
+
+  /* menu card */
+  try {
+    MENU.push(['duel','⚔️','تحدي لايف']); VIEWIDS.push('duel');
+    document.getElementById('menuGrid').insertAdjacentHTML('beforeend', '<a class="menu-card" href="#duel"><span class="m-ico">⚔️</span><span class="m-name">تحدي لايف</span></a>');
+  } catch(e){}
+
+  boot();
+})();

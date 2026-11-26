@@ -2151,6 +2151,51 @@
   <div id="friendsReal"><div class="gbk-empty">سجلي حسابك من قسم «حسابي» الأول، وبعدين ابعتي دعوة واتساب لصحابك — أول ما يدخلوا من اللينك هتلاقيهم هنا 💌</div></div>
 </section>
 
+<!-- ===================== v45: LIVE DUEL ===================== -->
+<section id="duel">
+  <h2 class="sec-title">✦ تحدي لايف ✦</h2>
+  <p class="sec-sub">العبي ضد صاحبتك في نفس اللحظة — نفس الكلمات ومين أسرع تكسب ⚔️💜</p>
+  <style>
+    .du-card{background:rgba(255,255,255,.045);border:1px solid rgba(212,175,55,.3);border-radius:20px;padding:22px 18px;max-width:460px;margin:0 auto;text-align:center}
+    .du-card h3{color:var(--gold);margin:0 0 8px;font-size:1.15rem}
+    .du-sub{color:var(--muted);font-size:.85rem;margin-bottom:14px;line-height:1.7}
+    .du-langs{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+    .du-big{width:100%;padding:13px;font-size:1rem;border-radius:14px;margin-bottom:12px;display:block;text-decoration:none;box-sizing:border-box}
+    .du-or{color:var(--muted);font-size:.78rem;margin:6px 0 10px}
+    .du-join{display:flex;gap:8px}
+    .du-join .acc-in{margin-bottom:0}
+    .du-code{font-size:2.2rem;font-weight:800;letter-spacing:10px;color:var(--gold);margin:8px 0 4px;font-family:monospace}
+    .du-players{margin:14px 0}
+    .du-p{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1px solid rgba(212,175,55,.2);border-radius:14px;padding:9px 14px;margin-bottom:8px}
+    .du-p.rdy{border-color:#34d399}
+    .du-pav{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#8a6a1f);display:flex;align-items:center;justify-content:center;font-weight:700;color:#1a1405;flex-shrink:0}
+    .du-pn{flex:1;font-weight:600;text-align:right}
+    .du-leave{background:none;border:none;color:var(--muted);font-family:inherit;font-size:.8rem;cursor:pointer;margin-top:6px;text-decoration:underline}
+    .du-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font-size:.9rem;font-weight:700}
+    .du-me{color:var(--gold)}
+    .du-opp{color:var(--muted);font-size:.8rem}
+    .du-timer{height:6px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin-bottom:16px}
+    .du-tbar{height:100%;background:linear-gradient(90deg,var(--gold),#f7c948);border-radius:99px;width:100%}
+    .du-q{margin-bottom:16px}
+    .du-we{font-size:2rem;margin-bottom:4px}
+    .du-word{font-size:1.6rem;font-weight:800;color:#fff;direction:ltr}
+    .du-count{font-size:1.3rem;color:var(--gold)}
+    .du-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+    .du-opt{padding:13px 8px;border-radius:14px;border:1px solid rgba(212,175,55,.3);background:rgba(255,255,255,.05);color:#fff;font-family:inherit;font-size:.95rem;cursor:pointer;transition:transform .1s}
+    .du-opt:active{transform:scale(.96)}
+    .du-opt.right{background:rgba(52,211,153,.25);border-color:#34d399}
+    .du-opt.wrong{background:rgba(239,68,68,.25);border-color:#ef4444}
+    .du-fb{min-height:22px;color:var(--gold);font-size:.88rem;font-weight:600}
+    .du-crown{font-size:3.4rem;margin-bottom:6px;animation:duBounce 1s ease infinite}
+    @keyframes duBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    .du-final{margin:14px 0}
+    .du-frow{display:flex;justify-content:space-between;background:rgba(255,255,255,.05);border:1px solid rgba(212,175,55,.2);border-radius:12px;padding:10px 16px;margin-bottom:8px;font-size:.95rem}
+    .du-frow.me{border-color:var(--gold);background:linear-gradient(135deg,rgba(212,175,55,.18),rgba(212,175,55,.06))}
+    .du-xp{color:var(--gold);font-weight:700;margin-bottom:14px}
+  </style>
+  <div id="duelBox"><div class="gbk-empty">بيتم التحميل... ⚔️</div></div>
+</section>
+
 <!-- ===================== v6: FUN GAMES ===================== -->
 <section id="fun">
   <h2 class="sec-title">✦ العاب ✦</h2>
@@ -3006,6 +3051,6 @@
   <div class="pl-top"><button id="plClose" class="pl-x">✕</button><div class="pl-prog"><i id="plBar"></i></div><div class="pl-hearts" id="plHearts"></div></div>
   <div id="plBody" class="pl-body"></div>
 </div>
-<script src="./app.js?v=44" defer></script>
+<script src="./app.js?v=45" defer></script>
 </body>
 </html>
