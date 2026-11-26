@@ -7512,24 +7512,28 @@ window.KM_POOL = [
 })();
 
 
-/* ================= v58: virtual pet رفيقتي (drawn SVG owl, grows with points) ================= */
+/* ================= v58/v68: virtual pet رفيقتي (drawn SVG pet, 4 species, grows with points) ================= */
 (function(){
-  var KEY_NAME='lingua_pet_name', KEY_ACC='lingua_pet_acc', KEY_FED='lingua_pet_fed', KEY_ST='lingua_pet_stage';
-  var STAGES=[
-    {min:0,    t:'بيضة سحرية', egg:true},
-    {min:50,   t:'فرخة صغيرة', s:0.62},
-    {min:200,  t:'بومة صغيرة', s:0.82},
-    {min:500,  t:'بومة حكيمة', s:1.0,  chest:true},
-    {min:1200, t:'بومة ملكية', s:1.08, chest:true, aura:true}
-  ];
+  var KEY_NAME='lingua_pet_name', KEY_ACC='lingua_pet_acc', KEY_FED='lingua_pet_fed', KEY_ST='lingua_pet_stage', KEY_SP='lingua_pet_species';
+  /* per-species stage names: egg is shared */
+  var SPECIES={
+    owl:  {t:'بومة',    stages:['فرخة صغيرة','بومة صغيرة','بومة حكيمة','بومة ملكية']},
+    cat:  {t:'قطة',     stages:['بسيسة صغيرة','قطة مرحة','قطة أنيقة','قطة ملكية']},
+    dog:  {t:'كلب',     stages:['جرو صغير','كلب وفي','كلب شجاع','كلب ملكي']},
+    bird: {t:'عصفورة',  stages:['فرخة صغيرة','عصفورة مرحة','عصفورة جميلة','عصفورة ملكية']}
+  };
+  var STAGE_MIN=[0,50,200,500,1200];
   var ACCS=[
-    {id:'bow',     t:'فيونكة', stage:1},
-    {id:'glasses', t:'نظارة',  stage:2},
-    {id:'scarf',   t:'وشاح',   stage:3},
-    {id:'crown',   t:'تاج',    stage:4}
+    {id:'bow',      t:'فيونكة',      stage:1},
+    {id:'glasses',  t:'نظارة',        stage:2},
+    {id:'necklace', t:'عقد لؤلؤ',     stage:2},
+    {id:'scarf',    t:'وشاح',         stage:3},
+    {id:'cape',     t:'كاب الأميرات', stage:4},
+    {id:'crown',    t:'تاج',          stage:4}
   ];
   function life(){ return window.getLifetime ? getLifetime() : parseInt(localStorage.getItem('lingua_lifetime')||'0',10); }
-  function stageOf(l){ var i=0; for(var k=0;k<STAGES.length;k++){ if(l>=STAGES[k].min) i=k; } return i; }
+  function stageOf(l){ var i=0; for(var k=0;k<STAGE_MIN.length;k++){ if(l>=STAGE_MIN[k]) i=k; } return i; }
+  function stageName(sp,st){ return st===0 ? 'بيضة سحرية' : SPECIES[sp].stages[st-1]; }
   function pget(k,d){ try{ var v=localStorage.getItem(k); return v===null?d:v; }catch(e){ return d; } }
   function pset(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
   function today(){ return new Date().toISOString().slice(0,10); }
@@ -7546,45 +7550,102 @@ window.KM_POOL = [
   function accSvg(id){
     if(id==='bow') return '<g transform="translate(34,-48)"><path d="M0,0 L-17,-9 L-17,9 Z" fill="#f07ba0"/><path d="M0,0 L17,-9 L17,9 Z" fill="#f07ba0"/><circle r="4.5" fill="#d14f7c"/></g>';
     if(id==='glasses') return '<g fill="none" stroke="#e9c26a" stroke-width="2.6"><circle cx="-17" cy="-22" r="14.5"/><circle cx="17" cy="-22" r="14.5"/><path d="M-2.5,-22 L2.5,-22"/><path d="M-31.5,-25 L-43,-31"/><path d="M31.5,-25 L43,-31"/></g>';
+    if(id==='necklace') return '<g><path d="M-20,2 Q0,14 20,2" fill="none" stroke="#f5e6c8" stroke-width="2.5"/><circle cx="-14" cy="7" r="3" fill="#fff"/><circle cx="-7" cy="10" r="3.4" fill="#fff"/><circle cx="0" cy="11.5" r="4" fill="#fff"/><circle cx="7" cy="10" r="3.4" fill="#fff"/><circle cx="14" cy="7" r="3" fill="#fff"/></g>';
     if(id==='scarf') return '<g><path d="M-34,-6 Q0,10 34,-6 L34,5 Q0,21 -34,5 Z" fill="#b03a5b"/><path d="M18,8 L32,27 L24,32 L12,13 Z" fill="#96304c"/></g>';
+    if(id==='cape') return '<g><path d="M-40,-4 Q-54,40 -46,74 Q0,94 46,74 Q54,40 40,-4 Q0,10 -40,-4 Z" fill="#7a2e52" opacity=".92"/><path d="M-40,-4 Q0,10 40,-4" fill="none" stroke="#e9c26a" stroke-width="3"/><circle cx="0" cy="4" r="4" fill="#e9c26a"/></g>';
     if(id==='crown') return '<g transform="translate(0,-64)"><path d="M-16,8 L-16,-6 L-8,2 L0,-10 L8,2 L16,-6 L16,8 Z" fill="#e9c26a" stroke="#b8912f" stroke-width="1.5" stroke-linejoin="round"/><circle cx="-8" cy="4" r="1.8" fill="#b03a5b"/><circle cx="0" cy="4" r="1.8" fill="#3e7cb1"/><circle cx="8" cy="4" r="1.8" fill="#3f9e63"/></g>';
     return '';
   }
 
-  function sceneSvg(){
-    var l=life(), st=stageOf(l), S=STAGES[st];
-    var s='<svg viewBox="0 0 300 250" class="pet-svg" aria-hidden="true">';
-    s+='<defs>'
+  /* species body builders: drawn around origin, eyes at y=-22, body bottom ~y=70 */
+  function bodySvg(sp, S){
+    var g='';
+    if(sp==='owl'){
+      g+='<g class="pet-wing pet-wing-l"><ellipse cx="-46" cy="12" rx="15" ry="32" fill="url(#petBody)" transform="rotate(14 -46 12)"/></g>';
+      g+='<g class="pet-wing pet-wing-r"><ellipse cx="46" cy="12" rx="15" ry="32" fill="url(#petBody)" transform="rotate(-14 46 12)"/></g>';
+      g+='<ellipse cx="0" cy="10" rx="46" ry="56" fill="url(#petBody)"/>';
+      g+='<ellipse cx="0" cy="26" rx="29" ry="36" fill="url(#petBelly)"/>';
+      if(S.chest) g+='<path d="M-14,16 q14,10 28,0 M-14,28 q14,10 28,0 M-14,40 q14,10 28,0" fill="none" stroke="#b8912f" stroke-width="2" opacity=".8"/>';
+      g+='<path d="M-33,-34 L-45,-60 L-16,-44 Z" fill="url(#petBody)"/><path d="M33,-34 L45,-60 L16,-44 Z" fill="url(#petBody)"/>';
+      g+=eyeG(-17)+eyeG(17);
+      g+='<path d="M-6,-9 L6,-9 L0,2 Z" fill="#e8a13c"/>';
+      g+='<path d="M-14,66 l-6,8 M-14,66 l0,9 M-14,66 l6,8 M14,66 l-6,8 M14,66 l0,9 M14,66 l6,8" stroke="#e8a13c" stroke-width="3" fill="none" stroke-linecap="round"/>';
+    } else if(sp==='cat'){
+      g+='<path d="M38,34 Q66,28 62,-6" fill="none" stroke="url(#petBody)" stroke-width="12" stroke-linecap="round"/>';
+      g+='<ellipse cx="0" cy="14" rx="44" ry="52" fill="url(#petBody)"/>';
+      g+='<ellipse cx="0" cy="30" rx="27" ry="32" fill="url(#petBelly)"/>';
+      g+='<path d="M-34,-32 L-42,-62 L-10,-46 Z" fill="url(#petBody)"/><path d="M-30,-37 L-35,-55 L-15,-44 Z" fill="#f0b8c8"/>';
+      g+='<path d="M34,-32 L42,-62 L10,-46 Z" fill="url(#petBody)"/><path d="M30,-37 L35,-55 L15,-44 Z" fill="#f0b8c8"/>';
+      g+=eyeG(-16)+eyeG(16);
+      g+='<path d="M-5,-8 L5,-8 L0,0 Z" fill="#e88ba0"/>';
+      g+='<path d="M0,0 Q-4,6 -10,5 M0,0 Q4,6 10,5" fill="none" stroke="#c76b84" stroke-width="2" stroke-linecap="round"/>';
+      g+='<path d="M-40,-14 l-16,-2 M-40,-6 l-16,2 M40,-14 l16,-2 M40,-6 l16,2" stroke="#e8dcc8" stroke-width="2" stroke-linecap="round"/>';
+      g+='<path d="M-16,62 l-6,9 M-16,62 l0,10 M-16,62 l6,9 M16,62 l-6,9 M16,62 l0,10 M16,62 l6,9" stroke="#e88ba0" stroke-width="3" fill="none" stroke-linecap="round"/>';
+    } else if(sp==='dog'){
+      g+='<ellipse cx="-40" cy="-16" rx="12" ry="26" fill="#4a3626" transform="rotate(18 -40 -16)"/>';
+      g+='<ellipse cx="40" cy="-16" rx="12" ry="26" fill="#4a3626" transform="rotate(-18 40 -16)"/>';
+      g+='<ellipse cx="0" cy="14" rx="44" ry="52" fill="url(#petBodyDog)"/>';
+      g+='<ellipse cx="0" cy="28" rx="26" ry="32" fill="url(#petBellyDog)"/>';
+      g+='<ellipse cx="0" cy="-4" rx="22" ry="16" fill="url(#petBellyDog)"/>';
+      g+=eyeG(-15)+eyeG(15);
+      g+='<ellipse cx="0" cy="-10" rx="7" ry="5" fill="#2c1f16"/>';
+      g+='<path d="M0,-5 L0,2 M0,2 Q-6,8 -12,5 M0,2 Q6,8 12,5" fill="none" stroke="#2c1f16" stroke-width="2.2" stroke-linecap="round"/>';
+      g+='<path d="M-3,8 Q0,16 3,8 Z" fill="#e88ba0"/>';
+      g+='<path d="M-16,62 l-6,9 M-16,62 l0,10 M-16,62 l6,9 M16,62 l-6,9 M16,62 l0,10 M16,62 l6,9" stroke="#8a6a45" stroke-width="3" fill="none" stroke-linecap="round"/>';
+    } else { /* bird */
+      g+='<path d="M0,58 L-14,84 L0,76 L14,84 Z" fill="url(#petBodyBird)"/>';
+      g+='<g class="pet-wing pet-wing-l"><ellipse cx="-34" cy="10" rx="12" ry="26" fill="url(#petBodyBird)" transform="rotate(16 -34 10)"/></g>';
+      g+='<g class="pet-wing pet-wing-r"><ellipse cx="34" cy="10" rx="12" ry="26" fill="url(#petBodyBird)" transform="rotate(-16 34 10)"/></g>';
+      g+='<ellipse cx="0" cy="8" rx="40" ry="50" fill="url(#petBodyBird)"/>';
+      g+='<ellipse cx="0" cy="24" rx="24" ry="32" fill="url(#petBellyBird)"/>';
+      g+='<path d="M-10,-40 Q0,-52 10,-40" fill="none" stroke="url(#petBodyBird)" stroke-width="5" stroke-linecap="round"/>';
+      g+=eyeG(-14)+eyeG(14);
+      g+='<path d="M-7,-10 L7,-10 L0,4 Z" fill="#e8a13c"/>';
+      g+='<path d="M-12,56 l-5,8 M-12,56 l0,9 M-12,56 l5,8 M12,56 l-5,8 M12,56 l0,9 M12,56 l5,8" stroke="#e8a13c" stroke-width="3" fill="none" stroke-linecap="round"/>';
+    }
+    return g;
+  }
+
+  function defsSvg(){
+    return '<defs>'
       +'<radialGradient id="petAura" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#e9c26a" stop-opacity=".45"/><stop offset="100%" stop-color="#e9c26a" stop-opacity="0"/></radialGradient>'
       +'<linearGradient id="petBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6b4f8f"/><stop offset="100%" stop-color="#3e2c52"/></linearGradient>'
       +'<linearGradient id="petBelly" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f4dcae"/><stop offset="100%" stop-color="#d9a84e"/></linearGradient>'
+      +'<linearGradient id="petBodyDog" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#b98a55"/><stop offset="100%" stop-color="#7d5a34"/></linearGradient>'
+      +'<linearGradient id="petBellyDog" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f0e0c8"/><stop offset="100%" stop-color="#d9bd95"/></linearGradient>'
+      +'<linearGradient id="petBodyBird" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4f8f8f"/><stop offset="100%" stop-color="#2c5252"/></linearGradient>'
+      +'<linearGradient id="petBellyBird" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f4e0ae"/><stop offset="100%" stop-color="#e0b84e"/></linearGradient>'
       +'<linearGradient id="petEgg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fdf3dd"/><stop offset="100%" stop-color="#eed9ae"/></linearGradient>'
       +'</defs>';
+  }
+
+  function eggSvg(l){
+    var prog=Math.min(49,l);
+    var s='<ellipse cx="150" cy="222" rx="70" ry="14" fill="#54380f" opacity=".55"/>';
+    s+='<g class="pet-bob"><ellipse cx="150" cy="180" rx="44" ry="54" fill="url(#petEgg)" stroke="#d9b878" stroke-width="2"/>';
+    s+='<circle cx="132" cy="160" r="3" fill="#e9c26a" opacity=".7"/><circle cx="168" cy="185" r="2.5" fill="#e9c26a" opacity=".7"/><circle cx="145" cy="205" r="2" fill="#e9c26a" opacity=".7"/>';
+    if(prog>=15) s+='<path d="M128,140 l10,14 l-8,10 l12,12" fill="none" stroke="#8a6d3b" stroke-width="2.5" stroke-linecap="round"/>';
+    if(prog>=30) s+='<path d="M172,148 l-9,12 l7,9 l-10,12" fill="none" stroke="#8a6d3b" stroke-width="2.5" stroke-linecap="round"/>';
+    if(prog>=45) s+='<path d="M140,210 l8,-10 l10,8 l6,-12" fill="none" stroke="#8a6d3b" stroke-width="2.5" stroke-linecap="round"/>';
+    s+='</g>';
+    return s;
+  }
+
+  function sceneSvg(){
+    var l=life(), st=stageOf(l);
+    var sp=pget(KEY_SP,'owl');
+    var s='<svg viewBox="0 0 300 250" class="pet-svg" aria-hidden="true">'+defsSvg();
     s+='<circle cx="252" cy="38" r="20" fill="#f5e3b0" class="pet-moon"/><circle cx="246" cy="33" r="4" fill="#e6cf96"/><circle cx="258" cy="44" r="3" fill="#e6cf96"/>';
     var stars=[[30,30],[70,58],[110,24],[190,60],[222,92],[45,100]];
     for(var i=0;i<stars.length;i++) s+='<circle cx="'+stars[i][0]+'" cy="'+stars[i][1]+'" r="2" fill="#ffe9a8" class="pet-star" style="animation-delay:'+(i*0.45)+'s"/>';
     s+='<path d="M-5,228 Q150,206 305,230" fill="none" stroke="#6b4423" stroke-width="11" stroke-linecap="round"/><path d="M210,222 q18,-14 34,-12" fill="none" stroke="#6b4423" stroke-width="6" stroke-linecap="round"/>';
-    if(S.egg){
-      var prog=Math.min(49,l);
-      s+='<ellipse cx="150" cy="222" rx="70" ry="14" fill="#54380f" opacity=".55"/>';
-      s+='<g class="pet-bob"><ellipse cx="150" cy="180" rx="44" ry="54" fill="url(#petEgg)" stroke="#d9b878" stroke-width="2"/>';
-      s+='<circle cx="132" cy="160" r="3" fill="#e9c26a" opacity=".7"/><circle cx="168" cy="185" r="2.5" fill="#e9c26a" opacity=".7"/><circle cx="145" cy="205" r="2" fill="#e9c26a" opacity=".7"/>';
-      if(prog>=15) s+='<path d="M128,140 l10,14 l-8,10 l12,12" fill="none" stroke="#8a6d3b" stroke-width="2.5" stroke-linecap="round"/>';
-      if(prog>=30) s+='<path d="M172,148 l-9,12 l7,9 l-10,12" fill="none" stroke="#8a6d3b" stroke-width="2.5" stroke-linecap="round"/>';
-      if(prog>=45) s+='<path d="M140,210 l8,-10 l10,8 l6,-12" fill="none" stroke="#8a6d3b" stroke-width="2.5" stroke-linecap="round"/>';
-      s+='</g>';
+    if(st===0){
+      s+=eggSvg(l);
     } else {
+      var S={s:[0,0.62,0.82,1.0,1.08][st], chest:st>=3, aura:st>=4};
       s+='<g transform="translate(150,158) scale('+S.s+')"><g class="pet-bob">';
       if(S.aura) s+='<circle r="100" fill="url(#petAura)" class="pet-aura"/>';
-      s+='<g class="pet-wing pet-wing-l"><ellipse cx="-46" cy="12" rx="15" ry="32" fill="url(#petBody)" transform="rotate(14 -46 12)"/></g>';
-      s+='<g class="pet-wing pet-wing-r"><ellipse cx="46" cy="12" rx="15" ry="32" fill="url(#petBody)" transform="rotate(-14 46 12)"/></g>';
-      s+='<ellipse cx="0" cy="10" rx="46" ry="56" fill="url(#petBody)"/>';
-      s+='<ellipse cx="0" cy="26" rx="29" ry="36" fill="url(#petBelly)"/>';
-      if(S.chest) s+='<path d="M-14,16 q14,10 28,0 M-14,28 q14,10 28,0 M-14,40 q14,10 28,0" fill="none" stroke="#b8912f" stroke-width="2" opacity=".8"/>';
-      s+='<path d="M-33,-34 L-45,-60 L-16,-44 Z" fill="url(#petBody)"/><path d="M33,-34 L45,-60 L16,-44 Z" fill="url(#petBody)"/>';
-      s+=eyeG(-17)+eyeG(17);
-      s+='<path d="M-6,-9 L6,-9 L0,2 Z" fill="#e8a13c"/>';
-      s+='<path d="M-14,66 l-6,8 M-14,66 l0,9 M-14,66 l6,8 M14,66 l-6,8 M14,66 l0,9 M14,66 l6,8" stroke="#e8a13c" stroke-width="3" fill="none" stroke-linecap="round"/>';
+      s+=bodySvg(sp,S);
       var acc=pget(KEY_ACC,'');
       if(acc && accUnlocked(acc,st)) s+=accSvg(acc);
       s+='</g></g>';
@@ -7613,30 +7674,56 @@ window.KM_POOL = [
   var SPARK='<svg viewBox="0 0 24 24" width="16" height="16"><path d="M12,2 L14,9.5 L22,12 L14,14.5 L12,22 L10,14.5 L2,12 L10,9.5 Z" fill="#e9c26a"/></svg>';
 
   function celebrate(st){
-    say('🎉 '+pget(KEY_NAME,'نور')+' كبرت! بقت '+STAGES[st].t);
+    say('🎉 '+pget(KEY_NAME,'نور')+' كبرت! بقت '+stageName(pget(KEY_SP,'owl'),st));
     burst('pet-spark',10,SPARK);
+  }
+
+  function pickerHtml(){
+    var h='<div class="pet-pick"><div class="pet-pick-t">اختاري رفيقتك 🥚✨</div><div class="pet-pick-grid">';
+    Object.keys(SPECIES).forEach(function(sp){
+      h+='<button type="button" class="pet-pick-card" data-sp="'+sp+'">'
+        +'<svg viewBox="-70 -80 140 170" class="pet-pick-svg">'+defsSvg()+'<g>'+bodySvg(sp,{chest:true,aura:false})+'</g></svg>'
+        +'<b>'+SPECIES[sp].t+'</b></button>';
+    });
+    h+='</div></div>';
+    return h;
   }
 
   function render(){
     var box=document.getElementById('petScene'); if(!box) return;
-    var l=life(), st=stageOf(l), S=STAGES[st];
+    var sp=pget(KEY_SP,'');
+    if(!sp){
+      box.innerHTML=pickerHtml();
+      var acts0=document.getElementById('petActions'); if(acts0) acts0.innerHTML='';
+      Array.prototype.forEach.call(box.querySelectorAll('[data-sp]'),function(b){
+        b.addEventListener('click',function(){
+          pset(KEY_SP,b.getAttribute('data-sp'));
+          say('مبروك! '+SPECIES[b.getAttribute('data-sp')].t+' بقت رفيقتك 🎉');
+          burst('pet-spark',10,SPARK);
+          render();
+        });
+      });
+      return;
+    }
+    var l=life(), st=stageOf(l);
     box.innerHTML=sceneSvg();
     var nm=pget(KEY_NAME,'نور');
     var nmEl=document.getElementById('petName'); if(nmEl) nmEl.textContent=nm;
-    var stEl=document.getElementById('petStageLbl'); if(stEl) stEl.textContent=S.t;
-    var next=STAGES[st+1];
-    var pct= next ? Math.min(100, Math.round((l - S.min)/(next.min - S.min)*100)) : 100;
+    var stEl=document.getElementById('petStageLbl'); if(stEl) stEl.textContent=stageName(sp,st);
+    var nextMin=STAGE_MIN[st+1];
+    var pct= nextMin!==undefined ? Math.min(100, Math.round((l - STAGE_MIN[st])/(nextMin - STAGE_MIN[st])*100)) : 100;
     var fEl=document.getElementById('petFill'); if(fEl) fEl.style.width=pct+'%';
     var nxEl=document.getElementById('petNext');
-    if(nxEl) nxEl.textContent = next ? ('باقي '+(next.min - l)+' نقطة وتبقى '+next.t+' ✨') : 'وصلتي لأعلى مرحلة — ملكية 👑';
+    if(nxEl) nxEl.textContent = nextMin!==undefined ? ('باقي '+(nextMin - l)+' نقطة وتبقى '+stageName(sp,st+1)+' ✨') : 'وصلتي لأعلى مرحلة — ملكية 👑';
     var fed=pget(KEY_FED,'')===today();
     var mEl=document.getElementById('petMood');
-    if(mEl) mEl.textContent = fed ? 'مبسوطة وشبعانة النهاردة 😊' : (S.egg ? 'البيضة دافية ومستنية نقاطك 🥚' : 'جوعانة شوية.. أطعميها 🍎');
+    if(mEl) mEl.textContent = fed ? 'مبسوطة وشبعانة النهاردة 😊' : (st===0 ? 'البيضة دافية ومستنية نقاطك 🥚' : 'جوعانة شوية.. أطعميها 🍎');
     var acts=document.getElementById('petActions');
     if(acts){
       var h='<button type="button" class="pet-btn" id="petFeed">'+(fed?'شبعانة ✅':'🍎 أطعميها')+'</button>'
            +'<button type="button" class="pet-btn" id="petLove">🤍 دلّعيها</button>'
-           +'<button type="button" class="pet-btn" id="petRen">✏️ سمّيها</button>';
+           +'<button type="button" class="pet-btn" id="petRen">✏️ سمّيها</button>'
+           +'<button type="button" class="pet-btn" id="petSp">🔀 غيّري رفيقتك</button>';
       ACCS.forEach(function(a){
         var un = st>=a.stage;
         var on = pget(KEY_ACC,'')===a.id;
@@ -7664,13 +7751,18 @@ window.KM_POOL = [
       burst('pet-heart',5,HEART);
       var box=document.getElementById('petScene');
       if(box){ box.classList.add('flap'); setTimeout(function(){ box.classList.remove('flap'); },1200); }
-      var lines=['بتحبك أوي 💜','بتقولك: يلا نتعلم كلمة جديدة!','مبسوطة معاكي ✨','جناحاتها بترفرف من الفرحة!'];
+      var lines=['بتحبك أوي 💜','بتقولك: يلا نتعلم كلمة جديدة!','مبسوطة معاكي ✨','شكلها بيفرح معاكي!'];
       say(lines[Math.floor(Math.random()*lines.length)]);
     });
     var ren=document.getElementById('petRen');
     if(ren) ren.addEventListener('click',function(){
       var n=window.prompt('عايزة تسمّيها إيه؟', pget(KEY_NAME,'نور'));
       if(n && n.trim()){ pset(KEY_NAME,n.trim().slice(0,20)); render(); }
+    });
+    var spBtn=document.getElementById('petSp');
+    if(spBtn) spBtn.addEventListener('click',function(){
+      pset(KEY_SP,'');
+      render();
     });
     Array.prototype.forEach.call(document.querySelectorAll('#petActions .pet-acc'),function(b){
       b.addEventListener('click',function(){
@@ -7694,7 +7786,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v67';
+  window.LINGUA_VERSION = 'v68';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){

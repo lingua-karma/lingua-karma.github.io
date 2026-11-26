@@ -949,6 +949,14 @@
 .mst-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px;text-align:right}
 .mst-q{color:#fff;font-size:14px;line-height:1.8}
 .mst-p{color:#cfc6b3;font-size:12px;margin-top:6px}
+
+/* v68: pet species picker */
+.pet-pick-t{text-align:center;font-size:19px;font-weight:800;color:#fff;margin:8px 0 16px}
+.pet-pick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.pet-pick-card{background:rgba(255,255,255,.04);border:1px solid rgba(233,194,106,.35);border-radius:18px;padding:14px 8px;cursor:pointer;font-family:inherit;color:#fff;display:flex;flex-direction:column;align-items:center;gap:6px;transition:.2s}
+.pet-pick-card:active{transform:scale(.95)}
+.pet-pick-card b{font-size:17px;color:var(--gold,#e9c26a)}
+.pet-pick-svg{width:110px;height:134px}
 </style>
 <style>
 /* v35 perf */
@@ -3267,6 +3275,6 @@
   <div class="pl-top"><button id="plClose" class="pl-x">✕</button><div class="pl-prog"><i id="plBar"></i></div><div class="pl-hearts" id="plHearts"></div></div>
   <div id="plBody" class="pl-body"></div>
 </div>
-<script src="./app.js?v=67" defer></script>
+<script src="./app.js?v=68" defer></script>
 </body>
 </html>
