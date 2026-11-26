@@ -979,6 +979,10 @@
 .du-hm-wrap{display:flex;gap:12px;align-items:center;justify-content:center;margin:6px 0}
 .du-hm-gal{flex:0 0 110px}
 .du-hm-g{width:110px;height:124px;stroke:#e9c26a;stroke-width:3;fill:none;stroke-linecap:round}
+.hm-stage{display:flex;gap:14px;align-items:center;margin:10px 0}
+.hm-side{flex:1;min-width:0;text-align:center}
+#hmGal svg{width:120px;height:135px;stroke:#e9c26a;stroke-width:3;fill:none;stroke-linecap:round;filter:drop-shadow(0 2px 6px rgba(233,194,106,.25))}
+@media(max-width:380px){#hmGal svg{width:96px;height:108px}}
 .du-hm-right{flex:1;min-width:0}
 .du-hm-hint{font-size:1rem;color:#d8c68f;margin-bottom:8px}
 .du-hm-e{font-size:1.3rem}
@@ -1761,8 +1765,13 @@
     <div id="gameHangman" style="display:none">
       <div class="scr-card">
         <div class="race-head"><span id="hmLives"></span><span>خمّني الكلمة حرف حرف 🎯</span></div>
-        <div class="scr-word" id="hmWord" style="letter-spacing:8px"></div>
-        <div class="scr-hint" id="hmHint"></div>
+        <div class="hm-stage">
+          <div id="hmGal"></div>
+          <div class="hm-side">
+            <div class="scr-word" id="hmWord" style="letter-spacing:8px"></div>
+            <div class="scr-hint" id="hmHint"></div>
+          </div>
+        </div>
         <div class="hm-letters" id="hmLetters"></div>
         <div class="speak-result" id="hmResult"></div>
         <div style="margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
@@ -3349,6 +3358,6 @@
   <div class="pl-top"><button id="plClose" class="pl-x">✕</button><div class="pl-prog"><i id="plBar"></i></div><div class="pl-hearts" id="plHearts"></div></div>
   <div id="plBody" class="pl-body"></div>
 </div>
-<script src="./app.js?v=79" defer></script>
+<script src="./app.js?v=80" defer></script>
 </body>
 </html>

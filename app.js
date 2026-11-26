@@ -1049,11 +1049,22 @@ function startHangman(){
   document.getElementById('hmResult').textContent = '';
   renderHangman();
 }
+function hmGalSvg(stage){
+  var p = '<line x1="20" y1="130" x2="100" y2="130"/>';
+  if(stage >= 1) p += '<line x1="40" y1="130" x2="40" y2="15"/>';
+  if(stage >= 2) p += '<line x1="40" y1="15" x2="90" y2="15"/><line x1="90" y1="15" x2="90" y2="32"/>';
+  if(stage >= 3) p += '<circle cx="90" cy="42" r="10"/>';
+  if(stage >= 4) p += '<line x1="90" y1="52" x2="90" y2="88"/>';
+  if(stage >= 5) p += '<line x1="90" y1="60" x2="72" y2="76"/><line x1="90" y1="60" x2="108" y2="76"/>';
+  if(stage >= 6) p += '<line x1="90" y1="88" x2="74" y2="112"/><line x1="90" y1="88" x2="106" y2="112"/>';
+  return '<svg viewBox="0 0 120 135" aria-hidden="true">' + p + '</svg>';
+}
 function renderHangman(){
   document.getElementById('hmWord').textContent = hm.word.split('').map(function(ch){
     return hm.guessed.indexOf(ch)!==-1 ? ch : '_';
   }).join(' ');
   document.getElementById('hmHint').textContent = 'المعنى: ' + hm.ar;
+  document.getElementById('hmGal').innerHTML = hmGalSvg(6 - hm.lives);
   document.getElementById('hmLives').textContent = '❤️'.repeat(hm.lives) + '🖤'.repeat(Math.max(0, 6-hm.lives));
   const box = document.getElementById('hmLetters');
   box.innerHTML = '';
@@ -8216,7 +8227,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v79';
+  window.LINGUA_VERSION = 'v80';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
