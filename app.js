@@ -11123,4 +11123,4 @@ window.LINGUA_VERSION='v99';
   else boot();
 })();
 
-window.LINGUA_VERSION='v100';
+window.LINGUA_VERSION='v101';
