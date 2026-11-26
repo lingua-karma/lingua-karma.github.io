@@ -5602,7 +5602,7 @@ gbkRender();
   function shuf(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
   function store(){ try{ return JSON.parse(localStorage.getItem('lingua_path_'+lang))||{}; }catch(e){ return {}; } }
   function saveS(s){ try{ localStorage.setItem('lingua_path_'+lang, JSON.stringify(s)); }catch(e){} }
-  function unitDone(s,key){ var a=s[key]||[]; return !!(a[0]&&a[1]&&a[2]); }
+  function unitDone(s,key){ var a=s[key]||[]; return !!(a[0]&&a[1]&&a[2]&&a[3]); }
   function unitOpen(s,u){ return u===0 || unitDone(s, PATH_UNITS[u-1]); }
   function say(t){ try{ var u=new SpeechSynthesisUtterance(t.replace(/ *\(.*?\)/g,'')); u.lang=TTS[lang]; u.rate=.85; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){} }
   function norm(s){ return String(s).toLowerCase().trim().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ß/g,'ss').replace(/[.!?,؛،'’]/g,'').replace(/\s+/g,' '); }
@@ -5619,17 +5619,20 @@ gbkRender();
       var th = VOC[key]; if(!th) return;
       var st = s[key]||[false,false,false];
       var done = unitDone(s,key), open = unitOpen(s,u);
-      var dots = [0,1,2].map(function(i){ return '<i class="'+(st[i]?'on':'')+'"></i>'; }).join('');
+      var dots = [0,1,2,3].map(function(i){ return '<i class="'+(st[i]?'on':'')+(i===3?' boss':'')+'"></i>'; }).join('');
       html += '<div class="pu-row '+(u%2?'r':'l')+'">'
         + '<button class="pu-node '+(done?'done':open?'open':'locked')+'" data-punit="'+u+'"'+(open?'':' disabled')+'>'
         + '<span>'+(done?'🏅':(open?th.rows[0][6]:'🔒'))+'</span></button>'
         + '<div class="pu-info"><b>'+escH(th.name)+'</b><span class="pu-dots">'+dots+'</span></div></div>';
       if(open && !done){
+        var bossOpen = st[0]&&st[1]&&st[2];
         html += '<div class="pu-lessons">'+[0,1,2].map(function(l){
           var lopen = l===0 || st[l-1];
           return '<button class="pl-btn '+(st[l]?'done':lopen?'open':'locked')+'" data-ulesson="'+u+':'+l+'"'+(lopen?'':' disabled')+'>'
             +(st[l]?'⭐':(lopen?'▶':'🔒'))+' درس '+(l+1)+'</button>';
-        }).join('')+'</div>';
+        }).join('')
+        + '<button class="pl-btn boss '+(st[3]?'done':bossOpen?'open':'locked')+'" data-uboss="'+u+'"'+(bossOpen?'':' disabled')+'>'
+        + (st[3]?'👑':'👑')+' الاختبار</button></div>';
       }
     });
     document.getElementById('mapPath').innerHTML = html;
@@ -5651,6 +5654,20 @@ gbkRender();
   function mkOrder(ui){ var s = SENTS[lang][ui % SENTS[lang].length]; return {type:'order', tiles:shuf(s), ans:s, picked:[]}; }
   function mkMatch(ws){ return {type:'match', pairs:ws, f:shuf(ws), a:shuf(ws), sel:null, got:0}; }
 
+  function startBoss(ui){
+    var key = PATH_UNITS[ui], th = (window.VOCAB_THEMES||{})[key];
+    var words = shuf(th.rows).map(function(r){ return {f:r[LIDX[lang]], a:r[5], e:r[6]}; });
+    var exs = [];
+    for(var i=0;i<4;i++) exs.push(mkMcq(words[i], words, 'f2a'));
+    exs.push(mkMcq(words[4], words, 'a2f')); exs.push(mkMcq(words[5], words, 'a2f'));
+    exs.push(mkListen(words[6], words)); exs.push(mkListen(words[7], words));
+    exs.push((lang==='zh'||lang==='ko') ? mkListen(words[8], words) : mkType(words[8]));
+    exs.push(mkOrder(ui));
+    LS = {ui:ui, li:3, key:key, exs:exs, i:0, hearts:5, xp:0, boss:true, score:0};
+    overlay.classList.add('show');
+    document.body.style.overflow='hidden';
+    renderEx();
+  }
   function startLesson(ui, li){
     var key = PATH_UNITS[ui], th = (window.VOCAB_THEMES||{})[key];
     var words = th.rows.slice(li*10, li*10+10).map(function(r){ return {f:r[LIDX[lang]], a:r[5], e:r[6]}; });
@@ -5665,13 +5682,13 @@ gbkRender();
   }
   function drawTop(){
     plBar.style.width = (LS.i/LS.exs.length*100)+'%';
-    plHearts.textContent = '❤️'.repeat(LS.hearts)+'🖤'.repeat(5-LS.hearts);
+    plHearts.textContent = LS.boss ? ('👑 '+LS.score+' / '+LS.i) : ('❤️'.repeat(LS.hearts)+'🖤'.repeat(5-LS.hearts));
   }
-  function correct(){ LS.xp+=10; if(window.awardPoints) awardPoints(10,'تمرين المسار 🚀'); }
+  function correct(){ LS.xp+=10; if(LS.boss) LS.score++; if(window.awardPoints) awardPoints(10,'تمرين المسار 🚀'); }
   function advance(delay){
     setTimeout(function(){
       LS.i++;
-      if(LS.i>=LS.exs.length) return endLesson(true);
+      if(LS.i>=LS.exs.length) return LS.boss ? endBoss() : endLesson(true);
       renderEx();
     }, delay||900);
   }
@@ -5764,8 +5781,29 @@ gbkRender();
     });
   }
   function loseHeart(){
+    if(LS.boss){ drawTop(); return; }
     LS.hearts--; drawTop();
     if(LS.hearts<=0){ setTimeout(function(){ endLesson(false); }, 700); }
+  }
+  function endBoss(){
+    plBar.style.width='100%';
+    var passed = LS.score>=7;
+    if(passed){
+      var s=store(); var st=s[LS.key]||[false,false,false,false]; st[3]=true; s[LS.key]=st; saveS(s);
+      var nm=(window.VOCAB_THEMES||{})[LS.key].name;
+      badge(nm);
+      if(window.awardPoints) awardPoints(50,'اختبار الوحدة 👑');
+      plBody.innerHTML='<div class="pl-end"><div class="pl-star">👑</div><h3>عدّيت الاختبار!</h3><p>'+LS.score+' / 10 صح · +50 نقطة</p>'
+        +'<div class="pl-badge">🏅<div>وسام الوحدة!<br><b>'+escH(nm)+'</b></div></div>'
+        +'<button class="btn pl-check" id="plDone">الوحدة اللي بعدها 🚀</button></div>';
+      if(window.refreshDash) refreshDash();
+      document.getElementById('plDone').addEventListener('click', closeLesson);
+    } else {
+      plBody.innerHTML='<div class="pl-end"><div class="pl-star">😤</div><h3>'+LS.score+' / 10 — محتاجة 7 عشان تعدّي</h3><p>راجعي الدروس وجربي تاني، إنتي قريبة!</p>'
+        +'<button class="btn pl-check" id="plRetry">🔁 أعيدي الاختبار</button> <button class="btn pl-check ghost" id="plDone">خروج</button></div>';
+      document.getElementById('plRetry').addEventListener('click', function(){ startBoss(LS.ui); });
+      document.getElementById('plDone').addEventListener('click', closeLesson);
+    }
   }
   function endLesson(won){
     plBar.style.width='100%';
@@ -5814,6 +5852,8 @@ gbkRender();
   document.getElementById('mapPath').addEventListener('click', function(e){
     var lb=e.target.closest('[data-ulesson]');
     if(lb && !lb.disabled){ var p=lb.dataset.ulesson.split(':'); startLesson(+p[0], +p[1]); return; }
+    var bb=e.target.closest('[data-uboss]');
+    if(bb && !bb.disabled){ startBoss(+bb.dataset.uboss); return; }
     var nb=e.target.closest('[data-punit]');
     if(nb && !nb.disabled){ /* scroll lessons into view */ var row=nb.closest('.pu-row'); var ls=row&&row.nextElementSibling; if(ls&&ls.classList.contains('pu-lessons')) ls.scrollIntoView({behavior:'smooth', block:'center'}); }
   });

@@ -866,6 +866,10 @@
 .pl-btn.open{border-color:var(--gold);background:linear-gradient(135deg,rgba(212,175,55,.25),rgba(212,175,55,.08))}
 .pl-btn.done{border-color:#4ade80;background:rgba(74,222,128,.12)}
 .pl-btn.locked{opacity:.4;cursor:default}
+.pl-btn.boss{border-color:#b79bf0;background:linear-gradient(135deg,rgba(183,155,240,.25),rgba(124,92,214,.12))}
+.pl-btn.boss.done{border-color:var(--gold);background:linear-gradient(135deg,rgba(212,175,55,.3),rgba(212,175,55,.1))}
+.pu-dots i.boss{width:10px;height:10px;border-radius:3px;background:rgba(183,155,240,.3)}
+.pu-dots i.boss.on{background:#b79bf0}
 .pl-overlay{position:fixed;inset:0;z-index:9500;background:#0d0a18;display:none;flex-direction:column;padding:14px 16px;overflow-y:auto}
 .pl-overlay.show{display:flex}
 .pl-top{display:flex;align-items:center;gap:12px;max-width:560px;width:100%;margin:0 auto 18px}
@@ -2985,6 +2989,6 @@
   <div class="pl-top"><button id="plClose" class="pl-x">✕</button><div class="pl-prog"><i id="plBar"></i></div><div class="pl-hearts" id="plHearts"></div></div>
   <div id="plBody" class="pl-body"></div>
 </div>
-<script src="./app.js?v=39" defer></script>
+<script src="./app.js?v=40" defer></script>
 </body>
 </html>
