@@ -6431,10 +6431,20 @@ window.KM_POOL = [
       if(opp) S.opp.name = opp.name;
       if(S.st === 'lobby') renderPlayers();
       dlog('sync st='+S.st+' opp='+(opp?opp.name:'NONE')+' players='+arr.length);
-      if(!opp && (S.st === 'game' || S.st === 'ending') && !S.oppDone){
-        dlog('FORFEIT st='+S.st);
-        toast('صاحبتك خرجت — كملي لوحدك وهتكسبي بالانسحاب 👑');
-        S.oppDone = true; S.oppForfeit = true; maybeFinish();
+      if(opp){ S._oppGoneT = false; }
+      if(!opp && (S.st === 'game' || S.st === 'ending') && !S.oppDone && !S._oppGoneT){
+        S._oppGoneT = true;
+        dlog('opp-missing, grace 8s');
+        later(function(){
+          var st2 = chan ? chan.presenceState() : {};
+          var still = Object.keys(st2).some(function(k){ return k !== S.uid; });
+          S._oppGoneT = false;
+          if(!still && (S.st === 'game' || S.st === 'ending') && !S.oppDone){
+            dlog('FORFEIT confirmed');
+            toast('صاحبتك خرجت — كملي لوحدك وهتكسبي بالانسحاب 👑');
+            S.oppDone = true; S.oppForfeit = true; maybeFinish();
+          }
+        }, 8000);
       }
     });
     chan.on('broadcast', {event: 'du'}, function(ev){
