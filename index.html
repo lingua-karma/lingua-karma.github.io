@@ -2229,6 +2229,14 @@
   <div class="tabs lang-tabs lib-langs" id="hbLangs"></div>
   <div class="food-words" id="hbWords"></div>
 </section>
+<section id="themes">
+  <h2 class="sec-title">✦ كلمات بالموضوع ✦</h2>
+  <p class="sec-sub">اختاري الموضوع واللغة واتعلمي 🗂️</p>
+  <div class="tabs lang-tabs lib-langs" id="thThemes"></div>
+  <div class="tabs lang-tabs lib-langs" id="thLangs"></div>
+  <div class="food-words" id="thWords"></div>
+</section>
+
 
 
 
@@ -5117,7 +5125,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['quotes','🎬','اقتباسات'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
+  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['quotes','🎬','اقتباسات'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
 ];
 
 /* ================= v16: free books library ================= */
@@ -5963,6 +5971,92 @@ const MENU = [
     });
     renderHb();
   }
+})();
+
+
+/* ================= v26: themed vocabulary ================= */
+(function(){
+  function esc(t){ var d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+  var LNAME = {en:'إنجليزي 🇬🇧',fr:'فرنسي 🇫🇷',de:'ألماني 🇩🇪',zh:'صيني 🇨🇳',ko:'كوري 🇰🇷'};
+  var LLANG = {en:'en-US',fr:'fr-FR',de:'de-DE',zh:'zh-CN',ko:'ko-KR'};
+  /* [en, fr, de, zh, ko, arabic, emoji] */
+  var THEMES = {
+    family: {name:'العيلة 👨‍👩‍👧', rows:[
+      ['Mother','Mère','Mutter','妈妈 (māma)','엄마 (eomma)','ماما','👩'],
+      ['Father','Père','Vater','爸爸 (bàba)','아빠 (appa)','بابا','👨'],
+      ['Sister','Sœur','Schwester','姐姐 (jiějie)','언니 (eonni)','أخت','👧'],
+      ['Brother','Frère','Bruder','哥哥 (gēge)','오빠 (oppa)','أخ','👦'],
+      ['Grandma','Grand-mère','Oma','奶奶 (nǎinai)','할머니 (halmeoni)','تيتة','👵'],
+      ['Baby','Bébé','Baby','宝宝 (bǎobǎo)','아기 (agi)','بيبي','👶']]},
+    colors: {name:'الألوان 🌈', rows:[
+      ['Red','Rouge','Rot','红色 (hóngsè)','빨간색 (ppalgansaek)','أحمر','🔴'],
+      ['Blue','Bleu','Blau','蓝色 (lánsè)','파란색 (paransaek)','أزرق','🔵'],
+      ['Green','Vert','Grün','绿色 (lǜsè)','초록색 (choroksaek)','أخضر','🟢'],
+      ['Yellow','Jaune','Gelb','黄色 (huángsè)','노란색 (noransaek)','أصفر','🟡'],
+      ['Pink','Rose','Rosa','粉色 (fěnsè)','분홍색 (bunhongsaek)','بينك','🩷'],
+      ['Purple','Violet','Lila','紫色 (zǐsè)','보라색 (borasaek)','بنفسجي','🟣']]},
+    animals: {name:'حيوانات 🐾', rows:[
+      ['Cat','Chat','Katze','猫 (māo)','고양이 (goyangi)','قطة','🐱'],
+      ['Dog','Chien','Hund','狗 (gǒu)','강아지 (gangaji)','كلب','🐶'],
+      ['Rabbit','Lapin','Hase','兔子 (tùzi)','토끼 (tokki)','أرنب','🐰'],
+      ['Bird','Oiseau','Vogel','鸟 (niǎo)','새 (sae)','عصفورة','🐦'],
+      ['Horse','Cheval','Pferd','马 (mǎ)','말 (mal)','حصان','🐴'],
+      ['Lion','Lion','Löwe','狮子 (shīzi)','사자 (saja)','أسد','🦁']]},
+    time: {name:'الوقت والأيام ⏰', rows:[
+      ['Today','Aujourd\'hui','Heute','今天 (jīntiān)','오늘 (oneul)','النهاردة','📅'],
+      ['Tomorrow','Demain','Morgen','明天 (míngtiān)','내일 (naeil)','بكرة','🌅'],
+      ['Yesterday','Hier','Gestern','昨天 (zuótiān)','어제 (eoje)','إمبارح','⏪'],
+      ['Morning','Matin','Morgen','早上 (zǎoshang)','아침 (achim)','الصبح','🌄'],
+      ['Night','Nuit','Nacht','晚上 (wǎnshang)','밤 (bam)','الليل','🌙'],
+      ['Week','Semaine','Woche','星期 (xīngqī)','일주일 (iljuil)','أسبوع','🗓️']]},
+    school: {name:'المدرسة 🎒', rows:[
+      ['Teacher','Professeur','Lehrerin','老师 (lǎoshī)','선생님 (seonsaengnim)','مدرسة','👩‍🏫'],
+      ['Student','Étudiante','Schülerin','学生 (xuésheng)','학생 (haksaeng)','طالبة','👩‍🎓'],
+      ['Pen','Stylo','Stift','笔 (bǐ)','펜 (pen)','قلم','🖊️'],
+      ['Notebook','Cahier','Heft','笔记本 (bǐjìběn)','공책 (gongchaek)','كشكول','📓'],
+      ['Exam','Examen','Prüfung','考试 (kǎoshì)','시험 (siheom)','امتحان','📝'],
+      ['Friend','Amie','Freundin','朋友 (péngyou)','친구 (chingu)','صاحبة','👯']]},
+    feelings: {name:'مشاعر 💗', rows:[
+      ['Happy','Heureuse','Glücklich','开心 (kāixīn)','행복해 (haengbokhae)','مبسوطة','😊'],
+      ['Sad','Triste','Traurig','难过 (nánguò)','슬퍼 (seulpeo)','زعلانة','😢'],
+      ['Tired','Fatiguée','Müde','累 (lèi)','피곤해 (pigonhae)','تعبانة','😴'],
+      ['Excited','Excitée','Aufgeregt','兴奋 (xīngfèn)','신나 (sinna)','متحمسة','🤩'],
+      ['Angry','En colère','Wütend','生气 (shēngqì)','화나 (hwana)','متنرفزة','😤'],
+      ['Proud','Fière','Stolz','骄傲 (jiāo\'ào)','자랑스러워 (jarangseureowo)','فخورة','💪']]}
+  };
+  var thTheme='family', thLang='en';
+  var tt=document.getElementById('thThemes'), tl2=document.getElementById('thLangs'), tw=document.getElementById('thWords');
+  if(!tt) return;
+  tt.innerHTML = Object.keys(THEMES).map(function(k){
+    return '<button class="tab lang-tab'+(k===thTheme?' active':'')+'" data-th="'+k+'"><span class="ln">'+THEMES[k].name+'</span></button>';
+  }).join('');
+  tl2.innerHTML = Object.keys(LNAME).map(function(k){
+    return '<button class="tab lang-tab'+(k===thLang?' active':'')+'" data-thl="'+k+'"><span class="ln">'+LNAME[k]+'</span></button>';
+  }).join('');
+  var LIDX = {en:0, fr:1, de:2, zh:3, ko:4};
+  function renderTh(){
+    var i = LIDX[thLang];
+    tw.innerHTML = THEMES[thTheme].rows.map(function(r){
+      return '<div class="fw-card"><span style="font-size:1.5rem">'+r[6]+'</span><div class="fw-t"><b>'+esc(r[i])+'</b><span>'+esc(r[5])+'</span></div><button class="fw-say" data-say="'+esc(r[i].replace(/ *\(.*?\)/,''))+'">🔊</button></div>';
+    }).join('');
+  }
+  tt.addEventListener('click', function(e){
+    var b=e.target.closest('[data-th]'); if(!b) return;
+    thTheme=b.dataset.th;
+    tt.querySelectorAll('.lang-tab').forEach(function(t){ t.classList.toggle('active', t===b); });
+    renderTh();
+  });
+  tl2.addEventListener('click', function(e){
+    var b=e.target.closest('[data-thl]'); if(!b) return;
+    thLang=b.dataset.thl;
+    tl2.querySelectorAll('.lang-tab').forEach(function(t){ t.classList.toggle('active', t===b); });
+    renderTh();
+  });
+  tw.addEventListener('click', function(e){
+    var b=e.target.closest('.fw-say'); if(!b) return;
+    try{ var u=new SpeechSynthesisUtterance(b.dataset.say); u.lang=LLANG[thLang]; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){}
+  });
+  renderTh();
 })();
 
 document.getElementById('menuGrid').innerHTML = MENU.map(function(m){
@@ -7736,7 +7830,7 @@ gbkRender();
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v25.0</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v26.0</div>
 <script>
 
 /* ================= v13: learning map, personality quiz, XO, korean ================= */
