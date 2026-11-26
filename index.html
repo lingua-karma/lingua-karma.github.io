@@ -1978,12 +1978,14 @@
   <div class="acc-tabs" id="accTabs">
     <button class="tab active" data-at="me">👑 حسابي</button>
     <button class="tab" data-at="friends">👯 صحابي</button>
+    <button class="tab" data-at="discover">💫 اكتشفي</button>
     <button class="tab" data-at="chat">💬 الشات</button>
     <button class="tab" data-at="top">🏆 لوحة الشرف</button>
     <button class="tab" data-at="feed">📣 منشورات</button>
   </div>
   <div id="accMe" class="acc-panel"></div>
   <div id="accFriends" class="acc-panel" style="display:none"></div>
+  <div id="accDiscover" class="acc-panel" style="display:none"></div>
   <div id="accChat" class="acc-panel" style="display:none"><div class="chat-box" id="chatBox"><div class="gbk-empty">اختاري صاحبة من «صحابي» وابدئوا الكلام 💬</div></div></div>
   <div id="accTop" class="acc-panel" style="display:none"><div id="topList"><div class="gbk-empty">بيتم التحميل... 🏆</div></div></div>
   <div id="accFeed" class="acc-panel" style="display:none">
@@ -5494,11 +5496,12 @@ gbkRender();
   document.getElementById('accTabs').addEventListener('click', function(e){
     var b = e.target.closest('.tab'); if(!b) return;
     document.querySelectorAll('#accTabs .tab').forEach(function(t){ t.classList.toggle('active', t === b); });
-    var map = {me:'accMe', friends:'accFriends', chat:'accChat', top:'accTop', feed:'accFeed'};
+    var map = {me:'accMe', friends:'accFriends', chat:'accChat', top:'accTop', feed:'accFeed', discover:'accDiscover'};
     Object.keys(map).forEach(function(k){ document.getElementById(map[k]).style.display = (k === b.dataset.at) ? 'block' : 'none'; });
     if(b.dataset.at === 'top') loadTop();
     if(b.dataset.at === 'feed') loadFeed();
     if(b.dataset.at === 'friends') renderFriendsReal();
+    if(b.dataset.at === 'discover') renderDiscover();
   });
 
   /* ---- pending referral from invite link ---- */
@@ -5675,6 +5678,49 @@ gbkRender();
       var txt = 'يلا بينا نتعلم لغات سوا على Lingua! 💜 اعملي حساب من اللينك ده وهنبقى صحاب على طول ونتنافس في النقاط: ' + link;
       window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank');
     };
+  }
+
+  /* ---- discover new friends (opt-in) ---- */
+  function renderDiscover(){
+    var el = document.getElementById('accDiscover');
+    if(!me){ needLogin(el); return; }
+    sb.from('profiles').select('discoverable').eq('id', me.id).single().then(function(pr){
+      var on = pr.data && pr.data.discoverable;
+      var html = '<div class="acc-card" style="max-width:520px;text-align:center">' +
+        '<h3>💫 اكتشفي صديقات جداد</h3>' +
+        '<p style="color:var(--muted);font-size:.82rem;line-height:1.8">شوفي بنات بتتعلم لغات زيك وصاحبيهم. اسمك ونقطاك بس اللي بيظهروا — مفيش إيميلات ولا بيانات شخصية أبد.</p>' +
+        '<button class="btn" id="discToggle" style="margin-top:6px">' + (on ? '🟢 ظاهرة في الاكتشاف — دوسي للإخفاء' : '⚪ اظهري في الاكتشاف') + '</button></div>' +
+        '<div id="discList"><div class="gbk-empty">بيتم التحميل... 💫</div></div>';
+      el.innerHTML = html;
+      document.getElementById('discToggle').onclick = function(){
+        sb.from('profiles').update({discoverable: !on}).eq('id', me.id).then(function(){
+          toast(!on ? 'بقيتي ظاهرة في الاكتشاف 💫' : 'اتخفيتي من الاكتشاف');
+          renderDiscover();
+        });
+      };
+      var ids = myFriends.map(function(f){ return f.id; });
+      sb.from('profiles').select('id,display_name,points').eq('discoverable', true).neq('id', me.id).order('points', {ascending:false}).limit(50).then(function(r){
+        var list = (r.data || []).filter(function(u){ return ids.indexOf(u.id) < 0; });
+        var dl = document.getElementById('discList');
+        if(!dl) return;
+        if(!list.length){ dl.innerHTML = '<div class="gbk-empty">لسه مفيش بنات جداد في الاكتشاف — شجعي صحابك يظهروا 💜</div>'; return; }
+        dl.innerHTML = list.map(function(u){
+          return '<div class="fr-item"><div class="fr-av">' + esc((u.display_name || '؟').charAt(0)) + '</div>' +
+            '<div class="fr-name">' + esc(u.display_name) + '</div><div class="fr-pts">💎 ' + (u.points || 0) + '</div>' +
+            '<button class="btn" style="padding:7px 14px;font-size:.8rem" data-addfr="' + u.id + '" data-nm="' + esc(u.display_name) + '">➕ صاحبيها</button></div>';
+        }).join('');
+        dl.querySelectorAll('[data-addfr]').forEach(function(b){
+          b.onclick = function(){
+            b.disabled = true;
+            sb.from('friendships').insert([{user_id: me.id, friend_id: b.dataset.addfr}, {user_id: b.dataset.addfr, friend_id: me.id}]).then(function(r){
+              if(r.error){ b.disabled = false; toast('حاجة غلط — جربي تاني'); return; }
+              toast(b.dataset.nm + ' بقت في صحابك 👯‍♀️💜');
+              loadFriends(); renderDiscover();
+            });
+          };
+        });
+      });
+    });
   }
 
   /* ---- send points gift ---- */
@@ -6189,7 +6235,7 @@ gbkRender();
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v13.1</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v13.2</div>
 <script>
 /* ================= v13: learning map, personality quiz, XO, korean ================= */
 (function(){
