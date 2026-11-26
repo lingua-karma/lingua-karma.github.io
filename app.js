@@ -8230,7 +8230,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v83';
+  window.LINGUA_VERSION = 'v84';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){

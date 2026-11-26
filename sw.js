@@ -1,6 +1,6 @@
 /* Lingua service worker: network-first for HTML (updates always flow), cache-first for static assets */
-const CACHE = 'lingua-v64';
-const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png', './app.js?v=83'];
+const CACHE = 'lingua-v65';
+const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png', './app.js?v=84'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
 });

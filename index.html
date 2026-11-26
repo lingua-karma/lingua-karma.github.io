@@ -571,8 +571,9 @@
   }
   .race-opt{
     display:block;width:100%;text-align:right;margin-bottom:10px;
-    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);
+    background:linear-gradient(160deg,#241b40,#150f24);border:1px solid rgba(var(--goldA),.3);
     color:var(--text);padding:13px 18px;border-radius:12px;font-size:1rem;font-weight:600;
+    box-shadow:0 3px 10px rgba(0,0,0,.3);transition:border-color .15s,transform .1s;
     cursor:pointer;font-family:inherit;transition:.15s;
   }
   .race-opt:active{transform:scale(.98)}
@@ -676,11 +677,14 @@
   /* ===== v4: match pairs ===== */
   .match-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;max-width:780px;margin:0 auto}
   @media (max-width:560px){.match-grid{grid-template-columns:repeat(2,1fr)}}
-  .mcard{padding:16px 6px;border-radius:12px;border:1px solid rgba(var(--goldA),.3);background:rgba(255,255,255,.04);color:#fff;font-size:1.02rem;font-weight:600;cursor:pointer;transition:.2s;font-family:inherit}
-  .mcard.ar{color:var(--gold2)}
-  .mcard.sel{border-color:var(--gold2);background:rgba(var(--goldA),.22);transform:scale(1.05)}
-  .mcard.done{background:rgba(74,222,128,.16);border-color:var(--ok);color:var(--ok);cursor:default;transform:none}
-  .mcard.wrong{border-color:var(--bad);background:rgba(248,113,113,.15)}
+  .mcard{padding:16px 6px;border-radius:14px;border:1px solid rgba(var(--goldA),.3);background:linear-gradient(160deg,#241b40,#150f24);color:#fff;font-size:1.02rem;font-weight:600;cursor:pointer;transition:.2s;font-family:inherit;box-shadow:0 3px 10px rgba(0,0,0,.3)}
+  .mcard.ar{color:var(--gold2);background:linear-gradient(160deg,#2c2140,#1a1228);border-style:dashed}
+  .mcard:not(.done):active{transform:scale(.96)}
+  .mcard.sel{border-color:var(--gold2);background:linear-gradient(160deg,rgba(var(--goldA),.35),rgba(var(--goldA),.15));transform:scale(1.05);box-shadow:0 0 16px rgba(var(--goldA),.35)}
+  .mcard.done{background:rgba(74,222,128,.16);border-color:var(--ok);color:var(--ok);cursor:default;transform:none;animation:mtPop .4s ease}
+  .mcard.wrong{border-color:var(--bad);background:rgba(248,113,113,.15);animation:mtShake .35s ease}
+  @keyframes mtPop{0%{transform:scale(1)}45%{transform:scale(1.1)}100%{transform:scale(1)}}
+  @keyframes mtShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
   /* ===== v4: true/false ===== */
   .tf-btns{display:flex;gap:16px;justify-content:center;margin:18px 0}
   .tf-btns .btn{min-width:130px;font-size:1.15rem;padding:14px 10px}
@@ -3372,6 +3376,6 @@
   <div class="pl-top"><button id="plClose" class="pl-x">✕</button><div class="pl-prog"><i id="plBar"></i></div><div class="pl-hearts" id="plHearts"></div></div>
   <div id="plBody" class="pl-body"></div>
 </div>
-<script src="./app.js?v=83" defer></script>
+<script src="./app.js?v=84" defer></script>
 </body>
 </html>
