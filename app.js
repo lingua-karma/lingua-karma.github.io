@@ -6563,8 +6563,11 @@ window.KM_POOL = [
     S.code = code; S.host = isHost;
     S._joined = false; if(!preserve) S._subOnce = false;
     duelLog('connect ' + code + (isHost ? ' host' : ' guest') + (preserve ? ' (re)' : ''));
-    chan = dsb.channel('duel-' + code, {config: {presence: {key: S.uid}}});
+    S._attempt = (S._attempt || 0) + 1;
+    S.pkey = S.uid + '-' + S._attempt + '-' + Math.random().toString(36).slice(2,6);
+    chan = dsb.channel('duel-' + code, {config: {presence: {key: S.pkey}}});
     var myChan = chan;
+    function isMine(k){ return k === S.uid || k.indexOf(S.uid + '-') === 0; }
     chan.on('presence', {event: 'sync'}, function(){
       if(chan !== myChan) return;
       var st = chan.presenceState(), arr = [];
@@ -6573,7 +6576,7 @@ window.KM_POOL = [
         arr.push({uid: k, name: (pr && pr.name) || 'صديقة', ready: !!(pr && pr.ready)});
       });
       S.players = arr;
-      var opp = arr.find(function(x){ return x.uid !== S.uid; });
+      var opp = arr.find(function(x){ return !isMine(x.uid); });
       if(opp){
         var pr2 = st[opp.uid] && st[opp.uid][0];
         if(pr2){
@@ -6598,7 +6601,7 @@ window.KM_POOL = [
         S._oppGoneT = true;
         later(function(){
           var st2 = chan ? chan.presenceState() : {};
-          var still = Object.keys(st2).some(function(k){ return k !== S.uid; });
+          var still = Object.keys(st2).some(function(k){ return !isMine(k); });
           S._oppGoneT = false;
           if(!still && (S.st === 'game' || S.st === 'ending') && !S.oppDone){
             toast('صاحبتك خرجت — كملي لوحدك وهتكسبي بالانسحاب 👑');
@@ -7673,7 +7676,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v63';
+  window.LINGUA_VERSION = 'v64';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
