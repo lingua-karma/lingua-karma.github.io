@@ -1,5 +1,5 @@
 /* Lingua service worker: network-first for HTML (updates always flow), cache-first for static assets */
-const CACHE = 'lingua-v16';
+const CACHE = 'lingua-v17';
 const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png', './app.js?v=36'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
@@ -30,10 +30,11 @@ self.addEventListener('push', e => {
   try { data = e.data ? e.data.json() : {}; } catch (err) {}
   e.waitUntil(self.registration.showNotification(data.title || 'Lingua 💜', {
     body: data.body || 'وقت المراجعة! دقيقتين وتحافظي على سلسلتك 🔥',
-    icon: './icon-192.png', badge: './icon-192.png', dir: 'rtl', lang: 'ar'
+    icon: './icon-192.png', badge: './icon-192.png', dir: 'rtl', lang: 'ar',
+    data: { url: data.url || './' }
   }));
 });
 self.addEventListener('notificationclick', e => {
   e.notification.close();
-  e.waitUntil(clients.openWindow('./'));
+  e.waitUntil(clients.openWindow((e.notification.data&&e.notification.data.url)||'./'));
 });
