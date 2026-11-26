@@ -6072,7 +6072,38 @@ window.GK_POOL = [
 {q:'أي حيوان بيطلع لبن وبيض وعنده منقار؟',a:'خلد الماء',o:['الكنغر','خلد الماء','الكسلان','النمس']},
 {q:'مين مؤسس الدولة الأيوبية؟',a:'صلاح الدين الأيوبي',o:['نور الدين زنكي','صلاح الدين الأيوبي','عماد الدين','الظاهر بيبرس']},
 {q:'إيه هو الكوكب الملقب بالكوكب الأحمر؟',a:'المريخ',o:['الزهرة','المريخ','عطارد','المشترى']},
-{q:'كم سنة استمرت حرب المائة عام بين إنجلترا وفرنسا تقريبًا؟',a:'116 سنة',o:['100 سنة بالظبط','116 سنة','99 سنة','130 سنة']}
+{q:'كم سنة استمرت حرب المائة عام بين إنجلترا وفرنسا تقريبًا؟',a:'116 سنة',o:['100 سنة بالظبط','116 سنة','99 سنة','130 سنة']},
+{q:'إيه هو الرقم الذري لعنصر الذهب؟',a:'79',o:['79','47','82','64']},
+{q:'مين العالم اللي وضع قوانين حركة الكواكب؟',a:'كيبلر',o:['نيوتن','كيبلر','جاليليو','كوبرنيكوس']},
+{q:'إيه هي أصغر عظمة في جسم الإنسان؟',a:'الركاب في الأذن',o:['الركاب في الأذن','الزند','الترقوة','عظمة الأنف']},
+{q:'في أي سنة اتأسست جامعة الدول العربية؟',a:'1945',o:['1945','1952','1938','1958']},
+{q:'إيه هي عاصمة سورينام؟',a:'باراماريبو',o:['باراماريبو','جورج تاون','كايين','بيلموبان']},
+{q:'مين اللي اخترع النظام الثنائي (0 و 1)؟',a:'لايبنيز',o:['لايبنيز','باسكال','تورينج','بول']},
+{q:'أي دولة عربية عدد سكانها أصغر؟',a:'جزر القمر',o:['جيبوتي','جزر القمر','البحرين','قطر']},
+{q:'إيه اسم أعمق بحيرة في العالم؟',a:'بايكال',o:['بايكال','فيكتوريا','تيتيكاكا','كاسبيان']},
+{q:'مين أول مصري يوصل لقمة إفرست؟',a:'عمر سمرة',o:['عمر سمرة','فاروق الباز','مجدي يعقوب','أحمد زويل']},
+{q:'إيه هي أقوى عضلة في جسم الإنسان بالنسبة لحجمها؟',a:'عضلة الفك',o:['عضلة الفك','عضلة الفخذ','القلب','اللسان']},
+{q:'مضيق باب المندب بيفصل بين اليمن وأي دولة؟',a:'جيبوتي',o:['الصومال','جيبوتي','إريتريا','عمان']},
+{q:'مين مؤلف رواية "عزازيل"؟',a:'يوسف زيدان',o:['يوسف زيدان','بهاء طاهر','صنع الله إبراهيم','جمال الغيطاني']},
+{q:'إيه هي أسرع سمكة في العالم؟',a:'أبو شراع',o:['أبو شراع','التونة','القرش الأبيض','الهامور']},
+{q:'مين أول امرأة حكمت مصر في العصر الإسلامي؟',a:'شجرة الدر',o:['شجرة الدر','حتشبسوت','كليوباترا','نفرتيتي']},
+{q:'إيه هو أعلى بركان نشط في العالم؟',a:'أوخوس ديل سالادو',o:['أوخوس ديل سالادو','إتنا','كيليمانجارو','فيزوف']},
+{q:'مين العالم المسلم الملقب بـ"أبو البصريات والكاميرا"؟',a:'ابن الهيثم',o:['ابن الهيثم','الجزري','الخوارزمي','ابن النفيس']},
+{q:'إيه هي عملة كوريا الجنوبية؟',a:'الوون',o:['الوون','الين','اليوان','الرينجيت']},
+{q:'كم عدد الدول العربية الموجودة في قارة آسيا؟',a:'12',o:['10','12','14','8']},
+{q:'مين اللي اكتشف البنسلين؟',a:'ألكسندر فليمنج',o:['ألكسندر فليمنج','لوي باستور','جوزيف ليستر','روبرت كوخ']},
+{q:'إيه هي أكبر جزيرة في البحر المتوسط؟',a:'صقلية',o:['صقلية','كريت','قبرص','سردينيا']},
+{q:'في أي سنة سقطت غرناطة وانتهى حكم الأندلس؟',a:'1492م',o:['1492م','1348م','1517م','1258م']},
+{q:'إيه هي أطول كلمة في القرآن الكريم؟',a:'فأسقيناكموه',o:['فأسقيناكموه','المستضعفين','استكباروا','يتطهرون']},
+{q:'أي حيوان عنده ٣ قلوب؟',a:'الأخطبوط',o:['الأخطبوط','الحبار','الدولفين','الضفدع']},
+{q:'إيه هي الدولة اللي عندها أكبر عدد جزر في العالم؟',a:'السويد',o:['إندونيسيا','السويد','الفلبين','النرويج']},
+{q:'إيه هو أكثر عنصر كثافة في الجدول الدوري؟',a:'الأوسميوم',o:['الأوسميوم','الرصاص','الذهب','اليورانيوم']},
+{q:'في أي سنة اتأسست الدولة الأموية؟',a:'661م',o:['661م','632م','750م','686م']},
+{q:'إيه اسم أول عاصمة للدولة الإسلامية بعد المدينة المنورة؟',a:'الكوفة',o:['الكوفة','دمشق','بغداد','مكة']},
+{q:'كم عدد صمامات القلب؟',a:'4',o:['4','2','6','3']},
+{q:'إيه هي أقرب مجرة كبيرة لمجرتنا درب التبانة؟',a:'أندروميدا',o:['أندروميدا','ماجلان','المثلث','القنطورس']},
+{q:'أي نهر بيمر بأكبر عدد من الدول في العالم؟',a:'الدانوب',o:['الدانوب','النيل','الأمازون','الراين']},
+{q:'كم لاعب في فريق الكرلنج على الجليد؟',a:'4',o:['4','6','5','7']}
 ];
 
 /* truth + know-me pools (fun + safe-embarrassing, no sexual/hurtful/private content) */
@@ -6238,14 +6269,11 @@ window.KM_POOL = [
     quiz:   {n:'سباق الكلمات', i:'⚔️', d:'١٠ كلمات — صح + سرعة', vocab:true},
     race:   {n:'سباق الستين', i:'⚡', d:'٦٠ ثانية — أكتر عدد إجابات', vocab:true},
     memory: {n:'ميموري سوا', i:'🃏', d:'مين يلاقي التطابقات الأول', vocab:true},
-    gk:     {n:'معلومات صعبة', i:'🧠', d:'١٠ أسئلة معلومات عامة تقيلة', vocab:false},
+    gk:     {n:'معلومات صعبة', i:'🧠', d:'١٥ سؤال معلومات عامة تقيلة 🔥', vocab:false},
     truth:  {n:'الحقيقة', i:'👑', d:'أسئلة ضحك ومفاجآت — جاوبي بصراحة أو تخطّي', vocab:false},
     knowme: {n:'قد إيه تعرفيني', i:'💜', d:'خمّني إجابات صاحبتك', vocab:false}
   };
   var dsb = null, chan = null;
-  window.__duelLog = [];
-  function dlog(m){ try { window.__duelLog.push(Date.now()%100000 + ' ' + m); if(window.__duelLog.length > 60) window.__duelLog.shift(); } catch(e){} }
-  Object.defineProperty(window, '__duelS', {get: function(){ return S; }});
   var S = {st:'home', game:'quiz', code:null, lang:'en', host:false, uid:null, myName:'', opp:null, players:[],
            qs:[], qi:0, startT:0, myAns:[], oppAns:[], myScore:0, oppDone:false, oppForfeit:false,
            raceN:0, raceMs:0, oppN:0, mem:{}, timers:[]};
@@ -6300,7 +6328,7 @@ window.KM_POOL = [
     var r = rng(hash(code + ':gk'));
     var idx = window.GK_POOL.map(function(_, i){ return i; });
     for(var k = idx.length - 1; k > 0; k--){ var m = Math.floor(r() * (k + 1)), t = idx[k]; idx[k] = idx[m]; idx[m] = t; }
-    return idx.slice(0, 10).map(function(i){
+    return idx.slice(0, 15).map(function(i){
       var q = window.GK_POOL[i];
       var opts = q.o.slice();
       for(var k = opts.length - 1; k > 0; k--){ var m = Math.floor(r() * (k + 1)), t = opts[k]; opts[k] = opts[m]; opts[m] = t; }
@@ -6430,17 +6458,14 @@ window.KM_POOL = [
       if(opp && !S.opp){ S.opp = {uid: opp.uid, name: opp.name}; sndTick(); }
       if(opp) S.opp.name = opp.name;
       if(S.st === 'lobby') renderPlayers();
-      dlog('sync st='+S.st+' opp='+(opp?opp.name:'NONE')+' players='+arr.length);
       if(opp){ S._oppGoneT = false; }
       if(!opp && (S.st === 'game' || S.st === 'ending') && !S.oppDone && !S._oppGoneT){
         S._oppGoneT = true;
-        dlog('opp-missing, grace 8s');
         later(function(){
           var st2 = chan ? chan.presenceState() : {};
           var still = Object.keys(st2).some(function(k){ return k !== S.uid; });
           S._oppGoneT = false;
           if(!still && (S.st === 'game' || S.st === 'ending') && !S.oppDone){
-            dlog('FORFEIT confirmed');
             toast('صاحبتك خرجت — كملي لوحدك وهتكسبي بالانسحاب 👑');
             S.oppDone = true; S.oppForfeit = true; maybeFinish();
           }
@@ -6469,7 +6494,6 @@ window.KM_POOL = [
     });
   }
   function maybeStart(){
-    dlog('maybeStart host='+S.host+' st='+S.st+' iR='+!!S._iReady+' oR='+!!S._oppReady);
     if(!S.host || S.st !== 'lobby') return;
     if(S._iReady && S._oppReady){
       S.st = 'starting';
@@ -6522,17 +6546,17 @@ window.KM_POOL = [
       '<div class="du-fb" id="duFb"></div></div>';
   }
   function quizShell(at){
-    el('duelBox').innerHTML = gameHead('١ / ١٠');
+    el('duelBox').innerHTML = gameHead('١ / ' + S.qs.length);
     var wait = at - Date.now();
     el('duQ').innerHTML = '<div class="du-count">استعدي... ⚡</div>';
     if(wait > 0) el('duFb').textContent = 'البداية بعد ' + Math.ceil(wait / 1000) + '...';
     later(function(){ runQ(0); }, Math.max(50, wait));
   }
   function runQ(i){
-    if(i >= 10 || S.st !== 'game') return endMyGame();
+    if(i >= S.qs.length || S.st !== 'game') return endMyGame();
     S.qi = i;
     var q = S.qs[i];
-    el('duProg').textContent = (i + 1) + ' / ١٠';
+    el('duProg').textContent = (i + 1) + ' / ' + S.qs.length;
     el('duQ').innerHTML = '<div class="du-we">' + q.e + '</div><div class="du-word"' + (S.game === 'gk' ? ' style="direction:rtl;font-size:1.15rem;line-height:1.8"' : '') + '>' + esc(q.w) + '</div>';
     el('duFb').textContent = '';
     el('duOpts').innerHTML = q.opts.map(function(o, k){
@@ -6584,7 +6608,7 @@ window.KM_POOL = [
   }
   function updOppTick(){
     var e2 = el('duOppScore');
-    if(e2 && S.opp && S.game !== 'race') e2.textContent = S.opp.name + ': ✓ ' + Object.keys(S.oppAns).length + '/١٠';
+    if(e2 && S.opp && S.game !== 'race') e2.textContent = S.opp.name + ': ✓ ' + Object.keys(S.oppAns).length + '/' + S.qs.length;
   }
 
   /* ---------- race (60 seconds) ---------- */
