@@ -992,6 +992,19 @@
 .du-hm-key.miss{background:#402020;border-color:#8f4a3f;color:#e8a79f;opacity:.55}
 .du-hm-key:disabled{cursor:default}
 @media(max-width:380px){.du-hm-kb{grid-template-columns:repeat(6,1fr)}.du-hm-gal{flex-basis:92px}.du-hm-g{width:92px;height:104px}}
+.du-wc-chain{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;min-height:44px;margin:8px 0}
+.du-wc-chip{background:#2a2340;border:1px solid #4a3f6e;color:#f4e3ae;padding:6px 12px;border-radius:999px;font-weight:800;font-size:.95rem}
+.du-wc-arrow{color:#8a7648}
+.du-wc-empty{color:#8a7f63;font-size:.9rem}
+.du-wc-need{color:#e9c26a;font-size:1.2rem}
+.du-wc-play{display:flex;gap:8px;margin-top:6px}
+.du-wc-in{flex:1;text-transform:uppercase;letter-spacing:1px;font-weight:700}
+.du-wc-go{padding:10px 18px;border-radius:12px;font-size:1.1rem}
+.du-wc-sugg{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.du-wc-s{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#221c33;border:1px solid #3a3350;border-radius:12px;padding:8px 12px;cursor:pointer;color:#f0e2b6}
+.du-wc-s b{font-size:1rem;letter-spacing:1px}
+.du-wc-s small{color:#b9a878}
+.du-wc-none{color:#8a7f63;font-size:.85rem;text-align:center}
 .du-xo-cell{aspect-ratio:1;background:rgba(255,255,255,.05);border:1px solid rgba(233,194,106,.35);border-radius:16px;font-size:34px;cursor:pointer;transition:.15s;font-family:inherit}
 .du-xo-cell:not([disabled]):active{transform:scale(.92)}
 .du-xo-cell[disabled]{cursor:default;opacity:.9}
@@ -3324,6 +3337,6 @@
   <div class="pl-top"><button id="plClose" class="pl-x">✕</button><div class="pl-prog"><i id="plBar"></i></div><div class="pl-hearts" id="plHearts"></div></div>
   <div id="plBody" class="pl-body"></div>
 </div>
-<script src="./app.js?v=76" defer></script>
+<script src="./app.js?v=77" defer></script>
 </body>
 </html>

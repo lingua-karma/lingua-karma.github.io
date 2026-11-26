@@ -6301,7 +6301,8 @@ window.KM_POOL = [
     truth:  {n:'الحقيقة', i:'👑', d:'أسئلة ضحك ومفاجآت — جاوبي بصراحة أو تخطّي', vocab:false},
     knowme: {n:'قد إيه تعرفيني', i:'💜', d:'خمّني إجابات صاحبتك', vocab:false},
     xo:     {n:'إكس أو لايف', i:'⭕', d:'دور بدور — مين يكسر التاني؟', vocab:false},
-    hang:   {n:'خمّني الكلمة', i:'🔤', d:'٣ كلمات — خمّني الحروف قبل ما الرسمة تكمل', vocab:true}
+    hang:   {n:'خمّني الكلمة', i:'🔤', d:'٣ كلمات — خمّني الحروف قبل ما الرسمة تكمل', vocab:true},
+    wc:     {n:'سلسلة الكلمات', i:'🔗', d:'كلمة بحرف آخر كلمة — مين هيتخنق الأول؟', vocab:true}
   };
   var dsb = null, chan = null;
   var S = {st:'home', game:'quiz', code:null, lang:'en', host:false, uid:null, myName:'', opp:null, players:[],
@@ -6372,6 +6373,7 @@ window.KM_POOL = [
     if(game === 'truth') return window.TRUTH_POOL.length;
     if(game === 'knowme') return window.KM_POOL.length;
     if(game === 'hang') return hangPool(S.lang).length;
+    if(game === 'wc') return hangPool(S.lang).length;
     return vocabPool().length;
   }
   function needFor(game){
@@ -6382,6 +6384,7 @@ window.KM_POOL = [
     if(game === 'truth') return 12;
     if(game === 'knowme') return 10;
     if(game === 'hang') return 3;
+    if(game === 'wc') return 0;
     return 10;
   }
   function pickIds(game){
@@ -6652,6 +6655,11 @@ window.KM_POOL = [
           }
           return;
         }
+        /* wc ends only when someone times out; a done while I'm still playing means they lost */
+        if(S.game === 'wc'){
+          if(S.st === 'game') wcFinish(true);
+          return;
+        }
         S.oppDone = true; S.oppAns = p.ans || S.oppAns; S.oppN = p.n || S.oppN; S.oppMs = p.ms || 0; S.oppPairs = p.pairs;
         /* v76: only finish if I already ended — if I'm still playing, let me finish; my endMyGame will use oppDone */
         if(S.st === 'ending') maybeFinish();
@@ -6661,6 +6669,7 @@ window.KM_POOL = [
       if(p.t === 'kready'){ S._oppKReady = true; knowMaybePhase2(); }
       if(p.t === 'kans'){ S.oppK = p.ans; knowMaybeReveal(); }
       if(p.t === 'xo'){ xoRecv(p.mv); }
+      if(p.t === 'wc'){ wcRecv(p); }
       if(p.t === 'hb'){ S._oppHb = Date.now(); }
     });
     chan.subscribe(function(status){
@@ -6756,11 +6765,120 @@ window.KM_POOL = [
     } else if(S.game === 'hang'){
       S.qs = (S.qids ? buildHmIds(S.lang, S.qids) : buildHm(S.code, S.lang));
       hmShell(at);
+    } else if(S.game === 'wc'){
+      wcShell(at);
     } else {
       S.qs = (S.game === 'gk') ? (S.qids ? buildGkIds(S.qids) : buildGk(S.code)) : (S.qids ? buildMcqIds(S.lang, S.qids) : buildMcq(S.code, 'quiz', S.lang, 12));
       quizShell(at);
     }
     recordSeen(S.game, S.qids);
+  }
+
+  /* ---------- wc: word chain (turn-based, last-letter, history-synced) ---------- */
+  var WC_TURN = 30000;
+  function wcPool(lang){
+    var rows = hangPool(lang), li = LIDX[lang] != null ? LIDX[lang] : 0;
+    return rows.map(function(r){ return {w: String(r[li]).trim().toUpperCase(), hint: r[5], e: r[6]}; });
+  }
+  function wcNeed(){ var mv = S.wc.mv; return mv.length ? mv[mv.length - 1].slice(-1) : ''; }
+  function wcValid(w){
+    w = String(w || '').trim().toUpperCase();
+    if(!/^[A-Z]{2,15}$/.test(w)) return {ok: false, why: 'حروف إنجليزية بس'};
+    var need = wcNeed();
+    if(need && w.charAt(0) !== need) return {ok: false, why: 'لازم تبدأ بحرف الـ ' + need};
+    if(S.wc.mv.indexOf(w) >= 0) return {ok: false, why: 'اتقالت قبل كده!'};
+    var hit = wcPool(S.lang).filter(function(p){ return p.w === w; })[0];
+    if(!hit) return {ok: false, why: 'مش من كلمات المنهج — جربي كلمة متعلمة'};
+    return {ok: true, w: w, row: hit};
+  }
+  function wcShell(at){
+    S.wc = {mv: [], tLast: 0};
+    el('duelBox').innerHTML =
+      '<div class="du-card du-game">' +
+      '<div class="du-top"><div class="du-me">' + esc(S.myName || 'انتي') + '</div>' +
+      '<div class="du-prog">سلسلة الكلمات 🔗</div>' +
+      '<div class="du-opp">' + esc(S.opp ? S.opp.name : 'صاحبتك') + '</div></div>' +
+      '<div class="du-xo-turn" id="wcTurn"></div>' +
+      '<div class="du-timer"><div class="du-tbar" id="wcTbar"></div></div>' +
+      '<div class="du-wc-chain" id="wcChain" dir="ltr"></div>' +
+      '<div class="du-fb" id="duFb"></div>' +
+      '<div class="du-wc-play" id="wcPlay" dir="ltr">' +
+      '<input class="acc-in du-wc-in" id="wcIn" maxlength="15" placeholder="Type a word..." autocomplete="off" autocapitalize="characters">' +
+      '<button class="btn du-wc-go" id="wcGo">✓</button></div>' +
+      '<div class="du-wc-sugg" id="wcSugg"></div></div>';
+    var wait = at - Date.now();
+    el('wcTurn').textContent = 'البداية بعد ' + Math.max(1, Math.ceil(wait / 1000)) + '...';
+    el('wcGo').onclick = wcSubmit;
+    el('wcIn').addEventListener('keydown', function(e){ if(e.key === 'Enter') wcSubmit(); });
+    el('wcIn').addEventListener('input', wcSugg);
+    later(function(){ wcStart(); }, Math.max(50, wait));
+  }
+  function wcMyTurn(){ return (S.wc.mv.length % 2 === 0) === !!S.host; }
+  function wcStart(){ if(S.st === 'game') wcRender(); }
+  function wcRender(){
+    if(S.st !== 'game' || !S.wc) return;
+    var mv = S.wc.mv, mine = wcMyTurn(), need = wcNeed();
+    el('wcTurn').innerHTML = mine ? '<b style="color:#e9c26a">دورك! ' + (need ? 'كلمة تبدأ بـ <b class="du-wc-need">' + need + '</b>' : 'ابدأي بأي كلمة') + ' ✨</b>' : 'دور ' + esc(S.opp ? S.opp.name : 'صاحبتك') + '... ⏳';
+    el('wcChain').innerHTML = mv.length ? mv.slice(-6).map(function(w, i, arr){
+      return (i ? '<span class="du-wc-arrow">→</span>' : '') + '<span class="du-wc-chip">' + esc(w) + '</span>';
+    }).join('') : '<span class="du-wc-empty">لسه مفيش كلمات — يلا نبدأ! 🔗</span>';
+    var play = el('wcPlay');
+    play.style.display = mine ? '' : 'none';
+    el('wcSugg').style.display = mine ? '' : 'none';
+    if(mine){ el('wcIn').value = ''; el('wcIn').focus(); wcSugg(); }
+    /* turn clock */
+    S.wc.tLast = Date.now();
+    var tb = el('wcTbar');
+    tb.style.transition = 'none'; tb.style.width = '100%';
+    requestAnimationFrame(function(){ tb.style.transition = 'width ' + (WC_TURN / 1000) + 's linear'; tb.style.width = '0%'; });
+    later(function(){ wcTimeout(); }, WC_TURN);
+  }
+  function wcTimeout(){
+    if(S.st !== 'game' || !S.wc) return;
+    if(!wcMyTurn()) return; /* opponent's clock is their problem */
+    if(Date.now() - S.wc.tLast < WC_TURN - 500) return; /* a newer turn started */
+    wcFinish(false);
+  }
+  function wcSugg(){
+    if(S.st !== 'game' || !S.wc || !wcMyTurn()) return;
+    var typed = (el('wcIn').value || '').trim().toUpperCase(), need = wcNeed();
+    var list = wcPool(S.lang).filter(function(p){
+      if(need && p.w.charAt(0) !== need) return false;
+      if(typed && p.w.indexOf(typed) !== 0) return false;
+      return S.wc.mv.indexOf(p.w) < 0;
+    }).slice(0, 6);
+    el('wcSugg').innerHTML = list.map(function(p){
+      return '<button class="du-wc-s" data-w="' + p.w + '"><b dir="ltr">' + p.w + '</b><small>' + p.e + ' ' + esc(p.hint) + '</small></button>';
+    }).join('') || '<span class="du-wc-none">مفيش كلمات مطابقة 😅</span>';
+    el('wcSugg').onclick = function(e){
+      var b = e.target.closest('.du-wc-s');
+      if(b){ el('wcIn').value = b.dataset.w; wcSubmit(); }
+    };
+  }
+  function wcSubmit(){
+    if(S.st !== 'game' || !S.wc || !wcMyTurn()) return;
+    var chk = wcValid(el('wcIn').value);
+    if(!chk.ok){ el('duFb').textContent = chk.why; beep(200, 0.1); return; }
+    S.wc.mv.push(chk.w);
+    el('duFb').textContent = '';
+    beep(600, 0.08);
+    send('wc', {mv: S.wc.mv});
+    wcRender();
+  }
+  function wcRecv(p){
+    if(!S.wc || S.st !== 'game') return;
+    if(p.lost){ wcFinish(true); return; }
+    if(!p.mv || !p.mv.length || p.mv.length <= S.wc.mv.length) return;
+    S.wc.mv = p.mv.slice(0, 60);
+    beep(440, 0.08);
+    wcRender();
+  }
+  function wcFinish(won){
+    if(S.st !== 'game') return;
+    S.st = 'result';
+    clearTimers();
+    send('done', {ans: [], n: 0, ms: 0, pairs: 0});
+    showResult(won ? 1 : 0, won ? 0 : 1, '⭐');
   }
 
   /* ---------- hang: word-guessing race (simultaneous, drawn gallows) ---------- */
@@ -7960,7 +8078,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v76';
+  window.LINGUA_VERSION = 'v77';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
