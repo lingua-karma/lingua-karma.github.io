@@ -8211,7 +8211,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v90';
+  window.LINGUA_VERSION = 'v91';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
@@ -9354,4 +9354,47 @@ window.KM_POOL = [
   /* ---------- استبدال لعبة المطبخ القديمة ---------- */
   host.innerHTML = '';
   pickRecipe();
+})();
+/* ================= v91: نطق صحيح لكل لغة — اختيار الصوت المناسب لكل لغة تلقائيًا ================= */
+(function(){
+  if(!('speechSynthesis' in window)) return;
+  var voices = [];
+  function loadVoices(){ try { voices = speechSynthesis.getVoices() || []; } catch(e){ voices = []; } }
+  loadVoices();
+  try { speechSynthesis.addEventListener('voiceschanged', loadVoices); } catch(e){ speechSynthesis.onvoiceschanged = loadVoices; }
+
+  function bestVoice(lang){
+    if(!lang || !voices.length) return null;
+    var L = String(lang).toLowerCase();
+    var exact = null, prefix = null;
+    for(var i=0;i<voices.length;i++){
+      var vl = String(voices[i].lang||'').toLowerCase().replace('_','-');
+      if(vl === L) { exact = voices[i]; break; }
+      if(!prefix && vl.split('-')[0] === L.split('-')[0]) prefix = voices[i];
+    }
+    return exact || prefix;
+  }
+
+  /* نقطة إصلاح واحدة: أي كلام في الموقع يعدي من هنا وياخد الصوت الصح للغته */
+  var origSpeak = speechSynthesis.speak.bind(speechSynthesis);
+  speechSynthesis.speak = function(u){
+    try {
+      if(u && u.lang && !u.voice){
+        var v = bestVoice(u.lang);
+        if(v) u.voice = v;
+      }
+    } catch(e){}
+    return origSpeak(u);
+  };
+
+  /* تشخيص: تقرير بالأصوات المتاحة لكل لغة (للتحقق) */
+  window.linguaTTSReport = function(){
+    loadVoices();
+    var out = {};
+    ['en-US','fr-FR','de-DE','zh-CN','ko-KR','ja-JP','ar-SA'].forEach(function(l){
+      var v = bestVoice(l);
+      out[l] = v ? (v.name + ' [' + v.lang + ']' + (v.localService ? ' local' : ' network')) : null;
+    });
+    return out;
+  };
 })();
