@@ -384,9 +384,13 @@
     font-weight:800;text-align:center;padding:8px;font-size:1.05rem;line-height:1.4;
   }
   .gface.back{
-    background:linear-gradient(135deg,#1c1430,#2b2050);border:1px solid rgba(var(--goldA),.35);
+    background:repeating-linear-gradient(45deg,rgba(233,194,106,.06) 0 6px,transparent 6px 12px),linear-gradient(135deg,#1c1430,#2b2050);
+    border:1px solid rgba(var(--goldA),.35);
     color:var(--gold);font-size:1.7rem;
   }
+  .gcard:not(.flipped):not(.matched):active .inner{transform:scale(.94)}
+  .gcard.matched .gface.front{animation:gmPop .45s ease}
+  @keyframes gmPop{0%{transform:rotateY(180deg) scale(1)}45%{transform:rotateY(180deg) scale(1.12)}100%{transform:rotateY(180deg) scale(1)}}
   .gface.front{
     background:linear-gradient(135deg,#2e2352,#171126);border:1px solid rgba(var(--goldA),.55);
     color:#fff;transform:rotateY(180deg);box-shadow:0 8px 22px rgba(0,0,0,.4);
@@ -3358,6 +3362,6 @@
   <div class="pl-top"><button id="plClose" class="pl-x">✕</button><div class="pl-prog"><i id="plBar"></i></div><div class="pl-hearts" id="plHearts"></div></div>
   <div id="plBody" class="pl-body"></div>
 </div>
-<script src="./app.js?v=81" defer></script>
+<script src="./app.js?v=82" defer></script>
 </body>
 </html>

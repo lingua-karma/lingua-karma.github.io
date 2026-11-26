@@ -418,7 +418,7 @@ function newGame(lang){
     btn.setAttribute('aria-label','بطاقة ذاكرة');
     btn.innerHTML =
       '<div class="inner">'+
-        '<div class="gface back">✦</div>'+
+        '<div class="gface back"><svg viewBox="0 0 60 60" width="38" height="38" aria-hidden="true"><path d="M30 6 L54 30 L30 54 L6 30 Z" fill="none" stroke="#e9c26a" stroke-width="2.5"/><path d="M30 16 L44 30 L30 44 L16 30 Z" fill="rgba(233,194,106,.25)" stroke="#e9c26a" stroke-width="1.5"/><circle cx="30" cy="30" r="4" fill="#e9c26a"/></svg></div>'+
         '<div class="gface front'+(c.ar?' ar':'')+'">'+c.text+'</div>'+
       '</div>';
     btn.addEventListener('click', function(){ flipCard(btn, c); });
@@ -8228,7 +8228,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v81';
+  window.LINGUA_VERSION = 'v82';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
