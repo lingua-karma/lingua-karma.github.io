@@ -813,6 +813,27 @@
   header nav{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;max-width:100%}
   header nav::-webkit-scrollbar{display:none}
   header nav a{white-space:nowrap}
+
+/* ===== v28: places + premium ===== */
+.place-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:640px;margin:0 auto}
+.place-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;text-align:center}
+.place-card img{width:100%;height:110px;object-fit:cover;display:block;background:#1a1428}
+.place-card h4{margin:8px 0 2px;font-size:.9rem;color:var(--gold2)}
+.place-card .par{font-size:.72rem;color:var(--muted);margin:0 0 8px}
+.prem-hero{max-width:640px;margin:0 auto 14px;background:linear-gradient(135deg,#2a1f3d,#4a3517);border:1px solid var(--gold,#c9a227);border-radius:20px;padding:22px 16px;text-align:center}
+.prem-hero h3{margin:0 0 6px;font-size:1.3rem;color:var(--gold2)}
+.prem-hero p{margin:0;font-size:.82rem;color:var(--muted);line-height:1.7}
+.prem-plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:640px;margin:14px auto}
+.prem-plan{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 12px;text-align:center;position:relative}
+.prem-plan.hot{border-color:var(--gold,#c9a227)}
+.prem-plan .badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--gold,#c9a227);color:#1a1428;font-size:.65rem;font-weight:700;padding:2px 10px;border-radius:99px}
+.prem-plan h4{margin:6px 0 2px;font-size:1rem;color:var(--gold2)}
+.prem-plan .price{font-size:1.4rem;font-weight:800;margin:6px 0}
+.prem-plan .per{font-size:.7rem;color:var(--muted)}
+.prem-plan ul{list-style:none;padding:0;margin:10px 0;text-align:right;font-size:.75rem;color:var(--muted);line-height:1.9}
+.prem-plan ul li::before{content:"✦ ";color:var(--gold2)}
+.prem-btn{display:inline-block;background:linear-gradient(135deg,var(--gold,#c9a227),#e6c65c);color:#1a1428;border:none;border-radius:12px;padding:10px 22px;font-weight:800;font-size:.85rem;cursor:pointer;font-family:inherit}
+.prem-lock{max-width:640px;margin:14px auto 0;background:var(--card);border:1px dashed var(--gold,#c9a227);border-radius:16px;padding:14px;text-align:center;font-size:.8rem;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -7968,7 +7989,7 @@ gbkRender();
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v28.0</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v28.1</div>
 <script>
 
 /* ================= v13: learning map, personality quiz, XO, korean ================= */
