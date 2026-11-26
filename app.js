@@ -9914,3 +9914,47 @@ window.KM_POOL = [
 
   pickLang();
 })();
+/* ================= v96: ذكر اليوم — شريط أعلى الصفحة الرئيسية، يتغيّر كل زيارة ================= */
+(function(){
+  var ADHKAR = [
+    'سُبْحَانَ اللهِ وَبِحَمْدِهِ',
+    'سُبْحَانَ اللهِ الْعَظِيمِ',
+    'الْحَمْدُ لِلهِ رَبِّ الْعَالَمِينَ',
+    'لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ',
+    'اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ',
+    'أَسْتَغْفِرُ اللهَ الْعَظِيمَ وَأَتُوبُ إِلَيْهِ',
+    'لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللهِ',
+    'حَسْبُنَا اللهُ وَنِعْمَ الْوَكِيلُ',
+    'رَبِّ زِدْنِي عِلْمًا',
+    'اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا',
+    'سُبْحَانَ اللهِ وَالْحَمْدُ لِلهِ وَلَا إِلَهَ إِلَّا اللهُ وَاللهُ أَكْبَرُ',
+    'اللَّهُمَّ يَسِّرْ وَلَا تُعَسِّرْ',
+    'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً',
+    'اللَّهُمَّ اجْعَلِ الْقُرْآنَ رَبِيعَ قَلْبِي وَنُورَ صَدْرِي',
+    'يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَى دِينِكَ',
+    'بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ',
+    'اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ',
+    'رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي',
+    'اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ',
+    'تَوَكَّلْتُ عَلَى اللهِ وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللهِ'
+  ];
+
+  function show(){
+    var hero = document.querySelector('.hero');
+    if(!hero || document.getElementById('dhikrBar')) return;
+    var last = -1;
+    try { last = parseInt(localStorage.getItem('lingua_dhikr_last') || '-1', 10); } catch(e){}
+    var i = Math.floor(Math.random() * ADHKAR.length);
+    if(i === last) i = (i + 1) % ADHKAR.length;
+    try { localStorage.setItem('lingua_dhikr_last', String(i)); } catch(e){}
+
+    var bar = document.createElement('div');
+    bar.id = 'dhikrBar';
+    bar.innerHTML = '<span class="dh-star">✦</span><span class="dh-text">' + ADHKAR[i] + '</span><span class="dh-star">✦</span>';
+    hero.insertBefore(bar, hero.firstChild);
+    requestAnimationFrame(function(){ bar.classList.add('on'); });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', show);
+  else show();
+})();
