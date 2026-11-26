@@ -10533,3 +10533,338 @@ window.KM_POOL = [
   window.LinguaStreak = {bump: bump, status: status, get: function(){ return S; }};
 })();
 window.LINGUA_VERSION='v98';
+/* ===== v99: chat list (قائمة شات) — text + voice notes + photos ===== */
+(function(){
+  'use strict';
+
+  var BUCKET = 'chat-media';
+  var openWith = null;       /* {id, name} of the open conversation */
+  var convos = [];           /* last message per partner */
+  var names = {};            /* uid -> display_name */
+  var signedCache = {};      /* media_path -> {url, exp} */
+  var rec = null, recChunks = [], recTimer = null, recStart = 0;
+  var chan = null;
+
+  function sb(){ return window.__linguaGetSb && window.__linguaGetSb(); }
+  function me(){ return window.__linguaGetMe && window.__linguaGetMe(); }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function ar(d){ try{ return new Date(d).toLocaleDateString('ar-EG', {day:'numeric', month:'short', hour:'numeric', minute:'2-digit'}); }catch(e){ return ''; } }
+
+  /* ---- styles ---- */
+  var css = ''
+    + '.cl-wrap{max-width:520px;margin:0 auto;padding:0 12px}'
+    + '.cl-row{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.045);border:1px solid rgba(212,175,55,.25);border-radius:16px;padding:12px 14px;margin-bottom:10px;cursor:pointer;transition:.15s;text-align:right;width:100%;font:inherit;color:inherit}'
+    + '.cl-row:hover{background:rgba(212,175,55,.08)}'
+    + '.cl-av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#3a2f5e,#241d3d);border:1px solid rgba(212,175,55,.4);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex:none;color:#f4e3ae}'
+    + '.cl-mid{flex:1;min-width:0}'
+    + '.cl-name{font-weight:800;color:#f4e3ae;font-size:.95rem}'
+    + '.cl-prev{color:#b3a8d8;font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}'
+    + '.cl-time{color:#8f84b8;font-size:.68rem;flex:none}'
+    + '.cv-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}'
+    + '.cv-back{background:rgba(255,255,255,.06);border:1px solid rgba(212,175,55,.35);border-radius:10px;color:#f4e3ae;padding:6px 12px;cursor:pointer;font:inherit;font-size:.85rem}'
+    + '.cv-title{flex:1;font-weight:800;color:var(--gold,#d4af37);font-size:1.05rem}'
+    + '.cv-msgs{max-height:52vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:6px 2px;margin-bottom:12px}'
+    + '.cv-b{max-width:78%;padding:9px 13px;border-radius:16px;font-size:.9rem;line-height:1.6;word-break:break-word}'
+    + '.cv-b.me{align-self:flex-start;background:linear-gradient(135deg,rgba(212,175,55,.3),rgba(212,175,55,.14));border:1px solid rgba(212,175,55,.45);color:#fdf6dd;border-bottom-right-radius:4px}'
+    + '.cv-b.them{align-self:flex-end;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:#efe9fb;border-bottom-left-radius:4px}'
+    + '.cv-b img{max-width:200px;max-height:200px;border-radius:12px;display:block;cursor:pointer}'
+    + '.cv-b audio{max-width:210px;height:38px;display:block}'
+    + '.cv-b .cv-t{display:block;font-size:.62rem;color:#a99fd0;margin-top:4px;text-align:left}'
+    + '.cv-com{display:flex;gap:8px;align-items:center}'
+    + '.cv-com input[type=text]{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(212,175,55,.35);border-radius:14px;padding:11px 14px;color:#f4e3ae;font:inherit;font-size:.92rem;outline:none}'
+    + '.cv-btn{background:rgba(212,175,55,.14);border:1px solid rgba(212,175,55,.45);border-radius:12px;color:#f4e3ae;width:44px;height:44px;font-size:1.1rem;cursor:pointer;flex:none;display:flex;align-items:center;justify-content:center}'
+    + '.cv-btn.rec{background:rgba(255,80,80,.25);border-color:#ff6b6b;animation:clPulse 1s infinite}'
+    + '@keyframes clPulse{50%{opacity:.55}}'
+    + '.cv-hint{color:#8f84b8;font-size:.72rem;text-align:center;margin-top:8px}'
+    + '.cl-empty{text-align:center;color:#b3a8d8;padding:34px 16px;font-size:.9rem;line-height:1.9}'
+    + '.cl-full{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:10001;display:flex;align-items:center;justify-content:center;cursor:zoom-out}'
+    + '.cl-full img{max-width:94vw;max-height:90vh;border-radius:14px}';
+  var st = document.createElement('style');
+  st.textContent = css;
+  document.head.appendChild(st);
+
+  /* ---- data ---- */
+  function loadNames(ids){
+    var missing = ids.filter(function(i){ return !names[i]; });
+    if(!missing.length) return Promise.resolve();
+    return sb().from('profiles').select('id,display_name').in('id', missing).then(function(r){
+      (r.data || []).forEach(function(p){ names[p.id] = p.display_name || 'صاحبتك'; });
+    });
+  }
+
+  function loadConvos(){
+    var m = me(); if(!m) return Promise.resolve();
+    return sb().from('messages').select('sender,recipient,body,kind,created_at')
+      .or('sender.eq.' + m.id + ',recipient.eq.' + m.id)
+      .order('created_at', {ascending: false}).limit(400).then(function(r){
+        var seen = {}, list = [];
+        (r.data || []).forEach(function(x){
+          var other = x.sender === m.id ? x.recipient : x.sender;
+          if(seen[other]) return;
+          seen[other] = true;
+          list.push({id: other, last: x});
+        });
+        convos = list;
+        /* merge friends with no messages yet so the list is never empty */
+        return sb().from('friendships').select('user_id,friend_id')
+          .or('user_id.eq.' + m.id + ',friend_id.eq.' + m.id).then(function(fr){
+            var seen = {};
+            list.forEach(function(c){ seen[c.id] = true; });
+            (fr.data || []).forEach(function(f){
+              var other = f.user_id === m.id ? f.friend_id : f.user_id;
+              if(other && other !== m.id && !seen[other]){ seen[other] = true; convos.push({id: other, last: null}); }
+            });
+            return loadNames(convos.map(function(c){ return c.id; }));
+          });
+      });
+  }
+
+  function signedUrl(path){
+    var c = signedCache[path];
+    if(c && c.exp > Date.now()) return Promise.resolve(c.url);
+    return sb().storage.from(BUCKET).createSignedUrl(path, 3600).then(function(r){
+      if(r.error || !r.data) return '';
+      signedCache[path] = {url: r.data.signedUrl, exp: Date.now() + 3500 * 1000};
+      return r.data.signedUrl;
+    });
+  }
+
+  /* ---- list view ---- */
+  function renderList(){
+    var root = document.getElementById('clRoot');
+    if(!root) return;
+    var m = me();
+    if(!m){
+      root.innerHTML = '<div class="cl-empty">💬 سجلي حسابك من قسم «حسابي» الأول،<br>وبعدين كل شات مع صحابك هيبقى هنا 💜</div>';
+      return;
+    }
+    var h = '<div class="cl-wrap">';
+    h += '<div class="cv-hint" style="margin-bottom:12px">محادثاتك خاصة — محدش غيرك وهي يقدر يقراها 🔒</div>';
+    if(!convos.length){
+      h += '<div class="cl-empty">لسه مفيش محادثات —<br>افتحي «أصحابي» وابعتي أول رسالة 💌</div>';
+    } else {
+      h += convos.map(function(c){
+        var nm = names[c.id] || 'صاحبتك';
+        var x = c.last;
+        var prev = x ? (x.kind === 'image' ? '📷 صورة' : x.kind === 'audio' ? '🎤 رسالة صوتية' : (x.body || '')) : 'ابدأي المحادثة ✨';
+        var who = x && x.sender === m.id ? 'إنتي: ' : '';
+        return '<button class="cl-row" data-uid="' + c.id + '">'
+          + '<span class="cl-av">' + esc((nm || '؟').charAt(0)) + '</span>'
+          + '<span class="cl-mid"><span class="cl-name">' + esc(nm) + '</span>'
+          + '<span class="cl-prev">' + who + esc(prev) + '</span></span>'
+          + '<span class="cl-time">' + (x ? ar(x.created_at) : '') + '</span></button>';
+      }).join('');
+    }
+    h += '</div>';
+    root.innerHTML = h;
+    root.querySelectorAll('.cl-row').forEach(function(b){
+      b.addEventListener('click', function(){ openConvo(b.dataset.uid, names[b.dataset.uid] || 'صاحبتك'); });
+    });
+  }
+
+  /* ---- conversation view ---- */
+  function bubble(x){
+    var m = me();
+    var cls = x.sender === m.id ? 'me' : 'them';
+    var inner = '';
+    if(x.kind === 'image') inner = '<div class="cv-media" data-p="' + esc(x.media_path) + '" data-k="image">📷 ...</div>';
+    else if(x.kind === 'audio') inner = '<div class="cv-media" data-p="' + esc(x.media_path) + '" data-k="audio">🎤 ...</div>';
+    else inner = esc(x.body || '');
+    return '<div class="cv-b ' + cls + '">' + inner + '<span class="cv-t">' + ar(x.created_at) + '</span></div>';
+  }
+
+  function hydrateMedia(box){
+    box.querySelectorAll('.cv-media').forEach(function(el){
+      var p = el.dataset.p, k = el.dataset.k;
+      if(!p || el.dataset.done) return;
+      el.dataset.done = '1';
+      signedUrl(p).then(function(u){
+        if(!u){ el.textContent = '🚫 الملف اتمسح'; return; }
+        if(k === 'image'){
+          var img = new Image();
+          img.src = u; img.alt = 'صورة';
+          img.addEventListener('click', function(){
+            var f = document.createElement('div');
+            f.className = 'cl-full';
+            f.innerHTML = '<img src="' + u + '">';
+            f.addEventListener('click', function(){ f.remove(); });
+            document.body.appendChild(f);
+          });
+          el.textContent = ''; el.appendChild(img);
+        } else {
+          var a = document.createElement('audio');
+          a.controls = true; a.preload = 'metadata'; a.src = u;
+          el.textContent = ''; el.appendChild(a);
+        }
+      });
+    });
+  }
+
+  function loadMsgs(){
+    var m = me(); if(!m || !openWith) return Promise.resolve();
+    return sb().from('messages').select('*')
+      .or('and(sender.eq.' + m.id + ',recipient.eq.' + openWith.id + '),and(sender.eq.' + openWith.id + ',recipient.eq.' + m.id + ')')
+      .order('created_at', {ascending: true}).limit(300).then(function(r){
+        var box = document.getElementById('cvMsgs');
+        if(!box) return;
+        var list = r.data || [];
+        box.innerHTML = list.length ? list.map(bubble).join('') : '<div class="cl-empty">ابدئوا الكلام 💬✨</div>';
+        hydrateMedia(box);
+        box.scrollTop = box.scrollHeight;
+      });
+  }
+
+  function openConvo(uid, name){
+    openWith = {id: uid, name: name};
+    var root = document.getElementById('clRoot');
+    root.innerHTML = '<div class="cl-wrap">'
+      + '<div class="cv-head"><button class="cv-back" id="cvBack">› رجوع</button><span class="cv-title">💬 ' + esc(name) + '</span></div>'
+      + '<div class="cv-msgs" id="cvMsgs"><div class="cl-empty">بيتم التحميل...</div></div>'
+      + '<div class="cv-com">'
+      + '<button class="cv-btn" id="cvMic" title="رسالة صوتية">🎤</button>'
+      + '<button class="cv-btn" id="cvPic" title="صورة">📷</button>'
+      + '<input type="text" id="cvIn" maxlength="500" placeholder="اكتبي رسالتك...">'
+      + '<button class="cv-btn" id="cvGo" title="ابعتي">💌</button>'
+      + '<input type="file" id="cvFile" accept="image/*" style="display:none">'
+      + '</div>'
+      + '<div class="cv-hint" id="cvHint">صور وفويس نوتس لمدة دقيقة — بتتخزن بأمان وبيتمسحوا تلقائي بعد شهرين 🔒</div></div>';
+    document.getElementById('cvBack').addEventListener('click', function(){ openWith = null; refreshList(); });
+    document.getElementById('cvGo').addEventListener('click', sendText);
+    document.getElementById('cvIn').addEventListener('keydown', function(e){ if(e.key === 'Enter') sendText(); });
+    document.getElementById('cvPic').addEventListener('click', function(){ document.getElementById('cvFile').click(); });
+    document.getElementById('cvFile').addEventListener('change', sendPhoto);
+    document.getElementById('cvMic').addEventListener('click', toggleRec);
+    loadMsgs();
+  }
+
+  /* ---- send text ---- */
+  function sendText(){
+    var inp = document.getElementById('cvIn');
+    var t = (inp.value || '').trim();
+    var m = me();
+    if(!t || !m || !openWith) return;
+    inp.value = '';
+    sb().from('messages').insert({sender: m.id, recipient: openWith.id, body: t, kind: 'text'}).then(function(r){
+      if(r.error){ toast99('الرسالة مرسلتش — جربي تاني 📡'); inp.value = t; return; }
+      loadMsgs();
+    });
+  }
+
+  /* ---- send photo (compressed) ---- */
+  function sendPhoto(ev){
+    var f = ev.target.files && ev.target.files[0];
+    ev.target.value = '';
+    if(!f) return;
+    var hint = document.getElementById('cvHint');
+    var img = new Image();
+    var url = URL.createObjectURL(f);
+    img.onload = function(){
+      URL.revokeObjectURL(url);
+      var max = 900, w = img.width, h = img.height;
+      if(w > max || h > max){ var s = max / Math.max(w, h); w = Math.round(w * s); h = Math.round(h * s); }
+      var cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+      cv.getContext('2d').drawImage(img, 0, 0, w, h);
+      var q = 0.82;
+      (function tryQ(){
+        cv.toBlob(function(blob){
+          if(!blob){ toast99('الصورة متصلحتش 📡'); return; }
+          if(blob.size > 380 * 1024 && q > 0.4){ q -= 0.15; tryQ(); return; }
+          upload(blob, 'jpg', 'image');
+        }, 'image/jpeg', q);
+      })();
+    };
+    img.onerror = function(){ URL.revokeObjectURL(url); toast99('الملف ده مش صورة 📡'); };
+    img.src = url;
+    if(hint) hint.textContent = 'بيتم رفع الصورة... ⏳';
+  }
+
+  /* ---- voice note ---- */
+  function toggleRec(){
+    var btn = document.getElementById('cvMic');
+    var hint = document.getElementById('cvHint');
+    if(rec){ stopRec(); return; }
+    if(!navigator.mediaDevices || !window.MediaRecorder){ toast99('المتصفح ده مش بيدعم تسجيل صوت 🎤'); return; }
+    navigator.mediaDevices.getUserMedia({audio: true}).then(function(stream){
+      recChunks = [];
+      rec = new MediaRecorder(stream);
+      rec.ondataavailable = function(e){ if(e.data && e.data.size) recChunks.push(e.data); };
+      rec.onstop = function(){
+        stream.getTracks().forEach(function(t){ t.stop(); });
+        var dur = (Date.now() - recStart) / 1000;
+        var blob = new Blob(recChunks, {type: rec.mimeType || 'audio/webm'});
+        rec = null;
+        if(btn) btn.classList.remove('rec');
+        if(dur < 1){ if(hint) hint.textContent = 'الفويس قصير أوي — سجلي تاني 🎤'; return; }
+        if(blob.size > 2 * 1024 * 1024){ toast99('الفويس كبير أوي — خليه أقصر 🎤'); return; }
+        upload(blob, 'webm', 'audio');
+      };
+      recStart = Date.now();
+      rec.start(250);
+      btn.classList.add('rec');
+      if(hint) hint.textContent = 'بتسجلي... اضغطي 🎤 تاني عشان تبعتي (أقصى حاجة دقيقة)';
+      recTimer = setTimeout(function(){ if(rec) stopRec(); }, 60000);
+    }).catch(function(){ toast99('محتاجين إذن المايك من المتصفح 🎤'); });
+  }
+  function stopRec(){ if(recTimer){ clearTimeout(recTimer); recTimer = null; } if(rec && rec.state !== 'inactive') rec.stop(); }
+
+  /* ---- upload + insert ---- */
+  function upload(blob, ext, kind){
+    var m = me(); if(!m || !openWith) return;
+    var hint = document.getElementById('cvHint');
+    var path = m.id + '/' + openWith.id + '/' + Date.now() + '.' + ext;
+    sb().storage.from(BUCKET).upload(path, blob, {contentType: blob.type || (kind === 'image' ? 'image/jpeg' : 'audio/webm'), cacheControl: '3600'}).then(function(r){
+      if(r.error){ toast99('الرفع وقف — جربي تاني 📡'); if(hint) hint.textContent = ''; return; }
+      sb().from('messages').insert({sender: m.id, recipient: openWith.id, body: '', kind: kind, media_path: path}).then(function(rr){
+        if(rr.error){ toast99('الرسالة مرسلتش — جربي تاني 📡'); return; }
+        if(hint) hint.textContent = 'صور وفويس نوتس لمدة دقيقة — بتتخزن بأمان وبيتمسحوا تلقائي بعد شهرين 🔒';
+        loadMsgs();
+      });
+    });
+  }
+
+  function toast99(msg){
+    try { if(window.toast) { window.toast(msg); return; } } catch(e){}
+    var t = document.createElement('div');
+    t.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#2d2450;border:1px solid rgba(212,175,55,.5);color:#f4e3ae;padding:10px 18px;border-radius:12px;z-index:10002;font-size:.88rem';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function(){ t.remove(); }, 3200);
+  }
+
+  /* ---- realtime ---- */
+  function subscribe(){
+    var m = me(); if(!m || chan) return;
+    chan = sb().channel('lingua-chatlist').on('postgres_changes',
+      {event: 'INSERT', schema: 'public', table: 'messages', filter: 'recipient=eq.' + m.id},
+      function(p){
+        if(openWith && p.new && p.new.sender === openWith.id){ loadMsgs(); }
+        else { loadConvos().then(renderList); toast99('رسالة جديدة 💬💜'); }
+      }).subscribe();
+  }
+
+  function refreshList(){ loadConvos().then(renderList); }
+
+  /* ---- boot ---- */
+  function boot(){
+    if(location.hash === '#chatlist') refreshList();
+    window.addEventListener('hashchange', function(){
+      if(location.hash === '#chatlist'){ openWith = null; refreshList(); subscribe(); }
+    });
+    subscribe();
+    var tries = 0;
+    var iv = setInterval(function(){
+      tries++;
+      if(me()){ subscribe(); if(location.hash === '#chatlist') refreshList(); clearInterval(iv); }
+      else if(tries > 20) clearInterval(iv);
+    }, 1500);
+    /* re-render after auth events (login/logout) */
+    try {
+      var _oa = window.__onAuth;
+      window.__onAuth = function(){ if(typeof _oa === 'function') _oa(); setTimeout(function(){ subscribe(); if(location.hash === '#chatlist') refreshList(); }, 900); };
+    } catch(e){}
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+window.LINGUA_VERSION='v99';
