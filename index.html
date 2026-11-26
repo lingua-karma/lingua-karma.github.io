@@ -2084,6 +2084,29 @@
     <div class="food-words" id="fwGrid"></div>
   </div>
 </section>
+<section id="stories">
+  <h2 class="sec-title">✦ قصص قصيرة ✦</h2>
+  <p class="sec-sub">اقرئي ودوسي على أي جملة تشوفي ترجمتها 📚✨</p>
+  <div class="tabs lang-tabs lib-langs" id="storyLangs"></div>
+  <div id="storyList"></div>
+</section>
+<section id="color">
+  <h2 class="sec-title">✦ ركن التلوين ✦</h2>
+  <p class="sec-sub">اختاري لون ودوسي على أي جزء من الرسمة 🎨</p>
+  <div class="palette" id="palette"></div>
+  <div class="color-stage" id="colorStage"></div>
+  <div style="text-align:center;margin-top:10px"><button class="k-dish" id="colorReset">🔄 من الأول</button></div>
+</section>
+<section id="capitals">
+  <h2 class="sec-title">✦ عواصم ومعلومات ✦</h2>
+  <p class="sec-sub">اختبري نفسك في عواصم الدول ومعلومات عامة 🌍</p>
+  <div class="tabs lang-tabs" id="cqTabs">
+    <button class="tab lang-tab active" data-cq="cap"><span class="ln">🏛️ عواصم</span></button>
+    <button class="tab lang-tab" data-cq="gk"><span class="ln">🧠 معلومات عامة</span></button>
+  </div>
+  <div class="cq-box" id="cqBox"></div>
+</section>
+
 
 
 <style>
@@ -2465,6 +2488,27 @@
 .fw-t b{display:block;font-size:.88rem}
 .fw-t span{font-size:.72rem;color:var(--muted)}
 .fw-say{margin-inline-start:auto;background:none;border:none;font-size:1.1rem;cursor:pointer}
+
+
+/* v19: stories, coloring, capitals */
+.story-card{max-width:640px;margin:0 auto 12px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px}
+.story-card h3{font-size:1rem;margin:0 0 4px;color:var(--gold2)}
+.story-meta{font-size:.7rem;color:var(--muted);margin-bottom:10px}
+.story-line{padding:8px 10px;border-radius:12px;margin-bottom:6px;background:#1a1428;cursor:pointer}
+.story-line .sl-orig{font-size:.9rem;font-weight:600}
+.story-line .sl-tr{font-size:.78rem;color:var(--muted);margin-top:3px;display:none}
+.story-line.open .sl-tr{display:block}
+.color-stage{max-width:420px;margin:0 auto;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:12px}
+.palette{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px auto;max-width:420px}
+.pal{width:34px;height:34px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:transform .15s}
+.pal.active{border-color:#fff;transform:scale(1.15)}
+.cq-box{max-width:640px;margin:0 auto;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;text-align:center}
+.cq-q{font-size:1.05rem;font-weight:700;margin-bottom:14px}
+.cq-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cq-opt{background:#1a1428;border:1px solid var(--border);border-radius:12px;padding:11px;font-size:.88rem;cursor:pointer;color:var(--ink);font-family:inherit}
+.cq-opt.right{background:#123f2a;border-color:#27ae60}
+.cq-opt.wrong{background:#3f1220;border-color:#e74c3c}
+.cq-score{font-size:.8rem;color:var(--muted);margin-top:10px}
 
 </style>
 <script>
@@ -4864,7 +4908,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
+  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
 ];
 
 /* ================= v16: free books library ================= */
@@ -5037,6 +5081,143 @@ const MENU = [
     document.getElementById('foodCook').style.display = b.dataset.food==='cook' ? '' : 'none';
     document.getElementById('foodWords').style.display = b.dataset.food==='words' ? '' : 'none';
   });
+})();
+
+
+/* ================= v19: stories, coloring, capitals ================= */
+(function(){
+  /* ---- stories ---- */
+  var STORIES = {
+    en: {name:'إنجليزي 🇬🇧', list:[
+      {t:'The Lost Cat', lvl:'مبتدئ', lines:[['Lina has a small cat.','لينا عندها قطة صغيرة.'],['The cat is white and fluffy.','القطة بيضاء وناعمة.'],['One day, the cat runs away.','في يوم، القطة هربت.'],['Lina looks everywhere: under the bed, in the garden.','لينا دوّرت في كل حتة: تحت السرير، في الجنينة.'],['She hears a sound from the kitchen.','سمعت صوت جاي من المطبخ.'],['The cat is sleeping in a box!','القطة نايمة في كرتونة!'],['Lina is happy again.','لينا فرحت تاني.']]},
+      {t:'A Rainy Day', lvl:'مبتدئ', lines:[['It is raining today.','النهاردة الجو بيمطر.'],['Sam cannot play outside.','سام مش قادر يلعب بره.'],['He reads a book and drinks hot chocolate.','قعد يقرا كتاب ويشرب هوت شوكليت.'],['The rain stops in the evening.','المطر وقف بالليل.'],['A rainbow appears in the sky.','قوس قزح ظهر في السما.'],['Sam smiles and takes a photo.','سام ابتسم وصوّرها.']]}
+    ]},
+    fr: {name:'فرنسي 🇫🇷', list:[
+      {t:'Le Petit Marché', lvl:'مبتدئ', lines:[["Marie va au marché le samedi.",'ماري بتروح السوق يوم السبت.'],['Elle achète des pommes rouges.','بتشتري تفاح أحمر.'],['Le fromage sent très bon.','ريحة الجبنة جميلة جدًا.'],['Elle parle avec le vendeur.','بتتكلم مع البائع.'],['Il lui donne une orange en cadeau.','ادهالها برتقالة هدية.'],['Marie rentre à la maison contente.','ماري رجعت البيت مبسوطة.']]}
+    ]},
+    de: {name:'ألماني 🇩🇪', list:[
+      {t:'Der Hund Max', lvl:'مبتدئ', lines:[['Max ist ein großer Hund.','ماكس كلب كبير.'],['Er wohnt bei Familie Braun.','عايش مع عيلة براون.'],['Jeden Morgen geht er spazieren.','كل صباح بيتمشى.'],['Er liebt den Park und den See.','بيحب الحديقة والبحيرة.'],['Am Sonntag spielt er mit den Kindern.','يوم الحد بيلعب مع العيال.'],['Max ist sehr glücklich.','ماكس مبسوط جدًا.']]}
+    ]},
+    zh: {name:'صيني 🇨🇳', list:[
+      {t:'我的朋友 (صاحبتي)', lvl:'مبتدئ', lines:[['我有一个好朋友。','عندي صاحبة كويسة.'],['她叫小梅。','اسمها شياو مي.'],['她很高，也很友好。','هي طويلة ولطيفة.'],['我们一起喝茶。','بنشرب شاي سوا.'],['今天天气很好。','النهاردة الجو حلو.'],['我们很开心。','إحنا مبسوطين.']]}
+    ]},
+    ko: {name:'كوري 🇰🇷', list:[
+      {t:'나의 하루 (يومي)', lvl:'مبتدئ', lines:[['아침에 일어나요.','بصحى الصبح.'],['밥을 먹어요.','باكل الأكل.'],['학교에 가요.','بروح المدرسة.'],['친구를 만나요.','بقابل صاحبتي.'],['집에 와요.','برجع البيت.'],['일찍 자요.','بنام بدري.']]}
+    ]}
+  };
+  var sLang='en';
+  var st=document.getElementById('storyLangs'), sl=document.getElementById('storyList');
+  if(st){
+    st.innerHTML = Object.keys(STORIES).map(function(k){
+      return '<button class="tab lang-tab'+(k===sLang?' active':'')+'" data-sl="'+k+'"><span class="ln">'+STORIES[k].name+'</span></button>';
+    }).join('');
+    function esc(t){ var d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+    function renderStories(){
+      sl.innerHTML = STORIES[sLang].list.map(function(story){
+        return '<div class="story-card"><h3>'+esc(story.t)+'</h3><div class="story-meta">'+story.lvl+' · '+story.lines.length+' جمل</div>'
+          + story.lines.map(function(l){ return '<div class="story-line"><div class="sl-orig">'+esc(l[0])+'</div><div class="sl-tr">'+esc(l[1])+'</div></div>'; }).join('') + '</div>';
+      }).join('');
+    }
+    st.addEventListener('click', function(e){
+      var b=e.target.closest('[data-sl]'); if(!b) return;
+      sLang=b.dataset.sl;
+      st.querySelectorAll('.lang-tab').forEach(function(t){ t.classList.toggle('active', t===b); });
+      renderStories();
+    });
+    sl.addEventListener('click', function(e){
+      var l=e.target.closest('.story-line'); if(l) l.classList.toggle('open');
+    });
+    renderStories();
+  }
+
+  /* ---- coloring ---- */
+  var PALS = ['#ff5c8a','#f5a623','#f7e76a','#7bc950','#2dd4bf','#4cc9f0','#7c5cff','#c86bfa','#ffffff','#8d6e63'];
+  var curColor = PALS[0];
+  var pal=document.getElementById('palette'), cst=document.getElementById('colorStage');
+  if(pal){
+    pal.innerHTML = PALS.map(function(c,i){ return '<div class="pal'+(i===0?' active':'')+'" data-c="'+c+'" style="background:'+c+'"></div>'; }).join('');
+    var CSVG = '<svg viewBox="0 0 200 200" width="100%" style="max-width:340px;display:block;margin:0 auto">'
+      + '<circle class="czone" cx="100" cy="60" r="34" fill="#fff" stroke="#8a7fb5" stroke-width="2.5"/>'
+      + '<circle cx="88" cy="54" r="4" fill="#1a1225"/><circle cx="112" cy="54" r="4" fill="#1a1225"/>'
+      + '<path d="M88 68 q12 10 24 0" stroke="#1a1225" stroke-width="3" fill="none" stroke-linecap="round"/>'
+      + '<path class="czone" d="M66 94 q34 -18 68 0 l10 60 q-44 16 -88 0 z" fill="#fff" stroke="#8a7fb5" stroke-width="2.5"/>'
+      + '<path class="czone" d="M66 94 q-24 4 -30 26 l18 8 q6 -18 12 -34z" fill="#fff" stroke="#8a7fb5" stroke-width="2.5"/>'
+      + '<path class="czone" d="M134 94 q24 4 30 26 l-18 8 q-6 -18 -12 -34z" fill="#fff" stroke="#8a7fb5" stroke-width="2.5"/>'
+      + '<path class="czone" d="M76 156 q-4 22 -8 30 h22 q4 -14 6 -30z" fill="#fff" stroke="#8a7fb5" stroke-width="2.5"/>'
+      + '<path class="czone" d="M124 156 q4 22 8 30 h-22 q-4 -14 -6 -30z" fill="#fff" stroke="#8a7fb5" stroke-width="2.5"/>'
+      + '<ellipse class="czone" cx="100" cy="176" rx="26" ry="8" fill="#fff" stroke="#8a7fb5" stroke-width="2.5"/>'
+      + '<circle class="czone" cx="46" cy="30" r="12" fill="#fff" stroke="#8a7fb5" stroke-width="2.5"/>'
+      + '<circle class="czone" cx="158" cy="26" r="9" fill="#fff" stroke="#8a7fb5" stroke-width="2.5"/>'
+      + '</svg>';
+    cst.innerHTML = CSVG;
+    pal.addEventListener('click', function(e){
+      var p=e.target.closest('.pal'); if(!p) return;
+      curColor=p.dataset.c;
+      pal.querySelectorAll('.pal').forEach(function(x){ x.classList.toggle('active', x===p); });
+    });
+    cst.addEventListener('click', function(e){
+      var z=e.target.closest('.czone'); if(!z) return;
+      z.setAttribute('fill', curColor);
+    });
+    document.getElementById('colorReset').addEventListener('click', function(){
+      cst.querySelectorAll('.czone').forEach(function(z){ z.setAttribute('fill','#fff'); });
+    });
+  }
+
+  /* ---- capitals & GK quiz ---- */
+  var CQ = {
+    cap: [
+      ['ما عاصمة فرنسا؟ 🇫🇷',['باريس','ليون','مارسيليا','نيس'],0],
+      ['ما عاصمة ألمانيا؟ 🇩🇪',['ميونخ','برلين','هامبورج','كولن'],1],
+      ['ما عاصمة الصين؟ 🇨🇳',['شنغهاي','هونج كونج','بكين','جوانزو'],2],
+      ['ما عاصمة كوريا الجنوبية؟ 🇰🇷',['بوسان','إنتشون','دايجو','سول'],3],
+      ['ما عاصمة بريطانيا؟ 🇬🇧',['لندن','مانشستر','ليفربول','برمنغهام'],0],
+      ['ما عاصمة اليابان؟ 🇯🇵',['أوساكا','طوكيو','كيوتو','ناجويا'],1],
+      ['ما عاصمة إيطاليا؟ 🇮🇹',['ميلان','فينيسيا','روما','نابولي'],2],
+      ['ما عاصمة إسبانيا؟ 🇪🇸',['برشلونة','إشبيلية','فالنسيا','مدريد'],3],
+      ['ما عاصمة أمريكا؟ 🇺🇸',['نيويورك','واشنطن','لوس أنجلوس','شيكاجو'],1],
+      ['ما عاصمة تركيا؟ 🇹🇷',['إسطنبول','أنطاليا','أنقرة','إزمير'],2]
+    ],
+    gk: [
+      ['كام دولة بتتكلم الإنجليزي كلغة رسمية تقريبًا؟',['حوالي ٦٠','حوالي ١٠','حوالي ٢٥','حوالي ١٠٠'],0],
+      ['إيه أكتر لغة متكلمة في العالم بعدد الناطقين الأصليين؟',['الإنجليزي','الصيني (ماندرين)','الهندي','الإسباني'],1],
+      ['الأبجدية الكورية (الهانغل) اتعملت امتى؟',['القرن ١٥','القرن ٥','القرن ١٩','القرن ١'],0],
+      ['كام حرف في الأبجدية الألمانية؟',['٢٦','٢٨','٣٠','٣٢'],2],
+      ['إيه اللغة الرسمية للأمم المتحدة من دول؟',['الألماني','الياباني','الصيني','الكوري'],2],
+      ['كلمة "Bonjour" معناها إيه؟',['مساء الخير','صباح الخير','تصبح على خير','مع السلامة'],1],
+      ['الأرقام الصينية ١ ٢ ٣ بتتكتب:',['一二三','天地人','日月星','大小中'],0],
+      ['أشهر برج في باريس اسمه إيه؟',['برج بيزا','برج إيفل','برج لندن','برج خليفة'],1]
+    ]
+  };
+  var cqMode='cap', cqIdx=0, cqScore=0;
+  var cqt=document.getElementById('cqTabs'), cqb=document.getElementById('cqBox');
+  function renderCQ(feedback){
+    var Q = CQ[cqMode][cqIdx];
+    cqb.innerHTML = '<div class="cq-q">'+Q[0]+'</div>'
+      + '<div class="cq-opts">'+Q[1].map(function(o,i){
+          var cls='cq-opt';
+          if(feedback!=null){ if(i===Q[2]) cls+=' right'; else if(i===feedback) cls+=' wrong'; }
+          return '<button class="'+cls+'" data-opt="'+i+'">'+o+'</button>';
+        }).join('')+'</div>'
+      + '<div class="cq-score">سؤال '+(cqIdx+1)+' / '+CQ[cqMode].length+' · نقطتك: '+cqScore+' ⭐</div>';
+  }
+  cqb.addEventListener('click', function(e){
+    var b=e.target.closest('[data-opt]'); if(!b) return;
+    var pick=+b.dataset.opt, Q=CQ[cqMode][cqIdx];
+    if(pick===Q[2]){ cqScore++; try{ addPoints(3); }catch(e){} }
+    renderCQ(pick===Q[2]?null:pick);
+    setTimeout(function(){
+      cqIdx=(cqIdx+1)%CQ[cqMode].length;
+      renderCQ(null);
+    }, 900);
+  });
+  cqt.addEventListener('click', function(e){
+    var b=e.target.closest('[data-cq]'); if(!b) return;
+    cqMode=b.dataset.cq; cqIdx=0; cqScore=0;
+    cqt.querySelectorAll('.lang-tab').forEach(function(t){ t.classList.toggle('active', t===b); });
+    renderCQ(null);
+  });
+  renderCQ(null);
 })();
 
 document.getElementById('menuGrid').innerHTML = MENU.map(function(m){
@@ -6810,7 +6991,7 @@ gbkRender();
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v17.0</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v19.0</div>
 <script>
 
 /* ================= v13: learning map, personality quiz, XO, korean ================= */
