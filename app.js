@@ -9912,10 +9912,13 @@ window.KM_POOL = [
     document.getElementById('lexList').onclick = function(){ pickExam(S.lang, S.level); };
   }
 
+  window.LINGUA_EXAM_API = { loadBank: loadBank, buildExam: buildExam, LANGS: LANGS, LEVELS: LEVELS };
+
   pickLang();
 })();
 /* ================= v96: ذكر اليوم — شريط أعلى الصفحة الرئيسية، يتغيّر كل زيارة ================= */
 (function(){
+  window.LINGUA_VERSION = 'v97';
   var ADHKAR = [
     'سُبْحَانَ اللهِ وَبِحَمْدِهِ',
     'سُبْحَانَ اللهِ الْعَظِيمِ',
@@ -9957,4 +9960,313 @@ window.KM_POOL = [
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', show);
   else show();
+})();
+/* ================= v97: غرفة مذاكرة جماعية — نفس الامتحان لايف مع الأصحاب ================= */
+(function(){
+  var sec = document.getElementById('lexams');
+  if(!sec) return;
+  var box = document.createElement('div');
+  box.id = 'roomBox';
+  var lexBox = document.getElementById('lexBox');
+  sec.insertBefore(box, lexBox);
+
+  var SUPA_URL = 'https://yzzlgalxjaaevmytdazf.supabase.co';
+  var SUPA_KEY = 'sb_publishable_EmbKVWREHSs3sZ_nBKFyqg_zxv3Z38-';
+
+  var S = { st:'idle', code:null, host:false, uid:null, name:'', chan:null,
+            lang:null, level:null, examNo:1, qs:null, qi:0, correct:0, answered:0,
+            t0:0, done:false, ms:0, players:{}, retry:0 };
+
+  function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  function uid(){ return 'u' + Math.random().toString(36).slice(2,10); }
+  function myName(){
+    var n = '';
+    try { n = localStorage.getItem('lingua_duel_name') || ''; } catch(e){}
+    return n.trim();
+  }
+  function ensureName(){
+    var n = myName();
+    if(n) return n;
+    n = (prompt('اكتبي اسمك عشان صحابك يشوفوكي في الغرفة:') || '').trim().slice(0,20);
+    if(n){ try { localStorage.setItem('lingua_duel_name', n); } catch(e){} }
+    return n || 'ضيفة';
+  }
+  function mkCode(){
+    var abc = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789', c = '';
+    for(var i=0;i<6;i++) c += abc[Math.floor(Math.random()*abc.length)];
+    return c;
+  }
+  function toast(t){
+    if(window.toast) { window.toast(t); return; }
+    var d = document.createElement('div');
+    d.style.cssText = 'position:fixed;bottom:90px;right:16px;left:16px;background:#2a1f3d;border:1px solid rgba(212,175,55,.4);border-radius:14px;padding:12px;text-align:center;z-index:9999;font-weight:700';
+    d.textContent = t; document.body.appendChild(d);
+    setTimeout(function(){ d.remove(); }, 2600);
+  }
+
+  /* ---------- Supabase lazy ---------- */
+  var sb = null;
+  function withSb(cb){
+    if(sb) return cb();
+    function go(){ sb = window.supabase.createClient(SUPA_URL, SUPA_KEY); cb(); }
+    if(window.supabase && window.supabase.createClient) return go();
+    var sc = document.createElement('script');
+    sc.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+    sc.onload = go;
+    sc.onerror = function(){ toast('الغرف محتاجة نت — جربي لما يرجع 📡'); };
+    document.head.appendChild(sc);
+  }
+
+  /* ---------- presence ---------- */
+  function me(){ return { name: S.name, host: S.host, lang: S.lang, level: S.level,
+    started: S.st === 'playing' || S.st === 'done', examNo: S.examNo,
+    answered: S.answered, correct: S.correct, done: S.done, ms: S.ms, t: Date.now() }; }
+  function track(){ if(S.chan){ try { S.chan.track(me()); } catch(e){} } }
+
+  function connect(code, isHost){
+    S.code = code; S.host = isHost; S.st = 'lobby';
+    S.chan = sb.channel('study-' + code, { config: { presence: { key: S.uid } } });
+    var myChan = S.chan;
+    S.chan.on('presence', { event: 'sync' }, function(){
+      if(S.chan !== myChan) return;
+      var st = myChan.presenceState(), ps = {};
+      Object.keys(st).forEach(function(k){
+        var p = st[k] && st[k][0];
+        if(p && p.name) ps[k] = p;
+      });
+      S.players = ps;
+      /* late joiner: adopt host settings */
+      if(!S.host && S.st === 'lobby'){
+        Object.keys(ps).forEach(function(k){
+          var p = ps[k];
+          if(p.host && p.lang && p.level){ S.lang = p.lang; S.level = p.level; S.examNo = p.examNo || 1; }
+          if(p.host && p.started && p.examNo && S.st === 'lobby'){ S.lang = p.lang; S.level = p.level; S.examNo = p.examNo; }
+        });
+      }
+      if(S.st === 'lobby') renderLobby();
+      else renderBoard();
+    });
+    S.chan.on('broadcast', { event: 'rm' }, function(ev){
+      if(S.chan !== myChan) return;
+      var p = ev.payload || {};
+      if(p.by === S.uid) return;
+      if(p.t === 'start' && S.st === 'lobby'){
+        S.lang = p.lang; S.level = p.level; S.examNo = p.examNo;
+        beginExam();
+      }
+      if(p.t === 'exam' && !S.host && S.st === 'lobby'){ S.examNo = p.examNo; renderLobby(); }
+    });
+    S.chan.subscribe(function(status){
+      if(S.chan !== myChan) return;
+      if(status === 'SUBSCRIBED'){ S.retry = 0; track(); if(S.st === 'lobby') renderLobby(); }
+      if(status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED'){
+        if(S.retry++ < 4){
+          setTimeout(function(){ if(S.chan === myChan && S.code) connect(S.code, S.host); }, 2500 * S.retry);
+        }
+      }
+    });
+  }
+  function bcast(p){ p.by = S.uid; if(S.chan){ try { S.chan.send({ type:'broadcast', event:'rm', payload:p }); } catch(e){} } }
+
+  /* ---------- شاشات ---------- */
+  function head(txt){ return '<div class="chef-head"><button class="engx-back" id="rmBack">‹ خروج</button><span>' + txt + '</span></div>'; }
+  function leave(){
+    if(S.chan){ try { S.chan.unsubscribe(); } catch(e){} }
+    S.chan = null; S.st = 'idle'; S.code = null; S.done = false; S.qi = 0; S.correct = 0; S.answered = 0;
+    renderHome();
+  }
+
+  function renderHome(){
+    box.innerHTML = '<div class="rm-cta"><button class="btn gold" id="rmOpen">🛋️ غرفة مذاكرة جماعية — نفس الامتحان لايف مع صحابك</button></div>';
+    document.getElementById('rmOpen').onclick = renderEntry;
+  }
+
+  function renderEntry(){
+    box.innerHTML = head('🛋️ غرفة مذاكرة')
+      + '<div class="rm-panel">'
+      + '<div class="chef-title" style="font-size:1rem">اعملي غرفة جديدة</div>'
+      + '<div class="rm-row"><select id="rmLang" class="rm-sel"></select><select id="rmLevel" class="rm-sel">'
+      + '<option value="easy">سهل 🌱</option><option value="medium">متوسط 💪</option><option value="hard">صعب 🔥</option></select></div>'
+      + '<button class="btn gold" id="rmCreate" style="width:100%">إنشاء الغرفة ✦</button>'
+      + '<div class="rm-or">أو</div>'
+      + '<div class="chef-title" style="font-size:1rem">ادخلي غرفة صاحبتك</div>'
+      + '<div class="rm-row"><input id="rmCode" class="rm-sel" placeholder="كود الغرفة" maxlength="6" style="text-align:center;letter-spacing:2px"><button class="btn" id="rmJoin">دخول</button></div>'
+      + '</div>';
+    document.getElementById('rmBack').onclick = leave;
+    var API = window.LINGUA_EXAM_API;
+    document.getElementById('rmLang').innerHTML = API.LANGS.map(function(l){
+      return '<option value="' + l.id + '">' + l.flag + ' ' + l.name + '</option>';
+    }).join('');
+    document.getElementById('rmCreate').onclick = function(){
+      S.name = ensureName();
+      S.lang = document.getElementById('rmLang').value;
+      S.level = document.getElementById('rmLevel').value;
+      box.innerHTML = '<div class="kara-note">بنفتح الغرفة... 🛋️</div>';
+      withSb(function(){ connect(mkCode(), true); });
+    };
+    document.getElementById('rmJoin').onclick = function(){
+      var c = document.getElementById('rmCode').value.trim().toUpperCase();
+      if(c.length < 4){ toast('اكتبي كود الغرفة الأول 🔑'); return; }
+      S.name = ensureName();
+      box.innerHTML = '<div class="kara-note">بندخل الغرفة... 🚪</div>';
+      withSb(function(){ connect(c, false); });
+    };
+  }
+
+  function inviteUrl(){ return 'https://lingua-karma.github.io/?room=' + S.code; }
+
+  function renderLobby(){
+    var API = window.LINGUA_EXAM_API;
+    var lang = API.LANGS.filter(function(l){ return l.id === S.lang; })[0];
+    var lvName = API.LEVELS.filter(function(x){ return x.id === S.level; })[0].n;
+    var ps = Object.keys(S.players).map(function(k){ return S.players[k]; });
+    var html = head('🛋️ غرفة ' + S.code)
+      + '<div class="rm-panel">'
+      + '<div class="rm-roominfo">' + (lang ? lang.flag + ' ' + lang.name : '...') + ' — ' + (S.host ? lvName : 'المستوى بيتحدد من المضيفة') + '</div>'
+      + '<div class="rm-codebox"><span>الكود:</span> <b>' + S.code + '</b> <button class="btn ghost sm" id="rmCopy">انسخي الدعوة 📤</button></div>'
+      + '<div class="chef-title" style="font-size:.95rem">اللي في الغرفة (' + ps.length + ')</div>'
+      + '<div class="rm-players">' + ps.map(function(p){
+          return '<span class="rm-chip">' + esc(p.name) + (p.host ? ' 👑' : '') + '</span>';
+        }).join('') + '</div>';
+    if(S.host){
+      html += '<div class="rm-row" style="margin-top:12px"><label class="rm-lbl">رقم الامتحان:</label><input id="rmExamNo" type="number" min="1" max="40" value="' + S.examNo + '" class="rm-sel" style="width:70px;text-align:center"></div>'
+        + '<button class="btn gold" id="rmStart" style="width:100%">ابدأوا الامتحان 🚀</button>';
+    } else {
+      html += '<div class="kara-note" style="margin-top:10px">مستنية المضيفة تبدأ... ⏳</div>';
+    }
+    box.innerHTML = html + '</div>';
+    document.getElementById('rmBack').onclick = leave;
+    document.getElementById('rmCopy').onclick = function(){
+      var txt = 'تعالي نذاكر سوا على لينجوا 📝 غرفة مذاكرة لايف — الكود: ' + S.code + '\n' + inviteUrl();
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(function(){ toast('اتنسخت الدعوة — ابعتيها لصحابك 💌'); }, function(){ toast(txt); });
+      } else toast(txt);
+    };
+    if(S.host){
+      document.getElementById('rmExamNo').onchange = function(e){
+        S.examNo = Math.min(40, Math.max(1, +e.target.value || 1));
+        track(); bcast({ t:'exam', examNo:S.examNo });
+      };
+      document.getElementById('rmStart').onclick = function(){
+        bcast({ t:'start', lang:S.lang, level:S.level, examNo:S.examNo });
+        beginExam();
+      };
+    }
+  }
+
+  function beginExam(){
+    var API = window.LINGUA_EXAM_API;
+    var lang = API.LANGS.filter(function(l){ return l.id === S.lang; })[0];
+    API.loadBank(S.lang, function(bank){
+      var qs = API.buildExam(bank, S.level, S.examNo, lang).filter(function(q){ return q.type !== 'essay'; });
+      /* passage يتفك لـ٣ أسئلة */
+      var flat = [];
+      qs.forEach(function(q){
+        if(q.type === 'passage'){
+          q.qs.forEach(function(qq, i){
+            flat.push({ type:'mcq', tag:'قطعة 📜', passage:(i === 0 ? q : null), q:qq.q, opts:qq.opts, a:qq.a });
+          });
+        } else flat.push(q);
+      });
+      S.qs = flat; S.qi = 0; S.correct = 0; S.answered = 0; S.done = false; S.ms = 0;
+      S.t0 = Date.now(); S.st = 'playing';
+      track(); renderQ();
+    });
+  }
+
+  function renderQ(){
+    var q = S.qs[S.qi];
+    if(!q) return finishExam();
+    var html = head('🛋️ غرفة ' + S.code)
+      + '<div class="rm-live" id="rmBoard"></div>'
+      + '<div class="rm-progress">سؤال ' + (S.qi + 1) + ' / ' + S.qs.length + ' — ' + q.tag + '</div>'
+      + '<div class="rm-bar"><span style="width:' + Math.round(S.qi / S.qs.length * 100) + '%"></span></div>'
+      + (q.passage ? '<div class="engx-pass"><div class="engx-pass-t">📜 ' + esc(q.passage.title) + '</div><div class="engx-pass-x">' + esc(q.passage.text) + '</div></div>' : '')
+      + '<div class="engx-q">' + esc(q.q).replace(/\n/g, '<br>') + '</div>'
+      + '<div class="engx-opts">' + q.opts.map(function(o, i){
+          return '<button class="engx-opt" data-i="' + i + '">' + esc(o) + '</button>';
+        }).join('') + '</div>';
+    box.innerHTML = html;
+    document.getElementById('rmBack').onclick = leave;
+    renderBoard();
+    box.querySelectorAll('.engx-opt').forEach(function(b){
+      b.onclick = function(){
+        if(b.classList.contains('done')) return;
+        var pickI = +b.dataset.i, ok = pickI === q.a;
+        S.answered++; if(ok) S.correct++;
+        box.querySelectorAll('.engx-opt').forEach(function(x){
+          x.classList.add('done');
+          if(+x.dataset.i === q.a) x.classList.add('ok');
+        });
+        if(!ok) b.classList.add('no');
+        track();
+        setTimeout(function(){ S.qi++; renderQ(); }, 750);
+      };
+    });
+  }
+
+  function renderBoard(){
+    var el = document.getElementById('rmBoard');
+    if(!el) return;
+    var ps = Object.keys(S.players).map(function(k){ return S.players[k]; });
+    ps.sort(function(a, b){ return (b.correct - a.correct) || ((a.ms || 9e9) - (b.ms || 9e9)); });
+    el.innerHTML = ps.map(function(p, i){
+      return '<span class="rm-chip' + (p.name === S.name ? ' me' : '') + '">' + (p.done ? '🏁 ' : '') + esc(p.name) + ' — ' + (p.correct || 0) + '✓</span>';
+    }).join('');
+  }
+
+  function finishExam(){
+    S.done = true; S.ms = Date.now() - S.t0; S.st = 'done';
+    track();
+    var ps = Object.keys(S.players).map(function(k){ return S.players[k]; });
+    ps = ps.filter(function(p){ return p.done; });
+    ps.sort(function(a, b){ return (b.correct - a.correct) || ((a.ms || 9e9) - (b.ms || 9e9)); });
+    var total = S.qs.length;
+    var rank = ps.findIndex(function(p){ return p.name === S.name && p.ms === S.ms; });
+    if(rank < 0) rank = ps.findIndex(function(p){ return p.name === S.name; });
+    var medals = ['🥇','🥈','🥉'];
+    try {
+      if(window.awardPoints){
+        if(rank === 0 && ps.length > 1) awardPoints(25, 'كسبتي غرفة المذاكرة 🏆');
+        else awardPoints(10, 'غرفة مذاكرة 🛋️');
+      }
+    } catch(e){}
+    box.innerHTML = head('🛋️ غرفة ' + S.code)
+      + '<div class="chef-title">خلصتي! ' + S.correct + ' / ' + total + ' صح ✅</div>'
+      + '<div class="rm-podium">' + ps.map(function(p, i){
+          return '<div class="rm-row2' + (p.name === S.name ? ' me' : '') + '"><span>' + (medals[i] || (i + 1) + '.') + ' ' + esc(p.name) + '</span><span>' + p.correct + '✓ — ' + Math.round((p.ms || 0) / 1000) + ' ث</span></div>';
+        }).join('') + '</div>'
+      + '<div class="kara-note" style="margin-top:8px">لو لسه حد بيلعب هيتضاف للترتيب أول بأول ✨</div>'
+      + '<div class="engx-acts"><button class="btn" id="rmAgain">غرفة جديدة 🔄</button><button class="btn ghost" id="rmExit">خروج</button></div>';
+    document.getElementById('rmBack').onclick = leave;
+    document.getElementById('rmAgain').onclick = leave;
+    document.getElementById('rmExit').onclick = leave;
+    /* الترتيب يتحدّث مع كل presence sync عبر renderBoard */
+    var boardHost = document.createElement('div');
+    boardHost.id = 'rmBoard'; boardHost.className = 'rm-live';
+  }
+
+  /* ---------- deep link ?room=CODE ---------- */
+  function bootLink(){
+    try {
+      var m = location.search.match(/[?&]room=([A-Z0-9]{4,8})/i);
+      if(!m) return;
+      S.name = ensureName();
+      location.hash = '#lexams';
+      box.innerHTML = '<div class="kara-note">بندخل غرفة ' + m[1].toUpperCase() + '... 🚪</div>';
+      withSb(function(){ connect(m[1].toUpperCase(), false); });
+      history.replaceState(null, '', location.pathname + '#lexams');
+    } catch(e){}
+  }
+
+  function init(){
+    renderHome();
+    bootLink();
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+  /* re-track لو الصفحة رجعت للواجهة */
+  document.addEventListener('visibilitychange', function(){
+    if(!document.hidden && S.chan) track();
+  });
 })();
