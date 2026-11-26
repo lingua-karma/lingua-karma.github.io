@@ -1,6 +1,6 @@
 /* Lingua service worker: network-first for HTML (updates always flow), cache-first for static assets */
-const CACHE = 'lingua-v84';
-const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png', './app.min.js?v=101'];
+const CACHE = 'lingua-v85';
+const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png', './app.min.js?v=102', './version.txt'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
@@ -20,7 +20,7 @@ self.addEventListener('fetch', e => {
     return;
   }
   if (url.origin !== location.origin) return; /* never intercept Supabase, APIs, YouTube */
-  const isHTML = e.request.mode === 'navigate' || url.pathname.endsWith('/') || url.pathname.endsWith('index.html');
+  const isHTML = e.request.mode === 'navigate' || url.pathname.endsWith('/') || url.pathname.endsWith('index.html') || url.pathname.endsWith('version.txt');
   if (isHTML) {
     e.respondWith(
       fetch(e.request).then(r => {
