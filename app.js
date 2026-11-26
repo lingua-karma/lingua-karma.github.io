@@ -7789,7 +7789,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v69';
+  window.LINGUA_VERSION = 'v70';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
@@ -8249,7 +8249,7 @@ window.KM_POOL = [
           _sb.from('gbk_messages').insert({name: n || 'زائرة', msg: m}).then(function(){});
         }
       } catch(e){}
-    });
+    }, true);
   }
 
   /* 2) owner inbox inside #karma */
