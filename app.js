@@ -10046,6 +10046,7 @@ window.KM_POOL = [
         });
       }
       if(S.st === 'lobby') renderLobby();
+      else if(S.st === 'done') renderPodium();
       else renderBoard();
     });
     S.chan.on('broadcast', { event: 'rm' }, function(ev){
@@ -10221,16 +10222,28 @@ window.KM_POOL = [
     }).join('');
   }
 
-  function finishExam(){
-    S.done = true; S.ms = Date.now() - S.t0; S.st = 'done';
-    track();
+  function podiumList(){
+    S.players[S.uid] = me();
     var ps = Object.keys(S.players).map(function(k){ return S.players[k]; });
     ps = ps.filter(function(p){ return p.done; });
     ps.sort(function(a, b){ return (b.correct - a.correct) || ((a.ms || 9e9) - (b.ms || 9e9)); });
-    var total = S.qs.length;
-    var rank = ps.findIndex(function(p){ return p.name === S.name && p.ms === S.ms; });
-    if(rank < 0) rank = ps.findIndex(function(p){ return p.name === S.name; });
+    return ps;
+  }
+  function renderPodium(){
+    var el = document.getElementById('rmPodium');
+    if(!el) return;
     var medals = ['🥇','🥈','🥉'];
+    var ps = podiumList();
+    el.innerHTML = ps.map(function(p, i){
+      return '<div class="rm-row2' + (p.name === S.name ? ' me' : '') + '"><span>' + (medals[i] || (i + 1) + '.') + ' ' + esc(p.name) + '</span><span>' + p.correct + '✓ — ' + Math.round((p.ms || 0) / 1000) + ' ث</span></div>';
+    }).join('') || '<div class="kara-note">...بيتحسب</div>';
+  }
+  function finishExam(){
+    S.done = true; S.ms = Date.now() - S.t0; S.st = 'done';
+    track();
+    var total = S.qs.length;
+    var ps = podiumList();
+    var rank = ps.findIndex(function(p){ return p.name === S.name; });
     try {
       if(window.awardPoints){
         if(rank === 0 && ps.length > 1) awardPoints(25, 'كسبتي غرفة المذاكرة 🏆');
@@ -10239,17 +10252,15 @@ window.KM_POOL = [
     } catch(e){}
     box.innerHTML = head('🛋️ غرفة ' + S.code)
       + '<div class="chef-title">خلصتي! ' + S.correct + ' / ' + total + ' صح ✅</div>'
-      + '<div class="rm-podium">' + ps.map(function(p, i){
-          return '<div class="rm-row2' + (p.name === S.name ? ' me' : '') + '"><span>' + (medals[i] || (i + 1) + '.') + ' ' + esc(p.name) + '</span><span>' + p.correct + '✓ — ' + Math.round((p.ms || 0) / 1000) + ' ث</span></div>';
-        }).join('') + '</div>'
+      + '<div class="rm-podium" id="rmPodium"></div>'
       + '<div class="kara-note" style="margin-top:8px">لو لسه حد بيلعب هيتضاف للترتيب أول بأول ✨</div>'
       + '<div class="engx-acts"><button class="btn" id="rmAgain">غرفة جديدة 🔄</button><button class="btn ghost" id="rmExit">خروج</button></div>';
     document.getElementById('rmBack').onclick = leave;
     document.getElementById('rmAgain').onclick = leave;
     document.getElementById('rmExit').onclick = leave;
-    /* الترتيب يتحدّث مع كل presence sync عبر renderBoard */
-    var boardHost = document.createElement('div');
-    boardHost.id = 'rmBoard'; boardHost.className = 'rm-live';
+    renderPodium();
+    setTimeout(renderPodium, 1500);
+    setTimeout(renderPodium, 4000);
   }
 
   /* ---------- deep link ?room=CODE ---------- */
