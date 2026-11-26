@@ -944,7 +944,9 @@ function renderScr(){
     return;
   }
   const w = scr.words[scr.i];
-  document.getElementById('scrWord').textContent = shuffled(w[0].replace(/\s/g,''));
+  document.getElementById('scrWord').innerHTML = shuffled(w[0].replace(/\s/g,'')).split('').map(function(ch, idx){
+    return '<span class="scr-tile" style="transform:rotate(' + ((idx % 2 ? -1 : 1) * (2 + idx % 3)) + 'deg)">' + ch + '</span>';
+  }).join('');
   document.getElementById('scrHint').textContent = 'المعنى: '+w[1];
   document.getElementById('scrCount').textContent = 'كلمة '+(scr.i+1)+' من '+scr.words.length;
   document.getElementById('scrInput').value = '';
@@ -8228,7 +8230,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v82';
+  window.LINGUA_VERSION = 'v83';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
