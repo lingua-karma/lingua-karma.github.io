@@ -6017,394 +6017,63 @@ gbkRender();
   boot();
 })();
 
-
-/* ================= v45: Live friend duels (تحدي لايف) ================= */
-(function(){
-  var SUPA_URL = 'https://yzzlgalxjaaevmytdazf.supabase.co';
-  var SUPA_KEY = 'sb_publishable_EmbKVWREHSs3sZ_nBKFyqg_zxv3Z38-';
-  var LIDX = {en:0, fr:1, de:2, zh:3, ko:4};
-  var LANGS = {en:'🇬🇧 إنجليزي', fr:'🇫🇷 فرنسي', de:'🇩🇪 ألماني', zh:'🇨🇳 صيني', ko:'🇰🇷 كوري'};
-  var CODE_ABC = 'ABDEFGHJKMNPQRSTWXYZ23456789';
-  var dsb = null, chan = null;
-  var S = {st:'home', code:null, lang:'en', host:false, uid:null, myName:'', opp:null, players:[],
-           qs:[], qi:0, startT:0, myAns:[], oppAns:[], myScore:0, oppScore:null, oppDone:false, timers:[]};
-
-  function esc(x){ return String(x == null ? '' : x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-  function el(id){ return document.getElementById(id); }
-  function clearTimers(){ S.timers.forEach(clearTimeout); S.timers = []; }
-  function later(fn, ms){ S.timers.push(setTimeout(fn, ms)); }
-
-  /* tiny WebAudio feedback */
-  var AC = null;
-  function beep(f, dur, type){
-    try {
-      if(!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
-      var o = AC.createOscillator(), g = AC.createGain();
-      o.type = type || 'sine'; o.frequency.value = f;
-      g.gain.setValueAtTime(0.08, AC.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, AC.currentTime + (dur || 0.15));
-      o.connect(g); g.connect(AC.destination);
-      o.start(); o.stop(AC.currentTime + (dur || 0.15));
-    } catch(e){}
-  }
-  function sndOk(){ beep(660, 0.12); later(function(){ beep(880, 0.15); }, 90); }
-  function sndNo(){ beep(220, 0.25, 'square'); }
-  function sndTick(){ beep(520, 0.07); }
-  function sndWin(){ [523, 659, 784, 1047].forEach(function(f, i){ later(function(){ beep(f, 0.18); }, i * 120); }); }
-
-  function hash(s){ var h = 2166136261; for(var i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
-  function rng(seed){ var a = seed; return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-  function mkCode(){ var c = ''; for(var i = 0; i < 6; i++) c += CODE_ABC[Math.floor(Math.random() * CODE_ABC.length)]; return c; }
-
-  function buildQuestions(code, lang){
-    var r = rng(hash(code + ':' + lang));
-    var pool = [];
-    Object.keys(window.VOCAB_THEMES).forEach(function(k){
-      window.VOCAB_THEMES[k].rows.forEach(function(row){ pool.push(row); });
-    });
-    var li = LIDX[lang], qs = [], used = {};
-    while(qs.length < 10 && pool.length > 4){
-      var i = Math.floor(r() * pool.length);
-      if(used[i]) continue; used[i] = 1;
-      var row = pool[i], opts = [row[5]], tries = 0;
-      while(opts.length < 4 && tries < 80){ var o = pool[Math.floor(r() * pool.length)][5]; if(opts.indexOf(o) < 0) opts.push(o); tries++; }
-      for(var k = opts.length - 1; k > 0; k--){ var m = Math.floor(r() * (k + 1)), tmp = opts[k]; opts[k] = opts[m]; opts[m] = tmp; }
-      qs.push({w: row[li], e: row[6], a: row[5], opts: opts});
-    }
-    return qs;
-  }
-
-  /* ---------- render ---------- */
-  function render(){
-    var box = el('duelBox');
-    if(!box) return;
-    if(S.st === 'home') return renderHome(box);
-    if(S.st === 'lobby') return renderLobby(box);
-    if(S.st === 'game') return; /* game renders its own updates */
-    if(S.st === 'result') return; /* result rendered by endGame */
-  }
-
-  function renderHome(box){
-    box.innerHTML =
-      '<div class="du-card">' +
-      '<h3>⚔️ تحدي لايف مع صاحبتك</h3>' +
-      '<p class="du-sub">١٠ كلمات، نفس الأسئلة في نفس اللحظة — اللي تجاوب صح وأسرع تكسب 💜</p>' +
-      '<input class="acc-in" id="duName" maxlength="20" placeholder="اسمك في التحدي" value="' + esc(S.myName) + '">' +
-      '<div class="du-langs" id="duLangs">' + Object.keys(LANGS).map(function(k){
-        return '<button class="tab lang-tab' + (k === S.lang ? ' active' : '') + '" data-dlang="' + k + '"><span class="ln">' + LANGS[k] + '</span></button>';
-      }).join('') + '</div>' +
-      '<button class="btn du-big" id="duCreate">🎮 اعملي تحدي جديد</button>' +
-      '<div class="du-or">— أو عندك كود من صاحبتك؟ —</div>' +
-      '<div class="du-join"><input class="acc-in" id="duCode" maxlength="6" placeholder="الكود (٦ حروف)" style="text-transform:uppercase;text-align:center;letter-spacing:4px">' +
-      '<button class="btn" id="duJoin">دخول ⚡</button></div>' +
-      '</div>';
-    el('duLangs').addEventListener('click', function(e){
-      var b = e.target.closest('[data-dlang]'); if(!b) return;
-      S.lang = b.dataset.dlang;
-      el('duLangs').querySelectorAll('.lang-tab').forEach(function(t){ t.classList.toggle('active', t === b); });
-    });
-    el('duName').addEventListener('input', function(){
-      S.myName = el('duName').value.trim();
-      try { localStorage.setItem('lingua_duel_name', S.myName); } catch(e){}
-    });
-    el('duCreate').onclick = function(){ if(!ensureName()) return; createDuel(); };
-    el('duJoin').onclick = function(){
-      if(!ensureName()) return;
-      var c = el('duCode').value.trim().toUpperCase();
-      if(c.length !== 6){ toast('الكود ٦ حروف 🔤'); return; }
-      joinDuel(c);
-    };
-  }
-
-  function ensureName(){
-    if(S.myName) return true;
-    var n = el('duName') && el('duName').value.trim();
-    if(n){ S.myName = n; try { localStorage.setItem('lingua_duel_name', n); } catch(e){} return true; }
-    toast('اكتبي اسمك الأول ✍️'); el('duName').focus(); return false;
-  }
-
-  function renderLobby(box){
-    var link = 'https://lingua-karma.github.io/?duel=' + S.code + '&lang=' + S.lang;
-    var share = 'https://wa.me/?text=' + encodeURIComponent('تحدّيني في Lingua! ⚔️ ١٠ كلمات ' + LANGS[S.lang] + ' ونشوف مين أسرع 💜\n' + link);
-    box.innerHTML =
-      '<div class="du-card">' +
-      '<h3>⏳ غرفة التحدي</h3>' +
-      '<div class="du-code">' + S.code + '</div>' +
-      '<div class="du-sub">' + LANGS[S.lang] + ' • ١٠ أسئلة • ١٢ ثانية لكل سؤال</div>' +
-      '<a class="btn du-big" id="duShare" href="' + share + '" target="_blank" rel="noopener">💌 ابعتي الدعوة واتساب</a>' +
-      '<div class="du-players" id="duPlayers"></div>' +
-      '<button class="btn du-big" id="duReady" style="background:linear-gradient(135deg,#34d399,#0e9f6e)">✋ أنا جاهزة!</button>' +
-      '<button class="du-leave" id="duLeave">← خروج من التحدي</button>' +
-      '</div>';
-    el('duShare').addEventListener('click', function(){ toast('ابعتي اللينك لصاحبتك 💌'); });
-    el('duLeave').onclick = function(){ leaveDuel(); };
-    el('duReady').onclick = function(){
-      el('duReady').disabled = true; el('duReady').textContent = '✅ جاهزة — مستنيين ' + (S.opp ? esc(S.opp.name) : 'صاحبتك');
-      S._iReady = true;
-      try { chan.track({name: S.myName, ready: true}); } catch(e){}
-      send('ready', {});
-      maybeStart();
-    };
-    renderPlayers();
-  }
-
-  function renderPlayers(){
-    var p = el('duPlayers');
-    if(!p) return;
-    p.innerHTML = S.players.map(function(pl){
-      return '<div class="du-p' + (pl.ready ? ' rdy' : '') + '"><div class="du-pav">' + esc(pl.name.charAt(0) || '؟') + '</div><div class="du-pn">' + esc(pl.name) + (pl.uid === S.uid ? ' (انتي)' : '') + '</div><div class="du-pr">' + (pl.ready ? '✅' : '⏳') + '</div></div>';
-    }).join('') || '<div class="du-sub">مستنية صاحبتك تدخل... 💜</div>';
-  }
-
-  /* ---------- channel ---------- */
-  function send(type, payload){
-    if(!chan) return;
-    chan.send({type: 'broadcast', event: 'du', payload: Object.assign({t: type, by: S.uid, name: S.myName}, payload)});
-  }
-
-  function connect(code, isHost){
-    S.code = code; S.host = isHost; S.st = 'lobby';
-    chan = dsb.channel('duel-' + code, {config: {presence: {key: S.uid}}});
-    chan.on('presence', {event: 'sync'}, function(){
-      var st = chan.presenceState(), arr = [];
-      Object.keys(st).forEach(function(k){
-        var pr = st[k][0];
-        arr.push({uid: k, name: (pr && pr.name) || 'صديقة', ready: !!(pr && pr.ready)});
-      });
-      S.players = arr;
-      var opp = arr.find(function(x){ return x.uid !== S.uid; });
-      if(opp && !S.opp){ S.opp = {uid: opp.uid, name: opp.name}; sndTick(); }
-      if(opp) S.opp.name = opp.name;
-      if(S.st === 'lobby') renderPlayers();
-      if(!opp && S.st === 'game' && !S.oppDone){
-        toast('صاحبتك خرجت — كملي لوحدك وهتكسبي بالانسحاب 👑');
-        S.oppDone = true; S.oppForfeit = true; maybeFinish();
-      }
-    });
-    chan.on('broadcast', {event: 'du'}, function(ev){
-      var p = ev.payload;
-      if(!p || p.by === S.uid) return;
-      if(p.t === 'ready'){ S.opp = S.opp || {uid: p.by, name: p.name}; S._oppReady = true; maybeStart(); }
-      if(p.t === 'start'){ if(!S.host) beginGame(p.at); }
-      if(p.t === 'ans'){ S.oppAns[p.q] = {ok: p.ok, ms: p.ms}; if(S.st === 'game') updOppTick(); }
-      if(p.t === 'done'){ S.oppDone = true; S.oppAns = p.ans || S.oppAns; maybeFinish(); }
-    });
-    chan.subscribe(function(status){
-      if(status === 'SUBSCRIBED'){
-        chan.track({name: S.myName, ready: false});
-        render();
-      }
-    });
-  }
-
-  function maybeStart(){
-    if(!S.host || S.st !== 'lobby') return;
-    if(S._iReady && S._oppReady){
-      S.st = 'starting';
-      var at = Date.now() + 2500;
-      send('start', {at: at});
-      beginGame(at);
-    }
-  }
-
-  function createDuel(){
-    var code = mkCode();
-    connect(code, true);
-  }
-  function joinDuel(code){
-    connect(code, false);
-  }
-
-  function leaveDuel(){
-    clearTimers();
-    if(chan){ try { dsb.removeChannel(chan); } catch(e){} chan = null; }
-    S = {st:'home', code:null, lang:S.lang, host:false, uid:S.uid, myName:S.myName, opp:null, players:[],
-         qs:[], qi:0, startT:0, myAns:[], oppAns:[], myScore:0, oppScore:null, oppDone:false, timers:[]};
-    render();
-  }
-
-  /* ---------- game ---------- */
-  var QTIME = 12000, GAP = 2000;
-  function beginGame(at){
-    clearTimers();
-    S.st = 'game'; S.qi = 0; S.startT = at; S.myAns = []; S.oppAns = []; S.myScore = 0; S.oppDone = false; S.oppForfeit = false;
-    S.qs = buildQuestions(S.code, S.lang);
-    var box = el('duelBox');
-    box.innerHTML =
-      '<div class="du-card du-game">' +
-      '<div class="du-top"><div class="du-me" id="duMeScore">💎 0</div>' +
-      '<div class="du-prog" id="duProg">١ / ١٠</div>' +
-      '<div class="du-opp" id="duOppScore">' + esc(S.opp ? S.opp.name : 'صاحبتك') + ': 💎 0</div></div>' +
-      '<div class="du-timer"><div class="du-tbar" id="duTbar"></div></div>' +
-      '<div class="du-q" id="duQ"></div>' +
-      '<div class="du-opts" id="duOpts"></div>' +
-      '<div class="du-fb" id="duFb"></div>' +
-      '</div>';
-    var wait = at - Date.now();
-    el('duQ').innerHTML = '<div class="du-count">استعدي... ⚡</div>';
-    if(wait > 0) el('duFb').textContent = 'البداية بعد ' + Math.ceil(wait / 1000) + '...';
-    later(function(){ runQ(0); }, Math.max(50, wait));
-  }
-
-  function runQ(i){
-    if(i >= 10 || S.st !== 'game') return endMyGame();
-    S.qi = i;
-    var q = S.qs[i];
-    el('duProg').textContent = (i + 1) + ' / ١٠';
-    el('duQ').innerHTML = '<div class="du-we">' + q.e + '</div><div class="du-word">' + esc(q.w) + '</div>';
-    el('duFb').textContent = '';
-    el('duOpts').innerHTML = q.opts.map(function(o, k){
-      return '<button class="du-opt" data-k="' + k + '">' + esc(o) + '</button>';
-    }).join('');
-    var t0 = Date.now(), answered = false;
-    var tbar = el('duTbar');
-    tbar.style.transition = 'none'; tbar.style.width = '100%';
-    requestAnimationFrame(function(){
-      tbar.style.transition = 'width ' + (QTIME / 1000) + 's linear';
-      tbar.style.width = '0%';
-    });
-    el('duOpts').onclick = function(e){
-      var b = e.target.closest('.du-opt');
-      if(!b || answered) return;
-      answered = true;
-      var pick = q.opts[+b.dataset.k], ok = (pick === q.a), ms = Date.now() - t0;
-      S.myAns[i] = {ok: ok, ms: ms};
-      el('duOpts').querySelectorAll('.du-opt').forEach(function(o){
-        o.disabled = true;
-        if(o.textContent === q.a) o.classList.add('right');
-      });
-      if(!ok) b.classList.add('wrong');
-      if(ok){ sndOk(); } else { sndNo(); }
-      el('duFb').textContent = ok ? 'صح! +' + 10 + ' 💎' : 'غلط — الصح: ' + q.a;
-      send('ans', {q: i, ok: ok, ms: ms});
-      updateMyScore();
-    };
-    later(function(){
-      if(!answered){
-        S.myAns[i] = {ok: false, ms: QTIME};
-        el('duOpts').querySelectorAll('.du-opt').forEach(function(o){
-          o.disabled = true;
-          if(o.textContent === q.a) o.classList.add('right');
-        });
-        el('duFb').textContent = 'الوقت خلص ⏰ الصح: ' + q.a;
-        send('ans', {q: i, ok: false, ms: QTIME});
-        updateMyScore();
-      }
-    }, QTIME);
-    later(function(){ runQ(i + 1); }, QTIME + GAP);
-  }
-
-  function calcScore(ans){
-    var s = 0;
-    for(var i = 0; i < 10; i++){ if(ans[i] && ans[i].ok) s += 10; }
-    return s;
-  }
-  function calcBonus(my, opp){
-    var b = 0;
-    for(var i = 0; i < 10; i++){
-      if(my[i] && my[i].ok && (!opp[i] || !opp[i].ok || my[i].ms < opp[i].ms)) b += 3;
-    }
-    return b;
-  }
-  function updateMyScore(){
-    S.myScore = calcScore(S.myAns);
-    var el1 = el('duMeScore');
-    if(el1) el1.textContent = '💎 ' + S.myScore;
-  }
-  function updOppTick(){
-    var el2 = el('duOppScore');
-    if(el2 && S.opp) el2.textContent = S.opp.name + ': ✓ ' + Object.keys(S.oppAns).length + '/١٠';
-  }
-
-  function endMyGame(){
-    if(S.st !== 'game') return;
-    S.st = 'ending';
-    S.myScore = calcScore(S.myAns) + calcBonus(S.myAns, S.oppAns);
-    send('done', {ans: S.myAns});
-    var f = el('duFb');
-    if(f) f.textContent = 'خلصتي! مستنيين نتيجة ' + (S.opp ? S.opp.name : 'صاحبتك') + '... ⏳';
-    later(maybeFinish, 9000); /* forfeit timeout */
-  }
-
-  function maybeFinish(){
-    if(S.st !== 'ending' && S.st !== 'game') return;
-    if(!S.oppDone) return;
-    S.st = 'result';
-    clearTimers();
-    var myBase = calcScore(S.myAns), oppBase = calcScore(S.oppAns);
-    var myTotal = myBase + calcBonus(S.myAns, S.oppAns);
-    var oppTotal = oppBase + calcBonus(S.oppAns, S.myAns);
-    if(S.oppForfeit) oppTotal = 0;
-    var oppName = S.opp ? S.opp.name : 'صاحبتك';
-    var won = myTotal > oppTotal, tie = myTotal === oppTotal;
-    var xp = won ? 30 : (tie ? 15 : 10);
-    if(typeof window.awardPoints === 'function') window.awardPoints(xp, won ? 'كسبتِ التحدي 👑' : (tie ? 'تعادل في التحدي' : 'لعبتِ تحدي'));
-    if(won){ sndWin(); try { confetti(); } catch(e){} }
-    var box = el('duelBox');
-    box.innerHTML =
-      '<div class="du-card du-result">' +
-      '<div class="du-crown">' + (won ? '👑' : (tie ? '🤝' : '💪')) + '</div>' +
-      '<h3>' + (won ? 'مبروووك! كسبتي التحدي 🎉' : (tie ? 'تعادل حلو! 🤝' : 'ماتش حلو! المرة الجاية ليكي 💪')) + '</h3>' +
-      '<div class="du-final">' +
-      '<div class="du-frow me"><span>' + esc(S.myName) + ' (انتي)</span><b>💎 ' + myTotal + '</b></div>' +
-      '<div class="du-frow"><span>' + esc(oppName) + '</span><b>💎 ' + oppTotal + '</b></div>' +
-      '</div>' +
-      '<div class="du-xp">+' + xp + ' نقطة في رصيدك ✨</div>' +
-      '<button class="btn du-big" id="duAgain">⚔️ تحدي جديد</button>' +
-      '<button class="du-leave" id="duHome">← رجوع</button>' +
-      '</div>';
-    el('duAgain').onclick = function(){
-      leaveDuel();
-      var c = mkCode();
-      var link = 'https://lingua-karma.github.io/?duel=' + c + '&lang=' + S.lang;
-      connect(c, true);
-      toast('تحدي جديد اتعمل — ابعتي اللينك تاني 💌');
-    };
-    el('duHome').onclick = function(){ leaveDuel(); };
-  }
-
-  /* ---------- boot ---------- */
-  function boot(){
-    if(!window.supabase){ setTimeout(boot, 400); return; }
-    dsb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
-    S.uid = sessionStorage.getItem('lingua_duel_uid');
-    if(!S.uid){ S.uid = 'u' + Math.random().toString(36).slice(2, 12); sessionStorage.setItem('lingua_duel_uid', S.uid); }
-    S.myName = localStorage.getItem('lingua_duel_name') || '';
-    /* adopt profile name when logged in */
-    dsb.auth.getSession().then(function(r){
-      if(r.data && r.data.session){
-        dsb.from('profiles').select('display_name').eq('id', r.data.session.user.id).maybeSingle().then(function(pr){
-          if(pr.data && pr.data.display_name && !S.myName){
-            S.myName = pr.data.display_name;
-            var n = el('duName'); if(n) n.value = S.myName;
-          }
-        });
-      }
-    });
-    /* landed from an invite link */
-    render();
-    try {
-      var q = new URLSearchParams(location.search);
-      var dc = q.get('duel'), dl = q.get('lang');
-      if(dl && LANGS[dl]) S.lang = dl;
-      if(dc && /^[A-Z0-9]{6}$/.test(dc.toUpperCase())){
-        if(dl && LANGS[dl]) render(); /* re-render with invite language */
-        el('duCode').value = dc.toUpperCase();
-        location.hash = 'duel';
-        history.replaceState(null, '', location.pathname + '#duel');
-        toast('وصلكي تحدي! اكتبي اسمك ودوسي دخول ⚔️');
-      }
-    } catch(e){}
-  }
-
-  /* menu card */
-  try {
-    MENU.push(['duel','⚔️','تحدي لايف']); VIEWIDS.push('duel');
-    document.getElementById('menuGrid').insertAdjacentHTML('beforeend', '<a class="menu-card" href="#duel"><span class="m-ico">⚔️</span><span class="m-name">تحدي لايف</span></a>');
-  } catch(e){}
-
-  boot();
-})();
+/* hard general-knowledge pool (Arabic) for live games */
+window.GK_POOL = [
+{q:'أي دولة فيها أكبر عدد من الأهرامات في العالم؟',a:'السودان',o:['مصر','المكسيك','السودان','الصين']},
+{q:'إيه هو العنصر الكيميائي اللي رمزه W؟',a:'التنجستن',o:['التنجستن','الحديد','الفضة','اليورانيوم']},
+{q:'مين أول من وصف الدورة الدموية الصغرى؟',a:'ابن النفيس',o:['ابن سينا','ابن النفيس','الرازي','هارفي']},
+{q:'أعمق نقطة في المحيطات اسمها إيه؟',a:'خندق ماريانا',o:['خندق تونجا','خندق ماريانا','خندق بورتوريكو','خندق جاوة']},
+{q:'في أي سنة وقعت معركة عين جالوت؟',a:'1260م',o:['1187م','1260م','1517م','1099م']},
+{q:'إيه هي أطول سلسلة جبال تحت الماء؟',a:'الحد وسط الأطلسي',o:['الأنديز','الهيمالايا','الحد وسط الأطلسي','الروكي']},
+{q:'مين رسام لوحة "الليلة المرصعة بالنجوم"؟',a:'فان جوخ',o:['بيكاسو','مونيه','فان جوخ','دافينشي']},
+{q:'كم عدد عظام جسم الإنسان البالغ؟',a:'206',o:['186','206','226','250']},
+{q:'عاصمة كازاخستان الحالية هي؟',a:'أستانا',o:['ألماتي','أستانا','تاشكент','بشكيك']},
+{q:'إيه هو أثقل غاز من الغازات النبيلة الطبيعية؟',a:'الرادون',o:['الأرجون','الزينون','الرادون','الكريبتون']},
+{q:'مين أول امرأة تاخد نوبل مرتين؟',a:'ماري كوري',o:['ماري كوري','روزاليند فرانكلين','دوروثي هودجكين','إيرين جوليو']},
+{q:'نهر النيل بيصب في إيه؟',a:'البحر المتوسط',o:['البحر الأحمر','البحر المتوسط','المحيط الهندي','الخليج العربي']},
+{q:'إيه اسم أول قمر صناعي في التاريخ؟',a:'سبوتنيك 1',o:['فوستوك 1','سبوتنيك 1','إكسبلورر 1','لونا 1']},
+{q:'أي حضارة بنت مدينة البتراء؟',a:'الأنباط',o:['الرومان','الأنباط','الفرس','الآشوريين']},
+{q:'كم لاعب في فريق الكرة الطائرة على الملعب؟',a:'6',o:['5','6','7','8']},
+{q:'إيه هو المعدن السائل في درجة حرارة الغرفة؟',a:'الزئبق',o:['الألومنيوم','الزئبق','الصوديوم','الجاليوم بس']},
+{q:'مين كتب "مقدمة" علم الاجتماع؟',a:'ابن خلدون',o:['ابن رشد','ابن خلدون','الفارابي','الجاحظ']},
+{q:'أكبر صحراء حارة في العالم؟',a:'الصحراء الكبرى',o:['جوبي','الصحراء الكبرى','كالاهاري','أتاكاما']},
+{q:'الضوء بيقطع المسافة من الشمس للأرض في قد إيه تقريبًا؟',a:'8 دقائق',o:['8 ثواني','8 دقائق','ساعة','يوم']},
+{q:'إيه هي لغة التشيك الرسمية؟',a:'التشيكية',o:['السلوفاكية','البولندية','التشيكية','الألمانية']},
+{q:'مين مخترع الديناميت؟',a:'ألفريد نوبل',o:['توماس إديسون','ألفريد نوبل','نيكولا تسلا','جراهام بيل']},
+{q:'أي كوكب عنده أكبر عدد أقمار مكتشفة (حاليًا)؟',a:'زحل',o:['المشترى','زحل','أورانوس','نبتون']},
+{q:'أول دولة اكتشفت شجر البن وصدرته للعالم؟',a:'إثيوبيا',o:['اليمن','إثيوبيا','البرازيل','كولومبيا']},
+{q:'إيه هي أصغر دولة في العالم مساحة؟',a:'الفاتيكان',o:['موناكو','الفاتيكان','سان مارينو','ناورو']},
+{q:'مين قائد حملة فتح الأندلس سنة 711م؟',a:'طارق بن زياد',o:['موسى بن نصير','طارق بن زياد','عقبة بن نافع','عبد الرحمن الداخل']},
+{q:'الحديد بيصدأ بسبب تفاعله مع إيه؟',a:'الأكسجين والمية',o:['الأكسجين بس','الأكسجين والمية','ثاني أكسيد الكربون','النيتروجين']},
+{q:'أي بحر يفصل بين أفريقيا وأوروبا؟',a:'البحر المتوسط',o:['البحر الأحمر','بحر العرب','البحر المتوسط','البحر الأسود']},
+{q:'مين واضع أسس الجبر في كتابه "الكتاب المختصر في حساب الجبر والمقابلة"؟',a:'الخوارزمي',o:['عمر الخيام','الخوارزمي','البيروني','ابن الهيثم']},
+{q:'كم عدد أبواب جهنم كما ورد في القرآن؟',a:'7',o:['7','8','9','10']},
+{q:'إيه هي عملة اليابان؟',a:'الين',o:['اليوان','الوون','الين','الرينمينبي']},
+{q:'مين أول رئيس للولايات المتحدة؟',a:'جورج واشنطن',o:['لينكولن','جيفرسون','جورج واشنطن','آدمز']},
+{q:'الحوت الأزرق هو أكبر؟',a:'حيوان عاش على الأرض',o:['سمكة في التاريخ','حيوان عاش على الأرض','ديناصور معروف','ثديي مائي بس']},
+{q:'في أي مدينة اتبنت أول جامعة في العالم (القرويين)؟',a:'فاس',o:['القاهرة','فاس','بغداد','قرطبة']},
+{q:'مين العالم اللي حط قوانين حركة الكواكب؟',a:'كبلر',o:['نيوتن','كبلر','جاليليو','كوبرنيكوس']},
+{q:'إيه هو أصلب مادة طبيعية؟',a:'الألماس',o:['الكوارتز','الألماس','البلاتين','الجرافيت']},
+{q:'عاصمة أستراليا هي؟',a:'كانبرا',o:['سيدني','ملبورن','كانبرا','بيرث']},
+{q:'كم عدد ألوان قوس قزح الأساسية؟',a:'7',o:['5','6','7','8']},
+{q:'مين مؤلف رواية "البؤساء"؟',a:'فيكتور هوجو',o:['بلزاك','فيكتور هوجو','زولا','ديكنز']},
+{q:'أي عضو في جسم الإنسان بيقدر يجدد نفسه بالكامل؟',a:'الكبد',o:['القلب','الكبد','الكلى','الرئة']},
+{q:'إيه اسم أكبر جزيرة في العالم؟',a:'جرينلاند',o:['مدغشقر','بورنيو','جرينلاند','نيو جيني']},
+{q:'الحرب العالمية الأولى بدأت سنة؟',a:'1914',o:['1914','1918','1939','1905']},
+{q:'مين النبي اللي اتلقب بكليم الله؟',a:'موسى عليه السلام',o:['عيسى','موسى عليه السلام','إبراهيم','نوح']},
+{q:'إيه هي أطول سورة في القرآن؟',a:'البقرة',o:['آل عمران','البقرة','النساء','المائدة']},
+{q:'أي دولة عندها أكبر عدد براكين نشطة؟',a:'إندونيسيا',o:['اليابان','إيطاليا','إندونيسيا','أيسلندا']},
+{q:'مين اكتشف البنسلين؟',a:'ألكسندر فلمنج',o:['باستير','ألكسندر فلمنج','كوخ','جينر']},
+{q:'إيه هي أسرع حشرة طائرة؟',a:'اليعسوب',o:['النحلة','اليعسوب','الفراشة','الذبابة']},
+{q:'برج إيفل اتبنى بمناسبة إيه؟',a:'معرض باريس العالمي 1889',o:['الثورة الفرنسية','معرض باريس العالمي 1889','انتصار نابليون','أولمبياد 1900']},
+{q:'إيه هي أكبر دولة عربية من حيث المساحة؟',a:'الجزائر',o:['السعودية','ليبيا','الجزائر','السودان']},
+{q:'مين أول من مشي على سطح القمر؟',a:'نيل أرمسترونج',o:['باز ألدرين','نيل أرمسترونج','يوري جاجارين','مايكل كولينز']},
+{q:'النسبة الذهبية بتساوي تقريبًا؟',a:'1.618',o:['3.14','1.618','2.71','1.414']},
+{q:'أي حيوان بيطلع لبن وبيض وعنده منقار؟',a:'خلد الماء',o:['الكنغر','خلد الماء','الكسلان','النمس']},
+{q:'مين مؤسس الدولة الأيوبية؟',a:'صلاح الدين الأيوبي',o:['نور الدين زنكي','صلاح الدين الأيوبي','عماد الدين','الظاهر بيبرس']},
+{q:'إيه هو الكوكب الملقب بالكوكب الأحمر؟',a:'المريخ',o:['الزهرة','المريخ','عطارد','المشترى']},
+{q:'كم سنة استمرت حرب المائة عام بين إنجلترا وفرنسا تقريبًا؟',a:'116 سنة',o:['100 سنة بالظبط','116 سنة','99 سنة','130 سنة']}
+];
 
 
 /* ================= v47: luxury grouped navigation ================= */
@@ -6519,4 +6188,660 @@ gbkRender();
   document.getElementById('lxAll').onclick = openOv;
 
   markNavActive();
+})();
+
+
+/* ================= v48: live-games lobby (قاعة الألعاب اللايف) ================= */
+/* one realtime room + WhatsApp invite system, 4 game types:
+   quiz (word duel), race (60s speed), memory (pair race), gk (hard GK duel) */
+(function(){
+  var SUPA_URL = 'https://yzzlgalxjaaevmytdazf.supabase.co';
+  var SUPA_KEY = 'sb_publishable_EmbKVWREHSs3sZ_nBKFyqg_zxv3Z38-';
+  var LIDX = {en:0, fr:1, de:2, zh:3, ko:4};
+  var LANGS = {en:'🇬🇧 إنجليزي', fr:'🇫🇷 فرنسي', de:'🇩🇪 ألماني', zh:'🇨🇳 صيني', ko:'🇰🇷 كوري'};
+  var CODE_ABC = 'ABDEFGHJKMNPQRSTWXYZ23456789';
+  var GAMES = {
+    quiz:   {n:'سباق الكلمات', i:'⚔️', d:'١٠ كلمات — صح + سرعة', vocab:true},
+    race:   {n:'سباق الستين', i:'⚡', d:'٦٠ ثانية — أكتر عدد إجابات', vocab:true},
+    memory: {n:'ميموري سوا', i:'🃏', d:'مين يلاقي التطابقات الأول', vocab:true},
+    gk:     {n:'معلومات صعبة', i:'🧠', d:'١٠ أسئلة معلومات عامة تقيلة', vocab:false}
+  };
+  var dsb = null, chan = null;
+  var S = {st:'home', game:'quiz', code:null, lang:'en', host:false, uid:null, myName:'', opp:null, players:[],
+           qs:[], qi:0, startT:0, myAns:[], oppAns:[], myScore:0, oppDone:false, oppForfeit:false,
+           raceN:0, raceMs:0, oppN:0, mem:{}, timers:[]};
+
+  function esc(x){ return String(x == null ? '' : x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function el(id){ return document.getElementById(id); }
+  function clearTimers(){ S.timers.forEach(clearTimeout); S.timers = []; }
+  function later(fn, ms){ S.timers.push(setTimeout(fn, ms)); }
+
+  var AC = null;
+  function beep(f, dur, type){
+    try {
+      if(!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
+      var o = AC.createOscillator(), g = AC.createGain();
+      o.type = type || 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0.08, AC.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, AC.currentTime + (dur || 0.15));
+      o.connect(g); g.connect(AC.destination);
+      o.start(); o.stop(AC.currentTime + (dur || 0.15));
+    } catch(e){}
+  }
+  function sndOk(){ beep(660, 0.12); later(function(){ beep(880, 0.15); }, 90); }
+  function sndNo(){ beep(220, 0.25, 'square'); }
+  function sndTick(){ beep(520, 0.07); }
+  function sndWin(){ [523, 659, 784, 1047].forEach(function(f, i){ later(function(){ beep(f, 0.18); }, i * 120); }); }
+
+  function hash(s){ var h = 2166136261; for(var i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function rng(seed){ var a = seed; return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function mkCode(){ var c = ''; for(var i = 0; i < 6; i++) c += CODE_ABC[Math.floor(Math.random() * CODE_ABC.length)]; return c; }
+
+  function vocabPool(){
+    var pool = [];
+    Object.keys(window.VOCAB_THEMES).forEach(function(k){
+      window.VOCAB_THEMES[k].rows.forEach(function(row){ pool.push(row); });
+    });
+    return pool;
+  }
+  function buildMcq(code, salt, lang, count){
+    var r = rng(hash(code + ':' + salt + ':' + lang));
+    var pool = vocabPool(), li = LIDX[lang], qs = [], used = {};
+    while(qs.length < count && pool.length > 4){
+      var i = Math.floor(r() * pool.length);
+      if(used[i]) continue; used[i] = 1;
+      var row = pool[i], opts = [row[5]], tries = 0;
+      while(opts.length < 4 && tries < 80){ var o = pool[Math.floor(r() * pool.length)][5]; if(opts.indexOf(o) < 0) opts.push(o); tries++; }
+      for(var k = opts.length - 1; k > 0; k--){ var m = Math.floor(r() * (k + 1)), tmp = opts[k]; opts[k] = opts[m]; opts[m] = tmp; }
+      qs.push({w: row[li], e: row[6], a: row[5], opts: opts});
+    }
+    return qs;
+  }
+  function buildGk(code){
+    var r = rng(hash(code + ':gk'));
+    var idx = window.GK_POOL.map(function(_, i){ return i; });
+    for(var k = idx.length - 1; k > 0; k--){ var m = Math.floor(r() * (k + 1)), t = idx[k]; idx[k] = idx[m]; idx[m] = t; }
+    return idx.slice(0, 10).map(function(i){
+      var q = window.GK_POOL[i];
+      var opts = q.o.slice();
+      for(var k = opts.length - 1; k > 0; k--){ var m = Math.floor(r() * (k + 1)), t = opts[k]; opts[k] = opts[m]; opts[m] = t; }
+      return {w: q.q, e: '🧠', a: q.a, opts: opts};
+    });
+  }
+
+  /* ---------- home / lobby ---------- */
+  function render(){
+    var box = el('duelBox');
+    if(!box) return;
+    if(S.st === 'home') renderHome(box);
+    else if(S.st === 'lobby') renderLobby(box);
+  }
+
+  function renderHome(box){
+    box.innerHTML =
+      '<div class="du-card">' +
+      '<h3>🎮 قاعة الألعاب اللايف</h3>' +
+      '<p class="du-sub">اختاري اللعبة، اعملي الأوضة، وابعتي اللينك لصاحبتك — تلعبوا في نفس اللحظة 💜</p>' +
+      '<div class="gl-grid" id="glGrid">' + Object.keys(GAMES).map(function(g){
+        return '<button class="gl-card' + (g === S.game ? ' on' : '') + '" data-game="' + g + '"><span class="gl-i">' + GAMES[g].i + '</span><b>' + GAMES[g].n + '</b><small>' + GAMES[g].d + '</small></button>';
+      }).join('') + '</div>' +
+      '<div id="glLangWrap"' + (GAMES[S.game].vocab ? '' : ' style="display:none"') + '><div class="du-langs" id="duLangs">' + Object.keys(LANGS).map(function(k){
+        return '<button class="tab lang-tab' + (k === S.lang ? ' active' : '') + '" data-dlang="' + k + '"><span class="ln">' + LANGS[k] + '</span></button>';
+      }).join('') + '</div></div>' +
+      '<input class="acc-in" id="duName" maxlength="20" placeholder="اسمك في اللعبة" value="' + esc(S.myName) + '">' +
+      '<button class="btn du-big" id="duCreate">🎮 اعملي أوضة جديدة</button>' +
+      '<div class="du-or">— أو عندك كود من صاحبتك؟ —</div>' +
+      '<div class="du-join"><input class="acc-in" id="duCode" maxlength="6" placeholder="الكود (٦ حروف)" style="text-transform:uppercase;text-align:center;letter-spacing:4px">' +
+      '<button class="btn" id="duJoin">دخول ⚡</button></div>' +
+      '</div>';
+    el('glGrid').addEventListener('click', function(e){
+      var b = e.target.closest('[data-game]'); if(!b) return;
+      S.game = b.dataset.game;
+      el('glGrid').querySelectorAll('.gl-card').forEach(function(c){ c.classList.toggle('on', c === b); });
+      el('glLangWrap').style.display = GAMES[S.game].vocab ? '' : 'none';
+    });
+    el('duLangs').addEventListener('click', function(e){
+      var b = e.target.closest('[data-dlang]'); if(!b) return;
+      S.lang = b.dataset.dlang;
+      el('duLangs').querySelectorAll('.lang-tab').forEach(function(t){ t.classList.toggle('active', t === b); });
+    });
+    el('duName').addEventListener('input', function(){
+      S.myName = el('duName').value.trim();
+      try { localStorage.setItem('lingua_duel_name', S.myName); } catch(e){}
+    });
+    el('duCreate').onclick = function(){ if(!ensureName()) return; connect(mkCode(), true); };
+    el('duJoin').onclick = function(){
+      if(!ensureName()) return;
+      var c = el('duCode').value.trim().toUpperCase();
+      if(c.length !== 6){ toast('الكود ٦ حروف 🔤'); return; }
+      connect(c, false);
+    };
+  }
+
+  function ensureName(){
+    if(S.myName) return true;
+    var n = el('duName') && el('duName').value.trim();
+    if(n){ S.myName = n; try { localStorage.setItem('lingua_duel_name', n); } catch(e){} return true; }
+    toast('اكتبي اسمك الأول ✍️'); el('duName').focus(); return false;
+  }
+
+  function renderLobby(box){
+    var link = 'https://lingua-karma.github.io/?duel=' + S.code + '&lang=' + S.lang + '&game=' + S.game;
+    var share = 'https://wa.me/?text=' + encodeURIComponent('تعالي نلعب ' + GAMES[S.game].n + ' على Lingua! ' + GAMES[S.game].i + '💜\n' + link);
+    box.innerHTML =
+      '<div class="du-card">' +
+      '<h3>' + GAMES[S.game].i + ' ' + GAMES[S.game].n + '</h3>' +
+      '<div class="du-code">' + S.code + '</div>' +
+      '<div class="du-sub">' + (GAMES[S.game].vocab ? LANGS[S.lang] + ' • ' : '') + GAMES[S.game].d + '</div>' +
+      '<a class="btn du-big" href="' + share + '" target="_blank" rel="noopener">💌 ابعتي الدعوة واتساب</a>' +
+      '<div class="du-players" id="duPlayers"></div>' +
+      '<button class="btn du-big" id="duReady" style="background:linear-gradient(135deg,#34d399,#0e9f6e)">✋ أنا جاهزة!</button>' +
+      '<button class="du-leave" id="duLeave">← خروج</button>' +
+      '</div>';
+    el('duLeave').onclick = leave;
+    el('duReady').onclick = function(){
+      el('duReady').disabled = true; el('duReady').textContent = '✅ جاهزة — مستنيين ' + (S.opp ? esc(S.opp.name) : 'صاحبتك');
+      S._iReady = true;
+      try { chan.track({name: S.myName, ready: true}); } catch(e){}
+      send('ready', {});
+      maybeStart();
+    };
+    renderPlayers();
+  }
+
+  function renderPlayers(){
+    var p = el('duPlayers');
+    if(!p) return;
+    p.innerHTML = S.players.map(function(pl){
+      return '<div class="du-p' + (pl.ready ? ' rdy' : '') + '"><div class="du-pav">' + esc(pl.name.charAt(0) || '؟') + '</div><div class="du-pn">' + esc(pl.name) + (pl.uid === S.uid ? ' (انتي)' : '') + '</div><div class="du-pr">' + (pl.ready ? '✅' : '⏳') + '</div></div>';
+    }).join('') || '<div class="du-sub">مستنية صاحبتك تدخل... 💜</div>';
+  }
+
+  /* ---------- channel ---------- */
+  function send(type, payload){
+    if(!chan) return;
+    chan.send({type: 'broadcast', event: 'du', payload: Object.assign({t: type, by: S.uid, name: S.myName}, payload)});
+  }
+  function connect(code, isHost){
+    S.code = code; S.host = isHost; S.st = 'lobby'; S._iReady = false; S._oppReady = false;
+    chan = dsb.channel('duel-' + code, {config: {presence: {key: S.uid}}});
+    chan.on('presence', {event: 'sync'}, function(){
+      var st = chan.presenceState(), arr = [];
+      Object.keys(st).forEach(function(k){
+        var pr = st[k][0];
+        arr.push({uid: k, name: (pr && pr.name) || 'صديقة', ready: !!(pr && pr.ready)});
+      });
+      S.players = arr;
+      var opp = arr.find(function(x){ return x.uid !== S.uid; });
+      if(opp && !S.opp){ S.opp = {uid: opp.uid, name: opp.name}; sndTick(); }
+      if(opp) S.opp.name = opp.name;
+      if(S.st === 'lobby') renderPlayers();
+      if(!opp && (S.st === 'game' || S.st === 'ending') && !S.oppDone){
+        toast('صاحبتك خرجت — كملي لوحدك وهتكسبي بالانسحاب 👑');
+        S.oppDone = true; S.oppForfeit = true; maybeFinish();
+      }
+    });
+    chan.on('broadcast', {event: 'du'}, function(ev){
+      var p = ev.payload;
+      if(!p || p.by === S.uid) return;
+      if(p.t === 'ready'){ S.opp = S.opp || {uid: p.by, name: p.name}; S._oppReady = true; maybeStart(); }
+      if(p.t === 'start'){ S.game = p.game || S.game; S.lang = p.lang || S.lang; if(!S.host) beginGame(p.at); }
+      if(p.t === 'ans'){ S.oppAns[p.q] = {ok: p.ok, ms: p.ms}; if(S.st === 'game') updOppTick(); }
+      if(p.t === 'prog'){ S.oppN = p.n; updRaceOpp(); }
+      if(p.t === 'claim'){ onOppClaim(p.pair); }
+      if(p.t === 'done'){ S.oppDone = true; S.oppAns = p.ans || S.oppAns; S.oppN = p.n || S.oppN; S.oppMs = p.ms || 0; S.oppPairs = p.pairs; maybeFinish(); }
+    });
+    chan.subscribe(function(status){
+      if(status === 'SUBSCRIBED'){
+        chan.track({name: S.myName, ready: false});
+        render();
+      }
+    });
+  }
+  function maybeStart(){
+    if(!S.host || S.st !== 'lobby') return;
+    if(S._iReady && S._oppReady){
+      S.st = 'starting';
+      var at = Date.now() + 2500;
+      send('start', {at: at, game: S.game, lang: S.lang});
+      beginGame(at);
+    }
+  }
+  function leave(){
+    clearTimers();
+    if(chan){ try { dsb.removeChannel(chan); } catch(e){} chan = null; }
+    var keep = {game: S.game, lang: S.lang, uid: S.uid, myName: S.myName};
+    S = {st:'home', game:keep.game, code:null, lang:keep.lang, host:false, uid:keep.uid, myName:keep.myName, opp:null, players:[],
+         qs:[], qi:0, startT:0, myAns:[], oppAns:[], myScore:0, oppDone:false, oppForfeit:false,
+         raceN:0, raceMs:0, oppN:0, mem:{}, timers:[]};
+    render();
+  }
+
+  /* ---------- game start dispatch ---------- */
+  var QTIME = 12000, GAP = 2000;
+  function beginGame(at){
+    clearTimers();
+    S.st = 'game'; S.qi = 0; S.startT = at; S.myAns = []; S.oppAns = []; S.myScore = 0;
+    S.oppDone = false; S.oppForfeit = false; S.raceN = 0; S.raceMs = 0; S.oppN = 0; S.oppMs = 0; S.mem = {flip:[], mine:[], opp:[], done:false};
+    if(S.game === 'race'){
+      S.qs = buildMcq(S.code, 'race', S.lang, 60);
+      raceShell(at);
+    } else if(S.game === 'memory'){
+      memShell(at);
+    } else {
+      S.qs = (S.game === 'gk') ? buildGk(S.code) : buildMcq(S.code, 'quiz', S.lang, 10);
+      quizShell(at);
+    }
+  }
+
+  /* ---------- shared quiz shell (quiz + gk) ---------- */
+  function gameHead(sub){
+    return '<div class="du-card du-game">' +
+      '<div class="du-top"><div class="du-me" id="duMeScore">💎 0</div>' +
+      '<div class="du-prog" id="duProg">' + sub + '</div>' +
+      '<div class="du-opp" id="duOppScore">' + esc(S.opp ? S.opp.name : 'صاحبتك') + ': 💎 0</div></div>' +
+      '<div class="du-timer"><div class="du-tbar" id="duTbar"></div></div>' +
+      '<div class="du-q" id="duQ"></div>' +
+      '<div class="du-opts" id="duOpts"></div>' +
+      '<div class="du-fb" id="duFb"></div></div>';
+  }
+  function quizShell(at){
+    el('duelBox').innerHTML = gameHead('١ / ١٠');
+    var wait = at - Date.now();
+    el('duQ').innerHTML = '<div class="du-count">استعدي... ⚡</div>';
+    if(wait > 0) el('duFb').textContent = 'البداية بعد ' + Math.ceil(wait / 1000) + '...';
+    later(function(){ runQ(0); }, Math.max(50, wait));
+  }
+  function runQ(i){
+    if(i >= 10 || S.st !== 'game') return endMyGame();
+    S.qi = i;
+    var q = S.qs[i];
+    el('duProg').textContent = (i + 1) + ' / ١٠';
+    el('duQ').innerHTML = '<div class="du-we">' + q.e + '</div><div class="du-word"' + (S.game === 'gk' ? ' style="direction:rtl;font-size:1.15rem;line-height:1.8"' : '') + '>' + esc(q.w) + '</div>';
+    el('duFb').textContent = '';
+    el('duOpts').innerHTML = q.opts.map(function(o, k){
+      return '<button class="du-opt" data-k="' + k + '">' + esc(o) + '</button>';
+    }).join('');
+    var t0 = Date.now(), answered = false;
+    var tbar = el('duTbar');
+    tbar.style.transition = 'none'; tbar.style.width = '100%';
+    requestAnimationFrame(function(){
+      tbar.style.transition = 'width ' + (QTIME / 1000) + 's linear';
+      tbar.style.width = '0%';
+    });
+    el('duOpts').onclick = function(e){
+      var b = e.target.closest('.du-opt');
+      if(!b || answered) return;
+      answered = true;
+      var pick = q.opts[+b.dataset.k], ok = (pick === q.a), ms = Date.now() - t0;
+      S.myAns[i] = {ok: ok, ms: ms};
+      el('duOpts').querySelectorAll('.du-opt').forEach(function(o){
+        o.disabled = true;
+        if(o.textContent === q.a) o.classList.add('right');
+      });
+      if(!ok) b.classList.add('wrong');
+      if(ok){ sndOk(); } else { sndNo(); }
+      el('duFb').textContent = ok ? 'صح! +10 💎' : 'غلط — الصح: ' + q.a;
+      send('ans', {q: i, ok: ok, ms: ms});
+      updateMyScore();
+    };
+    later(function(){
+      if(!answered){
+        S.myAns[i] = {ok: false, ms: QTIME};
+        el('duOpts').querySelectorAll('.du-opt').forEach(function(o){
+          o.disabled = true;
+          if(o.textContent === q.a) o.classList.add('right');
+        });
+        el('duFb').textContent = 'الوقت خلص ⏰ الصح: ' + q.a;
+        send('ans', {q: i, ok: false, ms: QTIME});
+        updateMyScore();
+      }
+    }, QTIME);
+    later(function(){ runQ(i + 1); }, QTIME + GAP);
+  }
+  function calcScore(ans){ var s = 0; for(var i = 0; i < 10; i++){ if(ans[i] && ans[i].ok) s += 10; } return s; }
+  function calcBonus(my, opp){ var b = 0; for(var i = 0; i < 10; i++){ if(my[i] && my[i].ok && (!opp[i] || !opp[i].ok || my[i].ms < opp[i].ms)) b += 3; } return b; }
+  function updateMyScore(){
+    S.myScore = calcScore(S.myAns);
+    var e1 = el('duMeScore');
+    if(e1) e1.textContent = '💎 ' + S.myScore;
+  }
+  function updOppTick(){
+    var e2 = el('duOppScore');
+    if(e2 && S.opp && S.game !== 'race') e2.textContent = S.opp.name + ': ✓ ' + Object.keys(S.oppAns).length + '/١٠';
+  }
+
+  /* ---------- race (60 seconds) ---------- */
+  function raceShell(at){
+    el('duelBox').innerHTML = gameHead('⏱️ ٦٠');
+    var wait = at - Date.now();
+    el('duQ').innerHTML = '<div class="du-count">استعدي... ⚡</div>';
+    later(function(){ raceQ(0); }, Math.max(50, wait));
+    later(endMyGame, Math.max(100, wait + 60000));
+    raceTick(wait);
+  }
+  function raceTick(wait){
+    var end = at0() + 60000;
+    function at0(){ return S.startT; }
+    var iv = setInterval(function(){
+      var left = Math.max(0, Math.round((end - Date.now()) / 1000));
+      var p = el('duProg');
+      if(p) p.textContent = '⏱️ ' + left;
+      var tb = el('duTbar');
+      if(tb){ tb.style.transition = 'none'; tb.style.width = (left / 60 * 100) + '%'; }
+      if(left <= 0) clearInterval(iv);
+    }, 500);
+    S.timers.push(iv);
+  }
+  function raceQ(i){
+    if(S.st !== 'game') return;
+    if(i >= S.qs.length) return;
+    S.qi = i;
+    var q = S.qs[i];
+    el('duQ').innerHTML = '<div class="du-we">' + q.e + '</div><div class="du-word">' + esc(q.w) + '</div>';
+    el('duOpts').innerHTML = q.opts.map(function(o, k){
+      return '<button class="du-opt" data-k="' + k + '">' + esc(o) + '</button>';
+    }).join('');
+    var t0 = Date.now();
+    el('duOpts').onclick = function(e){
+      var b = e.target.closest('.du-opt');
+      if(!b) return;
+      var pick = q.opts[+b.dataset.k], ok = (pick === q.a);
+      if(ok){ sndOk(); S.raceN++; S.raceMs += (Date.now() - t0); } else { sndNo(); }
+      var ms = el('duMeScore');
+      if(ms) ms.textContent = '💎 ' + S.raceN;
+      send('prog', {n: S.raceN});
+      raceQ(i + 1);
+    };
+  }
+  function updRaceOpp(){
+    var e2 = el('duOppScore');
+    if(e2 && S.opp && S.game === 'race') e2.textContent = S.opp.name + ': 💎 ' + S.oppN;
+  }
+
+  /* ---------- memory (shared claims) ---------- */
+  function memShell(at){
+    var r = rng(hash(S.code + ':mem:' + S.lang));
+    var pool = vocabPool(), used = {}, pairs = [];
+    while(pairs.length < 8){
+      var i = Math.floor(r() * pool.length);
+      if(used[i]) continue; used[i] = 1;
+      pairs.push({f: pool[i][LIDX[S.lang]], a: pool[i][5], e: pool[i][6]});
+    }
+    var cards = [];
+    pairs.forEach(function(p, k){
+      cards.push({pair: k, txt: p.f, e: p.e, kind: 'f'});
+      cards.push({pair: k, txt: p.a, e: p.e, kind: 'a'});
+    });
+    for(var k = cards.length - 1; k > 0; k--){ var m = Math.floor(r() * (k + 1)), t = cards[k]; cards[k] = cards[m]; cards[m] = t; }
+    S.memPairs = pairs;
+    el('duelBox').innerHTML =
+      '<div class="du-card du-game">' +
+      '<div class="du-top"><div class="du-me" id="duMeScore">🃏 0</div>' +
+      '<div class="du-prog" id="duProg">⏱️ ١٢٠</div>' +
+      '<div class="du-opp" id="duOppScore">' + esc(S.opp ? S.opp.name : 'صاحبتك') + ': 🃏 0</div></div>' +
+      '<div class="mem-grid" id="memGrid">' +
+      cards.map(function(c, i){
+        return '<button class="mem-c" data-i="' + i + '" data-pair="' + c.pair + '"><span class="mem-b">؟</span><span class="mem-f">' + (c.kind === 'f' ? c.e + ' ' : '') + esc(c.txt) + '</span></button>';
+      }).join('') + '</div>' +
+      '<div class="du-fb" id="duFb">لاقي الكلمة ومعناها! 🃏</div></div>';
+    var wait = at - Date.now();
+    var grid = el('memGrid');
+    grid.style.pointerEvents = 'none';
+    el('duFb').textContent = 'البداية بعد ' + Math.ceil(Math.max(0, wait) / 1000) + '... استعدي!';
+    later(function(){
+      grid.style.pointerEvents = '';
+      el('duFb').textContent = 'لاقي الكلمة ومعناها! 🃏';
+    }, Math.max(50, wait));
+    var end = at + 120000;
+    var iv = setInterval(function(){
+      var left = Math.max(0, Math.round((end - Date.now()) / 1000));
+      var p = el('duProg'); if(p) p.textContent = '⏱️ ' + left;
+      if(left <= 0) clearInterval(iv);
+    }, 500);
+    S.timers.push(iv);
+    later(endMyGame, Math.max(100, wait + 120000));
+    var flipped = [];
+    grid.onclick = function(e){
+      var b = e.target.closest('.mem-c');
+      if(!b || b.disabled || b.classList.contains('open')) return;
+      b.classList.add('open');
+      flipped.push(b);
+      sndTick();
+      if(flipped.length === 2){
+        var a = flipped[0], c = flipped[1];
+        if(a.dataset.pair === c.dataset.pair){
+          sndOk();
+          a.disabled = c.disabled = true;
+          a.classList.add('mine'); c.classList.add('mine');
+          S.mem.mine.push(+a.dataset.pair);
+          var ms = el('duMeScore'); if(ms) ms.textContent = '🃏 ' + S.mem.mine.length;
+          send('claim', {pair: +a.dataset.pair});
+          el('duFb').textContent = 'تطابق! دي ليكي 💛';
+          if(S.mem.mine.length + S.mem.opp.length >= 8) endMyGame();
+        } else {
+          sndNo();
+          var g = grid;
+          g.style.pointerEvents = 'none';
+          later(function(){
+            a.classList.remove('open'); c.classList.remove('open');
+            g.style.pointerEvents = '';
+          }, 700);
+        }
+        flipped = [];
+      }
+    };
+  }
+  function onOppClaim(pair){
+    if(S.st !== 'game' || S.game !== 'memory') return;
+    S.mem.opp.push(pair);
+    document.querySelectorAll('.mem-c[data-pair="' + pair + '"]').forEach(function(b){
+      b.disabled = true; b.classList.add('open', 'theirs');
+    });
+    var e2 = el('duOppScore');
+    if(e2 && S.opp) e2.textContent = S.opp.name + ': 🃏 ' + S.mem.opp.length;
+    el('duFb').textContent = (S.opp ? S.opp.name : 'صاحبتك') + ' لقت تطابق! 👀';
+    if(S.mem.mine.length + S.mem.opp.length >= 8) endMyGame();
+  }
+
+  /* ---------- end / result ---------- */
+  function endMyGame(){
+    if(S.st !== 'game') return;
+    S.st = 'ending';
+    var payload = {ans: S.myAns, n: S.raceN, ms: S.raceMs, pairs: S.mem ? S.mem.mine.length : 0};
+    send('done', payload);
+    var f = el('duFb');
+    if(f) f.textContent = 'خلصتي! مستنيين ' + (S.opp ? S.opp.name : 'صاحبتك') + '... ⏳';
+    later(maybeFinish, 10000);
+  }
+  function maybeFinish(){
+    if(S.st !== 'ending' && S.st !== 'game') return;
+    if(!S.oppDone) return;
+    S.st = 'result';
+    clearTimers();
+    var myTotal, oppTotal, unit = '💎';
+    if(S.game === 'race'){
+      myTotal = S.raceN; oppTotal = S.oppN || 0;
+      if(myTotal === oppTotal && !S.oppForfeit){ if(S.raceMs < (S.oppMs || Infinity)) myTotal += 0.5; else oppTotal += 0.5; }
+    } else if(S.game === 'memory'){
+      myTotal = S.mem.mine.length; oppTotal = S.oppPairs != null ? S.oppPairs : S.mem.opp.length; unit = '🃏';
+    } else {
+      myTotal = calcScore(S.myAns) + calcBonus(S.myAns, S.oppAns);
+      oppTotal = calcScore(S.oppAns) + calcBonus(S.oppAns, S.myAns);
+    }
+    if(S.oppForfeit) oppTotal = 0;
+    showResult(myTotal, oppTotal, unit);
+  }
+  function showResult(myTotal, oppTotal, unit){
+    var oppName = S.opp ? S.opp.name : 'صاحبتك';
+    var won = myTotal > oppTotal, tie = myTotal === oppTotal;
+    var xp = won ? 30 : (tie ? 15 : 10);
+    if(typeof window.awardPoints === 'function') window.awardPoints(xp, won ? 'كسبتِ ' + GAMES[S.game].n + ' 👑' : 'لعبتِ ' + GAMES[S.game].n);
+    if(won){ sndWin(); try { confetti(); } catch(e){} }
+    el('duelBox').innerHTML =
+      '<div class="du-card du-result">' +
+      '<div class="du-crown">' + (won ? '👑' : (tie ? '🤝' : '💪')) + '</div>' +
+      '<h3>' + (won ? 'مبروووك! كسبتي 🎉' : (tie ? 'تعادل حلو! 🤝' : 'ماتش حلو! المرة الجاية ليكي 💪')) + '</h3>' +
+      '<div class="du-final">' +
+      '<div class="du-frow me"><span>' + esc(S.myName) + ' (انتي)</span><b>' + unit + ' ' + myTotal + '</b></div>' +
+      '<div class="du-frow"><span>' + esc(oppName) + '</span><b>' + unit + ' ' + oppTotal + '</b></div>' +
+      '</div>' +
+      '<div class="du-xp">+' + xp + ' نقطة في رصيدك ✨</div>' +
+      '<button class="btn du-big" id="duAgain">' + GAMES[S.game].i + ' العبي تاني</button>' +
+      '<button class="du-leave" id="duHome">← القاعة</button></div>';
+    el('duAgain').onclick = function(){
+      var g = S.game;
+      leave();
+      S.game = g;
+      connect(mkCode(), true);
+      toast('أوضة جديدة اتعملت — ابعتي اللينك تاني 💌');
+    };
+    el('duHome').onclick = function(){ leave(); };
+  }
+
+  /* ---------- boot ---------- */
+  function boot(){
+    if(!window.supabase){ setTimeout(boot, 400); return; }
+    dsb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+    S.uid = sessionStorage.getItem('lingua_duel_uid');
+    if(!S.uid){ S.uid = 'u' + Math.random().toString(36).slice(2, 12); sessionStorage.setItem('lingua_duel_uid', S.uid); }
+    S.myName = localStorage.getItem('lingua_duel_name') || '';
+    dsb.auth.getSession().then(function(r){
+      if(r.data && r.data.session){
+        dsb.from('profiles').select('display_name').eq('id', r.data.session.user.id).maybeSingle().then(function(pr){
+          if(pr.data && pr.data.display_name && !S.myName){
+            S.myName = pr.data.display_name;
+            var n = el('duName'); if(n) n.value = S.myName;
+          }
+        });
+      }
+    });
+    render();
+    try {
+      var q = new URLSearchParams(location.search);
+      var dc = q.get('duel'), dl = q.get('lang'), dg = q.get('game');
+      if(dg && GAMES[dg]) S.game = dg;
+      if(dl && LANGS[dl]) S.lang = dl;
+      if(dc && /^[A-Z0-9]{6}$/.test(dc.toUpperCase())){
+        if(dg || dl) render();
+        el('duCode').value = dc.toUpperCase();
+        location.hash = 'duel';
+        history.replaceState(null, '', location.pathname + '#duel');
+        toast('وصلكي تحدي! اكتبي اسمك ودوسي دخول ⚔️');
+      }
+    } catch(e){}
+  }
+
+  /* menu card */
+  try {
+    if(!MENU.some(function(m){ return m[0] === 'duel'; })){
+      MENU.push(['duel','⚔️','تحدي لايف']); VIEWIDS.push('duel');
+      document.getElementById('menuGrid').insertAdjacentHTML('beforeend', '<a class="menu-card" href="#duel"><span class="m-ico">⚔️</span><span class="m-name">تحدي لايف</span></a>');
+    }
+  } catch(e){}
+
+  boot();
+})();
+
+
+/* ================= v49: new themes + profile chip + theme sync ================= */
+(function(){
+  /* ---- 6 new luxury themes ---- */
+  var NEW_THEMES = {
+    ruby:   ['ياقوتي ❤️', '#e11d48'],
+    amber:  ['كهرماني 🍯', '#f59e0b'],
+    orchid: ['أوركيد 🌺', '#d946ef'],
+    bronze: ['برونزي 🏺', '#c08a4e'],
+    peach:  ['خوخي 🍑', '#d0608a'],
+    lilac:  ['ليلكي 🪻', '#9d7bff']
+  };
+  try {
+    Object.keys(NEW_THEMES).forEach(function(k){
+      THEMES[k] = NEW_THEMES[k][0];
+      THEME_COLORS[k] = NEW_THEMES[k][1];
+    });
+    if(typeof window.buildThemeDots === 'function') window.buildThemeDots();
+  } catch(e){}
+
+  /* ---- theme sync to profile (saved per user, every device) ---- */
+  var SUPA_URL = 'https://yzzlgalxjaaevmytdazf.supabase.co';
+  var SUPA_KEY = 'sb_publishable_EmbKVWREHSs3sZ_nBKFyqg_zxv3Z38-';
+  var tsb = null, tme = null, tTimer = null;
+  function queueThemeSync(t){
+    if(!tme) return;
+    clearTimeout(tTimer);
+    tTimer = setTimeout(function(){
+      tsb.from('profiles').update({theme: t}).eq('id', tme.id).then(function(){});
+    }, 1500);
+  }
+  try {
+    var _apply = window.applyTheme;
+    if(typeof _apply === 'function'){
+      window.applyTheme = function(name){
+        _apply(name);
+        queueThemeSync(name);
+        refreshChip();
+      };
+    }
+  } catch(e){}
+
+  /* ---- profile chip in header ---- */
+  function lvl(){ return Math.floor(getLifetime() / 200) + 1; }
+  function chipName(){
+    return localStorage.getItem('lingua_duel_name') || 'ضيفتنا';
+  }
+  function refreshChip(){
+    var c = document.getElementById('lxChip');
+    if(!c) return;
+    var nm = chipName();
+    c.querySelector('.lx-cn').textContent = nm;
+    c.querySelector('.lx-cl').textContent = 'لفل ' + lvl() + ' • 💎 ' + getPoints();
+    c.querySelector('.lx-ca').textContent = (nm || '؟').charAt(0);
+  }
+  window.refreshChip = refreshChip;
+  function buildChip(){
+    var header = document.querySelector('header');
+    var pill = header && header.querySelector('.acc-pill');
+    if(!header || !pill || document.getElementById('lxChip')) return;
+    var chip = document.createElement('a');
+    chip.href = '#account';
+    chip.id = 'lxChip';
+    chip.className = 'lx-chip';
+    chip.innerHTML = '<span class="lx-ca">؟</span><span class="lx-cinfo"><b class="lx-cn">ضيفتنا</b><small class="lx-cl">لفل ١</small></span>';
+    header.insertBefore(chip, pill);
+    refreshChip();
+    /* keep XP fresh */
+    try {
+      var _award = window.awardPoints;
+      window.awardPoints = function(n, label){
+        if(typeof _award === 'function') _award(n, label);
+        setTimeout(refreshChip, 100);
+      };
+    } catch(e){}
+  }
+
+  function boot(){
+    buildChip();
+    if(!window.supabase){ setTimeout(boot, 400); return; }
+    tsb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+    tsb.auth.getSession().then(function(r){
+      if(r.data && r.data.session){
+        tme = r.data.session.user;
+        tsb.from('profiles').select('display_name,theme').eq('id', tme.id).maybeSingle().then(function(pr){
+          if(!pr.data) return;
+          if(pr.data.display_name){
+            try { localStorage.setItem('lingua_duel_name', pr.data.display_name); } catch(e){}
+            refreshChip();
+          }
+          var local = localStorage.getItem('lingua_theme') || 'rose';
+          if(pr.data.theme && pr.data.theme !== local && THEMES[pr.data.theme]){
+            if(typeof window.applyTheme === 'function') window.applyTheme(pr.data.theme);
+          } else if(!pr.data.theme){
+            queueThemeSync(local);
+          }
+        });
+      }
+    });
+  }
+  boot();
 })();
