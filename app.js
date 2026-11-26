@@ -6243,6 +6243,9 @@ window.KM_POOL = [
     knowme: {n:'قد إيه تعرفيني', i:'💜', d:'خمّني إجابات صاحبتك', vocab:false}
   };
   var dsb = null, chan = null;
+  window.__duelLog = [];
+  function dlog(m){ try { window.__duelLog.push(Date.now()%100000 + ' ' + m); if(window.__duelLog.length > 60) window.__duelLog.shift(); } catch(e){} }
+  Object.defineProperty(window, '__duelS', {get: function(){ return S; }});
   var S = {st:'home', game:'quiz', code:null, lang:'en', host:false, uid:null, myName:'', opp:null, players:[],
            qs:[], qi:0, startT:0, myAns:[], oppAns:[], myScore:0, oppDone:false, oppForfeit:false,
            raceN:0, raceMs:0, oppN:0, mem:{}, timers:[]};
@@ -6427,7 +6430,9 @@ window.KM_POOL = [
       if(opp && !S.opp){ S.opp = {uid: opp.uid, name: opp.name}; sndTick(); }
       if(opp) S.opp.name = opp.name;
       if(S.st === 'lobby') renderPlayers();
+      dlog('sync st='+S.st+' opp='+(opp?opp.name:'NONE')+' players='+arr.length);
       if(!opp && (S.st === 'game' || S.st === 'ending') && !S.oppDone){
+        dlog('FORFEIT st='+S.st);
         toast('صاحبتك خرجت — كملي لوحدك وهتكسبي بالانسحاب 👑');
         S.oppDone = true; S.oppForfeit = true; maybeFinish();
       }
@@ -6454,6 +6459,7 @@ window.KM_POOL = [
     });
   }
   function maybeStart(){
+    dlog('maybeStart host='+S.host+' st='+S.st+' iR='+!!S._iReady+' oR='+!!S._oppReady);
     if(!S.host || S.st !== 'lobby') return;
     if(S._iReady && S._oppReady){
       S.st = 'starting';
