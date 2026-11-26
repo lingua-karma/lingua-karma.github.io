@@ -2065,6 +2065,26 @@
   <div class="lib-books" id="libBooks"></div>
   <a class="lib-more" id="libMore" href="#" target="_blank" rel="noopener">المزيد من الكتب ↗</a>
 </section>
+<section id="food">
+  <h2 class="sec-title">✦ مطبخ لينجوا ✦</h2>
+  <p class="sec-sub">اطبخي واتعلمي كلمات الأكل بكل اللغات 🍳✨</p>
+  <div class="tabs lang-tabs" id="foodTabs">
+    <button class="tab lang-tab active" data-food="cook"><span class="ln">🍕 لعبة الطبخ</span></button>
+    <button class="tab lang-tab" data-food="words"><span class="ln">🍎 كلمات الأكل</span></button>
+  </div>
+  <div id="foodCook">
+    <div class="k-dish-bar" id="kDishBar"></div>
+    <div class="kitchen">
+      <div class="k-stage" id="kStage"></div>
+      <div class="k-side" id="kSide"></div>
+    </div>
+  </div>
+  <div id="foodWords" style="display:none">
+    <div class="tabs lang-tabs lib-langs" id="fwLangs"></div>
+    <div class="food-words" id="fwGrid"></div>
+  </div>
+</section>
+
 
 <style>
   .kr-card{background:rgba(255,255,255,.05);border:1px solid rgba(212,175,55,.25);border-radius:16px;padding:14px 18px;margin-bottom:10px;display:flex;align-items:center;gap:14px}
@@ -2424,6 +2444,27 @@
 .book-read{margin-top:auto;font-size:.72rem;color:var(--gold2);font-weight:700}
 .lib-more{display:block;text-align:center;margin:14px auto 0;font-size:.82rem;color:var(--gold2);text-decoration:none;font-weight:700}
 
+
+
+/* v17: food corner */
+.kitchen{display:grid;grid-template-columns:1fr 110px;gap:10px;max-width:640px;margin:0 auto;align-items:start}
+.k-stage{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:10px;text-align:center;min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.k-side{display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto}
+.k-ing{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:6px 4px;cursor:pointer;text-align:center;transition:transform .15s}
+.k-ing:active{transform:scale(.92)}
+.k-ing .k-name{font-size:.62rem;color:var(--muted);display:block;margin-top:2px}
+.k-ing.used{opacity:.35;pointer-events:none}
+.k-dish-bar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+.k-dish{background:var(--card);border:1px solid var(--border);border-radius:999px;padding:7px 16px;font-size:.8rem;font-weight:700;cursor:pointer;color:var(--ink)}
+.k-dish.active{background:linear-gradient(135deg,var(--gold),#b8860b);color:#1a1225;border-color:transparent}
+.k-progress{font-size:.75rem;color:var(--muted);margin-top:8px}
+.k-done{font-size:1.05rem;font-weight:800;color:var(--gold2);margin-top:8px}
+.food-words{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:640px;margin:0 auto}
+.fw-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px;display:flex;align-items:center;gap:10px}
+.fw-card svg{flex-shrink:0}
+.fw-t b{display:block;font-size:.88rem}
+.fw-t span{font-size:.72rem;color:var(--muted)}
+.fw-say{margin-inline-start:auto;background:none;border:none;font-size:1.1rem;cursor:pointer}
 
 </style>
 <script>
@@ -4823,7 +4864,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
+  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
 ];
 
 /* ================= v16: free books library ================= */
@@ -4892,6 +4933,110 @@ const MENU = [
     renderLib();
   });
   renderLib();
+})();
+
+
+/* ================= v17: food corner ================= */
+(function(){
+  function svgWrap(inner){ return '<svg viewBox="0 0 60 60" width="44" height="44">'+inner+'</svg>'; }
+  var ING = {
+    dough:{n:'عجينة', svg:'<ellipse cx="30" cy="34" rx="26" ry="20" fill="#f0d9a8" stroke="#d9b878" stroke-width="2"/>'},
+    sauce:{n:'صلصة', svg:'<ellipse cx="30" cy="34" rx="21" ry="15" fill="#e74c3c"/>'},
+    cheese:{n:'جبنة', svg:'<ellipse cx="30" cy="34" rx="18" ry="12" fill="#f7c948"/><circle cx="22" cy="31" r="3" fill="#e8a91c"/><circle cx="36" cy="37" r="2.5" fill="#e8a91c"/><circle cx="30" cy="30" r="2" fill="#e8a91c"/>'},
+    tomato:{n:'طماطم', svg:'<circle cx="30" cy="34" r="10" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/><circle cx="30" cy="34" r="4" fill="#ff8a75"/><path d="M26 24 q4 -4 8 0" stroke="#27ae60" stroke-width="3" fill="none"/>'},
+    pepperoni:{n:'بيبروني', svg:'<circle cx="24" cy="30" r="7" fill="#a93226"/><circle cx="38" cy="38" r="7" fill="#a93226"/><circle cx="24" cy="30" r="2" fill="#e5988e"/><circle cx="38" cy="38" r="2" fill="#e5988e"/>'},
+    mushroom:{n:'مشروم', svg:'<rect x="26" y="32" width="8" height="12" rx="3" fill="#f5f0e1"/><path d="M16 32 a14 12 0 0 1 28 0 z" fill="#b5651d"/><circle cx="24" cy="27" r="2" fill="#f5f0e1"/><circle cx="34" cy="25" r="2.5" fill="#f5f0e1"/>'},
+    bun_b:{n:'عيش تحت', svg:'<rect x="10" y="36" width="40" height="10" rx="5" fill="#e8b04b" stroke="#c98a2b" stroke-width="2"/>'},
+    patty:{n:'لحمة', svg:'<rect x="11" y="29" width="38" height="9" rx="4" fill="#6e3b1f" stroke="#54290f" stroke-width="2"/>'},
+    lettuce:{n:'خس', svg:'<path d="M10 30 q6 -8 12 0 q6 -8 12 0 q6 -8 12 0 q4 -6 8 -2 l-2 6 h-40 z" fill="#7bc950" stroke="#5aa83a" stroke-width="2"/>'},
+    cheese_slice:{n:'شريحة جبنة', svg:'<rect x="14" y="26" width="32" height="6" rx="2" fill="#f7c948" transform="rotate(4 30 29)"/>'},
+    bun_t:{n:'عيش فوق', svg:'<path d="M10 30 a20 16 0 0 1 40 0 z" fill="#e8b04b" stroke="#c98a2b" stroke-width="2"/><circle cx="22" cy="20" r="1.5" fill="#fff2cf"/><circle cx="32" cy="16" r="1.5" fill="#fff2cf"/><circle cx="40" cy="21" r="1.5" fill="#fff2cf"/>'},
+    rice:{n:'رز', svg:'<path d="M12 40 q18 -10 36 0 l-4 8 h-28 z" fill="#fdf6e3"/><circle cx="24" cy="34" r="2" fill="#fff"/><circle cx="32" cy="32" r="2" fill="#fff"/><circle cx="38" cy="35" r="2" fill="#fff"/>'},
+    fish:{n:'سمك', svg:'<path d="M14 34 q12 -12 24 0 q-12 12 -24 0 z" fill="#ff8c69" stroke="#e06a45" stroke-width="2"/><path d="M38 34 l8 -6 v12 z" fill="#e06a45"/><circle cx="20" cy="32" r="1.6" fill="#333"/>'},
+    avo:{n:'أفوكادو', svg:'<ellipse cx="24" cy="34" rx="9" ry="11" fill="#568203"/><ellipse cx="24" cy="34" rx="6" ry="8" fill="#a8c256"/><circle cx="24" cy="36" r="3.4" fill="#7a4a21"/>'},
+    cucum:{n:'خيار', svg:'<ellipse cx="40" cy="34" rx="6" ry="10" fill="#2e7d32"/><ellipse cx="40" cy="34" rx="4" ry="8" fill="#a5d6a7"/>'}
+  };
+  function stageSvg(layers){
+    var order = {dough:1,sauce:2,cheese:3,tomato:4,pepperoni:4,mushroom:4,bun_b:1,patty:2,cheese_slice:3,lettuce:4,tomato2:4,bun_t:5,rice:1,fish:2,avo:3,cucum:3};
+    var parts = layers.map(function(k){ return ING[k].svg; }).join('');
+    return '<svg viewBox="0 0 60 60" width="220" height="220">'
+      + '<ellipse cx="30" cy="46" rx="27" ry="8" fill="#e8e8f0" stroke="#c9c9d8" stroke-width="2"/>'
+      + parts + '</svg>';
+  }
+  var DISHES = {
+    pizza:{n:'🍕 بيتزا', need:['dough','sauce','cheese','tomato','pepperoni','mushroom'], word:{en:'Pizza',fr:'Pizza',de:'Pizza',zh:'披萨',ko:'피자'}},
+    burger:{n:'🍔 برجر', need:['bun_b','patty','cheese_slice','lettuce','tomato','bun_t'], word:{en:'Burger',fr:'Burger',de:'Burger',zh:'汉堡',ko:'버거'}},
+    sushi:{n:'🍣 سوشي', need:['rice','fish','avo','cucum'], word:{en:'Sushi',fr:'Sushi',de:'Sushi',zh:'寿司',ko:'초밥'}}
+  };
+  var curDish='pizza', added=[];
+  var bar=document.getElementById('kDishBar'), stage=document.getElementById('kStage'), side=document.getElementById('kSide');
+  if(!bar) return;
+  bar.innerHTML = Object.keys(DISHES).map(function(k){
+    return '<button class="k-dish'+(k===curDish?' active':'')+'" data-dish="'+k+'">'+DISHES[k].n+'</button>';
+  }).join('');
+  function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  function renderKitchen(done){
+    var D = DISHES[curDish];
+    stage.innerHTML = stageSvg(added)
+      + '<div class="k-progress">'+added.length+' / '+D.need.length+' مكونات</div>'
+      + (done ? '<div class="k-done">🎉 '+D.n+' جاهزة! +10 نقاط</div><div style="font-size:.78rem;color:var(--muted);margin-top:4px">'+Object.keys(D.word).map(function(l){return esc(D.word[l]);}).join(' · ')+'</div>' : '');
+    side.innerHTML = D.need.map(function(k){
+      var used = added.indexOf(k)>=0;
+      return '<div class="k-ing'+(used?' used':'')+'" data-ing="'+k+'">'+svgWrap(ING[k].svg)+'<span class="k-name">'+ING[k].n+'</span></div>';
+    }).join('');
+  }
+  side.addEventListener('click', function(e){
+    var el = e.target.closest('.k-ing'); if(!el || el.classList.contains('used')) return;
+    added.push(el.dataset.ing);
+    var done = added.length >= DISHES[curDish].need.length;
+    renderKitchen(done);
+    if(done){ try{ addPoints(10); }catch(e){} try{ confettiBurst(); }catch(e){} }
+  });
+  bar.addEventListener('click', function(e){
+    var b = e.target.closest('[data-dish]'); if(!b) return;
+    curDish = b.dataset.dish; added=[];
+    bar.querySelectorAll('.k-dish').forEach(function(x){ x.classList.toggle('active', x===b); });
+    renderKitchen(false);
+  });
+  renderKitchen(false);
+
+  /* food words */
+  var FW = {
+    en:[['Apple','تفاحة','🍎'],['Bread','عيش','🍞'],['Water','مية','💧'],['Rice','رز','🍚'],['Chicken','فراخ','🍗'],['Milk','لبن','🥛'],['Egg','بيضة','🥚'],['Fish','سمك','🐟']],
+    fr:[['Pomme','تفاحة','🍎'],['Pain','عيش','🍞'],['Eau','مية','💧'],['Riz','رز','🍚'],['Poulet','فراخ','🍗'],['Lait','لبن','🥛'],['Œuf','بيضة','🥚'],['Poisson','سمك','🐟']],
+    de:[['Apfel','تفاحة','🍎'],['Brot','عيش','🍞'],['Wasser','مية','💧'],['Reis','رز','🍚'],['Hähnchen','فراخ','🍗'],['Milch','لبن','🥛'],['Ei','بيضة','🥚'],['Fisch','سمك','🐟']],
+    zh:[['苹果 (píngguǒ)','تفاحة','🍎'],['面包 (miànbāo)','عيش','🍞'],['水 (shuǐ)','مية','💧'],['米饭 (mǐfàn)','رز','🍚'],['鸡肉 (jīròu)','فراخ','🍗'],['牛奶 (niúnǎi)','لبن','🥛'],['鸡蛋 (jīdàn)','بيضة','🥚'],['鱼 (yú)','سمك','🐟']],
+    ko:[['사과 (sagwa)','تفاحة','🍎'],['빵 (ppang)','عيش','🍞'],['물 (mul)','مية','💧'],['밥 (bap)','رز','🍚'],['닭고기 (dakgogi)','فراخ','🍗'],['우유 (uyu)','لبن','🥛'],['계란 (gyeran)','بيضة','🥚'],['물고기 (mulgogi)','سمك','🐟']]
+  };
+  var FWNAME = {en:'إنجليزي 🇬🇧',fr:'فرنسي 🇫🇷',de:'ألماني 🇩🇪',zh:'صيني 🇨🇳',ko:'كوري 🇰🇷'};
+  var fwLang='en';
+  var fwTabs=document.getElementById('fwLangs'), fwGrid=document.getElementById('fwGrid');
+  fwTabs.innerHTML = Object.keys(FW).map(function(k){
+    return '<button class="tab lang-tab'+(k===fwLang?' active':'')+'" data-fw="'+k+'"><span class="ln">'+FWNAME[k]+'</span></button>';
+  }).join('');
+  function renderFW(){
+    fwGrid.innerHTML = FW[fwLang].map(function(w){
+      return '<div class="fw-card"><span style="font-size:1.6rem">'+w[2]+'</span><div class="fw-t"><b>'+esc(w[0])+'</b><span>'+esc(w[1])+'</span></div><button class="fw-say" data-say="'+esc(w[0].replace(/ *\(.*?\)/,''))+'">🔊</button></div>';
+    }).join('');
+  }
+  fwTabs.addEventListener('click', function(e){
+    var b=e.target.closest('[data-fw]'); if(!b) return;
+    fwLang=b.dataset.fw;
+    fwTabs.querySelectorAll('.lang-tab').forEach(function(t){ t.classList.toggle('active', t===b); });
+    renderFW();
+  });
+  fwGrid.addEventListener('click', function(e){
+    var b=e.target.closest('.fw-say'); if(!b) return;
+    try{ var u=new SpeechSynthesisUtterance(b.dataset.say); u.lang={en:'en-US',fr:'fr-FR',de:'de-DE',zh:'zh-CN',ko:'ko-KR'}[fwLang]; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){}
+  });
+  renderFW();
+
+  document.getElementById('foodTabs').addEventListener('click', function(e){
+    var b=e.target.closest('[data-food]'); if(!b) return;
+    document.querySelectorAll('#foodTabs .lang-tab').forEach(function(t){ t.classList.toggle('active', t===b); });
+    document.getElementById('foodCook').style.display = b.dataset.food==='cook' ? '' : 'none';
+    document.getElementById('foodWords').style.display = b.dataset.food==='words' ? '' : 'none';
+  });
 })();
 
 document.getElementById('menuGrid').innerHTML = MENU.map(function(m){
@@ -6665,7 +6810,7 @@ gbkRender();
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v16.0</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v17.0</div>
 <script>
 
 /* ================= v13: learning map, personality quiz, XO, korean ================= */
