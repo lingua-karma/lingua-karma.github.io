@@ -2152,6 +2152,21 @@
     <div id="wBody"><div style="color:var(--muted);font-size:.85rem">بنجيب الجو...</div></div>
   </div>
 </section>
+<section id="shooter">
+  <h2 class="sec-title">✦ صيد الكلمات ✦</h2>
+  <p class="sec-sub">دوسي على الترجمة الصح قبل ما تهرب! 🔫</p>
+  <div class="game-hud"><span>النقاط: <b id="wsScore">0</b></span><span>المستوى: <b id="wsLvl">1</b></span><span>الأرواح: <b id="wsLives">3</b> ❤️</span></div>
+  <canvas class="game-canvas" id="wsCanvas" height="420"></canvas>
+  <button class="game-start" id="wsStart">▶️ ابدئي</button>
+</section>
+<section id="runner">
+  <h2 class="sec-title">✦ عدّاءة لينجوا ✦</h2>
+  <p class="sec-sub">دوسي على الشاشة عشان تنطّي فوق العوائق! 🏃‍♀️</p>
+  <div class="game-hud"><span>المسافة: <b id="rnScore">0</b>م</span><span>أحسن نتيجة: <b id="rnBest">0</b>م</span></div>
+  <canvas class="game-canvas" id="rnCanvas" height="300"></canvas>
+  <button class="game-start" id="rnStart">▶️ ابدئي</button>
+</section>
+
 
 
 
@@ -2597,6 +2612,13 @@
 .w-main{font-size:3rem;font-weight:800;color:var(--gold2)}
 .w-desc{font-size:.95rem;margin-top:2px}
 .w-details{display:flex;justify-content:center;gap:18px;margin-top:14px;font-size:.78rem;color:var(--muted)}
+
+
+/* v22: shooter + runner */
+.game-canvas{display:block;width:100%;max-width:640px;margin:0 auto;background:#14101f;border:1px solid var(--border);border-radius:16px;touch-action:manipulation}
+.game-hud{display:flex;justify-content:space-between;max-width:640px;margin:8px auto 6px;font-size:.82rem;color:var(--muted)}
+.game-hud b{color:var(--gold2)}
+.game-start{display:block;margin:10px auto;background:linear-gradient(135deg,var(--gold),#b8860b);border:none;border-radius:999px;padding:10px 28px;font-weight:800;font-size:.9rem;cursor:pointer;color:#1a1225;font-family:inherit}
 
 </style>
 <script>
@@ -4996,7 +5018,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
+  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
 ];
 
 /* ================= v16: free books library ================= */
@@ -5464,6 +5486,171 @@ const MENU = [
     }
     wc.addEventListener('change', loadWeather);
     loadWeather();
+  }
+})();
+
+
+/* ================= v22: word shooter + runner ================= */
+(function(){
+  /* ---- word shooter ---- */
+  var WORDS=[
+    ['apple','تفاحة',['برتقالة','موزة']],['water','مية',['عصير','لبن']],['book','كتاب',['قلم','ورقة']],
+    ['house','بيت',['شارع','شباك']],['sun','شمس',['قمر','نجمة']],['cat','قطة',['كلب','أرنب']],
+    ['friend','صاحبة',['عدو','جار']],['happy','مبسوطة',['زعلانة','عيّانة']],['school','مدرسة',['مستشفى','سوق']],
+    ['love','حب',['كره','خوف']],['food','أكل',['شرب','نوم']],['time','وقت',['مكان','يوم']],
+    ['beautiful','جميلة',['وحشة','عادية']],['family','عيلة',['عمل','سفر']],['money','فلوس',['ذهب','فضة']],
+    ['morning','صباح',['ليل','ظهر']],['rain','مطر',['ثلج','رياح']],['music','موسيقى',['سينما','رقص']]
+  ];
+  var cvs=document.getElementById('wsCanvas');
+  if(cvs){
+    var ctx=cvs.getContext('2d');
+    var W=0, bubbles=[], score=0, lives=3, lvl=1, running=false, curWord=null, raf=null, spawnT=0;
+    function fit(){ W=cvs.width=cvs.clientWidth; }
+    function newWord(){
+      curWord = WORDS[Math.floor(Math.random()*WORDS.length)];
+      var opts = [curWord[1]].concat(curWord[2]).sort(function(){return Math.random()-.5;});
+      bubbles = opts.map(function(t,i){
+        return {t:t, x:(i+1)*(W/4), y:440, r:44, correct:t===curWord[1], popped:false};
+      });
+      spawnT=0;
+    }
+    function loop(){
+      if(!running) return;
+      ctx.clearRect(0,0,W,420);
+      ctx.fillStyle='#14101f'; ctx.fillRect(0,0,W,420);
+      /* word card */
+      ctx.fillStyle='#241d3a';
+      ctx.beginPath(); ctx.roundRect(W/2-90, 14, 180, 56, 14); ctx.fill();
+      ctx.fillStyle='#f5d76e'; ctx.font='bold 22px Readex Pro, sans-serif'; ctx.textAlign='center';
+      ctx.fillText(curWord[0], W/2, 50);
+      var speed = .55 + lvl*.18;
+      bubbles.forEach(function(b){
+        if(b.popped) return;
+        b.y -= speed;
+        ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 7);
+        ctx.fillStyle = b.popAnim ? '#27ae60' : '#2b2350';
+        ctx.fill();
+        ctx.strokeStyle='#7c5cff'; ctx.lineWidth=2; ctx.stroke();
+        ctx.fillStyle='#fff'; ctx.font='bold 14px Readex Pro, sans-serif';
+        ctx.fillText(b.t, b.x, b.y+5);
+        if(b.y < -50){
+          b.popped=true;
+          if(b.correct){ lives--; updHud(); if(lives<=0) return gameOver(); newWord(); }
+        }
+      });
+      if(bubbles.every(function(b){return b.popped;})) newWord();
+      raf=requestAnimationFrame(loop);
+    }
+    function updHud(){
+      document.getElementById('wsScore').textContent=score;
+      document.getElementById('wsLvl').textContent=lvl;
+      document.getElementById('wsLives').textContent=lives;
+    }
+    function gameOver(){
+      running=false; cancelAnimationFrame(raf);
+      ctx.fillStyle='rgba(10,8,18,.85)'; ctx.fillRect(0,0,W,420);
+      ctx.fillStyle='#f5d76e'; ctx.font='bold 26px Readex Pro, sans-serif'; ctx.textAlign='center';
+      ctx.fillText('انتهت اللعبة! 🎯', W/2, 190);
+      ctx.font='18px Readex Pro, sans-serif'; ctx.fillStyle='#fff';
+      ctx.fillText('نقاطك: '+score, W/2, 224);
+      document.getElementById('wsStart').textContent='🔄 العبي تاني';
+    }
+    cvs.addEventListener('pointerdown', function(e){
+      if(!running) return;
+      var r=cvs.getBoundingClientRect();
+      var mx=(e.clientX-r.left)*(W/r.width), my=(e.clientY-r.top)*(420/r.height);
+      bubbles.forEach(function(b){
+        if(b.popped) return;
+        if(Math.hypot(mx-b.x,my-b.y)<b.r){
+          b.popped=true;
+          if(b.correct){ score+=10; lvl=1+Math.floor(score/50); try{ addPoints(2); }catch(e){} newWord(); }
+          else { lives--; if(lives<=0) return gameOver(); }
+          updHud();
+        }
+      });
+    });
+    document.getElementById('wsStart').addEventListener('click', function(){
+      fit(); score=0; lives=3; lvl=1; running=true; updHud(); newWord();
+      cancelAnimationFrame(raf); loop();
+    });
+    fit();
+  }
+
+  /* ---- runner ---- */
+  var rc=document.getElementById('rnCanvas');
+  if(rc){
+    var rctx=rc.getContext('2d');
+    var RW=0, ry=0, rv=0, obstacles=[], dist=0, rRunning=false, rraf=null, frame=0, best=0;
+    try{ best=+(localStorage.getItem('rn_best')||0); }catch(e){}
+    document.getElementById('rnBest').textContent=best;
+    var GROUND=250, PY=30;
+    function rfit(){ RW=rc.width=rc.clientWidth; }
+    function rloop(){
+      if(!rRunning) return;
+      frame++;
+      dist+=.25;
+      /* physics */
+      rv+=.9; ry+=rv;
+      if(ry>GROUND-PY*2){ ry=GROUND-PY*2; rv=0; }
+      /* spawn */
+      if(frame%Math.max(50,110-Math.floor(dist/60))===0){
+        obstacles.push({x:RW+30, w:16+Math.random()*14, h:26+Math.random()*26});
+      }
+      obstacles.forEach(function(o){ o.x-=4.5+dist/300; });
+      obstacles=obstacles.filter(function(o){return o.x>-40;});
+      /* draw */
+      rctx.clearRect(0,0,RW,300);
+      rctx.fillStyle='#14101f'; rctx.fillRect(0,0,RW,300);
+      rctx.strokeStyle='#3a3348'; rctx.lineWidth=2;
+      rctx.beginPath(); rctx.moveTo(0,GROUND+14); rctx.lineTo(RW,GROUND+14); rctx.stroke();
+      /* stars */
+      rctx.fillStyle='rgba(245,215,110,.35)';
+      for(var i=0;i<6;i++){ rctx.fillRect((i*137-frame*.4)%RW, 30+(i*53)%90, 2, 2); }
+      /* girl runner */
+      var px=60;
+      rctx.fillStyle='#ff9ecb';
+      rctx.beginPath(); rctx.arc(px+15, ry+10, 11, 0, 7); rctx.fill(); /* head */
+      rctx.fillStyle='#7c5cff';
+      rctx.beginPath(); rctx.roundRect(px+4, ry+22, 22, 26, 7); rctx.fill(); /* body */
+      var legSwing = Math.sin(frame*.3)*9;
+      rctx.strokeStyle='#ff9ecb'; rctx.lineWidth=5; rctx.lineCap='round';
+      rctx.beginPath(); rctx.moveTo(px+10, ry+46); rctx.lineTo(px+10+legSwing, ry+60); rctx.stroke();
+      rctx.beginPath(); rctx.moveTo(px+20, ry+46); rctx.lineTo(px+20-legSwing, ry+60); rctx.stroke();
+      /* obstacles (crystals) */
+      obstacles.forEach(function(o){
+        rctx.fillStyle='#e74c3c';
+        rctx.beginPath();
+        rctx.moveTo(o.x, GROUND+14); rctx.lineTo(o.x+o.w/2, GROUND+14-o.h); rctx.lineTo(o.x+o.w, GROUND+14);
+        rctx.closePath(); rctx.fill();
+        /* collision */
+        if(o.x < px+26 && o.x+o.w > px && ry+48 > GROUND+14-o.h){
+          rGameOver();
+        }
+      });
+      document.getElementById('rnScore').textContent=Math.floor(dist);
+      rraf=requestAnimationFrame(rloop);
+    }
+    function rGameOver(){
+      rRunning=false; cancelAnimationFrame(rraf);
+      var d=Math.floor(dist);
+      if(d>best){ best=d; try{ localStorage.setItem('rn_best', best); }catch(e){} document.getElementById('rnBest').textContent=best; }
+      try{ addPoints(Math.min(15, Math.floor(d/100))); }catch(e){}
+      rctx.fillStyle='rgba(10,8,18,.85)'; rctx.fillRect(0,0,RW,300);
+      rctx.fillStyle='#f5d76e'; rctx.font='bold 24px Readex Pro, sans-serif'; rctx.textAlign='center';
+      rctx.fillText('خبطتي! 😅', RW/2, 130);
+      rctx.font='17px Readex Pro, sans-serif'; rctx.fillStyle='#fff';
+      rctx.fillText('جريتي '+d+' متر', RW/2, 162);
+      document.getElementById('rnStart').textContent='🔄 العبي تاني';
+    }
+    rc.addEventListener('pointerdown', function(){
+      if(!rRunning) return;
+      if(ry>=GROUND-PY*2-1) rv=-14;
+    });
+    document.getElementById('rnStart').addEventListener('click', function(){
+      rfit(); dist=0; ry=GROUND-PY*2; rv=0; obstacles=[]; frame=0; rRunning=true;
+      cancelAnimationFrame(rraf); rloop();
+    });
+    rfit();
   }
 })();
 
@@ -7238,7 +7425,7 @@ gbkRender();
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v21.1</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v22.0</div>
 <script>
 
 /* ================= v13: learning map, personality quiz, XO, korean ================= */
