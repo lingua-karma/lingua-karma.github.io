@@ -6545,13 +6545,15 @@ window.KM_POOL = [
   }
   function scheduleReconnect(why){
     if(S._rc) return;
+    S._fails = (S._fails || 0) + 1;
+    var delay = Math.min(15000, 2500 * S._fails);
     S._rc = setTimeout(function(){
       S._rc = null;
       if(!S.code || S.st === 'home') return;
       duelLog('auto-reconnect (' + why + ')');
       if(chan){ try { dsb.removeChannel(chan); } catch(e){} chan = null; }
       connect(S.code, S.host, true);
-    }, 2500);
+    }, delay);
   }
   function connect(code, isHost, preserve){
     var freshRoom = !preserve && (S.code !== code);
@@ -6561,7 +6563,9 @@ window.KM_POOL = [
     S._joined = false; if(!preserve) S._subOnce = false;
     duelLog('connect ' + code + (isHost ? ' host' : ' guest') + (preserve ? ' (re)' : ''));
     chan = dsb.channel('duel-' + code, {config: {presence: {key: S.uid}}});
+    var myChan = chan;
     chan.on('presence', {event: 'sync'}, function(){
+      if(chan !== myChan) return;
       var st = chan.presenceState(), arr = [];
       Object.keys(st).forEach(function(k){
         var pr = st[k][0];
@@ -6603,6 +6607,7 @@ window.KM_POOL = [
       }
     });
     chan.on('broadcast', {event: 'du'}, function(ev){
+      if(chan !== myChan) return;
       var p = ev.payload;
       if(!p || p.by === S.uid) return;
       if(p.t === 'ready'){ S.opp = S.opp || {uid: p.by, name: p.name}; S._oppReady = true; maybeStart(); }
@@ -6617,9 +6622,11 @@ window.KM_POOL = [
       if(p.t === 'kans'){ S.oppK = p.ans; knowMaybeReveal(); }
     });
     chan.subscribe(function(status){
+      if(chan !== myChan) return;
       duelLog('chan ' + status);
       if(status === 'SUBSCRIBED'){
         S._joined = true;
+        S._fails = 0;
         if(S._wdog){ clearTimeout(S._wdog); S._wdog = null; }
         trackState();
         if(S.st === 'lobby'){
@@ -7665,7 +7672,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v61';
+  window.LINGUA_VERSION = 'v62';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
