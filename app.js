@@ -6405,3 +6405,118 @@ gbkRender();
 
   boot();
 })();
+
+
+/* ================= v47: luxury grouped navigation ================= */
+(function(){
+  /* drawn SVG icons (stroke, 24x24) */
+  var IC = {
+    home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg>',
+    flag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4c4-2 7 2 11 0v9c-4 2-7-2-11 0"/></svg>',
+    swords: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l9.5 9.5M4 4v4M4 4h4"/><path d="M20 4l-9.5 9.5M20 4v4M20 4h-4"/><path d="M13.5 13.5 17 21l-1.5-1.5L14 21l-.5-3.5zM10.5 13.5 7 21l1.5-1.5L10 21l.5-3.5z" opacity=".0"/><path d="M14.5 14.5 19 21h-3l-2-2.5M9.5 14.5 5 21h3l2-2.5"/></svg>',
+    hearts: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5.5C5.5 5.5 3.5 7.4 3.5 9.9c0 3.2 4.5 6.1 6 7.1 1.5-1 6-3.9 6-7.1 0-2.5-2-4.4-4.5-4.4-1 0-2 .4-3 1.4-.7-1-1.6-1.4-2-1.4z" transform="translate(-1.5 0)"/><path d="M17.5 9c-1.7 0-3 1.3-3 2.9 0 2.1 3 4 4 4.7 1-.7 4-2.6 4-4.7 0-1.6-1.3-2.9-3-2.9-.6 0-1.3.3-2 .9-.4-.6-.7-.9-1-.9z" opacity=".65"/></svg>',
+    grid: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg>',
+    book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C6 4 9 4 12 6c3-2 6-2 8-.5V18c-2-1.5-5-1.5-8 .5-3-2-6-2-8-.5z"/><path d="M12 6v12.5"/></svg>',
+    gamepad: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8h10a5 5 0 0 1 5 5c0 2.8-2.2 5-5 5-1.4 0-2.6-.6-3.4-1.5h-3.2C9.6 17.4 8.4 18 7 18c-2.8 0-5-2.2-5-5a5 5 0 0 1 5-5z"/><path d="M7.5 11v4M5.5 13h4"/><circle cx="16" cy="12" r=".6" fill="currentColor"/><circle cx="18.5" cy="14" r=".6" fill="currentColor"/></svg>',
+    chat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-8 8c-1.2 0-2.4-.2-3.4-.7L4 20l1-4.4A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14h4"/></svg>',
+    sparkle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M18.5 15.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z"/></svg>',
+    search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>',
+    close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg>'
+  };
+
+  var GROUPS = [
+    {id:'learn', icon:'book', title:'تعلّم 📚', items:['dash','corners','courses','lessons','quiz','map','dict','gallery','speak','videos','songs','music','cinema','korean','library','stories','capitals','food','fashion','trip','places','quotes','hobbies','themes','tips','eng','scholar','ch30','flash','puzzle','qotd']},
+    {id:'play', icon:'gamepad', title:'العب 🎮', items:['games','brain','fun','dressup','outfit','wheel','snake','xo','shooter','runner','piano','color','duel']},
+    {id:'social', icon:'chat', title:'صحابي 💜', items:['friends','wall','mood','jokes','vent','diary','gbk','karma','pquiz']},
+    {id:'life', icon:'sparkle', title:'حياتي ✨', items:['deen','mushaf','khatma','weather','shop','premium','settings','ai']}
+  ];
+
+  /* name lookup from MENU */
+  var NAMES = {};
+  try { MENU.forEach(function(m){ NAMES[m[0]] = m[2]; }); } catch(e){}
+  NAMES.duel = 'تحدي لايف'; NAMES.account = 'حسابي';
+
+  /* ---- build the 5-tab bar ---- */
+  var nav = document.getElementById('topNav');
+  if(!nav) return;
+  nav.classList.add('lx');
+  nav.innerHTML =
+    '<a href="#" data-id="home" class="lx-t"><span class="lx-i">' + IC.home + '</span><span class="tl">الرئيسية</span></a>' +
+    '<a href="#map" data-id="map" class="lx-t"><span class="lx-i">' + IC.flag + '</span><span class="tl">مسار التعلم</span></a>' +
+    '<a href="#duel" data-id="duel" class="lx-t"><span class="lx-i">' + IC.swords + '</span><span class="tl">تحدي لايف</span></a>' +
+    '<a href="#friends" data-id="friends" class="lx-t"><span class="lx-i">' + IC.hearts + '</span><span class="tl">أصحابي</span></a>' +
+    '<button type="button" class="lx-t lx-all" id="lxAll"><span class="lx-i">' + IC.grid + '</span><span class="tl">الأقسام</span><span class="lx-glow"></span></button>' +
+    '<span class="lx-pill" id="lxPill"></span>';
+
+  function movePill(){
+    var cur = nav.querySelector('.lx-t.active');
+    var pill = document.getElementById('lxPill');
+    if(!pill) return;
+    if(!cur){ pill.style.opacity = '0'; return; }
+    pill.style.opacity = '1';
+    pill.style.width = cur.offsetWidth + 'px';
+    pill.style.transform = 'translateX(' + (cur.offsetLeft) + 'px)';
+  }
+  window.markNavActive = function(){
+    var id = location.hash.slice(1) || 'home';
+    /* map deep sections to the overlay tab */
+    var known = ['home','map','duel','friends'];
+    var on = known.indexOf(id) >= 0 ? id : 'all';
+    nav.querySelectorAll('.lx-t').forEach(function(a){ a.classList.toggle('active', (a.dataset.id || 'all') === on); });
+    movePill();
+  };
+  window.addEventListener('resize', movePill);
+
+  /* ---- overlay directory ---- */
+  var ov = null, built = false;
+  function buildOverlay(){
+    if(built) return; built = true;
+    ov = document.createElement('div');
+    ov.id = 'lxOv';
+    ov.innerHTML =
+      '<div class="lx-back" id="lxBack"></div>' +
+      '<div class="lx-sheet" role="dialog" aria-label="الأقسام">' +
+      '<div class="lx-grab"></div>' +
+      '<div class="lx-head"><span class="lx-ht">✦ كل الأقسام</span><button class="lx-x" id="lxX">' + IC.close + '</button></div>' +
+      '<div class="lx-search"><span class="lx-si">' + IC.search + '</span><input id="lxQ" placeholder="دوّري على قسم... 🔍"></div>' +
+      '<div class="lx-groups" id="lxGroups">' +
+      GROUPS.map(function(g){
+        return '<div class="lx-g" data-g="' + g.id + '"><div class="lx-gh"><span class="lx-gi">' + IC[g.icon] + '</span>' + g.title + '</div>' +
+          '<div class="lx-gitems">' +
+          g.items.filter(function(id){ return NAMES[id]; }).map(function(id){
+            return '<a class="lx-item" href="#' + id + '" data-nm="' + NAMES[id] + '"><span>' + NAMES[id] + '</span></a>';
+          }).join('') + '</div></div>';
+      }).join('') + '</div></div>';
+    document.body.appendChild(ov);
+    document.getElementById('lxBack').onclick = closeOv;
+    document.getElementById('lxX').onclick = closeOv;
+    ov.addEventListener('click', function(e){
+      var a = e.target.closest('.lx-item');
+      if(a) closeOv();
+    });
+    document.getElementById('lxQ').addEventListener('input', function(){
+      var q = this.value.trim();
+      document.querySelectorAll('#lxGroups .lx-item').forEach(function(it){
+        it.style.display = (!q || it.dataset.nm.indexOf(q) >= 0) ? '' : 'none';
+      });
+      document.querySelectorAll('#lxGroups .lx-g').forEach(function(g){
+        var any = Array.prototype.some.call(g.querySelectorAll('.lx-item'), function(it){ return it.style.display !== 'none'; });
+        g.style.display = any ? '' : 'none';
+      });
+    });
+  }
+  function openOv(){
+    buildOverlay();
+    ov.classList.add('on');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function(){ var q = document.getElementById('lxQ'); if(q) q.focus(); }, 350);
+  }
+  function closeOv(){
+    if(!ov) return;
+    ov.classList.remove('on');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('lxAll').onclick = openOv;
+
+  markNavActive();
+})();
