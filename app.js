@@ -6554,6 +6554,7 @@ window.KM_POOL = [
     }, 2500);
   }
   function connect(code, isHost, preserve){
+    var freshRoom = !preserve && (S.code !== code);
     if(freshRoom){ S._iReady = false; S._oppReady = false; }
     if(!preserve){ S.st = 'lobby'; }
     S.code = code; S.host = isHost;
@@ -7664,7 +7665,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v60';
+  window.LINGUA_VERSION = 'v61';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
