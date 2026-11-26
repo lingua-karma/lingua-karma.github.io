@@ -6652,7 +6652,9 @@ window.KM_POOL = [
           }
           return;
         }
-        S.oppDone = true; S.oppAns = p.ans || S.oppAns; S.oppN = p.n || S.oppN; S.oppMs = p.ms || 0; S.oppPairs = p.pairs; maybeFinish();
+        S.oppDone = true; S.oppAns = p.ans || S.oppAns; S.oppN = p.n || S.oppN; S.oppMs = p.ms || 0; S.oppPairs = p.pairs;
+        /* v76: only finish if I already ended — if I'm still playing, let me finish; my endMyGame will use oppDone */
+        if(S.st === 'ending') maybeFinish();
       }
       if(p.t === 'tans'){ S.tAns[p.by] = {name: p.name, txt: p.txt, skip: p.skip}; truthMaybeReveal(); }
       if(p.t === 'tnext'){ if(!S.host) truthRound(p.r); }
@@ -7317,7 +7319,7 @@ window.KM_POOL = [
     send('done', payload);
     var f = el('duFb');
     if(f) f.textContent = 'خلصتي! مستنيين ' + (S.opp ? S.opp.name : 'صاحبتك') + '... ⏳';
-    later(maybeFinish, 10000);
+    if(S.oppDone) maybeFinish(); else later(maybeFinish, 10000);
   }
   function maybeFinish(){
     if(S.st !== 'ending' && S.st !== 'game') return;
@@ -7958,7 +7960,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v75';
+  window.LINGUA_VERSION = 'v76';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
