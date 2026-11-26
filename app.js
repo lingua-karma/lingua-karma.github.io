@@ -6127,17 +6127,34 @@ window.TRUTH_POOL = [
 {q:'اتصورتي صورة محرجة؟ إيه كانت؟ 📸', c:'embar'},
 {q:'قولتي على حد "بحبك" بالغلط؟ 😅', c:'embar'},
 {q:'إيه أطرف لقب اتناديتي بيه؟ 🏷️', c:'embar'},
-{q:'نسيتي اسم حد وانتي بتكلميه؟ عملتي إيه؟ 🫣', c:'embar'}
+{q:'نسيتي اسم حد وانتي بتكلميه؟ عملتي إيه؟ 🫣', c:'embar'},
+{q:'لو تقدري تعيشي جوه فيلم أو مسلسل — يكون إيه؟ 🎬', c:'fun'},
+{q:'إيه أكتر أكل ممكن تاكليه كل يوم من غير ما تزهقي؟ 🍝', c:'fun'},
+{q:'لو صوتك يتسمع في مكبرات المدينة دقيقة واحدة — هتقولي إيه؟ 📢', c:'fun'},
+{q:'إيه أغرب هدية وصلتك في حياتك؟ 🎁', c:'fun'},
+{q:'لو حياتك اسمها كتاب — يبقى عنوانه إيه؟ 📖', c:'fun'},
+{q:'إيه أكتر موقف كسوفة حصلك في مكان عام؟ 🙈', c:'embar'},
+{q:'هل رديتي على حد بالغلط في الشات وكان محرج؟ احكي! 📱', c:'embar'},
+{q:'إيه أطول مدة قعدتيها من غير ما تسرحي شعرك؟ 😅', c:'embar'},
+{q:'هل غنيتي بصوت عالي وانتي فاكرة محدش سامعك؟ 🎤', c:'embar'},
+{q:'إيه أغبى كلمة بتلاقي نفسك بتقوليها كتير؟ 🤭', c:'embar'},
 ];
+
 window.KM_POOL = [
 {q:'قهوة ولا شاي؟', o:['قهوة ☕','شاي 🍵','اللي اتنين','ولا واحد']},
-{q:'البحر ولا السفر للجبال؟', o:['البحر 🌊','الجبال ⛰️','اللي اتنين','أفضّل البيت']},
-{q:'بتصحي بدري ولا بتسهري؟', o:['بصحى بدري 🌅','بسهر 🌙','على مزاجي']},
-{q:'الأكل المفضل؟', o:['محشي','كشري','مكرونة','فراخ']},
-{q:'لو كسبتي مليون جنيه — أول حاجة؟', o:['أسافر ✈️','أشتري حاجة كبيرة 🛍️','أدّخرها 💰','أتصدق بجزء']},
+{q:'البحر ولا السفر للجبال؟', o:['البحر 🌊','الجبال 🏔️','الاتنين','أي مكان جديد']},
+{q:'بتصحي بدري ولا بتسهري؟', o:['أصحى بدري 🌅','أسهر بالليل 🌙','على مزاجي','نوم طول اليوم 😴']},
+{q:'الأكل المفضل؟', o:['محشي 🍇','مكرونة بشاميل 🍝','كشري 🍛','بيتزا 🍕']},
+{q:'لو كسبتي مليون جنيه — أول حاجة تعمليها؟', o:['أسافر ✈️','أشتري حاجة غالية 💎','أدخرها 🏦','أساعد أهلي 💜']},
 {q:'الفيلم المفضل: رومانسي ولا أكشن ولا كوميدي؟', o:['رومانسي 💕','أكشن 💥','كوميدي 😂','رعب 👻']},
-{q:'الشتاء ولا الصيف؟', o:['الشتاء ❄️','الصيف ☀️','الخريف 🍂']},
-{q:'لو حيوان أليف: قطة ولا كلب؟', o:['قطة 🐱','كلب 🐶','عصفير 🐦','مش بحب الحيوانات']}
+{q:'الشتاء ولا الصيف؟', o:['الشتا ☔','الصيف ☀️','الخريف 🍂','الربيع 🌸']},
+{q:'لو حيوان أليف: قطة ولا كلب؟', o:['قطة 🐱','كلب 🐶','عصفورة 🐦','مفيش حيوانات 🙅‍♀️']},
+{q:'الصيف في الساحل ولا الشتا في البيت؟', o:['الساحل 🏖️','البيت والبطانية 🛋️','الاتنين','ولا واحد']},
+{q:'لما تزعلي: بتتكلمي ولا بتسكتي؟', o:['أتكلم على طول 🗣️','أسكت وروح لوحدي 🚪','أكتب اللي جوايا 📝','أضحك وعدّيها 😂']},
+{q:'أكتر وجبة بتحبيها؟', o:['فطار 🍳','غدا 🍗','عشا 🍕','سناكس طول اليوم 🍫']},
+{q:'لو بتسافري بكرة: فين؟', o:['أوروبا 🗼','الخليج 🏙️','تركيا 🎈','أسيا 🏯']},
+{q:'موبايلك أكتر حاجة عليه إيه؟', o:['سوشيال ميديا 📱','ألعاب 🎮','صور 📸','مذاكرة وكورسات 📚']},
+{q:'الفلوس ولا الوقت؟', o:['الفلوس 💸','الوقت ⏳','الاتنين سوا 😌','ولا واحد يكفي']}
 ];
 
 
@@ -6266,7 +6283,7 @@ window.KM_POOL = [
   var LANGS = {en:'🇬🇧 إنجليزي', fr:'🇫🇷 فرنسي', de:'🇩🇪 ألماني', zh:'🇨🇳 صيني', ko:'🇰🇷 كوري'};
   var CODE_ABC = 'ABDEFGHJKMNPQRSTWXYZ23456789';
   var GAMES = {
-    quiz:   {n:'سباق الكلمات', i:'⚔️', d:'١٠ كلمات — صح + سرعة', vocab:true},
+    quiz:   {n:'سباق الكلمات', i:'⚔️', d:'١٢ كلمة — صح + سرعة', vocab:true},
     race:   {n:'سباق الستين', i:'⚡', d:'٦٠ ثانية — أكتر عدد إجابات', vocab:true},
     memory: {n:'ميموري سوا', i:'🃏', d:'مين يلاقي التطابقات الأول', vocab:true},
     gk:     {n:'معلومات صعبة', i:'🧠', d:'١٥ سؤال معلومات عامة تقيلة 🔥', vocab:false},
@@ -6529,7 +6546,7 @@ window.KM_POOL = [
     } else if(S.game === 'knowme'){
       knowShell(at);
     } else {
-      S.qs = (S.game === 'gk') ? buildGk(S.code) : buildMcq(S.code, 'quiz', S.lang, 10);
+      S.qs = (S.game === 'gk') ? buildGk(S.code) : buildMcq(S.code, 'quiz', S.lang, 12);
       quizShell(at);
     }
   }
@@ -6752,7 +6769,7 @@ window.KM_POOL = [
     function shuf(a){ a = a.slice(); for(var k = a.length - 1; k > 0; k--){ var m = Math.floor(r() * (k + 1)), t = a[k]; a[k] = a[m]; a[m] = t; } return a; }
     fun = shuf(fun); emb = shuf(emb);
     S.tQs = [];
-    for(var i = 0; i < 5; i++){ S.tQs.push(fun[i]); S.tQs.push(emb[i]); }
+    for(var i = 0; i < 6; i++){ S.tQs.push(fun[i]); S.tQs.push(emb[i]); }
     S.tR = 0; S.tAns = {}; S.tMine = false;
     el('duelBox').innerHTML = '<div class="du-card"><div id="duQ"></div><div id="duOpts"></div><div class="du-fb" id="duFb"></div></div>';
     var wait = at - Date.now();
@@ -6840,12 +6857,16 @@ window.KM_POOL = [
   /* ---------- know-me (2 players) ---------- */
   function knowShell(at){
     S.kMine = []; S.kGuess = []; S.oppK = null; S._oppKReady = false; S.kPhase = 1;
+    var rk = rng(hash(S.code + ':know'));
+    var ki = window.KM_POOL.map(function(_, i){ return i; });
+    for(var k = ki.length - 1; k > 0; k--){ var m = Math.floor(rk() * (k + 1)), t = ki[k]; ki[k] = ki[m]; ki[m] = t; }
+    S.kQs = ki.slice(0, 10).map(function(i){ return window.KM_POOL[i]; });
     var wait = at - Date.now();
     el('duelBox').innerHTML = '<div class="du-card"><div id="duQ"><div class="du-count">استعدي... 💜</div></div><div id="duOpts"></div><div class="du-fb" id="duFb"></div></div>';
     later(function(){ knowQ(0); }, Math.max(50, wait));
   }
   function knowQ(i){
-    if(S.kPhase === 1 && i >= window.KM_POOL.length){
+    if(S.kPhase === 1 && i >= S.kQs.length){
       S.kPhase = 1.5;
       send('kready', {});
       el('duQ').innerHTML = '<div class="du-word" style="font-size:1.1rem;direction:rtl">خلصتي إجاباتك! مستنيين ' + esc(S.opp ? S.opp.name : 'صاحبتك') + '... ⏳</div>';
@@ -6853,7 +6874,7 @@ window.KM_POOL = [
       knowMaybePhase2();
       return;
     }
-    if(S.kPhase === 2 && i >= window.KM_POOL.length){
+    if(S.kPhase === 2 && i >= S.kQs.length){
       S.kPhase = 2.5;
       send('kans', {ans: S.kMine});
       el('duQ').innerHTML = '<div class="du-word" style="font-size:1.1rem;direction:rtl">خمنتي كل حاجة! اللحظة الحاسمة... 👀</div>';
@@ -6861,12 +6882,12 @@ window.KM_POOL = [
       knowMaybeReveal();
       return;
     }
-    var q = window.KM_POOL[i];
+    var q = S.kQs[i];
     var guessing = S.kPhase === 2;
     el('duQ').innerHTML =
       '<div class="du-we">' + (guessing ? '🔮' : '💜') + '</div>' +
       '<div class="du-word" style="direction:rtl;font-size:1.2rem">' + (guessing ? esc(S.opp ? S.opp.name : 'صاحبتك') + ' هتختار إيه؟<br>' : '') + esc(q.q) + '</div>' +
-      '<div class="du-sub" style="margin-top:6px">' + (guessing ? 'خمّني إجابتها' : 'جاوبي عن نفسك (سرية 🤫)') + ' • ' + (i + 1) + ' / ' + window.KM_POOL.length + '</div>';
+      '<div class="du-sub" style="margin-top:6px">' + (guessing ? 'خمّني إجابتها' : 'جاوبي عن نفسك (سرية 🤫)') + ' • ' + (i + 1) + ' / ' + S.kQs.length + '</div>';
     el('duOpts').innerHTML = q.o.map(function(o, k){
       return '<button class="du-opt" data-k="' + k + '">' + esc(o) + '</button>';
     }).join('');
@@ -6890,10 +6911,10 @@ window.KM_POOL = [
     if(S.kPhase === 2.5 && S.oppK){
       S.kPhase = 3; S.st = 'result';
       var hits = 0, rows = '';
-      for(var i = 0; i < window.KM_POOL.length; i++){
+      for(var i = 0; i < S.kQs.length; i++){
         var ok = S.kGuess[i] === S.oppK[i];
         if(ok) hits++;
-        rows += '<div class="du-frow"><span>' + esc(window.KM_POOL[i].q) + '</span><b>' + (ok ? '✅' : '❌') + '</b></div>';
+        rows += '<div class="du-frow"><span>' + esc(S.kQs[i].q) + '</span><b>' + (ok ? '✅' : '❌') + '</b></div>';
       }
       /* opponent's hits on me: I know my answers; she computes hers. Approximate display: show my hits only */
       var xp = hits * 5;
@@ -6902,7 +6923,7 @@ window.KM_POOL = [
       el('duelBox').innerHTML =
         '<div class="du-card du-result"><div class="du-crown">' + (hits >= 6 ? '💜' : (hits >= 3 ? '🤝' : '😅')) + '</div>' +
         '<h3>' + (hits >= 6 ? 'بتعرفو بعض جامد! 💜' : (hits >= 3 ? 'معرفة حلوة 🤝' : 'لسه محتاجين قعدة أكتر 😂')) + '</h3>' +
-        '<div class="du-xp">خمّنتي ' + hits + ' من ' + window.KM_POOL.length + ' صح — +' + xp + ' نقطة ✨</div>' +
+        '<div class="du-xp">خمّنتي ' + hits + ' من ' + S.kQs.length + ' صح — +' + xp + ' نقطة ✨</div>' +
         '<div class="du-final" style="text-align:right">' + rows + '</div>' +
         '<button class="btn du-big" id="duAgain">💜 العبي تاني</button>' +
         '<button class="du-leave" id="duHome">← القاعة</button></div>';
