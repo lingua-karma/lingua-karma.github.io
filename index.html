@@ -6272,7 +6272,49 @@ const MENU = [
       ['Tired','Fatiguée','Müde','累 (lèi)','피곤해 (pigonhae)','تعبانة','😴'],
       ['Excited','Excitée','Aufgeregt','兴奋 (xīngfèn)','신나 (sinna)','متحمسة','🤩'],
       ['Angry','En colère','Wütend','生气 (shēngqì)','화나 (hwana)','متنرفزة','😤'],
-      ['Proud','Fière','Stolz','骄傲 (jiāo\'ào)','자랑스러워 (jarangseureowo)','فخورة','💪']]}
+      ['Proud','Fière','Stolz','骄傲 (jiāo\'ào)','자랑스러워 (jarangseureowo)','فخورة','💪']]},
+    food2: {name:'الأكل 🍎', rows:[
+      ['Bread','Pain','Brot','面包 (miànbāo)','빵 (ppang)','عيش','🍞'],
+      ['Rice','Riz','Reis','米饭 (mǐfàn)','밥 (bap)','رز','🍚'],
+      ['Chicken','Poulet','Hähnchen','鸡肉 (jīròu)','닭고기 (dakgogi)','فراخ','🍗'],
+      ['Fruit','Fruit','Obst','水果 (shuǐguǒ)','과일 (gwail)','فاكهة','🍎'],
+      ['Tea','Thé','Tee','茶 (chá)','차 (cha)','شاي','🍵'],
+      ['Coffee','Café','Kaffee','咖啡 (kāfēi)','커피 (keopi)','قهوة','☕']]},
+    places2: {name:'أماكن 🏙️', rows:[
+      ['House','Maison','Haus','房子 (fángzi)','집 (jip)','بيت','🏠'],
+      ['School','École','Schule','学校 (xuéxiào)','학교 (hakgyo)','مدرسة','🏫'],
+      ['Hospital','Hôpital','Krankenhaus','医院 (yīyuàn)','병원 (byeongwon)','مستشفى','🏥'],
+      ['Market','Marché','Markt','市场 (shìchǎng)','시장 (sijang)','سوق','🛒'],
+      ['Beach','Plage','Strand','海滩 (hǎitān)','해변 (haebyeon)','شاطئ','🏖️'],
+      ['Mosque','Mosquée','Moschee','清真寺 (qīngzhēnsì)','모스크 (moseukeu)','مسجد','🕌']]},
+    transport: {name:'مواصلات 🚗', rows:[
+      ['Car','Voiture','Auto','汽车 (qìchē)','차 (cha)','عربية','🚗'],
+      ['Bus','Bus','Bus','公交车 (gōngjiāochē)','버스 (beoseu)','أوتوبيس','🚌'],
+      ['Train','Train','Zug','火车 (huǒchē)','기차 (gicha)','قطار','🚆'],
+      ['Plane','Avion','Flugzeug','飞机 (fēijī)','비행기 (bihaenggi)','طيارة','✈️'],
+      ['Bicycle','Vélo','Fahrrad','自行车 (zìxíngchē)','자전거 (jajeongeo)','عجلة','🚲'],
+      ['Metro','Métro','U-Bahn','地铁 (dìtiě)','지하철 (jihacheol)','مترو','🚇']]},
+    sports: {name:'رياضة ⚽', rows:[
+      ['Football','Football','Fußball','足球 (zúqiú)','축구 (chukgu)','كورة','⚽'],
+      ['Swimming','Natation','Schwimmen','游泳 (yóuyǒng)','수영 (suyeong)','سباحة','🏊'],
+      ['Running','Course','Laufen','跑步 (pǎobù)','달리기 (dalligi)','جري','🏃‍♀️'],
+      ['Gym','Sport','Fitnessstudio','健身房 (jiànshēnfáng)','헬스장 (helseujang)','جيم','🏋️'],
+      ['Tennis','Tennis','Tennis','网球 (wǎngqiú)','테니스 (teniseu)','تنس','🎾'],
+      ['Dance','Danse','Tanzen','跳舞 (tiàowǔ)','춤 (chum)','رقص','💃']]},
+    work: {name:'الشغل 💼', rows:[
+      ['Doctor','Médecin','Ärztin','医生 (yīshēng)','의사 (uisa)','دكتورة','👩‍⚕️'],
+      ['Engineer','Ingénieure','Ingenieurin','工程师 (gōngchéngshī)','엔지니어 (enjinieo)','مهندسة','👩‍💻'],
+      ['Work','Travail','Arbeit','工作 (gōngzuò)','일 (il)','شغل','💼'],
+      ['Meeting','Réunion','Besprechung','会议 (huìyì)','회의 (hoeui)','اجتماع','🤝'],
+      ['Money','Argent','Geld','钱 (qián)','돈 (don)','فلوس','💰'],
+      ['Dream','Rêve','Traum','梦想 (mèngxiǎng)','꿈 (kkum)','حلم','✨']]},
+    weather2: {name:'الطقس ⛅', rows:[
+      ['Sun','Soleil','Sonne','太阳 (tàiyáng)','해 (hae)','شمس','☀️'],
+      ['Rain','Pluie','Regen','雨 (yǔ)','비 (bi)','مطر','🌧️'],
+      ['Snow','Neige','Schnee','雪 (xuě)','눈 (nun)','تلج','❄️'],
+      ['Wind','Vent','Wind','风 (fēng)','바람 (baram)','رياح','💨'],
+      ['Hot','Chaud','Heiß','热 (rè)','더워 (deowo)','حر','🔥'],
+      ['Cold','Froid','Kalt','冷 (lěng)','추워 (chuwo)','برد','🥶']]}
   };
   var thTheme='family', thLang='en';
   var tt=document.getElementById('thThemes'), tl2=document.getElementById('thLangs'), tw=document.getElementById('thWords');
@@ -8080,7 +8122,7 @@ gbkRender();
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v29.0</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v30.0</div>
 <script>
 
 /* ================= v13: learning map, personality quiz, XO, korean ================= */
