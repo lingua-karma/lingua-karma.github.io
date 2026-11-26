@@ -2929,6 +2929,58 @@
   </div>
 </section>
 
+<style>
+.pet-wrap{max-width:760px;margin:0 auto;background:linear-gradient(160deg,rgba(var(--goldA),.08),rgba(0,0,0,.25));border:1px solid rgba(var(--goldA),.25);border-radius:26px;padding:18px;display:grid;gap:14px}
+.pet-scene{position:relative;border-radius:22px;overflow:hidden;background:radial-gradient(120% 100% at 50% 0%,#2c2140 0%,#17111f 70%);min-height:250px;display:flex;align-items:flex-end;justify-content:center}
+.pet-svg{width:100%;max-width:340px;display:block}
+.pet-moon{filter:drop-shadow(0 0 14px rgba(245,227,176,.55))}
+.pet-star{animation:petTw 2.4s ease-in-out infinite}
+@keyframes petTw{0%,100%{opacity:.25}50%{opacity:1}}
+.pet-bob{animation:petBob 3s ease-in-out infinite}
+@keyframes petBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.pet-eye{transform-box:fill-box;transform-origin:center;animation:petBlink 4.6s infinite}
+@keyframes petBlink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.08)}}
+.pet-wing-l{transform-box:fill-box;transform-origin:right center}
+.pet-wing-r{transform-box:fill-box;transform-origin:left center}
+.pet-scene.flap .pet-wing-l{animation:petFlapL .45s ease 2}
+.pet-scene.flap .pet-wing-r{animation:petFlapR .45s ease 2}
+@keyframes petFlapL{0%,100%{transform:rotate(0)}50%{transform:rotate(-20deg)}}
+@keyframes petFlapR{0%,100%{transform:rotate(0)}50%{transform:rotate(20deg)}}
+.pet-aura{animation:petGlow 3s ease-in-out infinite}
+@keyframes petGlow{0%,100%{opacity:.55}50%{opacity:.95}}
+.pet-heart{position:absolute;bottom:36%;animation:petHeart 1.5s ease-out forwards;pointer-events:none}
+@keyframes petHeart{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:1}100%{transform:translateY(-95px) scale(1.15);opacity:0}}
+.pet-spark{position:absolute;bottom:30%;animation:petSpark 1.6s ease-out forwards;pointer-events:none}
+@keyframes petSpark{0%{transform:translateY(0) scale(.4) rotate(0);opacity:0}25%{opacity:1}100%{transform:translateY(-110px) scale(1.2) rotate(160deg);opacity:0}}
+.pet-panel{text-align:center}
+.pet-name-row{font-size:1.35rem;font-weight:800;color:var(--gold2)}
+.pet-stage{color:#cbb26a;margin:2px 0 8px;font-weight:700}
+.pet-bar{height:10px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;max-width:420px;margin:0 auto}
+.pet-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .6s}
+.pet-next{font-size:.85rem;color:#b9a878;margin-top:6px}
+.pet-mood{margin:10px 0;color:#e8dcc0}
+.pet-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.pet-btn{background:rgba(var(--goldA),.1);border:1px solid rgba(var(--goldA),.35);color:var(--gold2);border-radius:99px;padding:8px 14px;font-weight:700;cursor:pointer;font-family:inherit;font-size:.92rem}
+.pet-btn:active{transform:scale(.95)}
+.pet-btn[disabled]{opacity:.45;cursor:not-allowed}
+.pet-btn.on{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1c1405}
+</style>
+<section id="pet">
+  <h2 class="sec-title">✦ رفيقتي ✦</h2>
+  <p class="sec-sub">بومة صغيرة بتكبر معاكي — كل نقطة تكسبيها بتقربها من مرحلة جديدة 🥚</p>
+  <div class="pet-wrap">
+    <div class="pet-scene" id="petScene"></div>
+    <div class="pet-panel">
+      <div class="pet-name-row" id="petName">نور</div>
+      <div class="pet-stage" id="petStageLbl"></div>
+      <div class="pet-bar"><div class="pet-fill" id="petFill"></div></div>
+      <div class="pet-next" id="petNext"></div>
+      <div class="pet-mood" id="petMood"></div>
+      <div class="pet-actions" id="petActions"></div>
+    </div>
+  </div>
+</section>
+
 <!-- AD SLOT: bottom banner (AdSense anchor / 728x90) قبل الفوتر — تُضاف الشيفرة بعد الموافقة على AdSense -->
 
 <!-- Certificate overlay -->
@@ -3133,6 +3185,6 @@
   <div class="pl-top"><button id="plClose" class="pl-x">✕</button><div class="pl-prog"><i id="plBar"></i></div><div class="pl-hearts" id="plHearts"></div></div>
   <div id="plBody" class="pl-body"></div>
 </div>
-<script src="./app.js?v=57" defer></script>
+<script src="./app.js?v=58" defer></script>
 </body>
 </html>

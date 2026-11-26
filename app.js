@@ -2396,7 +2396,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['map','🚀','مسار التعلم'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['places','🏛️','أماكن'],['premium','💎','بريميوم'],['quotes','🎬','اقتباسات'],['ai','🤖','لمى'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
+  ['map','🚀','مسار التعلم'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['places','🏛️','أماكن'],['premium','💎','بريميوم'],['quotes','🎬','اقتباسات'],['ai','🤖','لمى'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق'],['pet','🥚','رفيقتي']
 ];
 
 /* ================= v16: free books library ================= */
@@ -6178,7 +6178,7 @@ window.KM_POOL = [
   var GROUPS = [
     {id:'learn', icon:'book', title:'تعلّم 📚', items:['dash','corners','courses','lessons','quiz','map','dict','gallery','speak','videos','songs','music','cinema','korean','library','stories','capitals','food','fashion','trip','places','quotes','hobbies','themes','tips','eng','scholar','ch30','flash','puzzle','qotd']},
     {id:'play', icon:'gamepad', title:'العب 🎮', items:['games','brain','fun','dressup','outfit','wheel','snake','xo','shooter','runner','piano','color','duel']},
-    {id:'social', icon:'chat', title:'صحابي 💜', items:['friends','wall','mood','jokes','vent','diary','gbk','karma','pquiz']},
+    {id:'social', icon:'chat', title:'صحابي 💜', items:['friends','wall','mood','jokes','vent','diary','gbk','karma','pquiz','pet']},
     {id:'life', icon:'sparkle', title:'حياتي ✨', items:['deen','mushaf','khatma','weather','shop','premium','settings','ai']}
   ];
 
@@ -7243,7 +7243,10 @@ window.KM_POOL = [
     ['استنيناكي','استنيناك'],['ترجعي','ترجع'],['خمنتي','خمنت'],['لعبتي','لعبت'],
     ['جاهزة','جاهز'],['ضيفتنا','ضيفنا'],['صديقتنا','صديقنا'],['مستنية','مستني'],['مستعدة','مستعد'],
     ['المضيفة','المضيف'],['صاحبتك','صاحبك'],['صديقتك','صديقك'],['صاحبتي','صاحبي'],['صاحبة','صاحب'],
-    ['عايزة','عايز'],['استحيت','استحى'],['شاطرة','شاطر'],['بطلة','بطل']
+    ['عايزة','عايز'],['استحيت','استحى'],['شاطرة','شاطر'],['بطلة','بطل'],
+    ['أطعميها','أطعمها'],['دلّعيها','دلّعها'],['سمّيها','سمّها'],['رفيقتي','رفيقي'],['رفيقتك','رفيقك'],
+    ['مبسوطة','مبسوط'],['شبعانة','شبعان'],['جوعانة','جوعان'],['صغيرة','صغير'],['حكيمة','حكيم'],
+    ['ملكية','ملكي'],['سحرية','سحري'],['كبرت','كبر'],['بقت','بقى'],['دافية','دافي']
   ];
   var MAP = {};
   PAIRS.forEach(function(p){
@@ -7378,3 +7381,184 @@ window.KM_POOL = [
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
+
+
+/* ================= v58: virtual pet رفيقتي (drawn SVG owl, grows with points) ================= */
+(function(){
+  var KEY_NAME='lingua_pet_name', KEY_ACC='lingua_pet_acc', KEY_FED='lingua_pet_fed', KEY_ST='lingua_pet_stage';
+  var STAGES=[
+    {min:0,    t:'بيضة سحرية', egg:true},
+    {min:50,   t:'فرخة صغيرة', s:0.62},
+    {min:200,  t:'بومة صغيرة', s:0.82},
+    {min:500,  t:'بومة حكيمة', s:1.0,  chest:true},
+    {min:1200, t:'بومة ملكية', s:1.08, chest:true, aura:true}
+  ];
+  var ACCS=[
+    {id:'bow',     t:'فيونكة', stage:1},
+    {id:'glasses', t:'نظارة',  stage:2},
+    {id:'scarf',   t:'وشاح',   stage:3},
+    {id:'crown',   t:'تاج',    stage:4}
+  ];
+  function life(){ return window.getLifetime ? getLifetime() : parseInt(localStorage.getItem('lingua_lifetime')||'0',10); }
+  function stageOf(l){ var i=0; for(var k=0;k<STAGES.length;k++){ if(l>=STAGES[k].min) i=k; } return i; }
+  function pget(k,d){ try{ var v=localStorage.getItem(k); return v===null?d:v; }catch(e){ return d; } }
+  function pset(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  function today(){ return new Date().toISOString().slice(0,10); }
+  function say(m){ if(window.toast) toast(m); }
+
+  function eyeG(x){
+    return '<g class="pet-eye">'
+      +'<circle cx="'+x+'" cy="-22" r="13" fill="#fff"/>'
+      +'<circle cx="'+x+'" cy="-22" r="8" fill="#d9a84e"/>'
+      +'<circle cx="'+x+'" cy="-22" r="4" fill="#241b30"/>'
+      +'<circle cx="'+(x+3)+'" cy="-25" r="2" fill="#fff"/>'
+      +'</g>';
+  }
+  function accSvg(id){
+    if(id==='bow') return '<g transform="translate(34,-48)"><path d="M0,0 L-17,-9 L-17,9 Z" fill="#f07ba0"/><path d="M0,0 L17,-9 L17,9 Z" fill="#f07ba0"/><circle r="4.5" fill="#d14f7c"/></g>';
+    if(id==='glasses') return '<g fill="none" stroke="#e9c26a" stroke-width="2.6"><circle cx="-17" cy="-22" r="14.5"/><circle cx="17" cy="-22" r="14.5"/><path d="M-2.5,-22 L2.5,-22"/><path d="M-31.5,-25 L-43,-31"/><path d="M31.5,-25 L43,-31"/></g>';
+    if(id==='scarf') return '<g><path d="M-34,-6 Q0,10 34,-6 L34,5 Q0,21 -34,5 Z" fill="#b03a5b"/><path d="M18,8 L32,27 L24,32 L12,13 Z" fill="#96304c"/></g>';
+    if(id==='crown') return '<g transform="translate(0,-64)"><path d="M-16,8 L-16,-6 L-8,2 L0,-10 L8,2 L16,-6 L16,8 Z" fill="#e9c26a" stroke="#b8912f" stroke-width="1.5" stroke-linejoin="round"/><circle cx="-8" cy="4" r="1.8" fill="#b03a5b"/><circle cx="0" cy="4" r="1.8" fill="#3e7cb1"/><circle cx="8" cy="4" r="1.8" fill="#3f9e63"/></g>';
+    return '';
+  }
+
+  function sceneSvg(){
+    var l=life(), st=stageOf(l), S=STAGES[st];
+    var s='<svg viewBox="0 0 300 250" class="pet-svg" aria-hidden="true">';
+    s+='<defs>'
+      +'<radialGradient id="petAura" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#e9c26a" stop-opacity=".45"/><stop offset="100%" stop-color="#e9c26a" stop-opacity="0"/></radialGradient>'
+      +'<linearGradient id="petBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6b4f8f"/><stop offset="100%" stop-color="#3e2c52"/></linearGradient>'
+      +'<linearGradient id="petBelly" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f4dcae"/><stop offset="100%" stop-color="#d9a84e"/></linearGradient>'
+      +'<linearGradient id="petEgg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fdf3dd"/><stop offset="100%" stop-color="#eed9ae"/></linearGradient>'
+      +'</defs>';
+    s+='<circle cx="252" cy="38" r="20" fill="#f5e3b0" class="pet-moon"/><circle cx="246" cy="33" r="4" fill="#e6cf96"/><circle cx="258" cy="44" r="3" fill="#e6cf96"/>';
+    var stars=[[30,30],[70,58],[110,24],[190,60],[222,92],[45,100]];
+    for(var i=0;i<stars.length;i++) s+='<circle cx="'+stars[i][0]+'" cy="'+stars[i][1]+'" r="2" fill="#ffe9a8" class="pet-star" style="animation-delay:'+(i*0.45)+'s"/>';
+    s+='<path d="M-5,228 Q150,206 305,230" fill="none" stroke="#6b4423" stroke-width="11" stroke-linecap="round"/><path d="M210,222 q18,-14 34,-12" fill="none" stroke="#6b4423" stroke-width="6" stroke-linecap="round"/>';
+    if(S.egg){
+      var prog=Math.min(49,l);
+      s+='<ellipse cx="150" cy="222" rx="70" ry="14" fill="#54380f" opacity=".55"/>';
+      s+='<g class="pet-bob"><ellipse cx="150" cy="180" rx="44" ry="54" fill="url(#petEgg)" stroke="#d9b878" stroke-width="2"/>';
+      s+='<circle cx="132" cy="160" r="3" fill="#e9c26a" opacity=".7"/><circle cx="168" cy="185" r="2.5" fill="#e9c26a" opacity=".7"/><circle cx="145" cy="205" r="2" fill="#e9c26a" opacity=".7"/>';
+      if(prog>=15) s+='<path d="M128,140 l10,14 l-8,10 l12,12" fill="none" stroke="#8a6d3b" stroke-width="2.5" stroke-linecap="round"/>';
+      if(prog>=30) s+='<path d="M172,148 l-9,12 l7,9 l-10,12" fill="none" stroke="#8a6d3b" stroke-width="2.5" stroke-linecap="round"/>';
+      if(prog>=45) s+='<path d="M140,210 l8,-10 l10,8 l6,-12" fill="none" stroke="#8a6d3b" stroke-width="2.5" stroke-linecap="round"/>';
+      s+='</g>';
+    } else {
+      s+='<g transform="translate(150,158) scale('+S.s+')"><g class="pet-bob">';
+      if(S.aura) s+='<circle r="100" fill="url(#petAura)" class="pet-aura"/>';
+      s+='<g class="pet-wing pet-wing-l"><ellipse cx="-46" cy="12" rx="15" ry="32" fill="url(#petBody)" transform="rotate(14 -46 12)"/></g>';
+      s+='<g class="pet-wing pet-wing-r"><ellipse cx="46" cy="12" rx="15" ry="32" fill="url(#petBody)" transform="rotate(-14 46 12)"/></g>';
+      s+='<ellipse cx="0" cy="10" rx="46" ry="56" fill="url(#petBody)"/>';
+      s+='<ellipse cx="0" cy="26" rx="29" ry="36" fill="url(#petBelly)"/>';
+      if(S.chest) s+='<path d="M-14,16 q14,10 28,0 M-14,28 q14,10 28,0 M-14,40 q14,10 28,0" fill="none" stroke="#b8912f" stroke-width="2" opacity=".8"/>';
+      s+='<path d="M-33,-34 L-45,-60 L-16,-44 Z" fill="url(#petBody)"/><path d="M33,-34 L45,-60 L16,-44 Z" fill="url(#petBody)"/>';
+      s+=eyeG(-17)+eyeG(17);
+      s+='<path d="M-6,-9 L6,-9 L0,2 Z" fill="#e8a13c"/>';
+      s+='<path d="M-14,66 l-6,8 M-14,66 l0,9 M-14,66 l6,8 M14,66 l-6,8 M14,66 l0,9 M14,66 l6,8" stroke="#e8a13c" stroke-width="3" fill="none" stroke-linecap="round"/>';
+      var acc=pget(KEY_ACC,'');
+      if(acc && accUnlocked(acc,st)) s+=accSvg(acc);
+      s+='</g></g>';
+    }
+    s+='</svg>';
+    return s;
+  }
+  function accUnlocked(id,st){
+    for(var i=0;i<ACCS.length;i++) if(ACCS[i].id===id) return st>=ACCS[i].stage;
+    return false;
+  }
+
+  function burst(cls,n,svgInner){
+    var box=document.getElementById('petScene'); if(!box) return;
+    for(var i=0;i<n;i++){
+      var el=document.createElement('span');
+      el.className=cls;
+      el.style.left=(38+Math.random()*24)+'%';
+      el.style.animationDelay=(Math.random()*0.35)+'s';
+      el.innerHTML=svgInner;
+      box.appendChild(el);
+      (function(node){ setTimeout(function(){ if(node.parentNode) node.parentNode.removeChild(node); },1900); })(el);
+    }
+  }
+  var HEART='<svg viewBox="0 0 24 24" width="18" height="18"><path d="M12,20 C7,15.5 3.5,12.4 3.5,9 C3.5,6.5 5.5,4.8 7.8,4.8 C9.4,4.8 10.9,5.7 12,7.4 C13.1,5.7 14.6,4.8 16.2,4.8 C18.5,4.8 20.5,6.5 20.5,9 C20.5,12.4 17,15.5 12,20 Z" fill="#f07ba0"/></svg>';
+  var SPARK='<svg viewBox="0 0 24 24" width="16" height="16"><path d="M12,2 L14,9.5 L22,12 L14,14.5 L12,22 L10,14.5 L2,12 L10,9.5 Z" fill="#e9c26a"/></svg>';
+
+  function celebrate(st){
+    say('🎉 '+pget(KEY_NAME,'نور')+' كبرت! بقت '+STAGES[st].t);
+    burst('pet-spark',10,SPARK);
+  }
+
+  function render(){
+    var box=document.getElementById('petScene'); if(!box) return;
+    var l=life(), st=stageOf(l), S=STAGES[st];
+    box.innerHTML=sceneSvg();
+    var nm=pget(KEY_NAME,'نور');
+    var nmEl=document.getElementById('petName'); if(nmEl) nmEl.textContent=nm;
+    var stEl=document.getElementById('petStageLbl'); if(stEl) stEl.textContent=S.t;
+    var next=STAGES[st+1];
+    var pct= next ? Math.min(100, Math.round((l - S.min)/(next.min - S.min)*100)) : 100;
+    var fEl=document.getElementById('petFill'); if(fEl) fEl.style.width=pct+'%';
+    var nxEl=document.getElementById('petNext');
+    if(nxEl) nxEl.textContent = next ? ('باقي '+(next.min - l)+' نقطة وتبقى '+next.t+' ✨') : 'وصلتي لأعلى مرحلة — ملكية 👑';
+    var fed=pget(KEY_FED,'')===today();
+    var mEl=document.getElementById('petMood');
+    if(mEl) mEl.textContent = fed ? 'مبسوطة وشبعانة النهاردة 😊' : (S.egg ? 'البيضة دافية ومستنية نقاطك 🥚' : 'جوعانة شوية.. أطعميها 🍎');
+    var acts=document.getElementById('petActions');
+    if(acts){
+      var h='<button type="button" class="pet-btn" id="petFeed">'+(fed?'شبعانة ✅':'🍎 أطعميها')+'</button>'
+           +'<button type="button" class="pet-btn" id="petLove">🤍 دلّعيها</button>'
+           +'<button type="button" class="pet-btn" id="petRen">✏️ سمّيها</button>';
+      ACCS.forEach(function(a){
+        var un = st>=a.stage;
+        var on = pget(KEY_ACC,'')===a.id;
+        h+='<button type="button" class="pet-btn pet-acc'+(on?' on':'')+'" data-acc="'+a.id+'"'+(un?'':' disabled')+'>'+(un?(on?'✅ ':'')+a.t:'🔒 '+a.t)+'</button>';
+      });
+      acts.innerHTML=h;
+      wire();
+    }
+    var oldSt=parseInt(pget(KEY_ST,'-1'),10);
+    if(oldSt>=0 && st>oldSt){ celebrate(st); }
+    pset(KEY_ST,String(st));
+  }
+
+  function wire(){
+    var feed=document.getElementById('petFeed');
+    if(feed) feed.addEventListener('click',function(){
+      if(pget(KEY_FED,'')===today()){ say(pget(KEY_NAME,'نور')+' شبعانة دلوقتي 😊'); return; }
+      pset(KEY_FED,today());
+      burst('pet-heart',6,HEART);
+      if(window.awardPoints) awardPoints(3,'إطعام '+pget(KEY_NAME,'نور'));
+      render();
+    });
+    var love=document.getElementById('petLove');
+    if(love) love.addEventListener('click',function(){
+      burst('pet-heart',5,HEART);
+      var box=document.getElementById('petScene');
+      if(box){ box.classList.add('flap'); setTimeout(function(){ box.classList.remove('flap'); },1200); }
+      var lines=['بتحبك أوي 💜','بتقولك: يلا نتعلم كلمة جديدة!','مبسوطة معاكي ✨','جناحاتها بترفرف من الفرحة!'];
+      say(lines[Math.floor(Math.random()*lines.length)]);
+    });
+    var ren=document.getElementById('petRen');
+    if(ren) ren.addEventListener('click',function(){
+      var n=window.prompt('عايزة تسمّيها إيه؟', pget(KEY_NAME,'نور'));
+      if(n && n.trim()){ pset(KEY_NAME,n.trim().slice(0,20)); render(); }
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('#petActions .pet-acc'),function(b){
+      b.addEventListener('click',function(){
+        var id=b.getAttribute('data-acc');
+        pset(KEY_ACC, pget(KEY_ACC,'')===id ? '' : id);
+        render();
+      });
+    });
+  }
+
+  /* re-render whenever points change */
+  if(window.awardPoints){
+    var _a=window.awardPoints;
+    window.awardPoints=function(n,label){ _a(n,label); try{ render(); }catch(e){} };
+  }
+  window.addEventListener('hashchange',function(){ if(location.hash==='#pet') setTimeout(render,50); });
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',render); else render();
+  window.petRender=render;
+})();
+
