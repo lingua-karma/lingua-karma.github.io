@@ -2418,7 +2418,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['map','🚀','مسار التعلم'],['placement','🎯','مستواي'],['quests','📋','مهام اليوم'],['listen','🎧','استماع'],['mistakes','🩹','أخطائي'],['german','🇩🇪','ركن الألماني'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['places','🏛️','أماكن'],['premium','💎','بريميوم'],['quotes','🎬','اقتباسات'],['ai','🤖','لمى'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق'],['pet','🥚','رفيقتي']
+  ['map','🚀','مسار التعلم'],['placement','🎯','مستواي'],['quests','📋','مهام اليوم'],['listen','🎧','استماع'],['mistakes','🩹','أخطائي'],['german','🇩🇪','ركن الألماني'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['karaoke','🎤','كاريوكي'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['places','🏛️','أماكن'],['premium','💎','بريميوم'],['quotes','🎬','اقتباسات'],['ai','🤖','لمى'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق'],['pet','🥚','رفيقتي']
 ];
 
 /* ================= v16: free books library ================= */
@@ -6177,7 +6177,7 @@ window.KM_POOL = [
   };
 
   var GROUPS = [
-    {id:'learn', icon:'book', title:'تعلّم 📚', items:['dash','quests','placement','listen','mistakes','german','corners','courses','lessons','quiz','map','dict','gallery','speak','videos','songs','music','cinema','tarab','korean','library','stories','capitals','food','fashion','trip','places','quotes','hobbies','themes','tips','eng','engx','scholar','ch30','flash','puzzle','qotd']},
+    {id:'learn', icon:'book', title:'تعلّم 📚', items:['dash','quests','placement','listen','mistakes','german','corners','courses','lessons','quiz','map','dict','gallery','speak','videos','songs','music','cinema','tarab','karaoke','korean','library','stories','capitals','food','fashion','trip','places','quotes','hobbies','themes','tips','eng','engx','scholar','ch30','flash','puzzle','qotd']},
     {id:'play', icon:'gamepad', title:'العب 🎮', items:['games','brain','fun','dressup','outfit','wheel','snake','xo','shooter','runner','piano','color','duel']},
     {id:'social', icon:'chat', title:'صحابي 💜', items:['friends','wall','mood','jokes','vent','diary','gbk','karma','pquiz','pet']},
     {id:'life', icon:'sparkle', title:'حياتي ✨', items:['deen','mushaf','khatma','weather','shop','premium','offline','settings','ai']}
@@ -8211,7 +8211,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v91';
+  window.LINGUA_VERSION = 'v92';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
@@ -9397,4 +9397,226 @@ window.KM_POOL = [
     });
     return out;
   };
+})();
+/* ================= v92: كاريوكي لينجوا — غنّي واتعلمي النطق (أغاني تراثية/ملك عام فقط) ================= */
+(function(){
+  var box = document.getElementById('karaBox');
+  if(!box) return;
+
+  /* أغاني تراثية وملك عام فقط — بدون إعادة نشر أي كلمات أو صوت محمي بحقوق نشر */
+  var SONGS = [
+    {id:'twinkle', lang:'en', flag:'🇬🇧', title:'Twinkle Twinkle Little Star', ar:'توينكل توينكل — النجمة الصغيرة', tts:'en-US', sr:'en-US',
+     lines:[
+       'Twinkle twinkle little star',
+       'How I wonder what you are',
+       'Up above the world so high',
+       'Like a diamond in the sky',
+       'Twinkle twinkle little star',
+       'How I wonder what you are']},
+    {id:'mary', lang:'en', flag:'🇬🇧', title:'Mary Had a Little Lamb', ar:'ماري والخروف الصغير', tts:'en-US', sr:'en-US',
+     lines:[
+       'Mary had a little lamb',
+       'Little lamb little lamb',
+       'Mary had a little lamb',
+       'Its fleece was white as snow',
+       'And everywhere that Mary went',
+       'The lamb was sure to go']},
+    {id:'row', lang:'en', flag:'🇬🇧', title:'Row Row Row Your Boat', ar:'جذّف جذّف مركبك', tts:'en-US', sr:'en-US',
+     lines:[
+       'Row row row your boat',
+       'Gently down the stream',
+       'Merrily merrily merrily merrily',
+       'Life is but a dream']},
+    {id:'bday', lang:'en', flag:'🇬🇧', title:'Happy Birthday', ar:'عيد ميلاد سعيد', tts:'en-US', sr:'en-US',
+     lines:[
+       'Happy birthday to you',
+       'Happy birthday to you',
+       'Happy birthday happy birthday',
+       'Happy birthday to you']},
+    {id:'frere', lang:'fr', flag:'🇫🇷', title:'Frère Jacques', ar:'الأخ جاك — أغنية فرنسية تراثية', tts:'fr-FR', sr:'fr-FR',
+     lines:[
+       'Frère Jacques frère Jacques',
+       'Dormez-vous dormez-vous',
+       'Sonnez les matines sonnez les matines',
+       'Din din don din din don']},
+    {id:'lune', lang:'fr', flag:'🇫🇷', title:'Au clair de la lune', ar:'على ضوء القمر — تراث فرنسي', tts:'fr-FR', sr:'fr-FR',
+     lines:[
+       'Au clair de la lune',
+       'Mon ami Pierrot',
+       'Prête-moi ta plume',
+       'Pour écrire un mot']},
+    {id:'hanschen', lang:'de', flag:'🇩🇪', title:'Hänschen klein', ar:'هانشن الصغير — تراث ألماني', tts:'de-DE', sr:'de-DE',
+     lines:[
+       'Hänschen klein ging allein',
+       'In die weite Welt hinein',
+       'Stock und Hut steh n ihm gut',
+       'Ist gar wohlgemut']},
+    {id:'ode', lang:'de', flag:'🇩🇪', title:'Ode an die Freude', ar:'أنشودة الفرح — بيتهوفن/شيلر', tts:'de-DE', sr:'de-DE',
+     lines:[
+       'Freude schöner Götterfunken',
+       'Tochter aus Elysium',
+       'Wir betreten feuertrunken',
+       'Himmlische dein Heiligtum']}
+  ];
+
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  function norm(w){
+    return String(w).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-zà-öø-ÿ0-9]/gi,'');
+  }
+  function say(text, lang, rate){
+    if(!('speechSynthesis' in window)) return;
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = lang; u.rate = rate || 0.8;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  }
+
+  var G = null; /* {song, li, results:[]} */
+
+  /* ---------- اختيار أغنية ---------- */
+  function picker(){
+    G = null;
+    box.innerHTML = '<div class="kara-note">🎵 كل الأغاني هنا تراثية وملك عام (زي التهاليل والأغاني الشعبية) — عشان كده مفيش أغاني تجارية بكلماتها. الأغاني التجارية بتاعتك في «نجوم الطرب» 🎶</div>'
+      + '<div class="kara-grid">'
+      + SONGS.map(function(s,i){
+          return '<button class="kara-card" data-s="'+i+'"><span class="kc-flag">'+s.flag+'</span>'
+            + '<span class="kc-title">'+esc(s.title)+'</span><span class="kc-ar">'+esc(s.ar)+'</span>'
+            + '<span class="kc-lines">'+s.lines.length+' سطور</span></button>';
+        }).join('')
+      + '</div>';
+    box.querySelectorAll('[data-s]').forEach(function(b){
+      b.onclick = function(){ startSong(+b.dataset.s); };
+    });
+  }
+
+  /* ---------- المسرح ---------- */
+  function startSong(i){
+    G = {song:SONGS[i], li:0, results:[]};
+    renderLine();
+  }
+  function renderLine(){
+    var s = G.song, line = s.lines[G.li];
+    var words = line.split(/\s+/);
+    box.innerHTML = '<div class="kara-stage">'
+      + '<div class="chef-head"><button class="engx-back" id="karaBack">‹ الأغاني</button><span>'+s.flag+' '+esc(s.title)+'</span></div>'
+      + '<div class="kara-progress">السطر '+(G.li+1)+' / '+s.lines.length+'</div>'
+      + '<div class="kara-bar"><div class="kara-fill" style="width:'+(G.li/s.lines.length*100)+'%"></div></div>'
+      + '<div class="kara-line" id="karaLine">'
+      + words.map(function(w,j){ return '<span class="kara-word" data-w="'+j+'">'+esc(w)+'</span>'; }).join(' ')
+      + '</div>'
+      + '<div class="kara-acts">'
+      + '<button class="btn" id="karaHear">🔊 اسمعي السطر</button>'
+      + (SR ? '<button class="btn gold" id="karaSing">🎤 غنّي / ردّدي</button>' : '')
+      + '<button class="btn ghost" id="karaNext">'+(G.li+1<s.lines.length?'السطر اللي بعده ⏭':'النتيجة 🏁')+'</button>'
+      + '</div>'
+      + '<div class="kara-verdict" id="karaVerdict"></div>'
+      + (SR ? '' : '<div class="kara-note">⚠️ التصحيح الصوتي محتاج متصفح كروم. تقدري تسمعي وتردّدي ورا الصوت في أي متصفح، والتقييم الذاتي شغال 👇<br><button class="btn ghost" id="karaSelfGood" style="margin-top:6px">قلتها صح ✅</button> <button class="btn ghost" id="karaSelfBad" style="margin-top:6px">لسه بتعثّر 🔁</button></div>')
+      + '<div class="kara-tip">💡 دوسي على أي كلمة حمرا تسمعي نطقها الصح لوحدها</div>'
+      + '</div>';
+    document.getElementById('karaBack').onclick = picker;
+    document.getElementById('karaHear').onclick = function(){ say(line, s.tts, 0.75); };
+    document.getElementById('karaNext').onclick = nextLine;
+    var singBtn = document.getElementById('karaSing');
+    if(singBtn) singBtn.onclick = sing;
+    var sg = document.getElementById('karaSelfGood');
+    if(sg) sg.onclick = function(){ markLine(1); };
+    var sb = document.getElementById('karaSelfBad');
+    if(sb) sb.onclick = function(){ markLine(0.4); };
+    box.querySelectorAll('.kara-word').forEach(function(el){
+      el.onclick = function(){ say(el.textContent, s.tts, 0.75); };
+    });
+  }
+
+  /* ---------- الغناء بالميك ---------- */
+  var listening = false;
+  function sing(){
+    if(listening) return;
+    var s = G.song, line = s.lines[G.li];
+    var rec;
+    try { rec = new SR(); } catch(e){ toast('الميكروفون مش متاح هنا 🙈'); return; }
+    rec.lang = s.sr; rec.interimResults = false; rec.maxAlternatives = 3;
+    var btn = document.getElementById('karaSing');
+    btn.textContent = '🎙️ بتسمعك... غنّي دلوقتي';
+    btn.disabled = true; listening = true;
+    var done = false;
+    function finish(fn){
+      if(done) return; done = true; listening = false;
+      btn.textContent = '🎤 غنّي / ردّدي'; btn.disabled = false;
+      fn();
+    }
+    rec.onresult = function(ev){
+      var heard = [];
+      for(var i=0;i<ev.results[0].length;i++){ heard.push(ev.results[0][i].transcript); }
+      finish(function(){ grade(heard.join(' ')); });
+    };
+    rec.onerror = function(ev){
+      finish(function(){
+        if(ev.error === 'not-allowed' || ev.error === 'service-not-allowed'){
+          document.getElementById('karaVerdict').innerHTML = '⚠️ محتاجين إذن الميكروفون — اضغطي سماح لما يطلب، أو كمّلي بوضع الترديد 🔁';
+        } else if(ev.error === 'no-speech'){
+          document.getElementById('karaVerdict').innerHTML = 'ماسمعتش حاجة 🙉 قربي من الميك وجرّبي تاني';
+        } else {
+          document.getElementById('karaVerdict').innerHTML = 'حصلت مشكلة في التعرّف ('+esc(ev.error||'خطأ')+') — جرّبي تاني 🔄';
+        }
+      });
+    };
+    rec.onend = function(){ finish(function(){}); };
+    try { rec.start(); } catch(e){ finish(function(){ toast('الميكروفون مش متاح 🙈'); }); }
+  }
+
+  /* ---------- التقييم: مقارنة كلمة بكلمة ---------- */
+  function grade(heard){
+    var s = G.song, line = s.lines[G.li];
+    var words = line.split(/\s+/);
+    var heardNorm = norm(heard).split ? heard.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').split(/\s+/).map(norm).filter(Boolean) : [];
+    var heardSet = {};
+    heardNorm.forEach(function(w){ heardSet[w] = (heardSet[w]||0)+1; });
+    var correct = 0;
+    box.querySelectorAll('.kara-word').forEach(function(el){
+      var w = norm(el.textContent);
+      var ok = w && heardSet[w] > 0;
+      if(ok){ heardSet[w]--; correct++; }
+      el.classList.add(ok ? 'kw-ok' : 'kw-bad');
+    });
+    var ratio = words.length ? correct/words.length : 0;
+    markLine(ratio, correct, words.length);
+  }
+  function markLine(ratio, correct, total){
+    var v = document.getElementById('karaVerdict');
+    var pct = Math.round(ratio*100);
+    G.results[G.li] = ratio;
+    v.innerHTML = pct >= 90 ? 'مذهلة! 🌟 '+pct+'% صح'
+      : pct >= 60 ? 'حلو أوي! 💪 '+pct+'% — بصّي على الكلمات الحمرا'
+      : pct > 0 ? 'محاولة كويسة 🌱 '+pct+'% — اسمعي السطر تاني وردّدي'
+      : 'سجّلنا المحاولة — كمّلي للسطر اللي بعده ⏭';
+    try { addPoints(Math.max(1, Math.round(pct/20))); } catch(e){}
+  }
+  function nextLine(){
+    var s = G.song;
+    if(G.li+1 < s.lines.length){ G.li++; renderLine(); }
+    else { finishSong(); }
+  }
+
+  /* ---------- النتيجة ---------- */
+  function finishSong(){
+    var s = G.song;
+    var ratios = G.results.filter(function(r){ return typeof r === 'number'; });
+    var avg = ratios.length ? ratios.reduce(function(a,b){return a+b;},0)/ratios.length : 0;
+    var st = avg >= 0.85 ? 3 : avg >= 0.55 ? 2 : 1;
+    var pts = st * 15;
+    try { addPoints(pts); } catch(e){}
+    try { if(window.awardPoints) awardPoints(pts, 'كاريوكي 🎤'); } catch(e){}
+    box.innerHTML = '<div class="kara-stage">'
+      + '<div class="chef-title">'+s.flag+' خلّصتي '+esc(s.title)+'! 🎉</div>'
+      + '<div class="chef-bigstars">'+[1,2,3].map(function(n){ return '<span class="'+(n<=st?'on':'')+'">★</span>'; }).join('')+'</div>'
+      + '<div class="chef-grade">'+(st===3?'صوتك طلع أجود من اللي متخيلاه! 🤌🎶':st===2?'أداء حلو — رجّعي الكلمات الحمرا وهتبقي مثالية 💪':'بداية شجاعة — اسمعي كل سطر وردّديه مرتين 🌱')+'</div>'
+      + '<div class="chef-points">+'+pts+' نقطة 💎</div>'
+      + '<div class="engx-acts"><button class="btn" id="karaAgain">غنّيها تاني 🔄</button><button class="btn ghost" id="karaSongs">أغنية تانية 🎵</button></div>'
+      + '</div>';
+    try { if(st>=2 && window.confetti) confetti(); } catch(e){}
+    document.getElementById('karaAgain').onclick = function(){ startSong(SONGS.indexOf(s)); };
+    document.getElementById('karaSongs').onclick = picker;
+  }
+
+  picker();
 })();
