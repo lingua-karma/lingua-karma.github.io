@@ -6075,6 +6075,40 @@ window.GK_POOL = [
 {q:'كم سنة استمرت حرب المائة عام بين إنجلترا وفرنسا تقريبًا؟',a:'116 سنة',o:['100 سنة بالظبط','116 سنة','99 سنة','130 سنة']}
 ];
 
+/* truth + know-me pools (fun + safe-embarrassing, no sexual/hurtful/private content) */
+window.TRUTH_POOL = [
+{q:'إيه أغبى حاجة عملتيها وانتي صغيرة؟ 😄', c:'fun'},
+{q:'إيه الأكل اللي بتاكليه في السر ومحسش حد؟ 🍫', c:'fun'},
+{q:'لو يوم كامل تبدلي حياتك مع أي حد — مين؟ ✨', c:'fun'},
+{q:'إيه عادة غريبة عندك محدش يعرفها؟ 🤫', c:'fun'},
+{q:'أغرب حلم حلمتيه كان عن إيه؟ 💭', c:'fun'},
+{q:'إيه الحاجة اللي بتخافي منها ومضحكة؟ 😂', c:'fun'},
+{q:'لو لسه بتتفرجي على كرتون — إيه هو؟ 📺', c:'fun'},
+{q:'إيه أول حاجة بتعمليها أول ما تصحي؟ ☀️', c:'fun'},
+{q:'مين آخر واحدة بعتيها رسالة وقولتي فيها إيه؟ 📱', c:'fun'},
+{q:'إيه الأغنية اللي بتغنيها وانتي لوحدك بصوت عالي؟ 🎤', c:'fun'},
+{q:'أطرف موقف حصلك في المواصلات؟ 🚌', c:'embar'},
+{q:'إيه الكدبة الصغيرة اللي قولتيها المرة الأخيرة؟ 🙊', c:'embar'},
+{q:'اتكسفتي قدام ناس إمتى آخر مرة؟ 😳', c:'embar'},
+{q:'ندمتي على رسالة بعتيها؟ كانت عن إيه؟ 💌', c:'embar'},
+{q:'وقعتي أو تعثرتي قدام ناس قبل كده؟ احكي! 🤭', c:'embar'},
+{q:'إيه الحاجة اللي لسه بتعمليها زي الأطفال؟ 🧸', c:'embar'},
+{q:'اتصورتي صورة محرجة؟ إيه كانت؟ 📸', c:'embar'},
+{q:'قولتي على حد "بحبك" بالغلط؟ 😅', c:'embar'},
+{q:'إيه أطرف لقب اتناديتي بيه؟ 🏷️', c:'embar'},
+{q:'نسيتي اسم حد وانتي بتكلميه؟ عملتي إيه؟ 🫣', c:'embar'}
+];
+window.KM_POOL = [
+{q:'قهوة ولا شاي؟', o:['قهوة ☕','شاي 🍵','اللي اتنين','ولا واحد']},
+{q:'البحر ولا السفر للجبال؟', o:['البحر 🌊','الجبال ⛰️','اللي اتنين','أفضّل البيت']},
+{q:'بتصحي بدري ولا بتسهري؟', o:['بصحى بدري 🌅','بسهر 🌙','على مزاجي']},
+{q:'الأكل المفضل؟', o:['محشي','كشري','مكرونة','فراخ']},
+{q:'لو كسبتي مليون جنيه — أول حاجة؟', o:['أسافر ✈️','أشتري حاجة كبيرة 🛍️','أدّخرها 💰','أتصدق بجزء']},
+{q:'الفيلم المفضل: رومانسي ولا أكشن ولا كوميدي؟', o:['رومانسي 💕','أكشن 💥','كوميدي 😂','رعب 👻']},
+{q:'الشتاء ولا الصيف؟', o:['الشتاء ❄️','الصيف ☀️','الخريف 🍂']},
+{q:'لو حيوان أليف: قطة ولا كلب؟', o:['قطة 🐱','كلب 🐶','عصفير 🐦','مش بحب الحيوانات']}
+];
+
 
 /* ================= v47: luxury grouped navigation ================= */
 (function(){
@@ -6204,7 +6238,9 @@ window.GK_POOL = [
     quiz:   {n:'سباق الكلمات', i:'⚔️', d:'١٠ كلمات — صح + سرعة', vocab:true},
     race:   {n:'سباق الستين', i:'⚡', d:'٦٠ ثانية — أكتر عدد إجابات', vocab:true},
     memory: {n:'ميموري سوا', i:'🃏', d:'مين يلاقي التطابقات الأول', vocab:true},
-    gk:     {n:'معلومات صعبة', i:'🧠', d:'١٠ أسئلة معلومات عامة تقيلة', vocab:false}
+    gk:     {n:'معلومات صعبة', i:'🧠', d:'١٠ أسئلة معلومات عامة تقيلة', vocab:false},
+    truth:  {n:'الحقيقة', i:'👑', d:'أسئلة ضحك ومفاجآت — جاوبي بصراحة أو تخطّي', vocab:false},
+    knowme: {n:'قد إيه تعرفيني', i:'💜', d:'خمّني إجابات صاحبتك', vocab:false}
   };
   var dsb = null, chan = null;
   var S = {st:'home', game:'quiz', code:null, lang:'en', host:false, uid:null, myName:'', opp:null, players:[],
@@ -6390,6 +6426,10 @@ window.GK_POOL = [
       if(p.t === 'prog'){ S.oppN = p.n; updRaceOpp(); }
       if(p.t === 'claim'){ onOppClaim(p.pair); }
       if(p.t === 'done'){ S.oppDone = true; S.oppAns = p.ans || S.oppAns; S.oppN = p.n || S.oppN; S.oppMs = p.ms || 0; S.oppPairs = p.pairs; maybeFinish(); }
+      if(p.t === 'tans'){ S.tAns[p.by] = {name: p.name, txt: p.txt, skip: p.skip}; truthMaybeReveal(); }
+      if(p.t === 'tnext'){ if(!S.host) truthRound(p.r); }
+      if(p.t === 'kready'){ S._oppKReady = true; knowMaybePhase2(); }
+      if(p.t === 'kans'){ S.oppK = p.ans; knowMaybeReveal(); }
     });
     chan.subscribe(function(status){
       if(status === 'SUBSCRIBED'){
@@ -6428,6 +6468,10 @@ window.GK_POOL = [
       raceShell(at);
     } else if(S.game === 'memory'){
       memShell(at);
+    } else if(S.game === 'truth'){
+      truthShell(at);
+    } else if(S.game === 'knowme'){
+      knowShell(at);
     } else {
       S.qs = (S.game === 'gk') ? buildGk(S.code) : buildMcq(S.code, 'quiz', S.lang, 10);
       quizShell(at);
@@ -6642,6 +6686,173 @@ window.GK_POOL = [
     if(e2 && S.opp) e2.textContent = S.opp.name + ': 🃏 ' + S.mem.opp.length;
     el('duFb').textContent = (S.opp ? S.opp.name : 'صاحبتك') + ' لقت تطابق! 👀';
     if(S.mem.mine.length + S.mem.opp.length >= 8) endMyGame();
+  }
+
+  /* ---------- truth (group) ---------- */
+  function truthShell(at){
+    var r = rng(hash(S.code + ':truth'));
+    var fun = window.TRUTH_POOL.filter(function(q){ return q.c === 'fun'; });
+    var emb = window.TRUTH_POOL.filter(function(q){ return q.c === 'embar'; });
+    function shuf(a){ a = a.slice(); for(var k = a.length - 1; k > 0; k--){ var m = Math.floor(r() * (k + 1)), t = a[k]; a[k] = a[m]; a[m] = t; } return a; }
+    fun = shuf(fun); emb = shuf(emb);
+    S.tQs = [];
+    for(var i = 0; i < 5; i++){ S.tQs.push(fun[i]); S.tQs.push(emb[i]); }
+    S.tR = 0; S.tAns = {}; S.tMine = false;
+    el('duelBox').innerHTML = '<div class="du-card"><div id="duQ"></div><div id="duOpts"></div><div class="du-fb" id="duFb"></div></div>';
+    var wait = at - Date.now();
+    el('duQ').innerHTML = '<div class="du-count">استعدي... 👑</div>';
+    later(function(){ truthRound(0); }, Math.max(50, wait));
+  }
+  function truthRound(r){
+    if(r >= S.tQs.length){ return truthEnd(); }
+    S.st = 'game'; S.tR = r; S.tAns = {}; S.tMine = false;
+    var q = S.tQs[r];
+    el('duQ').innerHTML =
+      '<div class="du-we">' + (q.c === 'embar' ? '🙈' : '😄') + '</div>' +
+      '<div class="du-word" style="direction:rtl;font-size:1.2rem;line-height:1.9">' + esc(q.q) + '</div>' +
+      '<div class="du-sub" style="margin-top:6px">' + (q.c === 'embar' ? 'سؤال محرج شوية 😳' : 'سؤال حلو') + ' • ' + (r + 1) + ' / ' + S.tQs.length + '</div>';
+    el('duOpts').innerHTML =
+      '<textarea class="acc-in" id="tIn" rows="2" maxlength="200" placeholder="جاوبي بصراحة..."></textarea>' +
+      '<div style="display:flex;gap:8px;justify-content:center">' +
+      '<button class="btn" id="tSend">ابعتي الإجابة 💬</button>' +
+      '<button class="btn" id="tSkip" style="background:rgba(255,255,255,.1)">تخطّي 🙈</button></div>' +
+      '<div id="tWho" class="du-sub" style="margin-top:10px"></div>';
+    el('duFb').textContent = '';
+    el('tSend').onclick = function(){
+      var v = el('tIn').value.trim();
+      if(!v){ toast('اكتبي إجابتك أو دوسي تخطّي 💭'); return; }
+      S.tMine = true;
+      S.tAns[S.uid] = {name: S.myName, txt: v, skip: false};
+      send('tans', {txt: v, skip: false});
+      truthLock();
+    };
+    el('tSkip').onclick = function(){
+      S.tMine = true;
+      S.tAns[S.uid] = {name: S.myName, txt: '', skip: true};
+      send('tans', {txt: '', skip: true});
+      truthLock();
+    };
+    truthWho();
+    later(function(){ if(!S.tMine){ /* gentle nudge */ var f = el('duFb'); if(f) f.textContent = '⏳ مستنيينك...'; } }, 45000);
+  }
+  function truthLock(){
+    el('tSend').disabled = true; el('tSkip').disabled = true; el('tIn').disabled = true;
+    truthWho();
+    truthMaybeReveal();
+  }
+  function truthWho(){
+    var w = el('tWho');
+    if(!w) return;
+    var total = S.players.length, got = Object.keys(S.tAns).length;
+    w.textContent = 'جاوبوا ' + got + ' من ' + total + ' ⏳';
+  }
+  function truthMaybeReveal(){
+    if(S.st !== 'game' || S.game !== 'truth') return;
+    var total = S.players.length;
+    if(Object.keys(S.tAns).length < total) return;
+    /* everyone answered -> reveal */
+    S.st = 'revealing';
+    var q = S.tQs[S.tR];
+    el('duQ').innerHTML = '<div class="du-word" style="direction:rtl;font-size:1.15rem;line-height:1.8">' + esc(q.q) + '</div>';
+    var html = Object.keys(S.tAns).map(function(uid){
+      var a = S.tAns[uid];
+      return '<div class="du-frow' + (uid === S.uid ? ' me' : '') + '"><span>' + esc(a.name) + '</span><b style="font-weight:600;max-width:65%;text-align:left">' + (a.skip ? 'استحيت 😳' : esc(a.txt)) + '</b></div>';
+    }).join('');
+    el('duOpts').innerHTML = '<div class="du-final">' + html + '</div>' +
+      (S.host ? '<button class="btn du-big" id="tNext">السؤال اللي بعده ›</button>' : '<div class="du-sub">مستنيين المضيفة تقول السؤال اللي بعده...</div>');
+    sndOk();
+    if(S.host){
+      el('tNext').onclick = function(){
+        send('tnext', {r: S.tR + 1});
+        truthRound(S.tR + 1);
+      };
+    }
+  }
+  function truthEnd(){
+    S.st = 'result';
+    if(typeof window.awardPoints === 'function') window.awardPoints(15, 'لعبتِ الحقيقة 👑');
+    el('duelBox').innerHTML =
+      '<div class="du-card du-result"><div class="du-crown">👑</div>' +
+      '<h3>الضحك كان بطل الليلة 😂💜</h3>' +
+      '<div class="du-xp">+15 نقطة في رصيدك ✨</div>' +
+      '<button class="btn du-big" id="duAgain">👑 جولة تانية</button>' +
+      '<button class="du-leave" id="duHome">← القاعة</button></div>';
+    el('duAgain').onclick = function(){ var g = S.game; leave(); S.game = g; connect(mkCode(), true); };
+    el('duHome').onclick = function(){ leave(); };
+  }
+
+  /* ---------- know-me (2 players) ---------- */
+  function knowShell(at){
+    S.kMine = []; S.kGuess = []; S.oppK = null; S._oppKReady = false; S.kPhase = 1;
+    var wait = at - Date.now();
+    el('duelBox').innerHTML = '<div class="du-card"><div id="duQ"><div class="du-count">استعدي... 💜</div></div><div id="duOpts"></div><div class="du-fb" id="duFb"></div></div>';
+    later(function(){ knowQ(0); }, Math.max(50, wait));
+  }
+  function knowQ(i){
+    if(S.kPhase === 1 && i >= window.KM_POOL.length){
+      S.kPhase = 1.5;
+      send('kready', {});
+      el('duQ').innerHTML = '<div class="du-word" style="font-size:1.1rem;direction:rtl">خلصتي إجاباتك! مستنيين ' + esc(S.opp ? S.opp.name : 'صاحبتك') + '... ⏳</div>';
+      el('duOpts').innerHTML = '';
+      knowMaybePhase2();
+      return;
+    }
+    if(S.kPhase === 2 && i >= window.KM_POOL.length){
+      S.kPhase = 2.5;
+      send('kans', {ans: S.kMine});
+      el('duQ').innerHTML = '<div class="du-word" style="font-size:1.1rem;direction:rtl">خمنتي كل حاجة! اللحظة الحاسمة... 👀</div>';
+      el('duOpts').innerHTML = '';
+      knowMaybeReveal();
+      return;
+    }
+    var q = window.KM_POOL[i];
+    var guessing = S.kPhase === 2;
+    el('duQ').innerHTML =
+      '<div class="du-we">' + (guessing ? '🔮' : '💜') + '</div>' +
+      '<div class="du-word" style="direction:rtl;font-size:1.2rem">' + (guessing ? esc(S.opp ? S.opp.name : 'صاحبتك') + ' هتختار إيه؟<br>' : '') + esc(q.q) + '</div>' +
+      '<div class="du-sub" style="margin-top:6px">' + (guessing ? 'خمّني إجابتها' : 'جاوبي عن نفسك (سرية 🤫)') + ' • ' + (i + 1) + ' / ' + window.KM_POOL.length + '</div>';
+    el('duOpts').innerHTML = q.o.map(function(o, k){
+      return '<button class="du-opt" data-k="' + k + '">' + esc(o) + '</button>';
+    }).join('');
+    el('duOpts').onclick = function(e){
+      var b = e.target.closest('.du-opt'); if(!b) return;
+      sndTick();
+      if(guessing) S.kGuess[i] = +b.dataset.k; else S.kMine[i] = +b.dataset.k;
+      knowQ(i + 1);
+    };
+  }
+  function knowMaybePhase2(){
+    if(S.game !== 'knowme') return;
+    if(S.kPhase === 1.5 && S._oppKReady){
+      S.kPhase = 2;
+      el('duQ').innerHTML = '<div class="du-word" style="font-size:1.1rem;direction:rtl">دلوقتي خمّني إجابات ' + esc(S.opp ? S.opp.name : 'صاحبتك') + '! 🔮</div>';
+      later(function(){ knowQ(0); }, 1200);
+    }
+  }
+  function knowMaybeReveal(){
+    if(S.game !== 'knowme') return;
+    if(S.kPhase === 2.5 && S.oppK){
+      S.kPhase = 3; S.st = 'result';
+      var hits = 0, rows = '';
+      for(var i = 0; i < window.KM_POOL.length; i++){
+        var ok = S.kGuess[i] === S.oppK[i];
+        if(ok) hits++;
+        rows += '<div class="du-frow"><span>' + esc(window.KM_POOL[i].q) + '</span><b>' + (ok ? '✅' : '❌') + '</b></div>';
+      }
+      /* opponent's hits on me: I know my answers; she computes hers. Approximate display: show my hits only */
+      var xp = hits * 5;
+      if(typeof window.awardPoints === 'function') window.awardPoints(xp, 'قد إيه تعرفيني 💜');
+      if(hits >= 6){ sndWin(); try { confetti(); } catch(e){} }
+      el('duelBox').innerHTML =
+        '<div class="du-card du-result"><div class="du-crown">' + (hits >= 6 ? '💜' : (hits >= 3 ? '🤝' : '😅')) + '</div>' +
+        '<h3>' + (hits >= 6 ? 'بتعرفو بعض جامد! 💜' : (hits >= 3 ? 'معرفة حلوة 🤝' : 'لسه محتاجين قعدة أكتر 😂')) + '</h3>' +
+        '<div class="du-xp">خمّنتي ' + hits + ' من ' + window.KM_POOL.length + ' صح — +' + xp + ' نقطة ✨</div>' +
+        '<div class="du-final" style="text-align:right">' + rows + '</div>' +
+        '<button class="btn du-big" id="duAgain">💜 العبي تاني</button>' +
+        '<button class="du-leave" id="duHome">← القاعة</button></div>';
+      el('duAgain').onclick = function(){ var g = S.game; leave(); S.game = g; connect(mkCode(), true); };
+      el('duHome').onclick = function(){ leave(); };
+    }
   }
 
   /* ---------- end / result ---------- */
