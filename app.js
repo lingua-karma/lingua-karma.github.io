@@ -6199,7 +6199,7 @@ window.KM_POOL = [
     {id:'learn', icon:'book', title:'تعلّم 📚', items:['dash','quests','placement','listen','mistakes','german','corners','courses','lessons','quiz','map','dict','gallery','speak','videos','songs','music','cinema','tarab','korean','library','stories','capitals','food','fashion','trip','places','quotes','hobbies','themes','tips','eng','scholar','ch30','flash','puzzle','qotd']},
     {id:'play', icon:'gamepad', title:'العب 🎮', items:['games','brain','fun','dressup','outfit','wheel','snake','xo','shooter','runner','piano','color','duel']},
     {id:'social', icon:'chat', title:'صحابي 💜', items:['friends','wall','mood','jokes','vent','diary','gbk','karma','pquiz','pet']},
-    {id:'life', icon:'sparkle', title:'حياتي ✨', items:['deen','mushaf','khatma','weather','shop','premium','settings','ai']}
+    {id:'life', icon:'sparkle', title:'حياتي ✨', items:['deen','mushaf','khatma','weather','shop','premium','offline','settings','ai']}
   ];
 
   /* name lookup from MENU */
@@ -8230,7 +8230,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v86';
+  window.LINGUA_VERSION = 'v87';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
@@ -8816,4 +8816,68 @@ window.KM_POOL = [
     } catch(e){}
   } catch(e){}
   renderTarab();
+})();
+/* ================= v87: وضع من غير نت — hub + مؤشر + تسجيل في القايمة ================= */
+(function(){
+  var IC = {
+    book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C6 4 9 4 12 6c3-2 6-2 8-.5V18c-2-1.5-5-1.5-8 .5-3-2-6-2-8-.5z"/><path d="M12 6v12.5"/></svg>',
+    rocket:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c3.5 2 5.5 6 5.5 10l-2 3h-7l-2-3C6.5 8 8.5 4 12 2z"/><circle cx="12" cy="9" r="1.6"/><path d="M8.5 15L6 20m11.5-5L18 20M12 15v6"/></svg>',
+    game:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8h10a5 5 0 0 1 5 5c0 2.8-2.2 5-5 5-1.4 0-2.6-.6-3.4-1.5h-3.2C9.6 17.4 8.4 18 7 18c-2.8 0-5-2.2-5-5a5 5 0 0 1 5-5z"/><path d="M7.5 11v4M5.5 13h4"/></svg>',
+    brain:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 2 5 3 3 0 0 0 3 3c1 0 2-.5 3-1.5C13 20.5 14 21 15 21a3 3 0 0 0 3-3 3 3 0 0 0 2-5 3 3 0 0 0-2-5 3 3 0 0 0-3-3c-1 0-2 .5-3 1.5C11 3.5 10 3 9 3z"/></svg>',
+    dict:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>',
+    card:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="13" height="16" rx="2"/><path d="M8 5V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2h-1"/></svg>',
+    listen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10v4h3l5 4V6l-5 4H4z"/><path d="M15 9a4 4 0 0 1 0 6M17.5 6.5a8 8 0 0 1 0 11"/></svg>',
+    quiz:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg>',
+    stories:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-2-1.5-5-1.7-8-.5V19c3-1.2 6-1 8 .5 2-1.5 5-1.7 8-.5V5.5c-3-1.2-6-1-8 .5z"/><path d="M12 6v13.5"/></svg>',
+    hobbies:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4-3.5-8-6.8-8-11a5 5 0 0 1 8-4 5 5 0 0 1 8 4c0 4.2-4 7.5-8 11z"/></svg>'
+  };
+  var OFFLINE_OK = [
+    ['map','مسار التعلم','rocket'],['lessons','الدروس','book'],['games','ألعاب اللغات','game'],
+    ['brain','ألعاب ذكاء','brain'],['dict','القاموس','dict'],['flash','كروت سحرية','card'],
+    ['listen','استماع','listen'],['quiz','الاختبارات','quiz'],['stories','قصص','stories'],
+    ['hobbies','هوايات','hobbies'],['themes','كلمات بالموضوع','card'],['gallery','بالصور','card'],
+    ['snake','الثعبان','game'],['xo','إكس أو','game'],['puzzle','بازل الكلمات','game'],
+    ['mistakes','أخطائي','card'],['capitals','عواصم','book'],['ch30','تحدي ٣٠ يوم','rocket']
+  ];
+  var OFFLINE_NEED = ['أصحابي والشات 💜','تحدي لايف ⚔️','لمى 🤖','سينما وطرب 🎬','أغاني واستمع 🎵','المتجر المشترك 🛍️','فيديوهات يوتيوب 🎥'];
+
+  function renderOfflineHub(){
+    var g = document.getElementById('offGrid');
+    if(g && !g.children.length){
+      g.innerHTML = OFFLINE_OK.map(function(x){
+        return '<a class="off-card" href="#'+x[0]+'"><span class="oc-i">'+(IC[x[2]]||IC.book)+'</span><span class="oc-n">'+x[1]+'</span></a>';
+      }).join('');
+    }
+    var n = document.getElementById('offNeed');
+    if(n && !n.children.length){
+      n.innerHTML = OFFLINE_NEED.map(function(x){ return '<span>'+x+'</span>'; }).join('');
+    }
+  }
+
+  function paintStatus(){
+    var on = navigator.onLine;
+    var st = document.getElementById('offStatus'), tx = document.getElementById('offStatusTx');
+    if(st){ st.classList.toggle('is-off', !on); }
+    if(tx){ tx.textContent = on ? 'النت شغال دلوقتي ✅ — كل حاجة متاحة' : 'مفيش نت 📵 — وضع التوفير شغال والمحتوى الأساسي معاكي'; }
+    var bar = document.getElementById('offlineBar');
+    if(bar){ bar.classList.toggle('show', !on); }
+    document.body.classList.toggle('is-offline', !on);
+  }
+
+  window.addEventListener('online', paintStatus);
+  window.addEventListener('offline', paintStatus);
+
+  try {
+    var li = MENU.findIndex(function(m){ return m[0] === 'settings'; });
+    MENU.splice(li >= 0 ? li : MENU.length, 0, ['offline','📵','بدون نت']);
+    VIEWIDS.push('offline');
+    var anchor = document.querySelector('#menuGrid a[href="#settings"]');
+    var cardHtml = '<a class="menu-card" href="#offline"><span class="m-ico">📵</span><span class="m-name">بدون نت</span></a>';
+    if(anchor) anchor.insertAdjacentHTML('beforebegin', cardHtml);
+    else document.getElementById('menuGrid').insertAdjacentHTML('beforeend', cardHtml);
+  } catch(e){}
+
+  renderOfflineHub();
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', paintStatus);
+  else paintStatus();
 })();
