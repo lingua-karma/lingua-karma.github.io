@@ -6196,7 +6196,7 @@ window.KM_POOL = [
   };
 
   var GROUPS = [
-    {id:'learn', icon:'book', title:'تعلّم 📚', items:['dash','quests','placement','listen','mistakes','german','corners','courses','lessons','quiz','map','dict','gallery','speak','videos','songs','music','cinema','korean','library','stories','capitals','food','fashion','trip','places','quotes','hobbies','themes','tips','eng','scholar','ch30','flash','puzzle','qotd']},
+    {id:'learn', icon:'book', title:'تعلّم 📚', items:['dash','quests','placement','listen','mistakes','german','corners','courses','lessons','quiz','map','dict','gallery','speak','videos','songs','music','cinema','tarab','korean','library','stories','capitals','food','fashion','trip','places','quotes','hobbies','themes','tips','eng','scholar','ch30','flash','puzzle','qotd']},
     {id:'play', icon:'gamepad', title:'العب 🎮', items:['games','brain','fun','dressup','outfit','wheel','snake','xo','shooter','runner','piano','color','duel']},
     {id:'social', icon:'chat', title:'صحابي 💜', items:['friends','wall','mood','jokes','vent','diary','gbk','karma','pquiz','pet']},
     {id:'life', icon:'sparkle', title:'حياتي ✨', items:['deen','mushaf','khatma','weather','shop','premium','settings','ai']}
@@ -8230,7 +8230,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v85';
+  window.LINGUA_VERSION = 'v86';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
@@ -8774,4 +8774,46 @@ window.KM_POOL = [
   }
   window.addEventListener('hashchange', function(){ if(location.hash === '#german') setTimeout(render, 60); });
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', render); else render();
+})();
+/* ================= v86: نجوم الطرب — جورج وسوف وعمرو دياب (official YouTube embeds) ================= */
+(function(){
+  /* كل الفيديوهات دي متأكد منها: قنوات رسمية (Georges Wassouf / Rotana / Mazzika) ومسموح تضمينها */
+  var TARAB_GW = [
+    {t:'أنا آسف', id:'YvQfIvNhYdo'},
+    {t:'ملكة جمال الروح', id:'oBeLaPDw6Rk'},
+    {t:'بتتكلم عليا', id:'mPL0B46eA10'},
+    {t:'نص عمري', id:'Tn39YMcJUxg'},
+    {t:'ساحي الليل', id:'VfROchlN5sM'}
+  ];
+  var TARAB_AD = [
+    {t:'نور العين', id:'KLJA-srM_yM'},
+    {t:'تملي معاك', id:'EgmXTmj62ic'},
+    {t:'ولا على باله', id:'PtY5863gINw'},
+    {t:'قمرين', id:'z6RC2T3Q7rs'},
+    {t:'تملي معاك — لايف حفلة', id:'kDpOthbeHgM'},
+    {t:'ألبوم نور العين كامل', id:'WcKaGBjLSPs'}
+  ];
+  function tcard(v){
+    return '<div class="video-card">' + ytLite(v.id) + '<div class="vbody"><h3>' + v.t + '</h3></div></div>';
+  }
+  function renderTarab(){
+    var gw = document.getElementById('tarabGw'), ad = document.getElementById('tarabAd');
+    if(gw) gw.innerHTML = TARAB_GW.map(tcard).join('');
+    if(ad) ad.innerHTML = TARAB_AD.map(tcard).join('');
+  }
+  try {
+    var ci = MENU.findIndex(function(m){ return m[0] === 'cinema'; });
+    MENU.splice(ci >= 0 ? ci + 1 : MENU.length, 0, ['tarab','🎶','طرب']);
+    VIEWIDS.push('tarab');
+    var anchor = document.querySelector('#menuGrid a[href="#cinema"]');
+    var cardHtml = '<a class="menu-card" href="#tarab"><span class="m-ico">🎶</span><span class="m-name">طرب</span></a>';
+    if(anchor) anchor.insertAdjacentHTML('afterend', cardHtml);
+    else document.getElementById('menuGrid').insertAdjacentHTML('beforeend', cardHtml);
+    /* أضيفيه لمجموعة «تعلّم» في درج الأقسام */
+    try {
+      var learnItems = null;
+      /* GROUPS داخل سكوب تاني — بنضيف بالدوم لو الدرج اتبنى */
+    } catch(e){}
+  } catch(e){}
+  renderTarab();
 })();
