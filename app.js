@@ -9975,7 +9975,7 @@ window.KM_POOL = [
 
   var S = { st:'idle', code:null, host:false, uid:null, name:'', chan:null,
             lang:null, level:null, examNo:1, qs:null, qi:0, correct:0, answered:0,
-            t0:0, done:false, ms:0, players:{}, retry:0 };
+            t0:0, done:false, ms:0, players:{}, retry:0, lastSync:0 };
 
   function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
   function uid(){ return 'u' + Math.random().toString(36).slice(2,10); }
@@ -10027,10 +10027,12 @@ window.KM_POOL = [
     if(!S.uid) S.uid = uid();
     S.code = code; S.host = isHost;
     if(!preserve) S.st = 'lobby';
+    if(S.chan){ try { S.chan.unsubscribe(); } catch(e){} }
     S.chan = sb.channel('study-' + code, { config: { presence: { key: S.uid } } });
     var myChan = S.chan;
     S.chan.on('presence', { event: 'sync' }, function(){
       if(S.chan !== myChan) return;
+      S.lastSync = Date.now();
       var st = myChan.presenceState(), ps = {};
       Object.keys(st).forEach(function(k){
         var p = st[k] && st[k][0];
@@ -10286,4 +10288,16 @@ window.KM_POOL = [
   document.addEventListener('visibilitychange', function(){
     if(!document.hidden && S.chan) track();
   });
+  /* نبضة: نحافظ على الـ presence ونعيد الاتصال لو سكت */
+  setInterval(function(){
+    if(!S.code || !sb) return;
+    if(!S.lastSync) { track(); return; }
+    var silent = Date.now() - S.lastSync;
+    if(silent > 15000){
+      S.lastSync = 0;
+      connect(S.code, S.host, true);
+    } else {
+      track();
+    }
+  }, 5000);
 })();
