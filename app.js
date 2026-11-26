@@ -6378,7 +6378,7 @@ window.KM_POOL = [
     el('duReady').onclick = function(){
       el('duReady').disabled = true; el('duReady').textContent = '✅ جاهزة — مستنيين ' + (S.opp ? esc(S.opp.name) : 'صاحبتك');
       S._iReady = true;
-      try { chan.track({name: S.myName, ready: true}); } catch(e){}
+      try { chan.track({name: S.myName, ready: true, game: S.game}); } catch(e){}
       send('ready', {});
       maybeStart();
     };
@@ -6409,6 +6409,10 @@ window.KM_POOL = [
       });
       S.players = arr;
       var opp = arr.find(function(x){ return x.uid !== S.uid; });
+      if(!S.host && opp){
+        var pr2 = st[opp.uid] && st[opp.uid][0];
+        if(pr2 && pr2.game && GAMES[pr2.game] && S.game !== pr2.game){ S.game = pr2.game; if(S.st === 'lobby') render(); }
+      }
       if(opp && !S.opp){ S.opp = {uid: opp.uid, name: opp.name}; sndTick(); }
       if(opp) S.opp.name = opp.name;
       if(S.st === 'lobby') renderPlayers();
@@ -6433,7 +6437,7 @@ window.KM_POOL = [
     });
     chan.subscribe(function(status){
       if(status === 'SUBSCRIBED'){
-        chan.track({name: S.myName, ready: false});
+        chan.track({name: S.myName, ready: false, game: S.game});
         render();
       }
     });
