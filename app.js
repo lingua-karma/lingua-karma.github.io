@@ -3202,7 +3202,7 @@ const MENU = [
   overlay.addEventListener('click', function(e){ if(e.target===overlay) closeLama(); });
   var hist = [];
   try{ hist = JSON.parse(localStorage.getItem('lama_hist')||'[]'); }catch(e){}
-  if(!hist.length) hist = [{role:'assistant', content:'أهلاً يا قمر! 👋 أنا لمى، صاحبتك في لينجوا. اسأليني أي حاجة عن الإنجليزي أو الفرنسي أو الألماني أو الصيني أو الكوري — ترجمة، نطق، قواعد، أي حاجة! 💜'}];
+  if(!hist.length) hist = [{role:'assistant', content:(window.LG==='m' ? 'أهلاً يا صاحبي! 👋 أنا لمى، صاحبك في لينجوا. اسألني أي حاجة عن الإنجليزي أو الفرنسي أو الألماني أو الصيني أو الكوري — ترجمة، نطق، قواعد، أي حاجة! 💜' : 'أهلاً يا قمر! 👋 أنا لمى، صاحبتك في لينجوا. اسأليني أي حاجة عن الإنجليزي أو الفرنسي أو الألماني أو الصيني أو الكوري — ترجمة، نطق، قواعد، أي حاجة! 💜')}];
   function esc(t){ var d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
   function render(){
     msgsEl.innerHTML = hist.map(function(m){
@@ -3229,7 +3229,7 @@ const MENU = [
     ty.className='lm bot typing'; ty.textContent='لمى بتكتب...';
     msgsEl.appendChild(ty); msgsEl.scrollTop = msgsEl.scrollHeight;
     fetch(ENDPOINT, {method:'POST', headers:{'Content-Type':'application/json','apikey':ANON,'Authorization':'Bearer '+ANON},
-      body: JSON.stringify({messages: hist.slice(-9).map(function(m){return {role:m.role, content:m.content};})})})
+      body: JSON.stringify({messages: ((window.LG==='m')?[{role:'user',content:'(تعليمات: كلميني دايمًا بصيغة المذكر المصري — أنا ولد)'},{role:'assistant',content:'حاضر يا صاحبي! 😄'}]:[]).concat(hist.slice(-9).map(function(m){return {role:m.role, content:m.content};}))})})
     .then(function(r){ return r.json(); })
     .then(function(d){
       ty.remove();
@@ -7087,4 +7087,177 @@ window.KM_POOL = [
     });
   }
   boot();
+})();
+
+
+/* ================= v54: gender choice (ولد/بنت) ================= */
+/* first-run picker + account settings + feminine->masculine UI text transform */
+(function(){
+  var KEY = 'lingua_gender';
+  var LG = 'f', firstRun = false;
+  try {
+    LG = localStorage.getItem(KEY) || '';
+    if(!LG){ firstRun = true; LG = 'f'; }
+  } catch(e){}
+  window.LG = LG;
+
+  var PAIRS = [
+    ['انتي','انت'],['إنتي','إنت'],
+    ['اكتبيها','اكتبها'],['اكتبي','اكتب'],['اختاري','اختار'],['استمعي','استمع'],['اسمعيها','اسمعها'],
+    ['ابعتي','ابعت'],['استعدي','استعد'],['تعالي','تعالى'],['تفضلي','تفضل'],['اختبري','اختبر'],
+    ['حمليها','حملها'],['اتكلمي','اتكلم'],['تصبحي','تصبح'],['اتعلمي','اتعلم'],['تتعلمي','تتعلم'],
+    ['تكسريها','تكسرها'],['تفتحي','تفتح'],['اتفرجي','اتفرج'],['تدخلي','تدخل'],['تحققي','تحقق'],
+    ['انتبهي','انتبه'],['استعجلي','استعجل'],['استخدمي','استخدم'],['تأكدي','تأكد'],['استني','استنى'],
+    ['افتحي','افتح'],['اكتشفي','اكتشف'],['اظهري','اظهر'],['امسحيها','امسحها'],['كلميها','كلمها'],
+    ['تنشري','تنشر'],['تضيفي','تضيف'],['تحفظي','تحفظ'],['تنامي','تنام'],['وقوليها','وقولها'],
+    ['واقتنصي','واقتنص'],['تبدلي','تبدل'],['تجربيها','تجربها'],['جربيها','جربها'],['جربي','جرب'],
+    ['تتخيلي','تتخيل'],['اسأليني','اسألني'],['علميني','علمني'],['خمّني','خمّن'],['جاوبي','جاوب'],
+    ['اعملي','اعمل'],['كملي','كمل'],['تخطّي','تخطّى'],['العبي','العب'],['دوسي','دوس'],['وصلكي','وصلك'],
+    ['تقدري','تقدر'],['تكسبي','تكسب'],['هتقولي','هتقول'],['هتبقي','هتبقى'],['بتديكي','بتديك'],
+    ['بتتعلميها','بتتعلمها'],['هتتعلمي','هتتعلم'],['تحسي','تحس'],['هتحسي','هتحس'],['تهربي','تهرب'],
+    ['بتخافي','بتخاف'],['بتتفرجي','بتتفرج'],['تحضيري','تحضير'],['تعرفيني','تعرفني'],['هتكسبي','هتكسب'],
+    ['بتلاقي','بتلاقى'],['بتساوي','بتساوى'],['بتصحي','بتصحى'],['بتسهري','بتسهر'],
+    ['خلصتي','خلصت'],['كسبتي','كسبت'],['وصلتي','وصلت'],['بعتيها','بعتها'],['بعتي','بعت'],
+    ['جاوبتي','جاوبت'],['خبطتي','خبطت'],['جريتي','جريت'],['خسرتي','خسرت'],['قولتي','قولت'],
+    ['قولتيها','قولتها'],['قلتيلي','قلتلي'],['كلمتي','كلمت'],['عملتي','عملت'],['عملتيها','عملتها'],
+    ['نسيتي','نسيت'],['اتناديتي','اتناديت'],['اتصورتي','اتصورت'],['اتكسفتي','اتكسفت'],['ندمتي','ندمت'],
+    ['وقعتي','وقعت'],['تعثرتي','تعثرت'],['عديتي','عديت'],['رميتي','رميت'],['لفيتي','لفيت'],
+    ['انضميتي','انضميت'],['اتخفيتي','اتخفيت'],['بقيتي','بقيت'],['رجعتي','رجعت'],
+    ['استنيناكي','استنيناك'],['ترجعي','ترجع'],['خمنتي','خمنت'],['لعبتي','لعبت'],
+    ['جاهزة','جاهز'],['ضيفتنا','ضيفنا'],['صديقتنا','صديقنا'],['مستنية','مستني'],['مستعدة','مستعد'],
+    ['المضيفة','المضيف'],['صاحبتك','صاحبك'],['صديقتك','صديقك'],['صاحبتي','صاحبي'],['صاحبة','صاحب'],
+    ['عايزة','عايز'],['استحيت','استحى'],['شاطرة','شاطر'],['بطلة','بطل']
+  ];
+  var MAP = {};
+  PAIRS.forEach(function(p){
+    MAP[p[0]] = p[1];
+    ['و','ف','ل','ب'].forEach(function(pre){ if(!MAP[pre + p[0]]) MAP[pre + p[0]] = pre + p[1]; });
+  });
+  function toMasc(txt){ return String(txt).replace(/[ء-ي]+/g, function(w){ return MAP[w] || w; }); }
+  window.toMasc = toMasc;
+
+  var applying = false;
+  function walk(root){
+    if(applying || !root) return;
+    applying = true;
+    try {
+      var tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+      var n;
+      while((n = tw.nextNode())){
+        if(n.__g0 === undefined) n.__g0 = n.nodeValue;
+        var nv = (LG === 'm') ? toMasc(n.__g0) : n.__g0;
+        if(n.nodeValue !== nv) n.nodeValue = nv;
+      }
+      var els = root.querySelectorAll ? root.querySelectorAll('[placeholder]') : [];
+      for(var i = 0; i < els.length; i++){
+        var x = els[i];
+        if(x.__gp0 === undefined) x.__gp0 = x.getAttribute('placeholder') || '';
+        var pv = (LG === 'm') ? toMasc(x.__gp0) : x.__gp0;
+        if(x.getAttribute('placeholder') !== pv) x.setAttribute('placeholder', pv);
+      }
+    } finally { applying = false; }
+  }
+  var moT = null;
+  new MutationObserver(function(muts){
+    if(applying) return;
+    for(var i = 0; i < muts.length; i++){
+      var mu = muts[i];
+      if(mu.type === 'characterData' && mu.target.__g0 !== undefined){
+        var t = mu.target;
+        if(t.nodeValue !== t.__g0 && t.nodeValue !== toMasc(t.__g0)) t.__g0 = t.nodeValue;
+      }
+    }
+    clearTimeout(moT);
+    moT = setTimeout(function(){ walk(document.body); }, 90);
+  }).observe(document.documentElement, {childList: true, subtree: true, characterData: true});
+
+  function markTabs(){
+    var on = (LG === 'm') ? 'm' : 'f';
+    var bs = document.querySelectorAll('.g-pick');
+    for(var i = 0; i < bs.length; i++){ bs[i].classList.toggle('active', bs[i].dataset.g === on); }
+  }
+  function setGender(g){
+    LG = (g === 'm') ? 'm' : 'f';
+    window.LG = LG;
+    try { localStorage.setItem(KEY, LG); } catch(e){}
+    walk(document.body);
+    markTabs();
+    syncGender();
+  }
+  window.setGender = setGender;
+
+  /* settings card in حسابي */
+  function injectCard(){
+    var accMe = document.getElementById('accMe');
+    if(!accMe || document.getElementById('genderCard') || !accMe.parentNode) return;
+    var c = document.createElement('div');
+    c.className = 'acc-card'; c.id = 'genderCard'; c.style.maxWidth = '480px';
+    c.innerHTML = '<h3>🚻 نداءك</h3><div class="acc-row">' +
+      '<button class="tab g-pick" data-g="m">👦 ولد</button>' +
+      '<button class="tab g-pick" data-g="f">👧 بنت</button></div>';
+    accMe.parentNode.insertBefore(c, accMe.nextSibling);
+    c.addEventListener('click', function(e){
+      var b = e.target.closest('[data-g]'); if(!b) return;
+      setGender(b.dataset.g);
+    });
+    markTabs();
+  }
+
+  /* first-run picker */
+  function showPicker(){
+    if(document.getElementById('genderGate')) return;
+    var d = document.createElement('div');
+    d.id = 'genderGate';
+    d.style.cssText = 'position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(7,5,15,.88);backdrop-filter:blur(8px);padding:22px';
+    d.innerHTML = '<div style="background:linear-gradient(160deg,#1d1532,#110c1f);border:1.5px solid rgba(232,190,88,.55);border-radius:26px;padding:30px 22px;max-width:340px;width:100%;text-align:center;box-shadow:0 26px 80px rgba(0,0,0,.6)">' +
+      '<div style="font-size:2.1rem;margin-bottom:4px">✨</div>' +
+      '<h2 style="margin:0 0 6px;color:#f5d67b;font-size:1.4rem">أهلاً بيك في Lingua</h2>' +
+      '<p style="color:#cbb6dd;margin:0 0 20px;font-size:.95rem;line-height:1.7">محتاجين نعرف نكلمك إزاي 💜</p>' +
+      '<div style="display:flex;gap:12px">' +
+      '<button data-g="m" style="flex:1;padding:20px 8px;border-radius:20px;border:1.5px solid rgba(232,190,88,.45);background:rgba(255,255,255,.05);color:#fff;font-size:1.2rem;cursor:pointer">👦<br><b>ولد</b></button>' +
+      '<button data-g="f" style="flex:1;padding:20px 8px;border-radius:20px;border:1.5px solid rgba(232,190,88,.45);background:rgba(255,255,255,.05);color:#fff;font-size:1.2rem;cursor:pointer">👧<br><b>بنت</b></button>' +
+      '</div></div>';
+    document.body.appendChild(d);
+    d.addEventListener('click', function(e){
+      var b = e.target.closest('[data-g]'); if(!b) return;
+      setGender(b.dataset.g);
+      d.remove();
+    });
+  }
+
+  /* profile persistence (mirror theme sync) */
+  var SUPA_URL = 'https://yzzlgalxjaaevmytdazf.supabase.co';
+  var SUPA_KEY = 'sb_publishable_EmbKVWREHSs3sZ_nBKFyqg_zxv3Z38-';
+  var gsb = null, gme = null, gT = null;
+  function syncGender(){
+    if(!gme || !gsb) return;
+    clearTimeout(gT);
+    gT = setTimeout(function(){
+      gsb.from('profiles').update({gender: LG}).eq('id', gme.id).then(function(){});
+    }, 1200);
+  }
+  function bootG(){
+    if(!window.supabase){ setTimeout(bootG, 400); return; }
+    gsb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+    gsb.auth.getSession().then(function(r){
+      if(r.data && r.data.session){
+        gme = r.data.session.user;
+        gsb.from('profiles').select('gender').eq('id', gme.id).maybeSingle().then(function(pr){
+          if(!pr.data) return;
+          if(pr.data.gender && pr.data.gender !== LG){ setGender(pr.data.gender); }
+          else if(!pr.data.gender){ syncGender(); }
+        });
+      }
+    });
+  }
+
+  function init(){
+    walk(document.body);
+    injectCard();
+    setInterval(injectCard, 1500);
+    if(firstRun) setTimeout(showPicker, 500);
+    bootG();
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
 })();
