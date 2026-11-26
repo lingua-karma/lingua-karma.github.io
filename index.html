@@ -2106,6 +2106,22 @@
   </div>
   <div class="cq-box" id="cqBox"></div>
 </section>
+<section id="ch30">
+  <h2 class="sec-title">✦ تحدي الـ ٣٠ يوم ✦</h2>
+  <p class="sec-sub">مهمة صغيرة كل يوم — كمّلي الشهر كله! 📅🔥</p>
+  <div class="ch30-stats" id="ch30Stats"></div>
+  <div class="ch30-bar"><div class="ch30-fill" id="ch30Fill"></div></div>
+  <div class="ch30-grid" id="ch30Grid"></div>
+</section>
+<section id="piano">
+  <h2 class="sec-title">✦ بيانو لينجوا ✦</h2>
+  <p class="sec-sub">اعزفي بصوابعك — أو شغّلي أغنية جاهزة 🎹</p>
+  <div class="piano-box">
+    <div class="piano" id="pianoKeys"></div>
+    <div class="piano-song"><button id="pianoSong">🎵 اعزفيلي Happy Birthday</button></div>
+  </div>
+</section>
+
 
 
 
@@ -2509,6 +2525,28 @@
 .cq-opt.right{background:#123f2a;border-color:#27ae60}
 .cq-opt.wrong{background:#3f1220;border-color:#e74c3c}
 .cq-score{font-size:.8rem;color:var(--muted);margin-top:10px}
+
+
+/* v20: 30-day challenge + piano */
+.ch30-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-width:640px;margin:0 auto}
+.ch30-day{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 4px;text-align:center;cursor:pointer;transition:transform .15s}
+.ch30-day:active{transform:scale(.93)}
+.ch30-day .d-num{font-size:.95rem;font-weight:800}
+.ch30-day .d-task{font-size:.58rem;color:var(--muted);margin-top:3px;line-height:1.3}
+.ch30-day.done{background:linear-gradient(135deg,#123f2a,#0c2c1e);border-color:#27ae60}
+.ch30-day.done .d-num{color:#7bc950}
+.ch30-bar{height:10px;background:#1a1428;border-radius:99px;max-width:640px;margin:12px auto;overflow:hidden;border:1px solid var(--border)}
+.ch30-fill{height:100%;background:linear-gradient(90deg,var(--gold),#f7e76a);width:0;transition:width .5s}
+.ch30-stats{text-align:center;font-size:.8rem;color:var(--muted)}
+.piano-box{max-width:640px;margin:0 auto;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px}
+.piano{position:relative;height:170px;display:flex;direction:ltr;border-radius:0 0 12px 12px;overflow:hidden}
+.pk-w{flex:1;background:linear-gradient(#fff,#e8e4f5);border:1px solid #b8b0d0;border-radius:0 0 8px 8px;cursor:pointer;position:relative;z-index:1}
+.pk-w:active{background:linear-gradient(var(--gold),#d4a017)}
+.pk-b{position:absolute;width:7%;height:60%;background:linear-gradient(#3a3348,#16111f);border-radius:0 0 6px 6px;cursor:pointer;z-index:2}
+.pk-b:active{background:linear-gradient(var(--gold),#8a6a10)}
+.pk-label{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-size:.6rem;color:#8a7fb5;pointer-events:none}
+.piano-song{margin-top:12px;text-align:center}
+.piano-song button{background:#1a1428;border:1px solid var(--border);color:var(--ink);border-radius:999px;padding:7px 16px;font-size:.8rem;cursor:pointer;font-family:inherit}
 
 </style>
 <script>
@@ -4908,7 +4946,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
+  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
 ];
 
 /* ================= v16: free books library ================= */
@@ -5218,6 +5256,79 @@ const MENU = [
     renderCQ(null);
   });
   renderCQ(null);
+})();
+
+
+/* ================= v20: 30-day challenge + piano ================= */
+(function(){
+  /* ---- 30-day challenge ---- */
+  var TASKS = ['اتعلمي ٥ كلمات','حلّي اختبار','اسمعي أغنية','اكتبي ٣ جمل','شوفي فيديو','راجعي كروت','العبي لعبة','اقرئي قصة','انطقي بصوت عالي','علمي حد كلمة'];
+  var KEY='ch30_done';
+  var done=[];
+  try{ done=JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){}
+  var grid=document.getElementById('ch30Grid');
+  if(grid){
+    function render30(){
+      grid.innerHTML='';
+      for(var i=0;i<30;i++){
+        var d=document.createElement('div');
+        var isDone=done.indexOf(i)>=0;
+        d.className='ch30-day'+(isDone?' done':'');
+        d.innerHTML='<div class="d-num">'+(isDone?'✓':(i+1))+'</div><div class="d-task">'+TASKS[i%TASKS.length]+'</div>';
+        (function(day,el){
+          el.addEventListener('click', function(){
+            var ix=done.indexOf(day);
+            if(ix>=0){ done.splice(ix,1); } else { done.push(day); try{ addPoints(5); }catch(e){} }
+            localStorage.setItem(KEY, JSON.stringify(done));
+            render30();
+          });
+        })(i,d);
+        grid.appendChild(d);
+      }
+      var pct=Math.round(done.length/30*100);
+      document.getElementById('ch30Fill').style.width=pct+'%';
+      document.getElementById('ch30Stats').innerHTML='كمّلتي <b style="color:var(--gold2)">'+done.length+'</b> من ٣٠ يوم ('+pct+'%)'+(done.length>=30?' — 🏆 بطلة التحدي!':'');
+    }
+    render30();
+  }
+
+  /* ---- piano ---- */
+  var NOTES=[['C',261.63,'دو'],['D',293.66,'ري'],['E',329.63,'مي'],['F',349.23,'فا'],['G',392.00,'صول'],['A',440.00,'لا'],['B',493.88,'سي'],['C2',523.25,'دو²']];
+  var BLACKS=[['C#',277.18,0],['D#',311.13,1],['F#',369.99,3],['G#',415.30,4],['A#',466.16,5]];
+  var pk=document.getElementById('pianoKeys');
+  if(pk){
+    var actx=null;
+    function play(f, dur){
+      try{
+        if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)();
+        var o=actx.createOscillator(), g=actx.createGain();
+        o.type='triangle'; o.frequency.value=f;
+        g.gain.setValueAtTime(.35, actx.currentTime);
+        g.gain.exponentialRampToValueAtTime(.001, actx.currentTime+(dur||.5));
+        o.connect(g); g.connect(actx.destination);
+        o.start(); o.stop(actx.currentTime+(dur||.5));
+      }catch(e){}
+    }
+    pk.innerHTML = NOTES.map(function(n){
+      return '<div class="pk-w" data-f="'+n[1]+'"><span class="pk-label">'+n[2]+'</span></div>';
+    }).join('') + BLACKS.map(function(b){
+      var left=((b[2]+1)*(100/8))-3.5;
+      return '<div class="pk-b" data-f="'+b[1]+'" style="left:'+left+'%"></div>';
+    }).join('');
+    pk.addEventListener('pointerdown', function(e){
+      var k=e.target.closest('[data-f]'); if(!k) return;
+      play(+k.dataset.f);
+    });
+    /* Happy Birthday */
+    var HB=[[261.63,.35],[261.63,.25],[293.66,.6],[261.63,.6],[349.23,.6],[329.63,.9],[261.63,.35],[261.63,.25],[293.66,.6],[261.63,.6],[392,.6],[349.23,.9],[261.63,.35],[261.63,.25],[523.25,.6],[440,.6],[349.23,.6],[329.63,.6],[293.66,.9],[466.16,.35],[466.16,.25],[440,.6],[349.23,.6],[392,.6],[349.23,.9]];
+    var playing=false;
+    document.getElementById('pianoSong').addEventListener('click', function(){
+      if(playing) return; playing=true;
+      var t=0;
+      HB.forEach(function(n){ setTimeout(function(){ play(n[0], n[1]*.95); }, t*1000); t+=n[1]*.55; });
+      setTimeout(function(){ playing=false; }, t*1000+300);
+    });
+  }
 })();
 
 document.getElementById('menuGrid').innerHTML = MENU.map(function(m){
@@ -6991,7 +7102,7 @@ gbkRender();
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v19.0</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v20.0</div>
 <script>
 
 /* ================= v13: learning map, personality quiz, XO, korean ================= */
