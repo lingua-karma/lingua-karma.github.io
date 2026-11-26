@@ -6177,7 +6177,7 @@ window.KM_POOL = [
   };
 
   var GROUPS = [
-    {id:'learn', icon:'book', title:'تعلّم 📚', items:['dash','quests','placement','listen','mistakes','german','corners','courses','lessons','quiz','map','dict','gallery','speak','videos','songs','music','cinema','tarab','korean','library','stories','capitals','food','fashion','trip','places','quotes','hobbies','themes','tips','eng','scholar','ch30','flash','puzzle','qotd']},
+    {id:'learn', icon:'book', title:'تعلّم 📚', items:['dash','quests','placement','listen','mistakes','german','corners','courses','lessons','quiz','map','dict','gallery','speak','videos','songs','music','cinema','tarab','korean','library','stories','capitals','food','fashion','trip','places','quotes','hobbies','themes','tips','eng','engx','scholar','ch30','flash','puzzle','qotd']},
     {id:'play', icon:'gamepad', title:'العب 🎮', items:['games','brain','fun','dressup','outfit','wheel','snake','xo','shooter','runner','piano','color','duel']},
     {id:'social', icon:'chat', title:'صحابي 💜', items:['friends','wall','mood','jokes','vent','diary','gbk','karma','pquiz','pet']},
     {id:'life', icon:'sparkle', title:'حياتي ✨', items:['deen','mushaf','khatma','weather','shop','premium','offline','settings','ai']}
@@ -8211,7 +8211,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v88';
+  window.LINGUA_VERSION = 'v89';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
@@ -8861,4 +8861,195 @@ window.KM_POOL = [
   renderOfflineHub();
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', paintStatus);
   else paintStatus();
+})();
+/* ================= v89: امتحانات هندسة — سنة ← قسم ← مادة، MCQ بالتصحيح والمراجعة (offline) ================= */
+(function(){
+  /* البنوك محلية بالكامل — شغالة من غير نت */
+  var BANKS = {
+    math1: {name:'رياضيات ١ (تفاضل وتكامل)', qs:[
+      {q:'مشتقة x³ بالنسبة لـ x؟', o:['3x²','x²','3x','x³/3'], c:0},
+      {q:'مشتقة sin(x)؟', o:['-cos(x)','cos(x)','-sin(x)','tan(x)'], c:1},
+      {q:'نهاية sin(x)/x لما x تقترب من الصفر؟', o:['0','∞','1','مش موجودة'], c:2},
+      {q:'مشتقة eˣ؟', o:['xeˣ','eˣ','eˣ⁻¹','ln(x)'], c:1},
+      {q:'تكامل 2x dx؟', o:['2x² + C','x² + C','2 + C','x²/2 + C'], c:1},
+      {q:'مشتقة ln(x)؟', o:['1/x','x','eˣ','ln(x)/x'], c:0},
+      {q:'لو f(x) = x² + 3x، يبقى f′(1) = ؟', o:['4','3','5','2'], c:2},
+      {q:'ميل المماس للمنحنى عند نقطة بيساوي؟', o:['قيمة الدالة','المشتقة التانية','المشتقة الأولى عند النقطة','التكامل'], c:2},
+      {q:'قاعدة مشتقة حاصل ضرب دالتين (uv)′؟', o:["u'v'","u'v + uv'","uv' − u'v","(u+v)'"], c:1},
+      {q:'جذور المعادلة x² = 9؟', o:['3 بس','−3 بس','±3','9'], c:2}
+    ]},
+    phys1: {name:'فيزياء ١', qs:[
+      {q:'وحدة قياس القوة في النظام الدولي؟', o:['جول','نيوتن','واط','باسكال'], c:1},
+      {q:'قانون نيوتن التاني؟', o:['F = m/a','F = ma','F = mv','F = mgh'], c:1},
+      {q:'وحدة قياس الشغل والطاقة؟', o:['نيوتن','واط','جول','أمبير'], c:2},
+      {q:'العجلة هي؟', o:['السرعة × الزمن','التغير في السرعة على الزمن','المسافة على الزمن','القوة × الإزاحة'], c:1},
+      {q:'عجلة الجاذبية الأرضية g تقريبًا؟', o:['8.9 m/s²','10.8 m/s²','9.8 m/s²','7.8 m/s²'], c:2},
+      {q:'كمية التحرك p بتساوي؟', o:['mv','ma','½mv²','mgh'], c:0},
+      {q:'وحدة قياس التردد؟', o:['جول','هرتز','نيوتن','فولت'], c:1},
+      {q:'الشغل المبذول = القوة × الإزاحة × ؟', o:['sin θ','tan θ','cos θ','θ'], c:2},
+      {q:'وحدة قياس الضغط؟', o:['باسكال','جول','واط','كولوم'], c:0},
+      {q:'السرعة كمية؟', o:['قياسية','متجهة','ثابتة','ليس لها وحدة'], c:1}
+    ]},
+    mech1: {name:'ميكانيكا (استاتيكا)', qs:[
+      {q:'محصلة قوتين متعامدتين 3N و 4N؟', o:['7N','1N','5N','12N'], c:2},
+      {q:'شرط اتزان الجسم؟', o:['مجموع القوى = صفر بس','مجموع العزوم = صفر بس','مجموع القوى والعزوم = صفر','السرعة ثابتة'], c:2},
+      {q:'عزم قوة حول نقطة = القوة × ؟', o:['المسافة المائلة','الذراع العمودية','الزمن','الكتلة'], c:1},
+      {q:'وحدة قياس العزم؟', o:['نيوتن','نيوتن.متر','جول/ثانية','باسكال'], c:1},
+      {q:'الاحتكاك السكوني الحرج = ؟', o:['μs × رد الفعل العمودي','μs × الوزن × g','القوة ÷ المساحة','نصف الوزن'], c:0},
+      {q:'الازدواج هو؟', o:['قوتان متساويتان ومتعاكستان وفي خط واحد','قوتان متساويتان متعاكستان ومتوازيتان','قوتان متعامدتان','أي قوتين'], c:1},
+      {q:'مركز ثقل قضيب منتظم بيكون؟', o:['عند طرفه','عند منتصفه','خارجه','حسب الحمل'], c:1},
+      {q:'عزم الازدواج = إحدى القوتين × ؟', o:['المسافة العمودية بينهما','طول الجسم','نصف القوة','الزمن'], c:0}
+    ]},
+    circ1: {name:'دوائر كهربية (أساسيات)', qs:[
+      {q:'قانون أوم؟', o:['V = I/R','V = IR','V = I²R فقط','V = P/I فقط'], c:1},
+      {q:'مقاومتان على التوالي 2Ω و 3Ω — المكافئة؟', o:['1.2Ω','6Ω','5Ω','2.5Ω'], c:2},
+      {q:'مقاومتان متساويتان R على التوازي — المكافئة؟', o:['2R','R','R/2','R²'], c:2},
+      {q:'قانون كيرشوف للتيار بيقول؟', o:['مجموع الجهود في مصار مغلق = صفر','مجموع التيارات عند نقطة = صفر','التيار ثابت في التوازي','الجهد ثابت في التوالي'], c:1},
+      {q:'وحدة قياس القدرة الكهربية؟', o:['جول','أمبير','واط','أوم'], c:2},
+      {q:'القدرة P بتساوي؟', o:['V + I','V × I','V ÷ I','I ÷ V'], c:1},
+      {q:'المكثف بيخزن؟', o:['تيار','شحنة كهربية','مقاومة','حث'], c:1},
+      {q:'في دوائر التوالي بيثبت؟', o:['الجهد','التيار','القدرة','المقاومة'], c:1}
+    ]},
+    prog1: {name:'برمجة (C أساسيات)', qs:[
+      {q:'الدالة اللي بيبدأ منها تنفيذ برنامج C؟', o:['start','main','run','init'], c:1},
+      {q:'دالة الطباعة في C؟', o:['echo','print','printf','cout'], c:2},
+      {q:'نهاية أي جملة في C بيكون؟', o:['نقطة .','فاصلة ,','فاصلة منقوطة ;','قوس )'], c:2},
+      {q:'أول عنصر في المصفوفة index بتاعه؟', o:['1','0','-1','حسب النوع'], c:1},
+      {q:'تعليق سطر واحد في C؟', o:['# تعليق','<!-- تعليق -->','// تعليق','** تعليق'], c:2},
+      {q:'صيغة طباعة عدد صحيح في printf؟', o:['%f','%c','%s','%d'], c:3},
+      {q:'المترجم (Compiler) بيعمل إيه؟', o:['ينفذ سطر سطر','يحول الكود كله للغة الآلة','يرتب الملفات','يصلح الأخطاء تلقائي'], c:1},
+      {q:'نوع البيانات المناسب لعدد صحيح؟', o:['float','char','int','double'], c:2}
+    ]},
+    draw1: {name:'رسم هندسي', qs:[
+      {q:'الحواف المخفية في الرسم الهندسي بترسم؟', o:['خط متصل سميك','خط متقطع dashed','نقطة وشرطة','خط رفيع متصل'], c:1},
+      {q:'المسقط الرأسي الأمامي بيسمى؟', o:['Top view','Front view','Side view','Section'], c:1},
+      {q:'مقياس رسم 1:2 معناه؟', o:['تكبير مرتين','تصغير للنصف','مقاس طبيعي','تكبير 20 مرة'], c:1},
+      {q:'خطوط المحاور بترسم بخط؟', o:['سميك متصل','متقطع','نقطة وشرطة chain','منقط dots'], c:2},
+      {q:'وحدة الأبعاد الأساسية في اللوحات الهندسية؟', o:['سم','متر','مليمتر','بوصة'], c:2},
+      {q:'الإسقاط الأورثوغرافي معناه؟', o:['إسقاط مائل','إسقاط عمودي على مستويات','رسم بعين واحدة','رسم حر'], c:1},
+      {q:'الرمز ⌀ بيعبر عن؟', o:['نصف القطر','القطر','الزاوية','العمق'], c:1},
+      {q:'القطاع (Section) بيستخدم عشان؟', o:['تجميل اللوحة','إظهار التفاصيل الداخلية','تكبير الرسم','حذف الأبعاد'], c:1}
+    ]},
+    vocab: {name:'مصطلحات هندسية 🇬🇧', qs:[
+      {q:'Torque يعني؟', o:['عزم الدوران','الاحتكاك','الضغط','القدرة'], c:0},
+      {q:'Stress يعني؟', o:['انفعال','إجهاد','صلابة','لدونة'], c:1},
+      {q:'Strain يعني؟', o:['إجهاد','انفعال (استطالة نسبية)','كسر','زحف'], c:1},
+      {q:'Beam يعني؟', o:['عمود','كمرة / جائز','سقف','قاعدة'], c:1},
+      {q:'Voltage يعني؟', o:['تيار','مقاومة','جهد كهربي','قدرة'], c:2},
+      {q:'Algorithm يعني؟', o:['برنامج','لغة','خوارزمية','معالج'], c:2},
+      {q:'Foundation يعني؟', o:['سقف','حائط','سور','أساس / قاعدة'], c:3},
+      {q:'Gear يعني؟', o:['ترس','محرك','عمود','سير'], c:0},
+      {q:'Welding يعني؟', o:['خراطة','لحام','صب','تجليد'], c:1},
+      {q:'Load في الإنشاءات يعني؟', o:['حمل','كابل','حديد','خلط'], c:0}
+    ]}
+  };
+  var YEARS = [
+    {id:'prep', name:'السنة الإعدادية', depts:[{id:'gen', name:'عام', subjects:['math1','phys1','mech1','circ1','prog1','draw1','vocab']}]},
+    {id:'y1', name:'أولى هندسة', depts:null},
+    {id:'y2', name:'تانية هندسة', depts:null},
+    {id:'y3', name:'تالتة هندسة', depts:null},
+    {id:'y4', name:'رابعة هندسة', depts:null}
+  ];
+  var DEPTS = [
+    {id:'civil', name:'مدني'}, {id:'mech', name:'ميكانيكا'}, {id:'elec', name:'كهرباء'},
+    {id:'comp', name:'حاسبات'}, {id:'arch', name:'عمارة'}, {id:'chem', name:'كيمياء'}
+  ];
+  var st = {year:null, dept:null, subj:null, i:0, score:0, wrong:[]};
+  var root = document.getElementById('engxBody');
+  if(!root) return;
+  function esc(x){ return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function best(k){ try { return JSON.parse(localStorage.getItem('lingua_engx_best')||'{}')[k]; } catch(e){ return null; } }
+  function setBest(k, v){ try { var b = JSON.parse(localStorage.getItem('lingua_engx_best')||'{}'); if(!b[k] || v > b[k]){ b[k] = v; localStorage.setItem('lingua_engx_best', JSON.stringify(b)); } } catch(e){} }
+
+  function pickYear(){
+    st = {year:null, dept:null, subj:null, i:0, score:0, wrong:[]};
+    root.innerHTML = '<div class="engx-crumb">اختاري السنة 🎓</div><div class="engx-grid">'
+      + YEARS.map(function(y, i){
+          var soon = !y.depts;
+          return '<button class="engx-card" data-y="'+i+'"'+(soon?'':'')+'><span class="ex-n">'+y.name+'</span><span class="ex-s">'+(soon ? 'قريبًا 🔜' : YEARS[i].depts[0].subjects.length+' مواد متاحة ✦')+'</span></button>';
+        }).join('') + '</div>';
+    root.querySelectorAll('[data-y]').forEach(function(b){
+      b.onclick = function(){
+        var y = YEARS[+b.dataset.y];
+        if(!y.depts){ toast('السنة دي جاية قريب إن شاء الله 🔜 — ابدئي بالإعدادية دلوقتي 💪'); return; }
+        st.year = y; pickDept();
+      };
+    });
+  }
+  function pickDept(){
+    var y = st.year;
+    var depts = y.id === 'prep' ? y.depts : DEPTS.map(function(d){ return {id:d.id, name:d.name, subjects:[]}; });
+    root.innerHTML = '<div class="engx-crumb"><button class="engx-back" id="exBack">‹ السنين</button> '+y.name+' — اختاري القسم ⚙️</div><div class="engx-grid">'
+      + depts.map(function(d, i){
+          var has = d.subjects && d.subjects.length;
+          return '<button class="engx-card" data-d="'+i+'"><span class="ex-n">'+d.name+'</span><span class="ex-s">'+(has ? has.length+' مواد ✦' : 'قريبًا 🔜')+'</span></button>';
+        }).join('') + '</div>';
+    document.getElementById('exBack').onclick = pickYear;
+    root.querySelectorAll('[data-d]').forEach(function(b){
+      b.onclick = function(){
+        var d = depts[+b.dataset.d];
+        if(!d.subjects || !d.subjects.length){ toast('مواد القسم ده جاية قريب 🔜'); return; }
+        st.dept = d; pickSubject();
+      };
+    });
+  }
+  function pickSubject(){
+    var d = st.dept;
+    root.innerHTML = '<div class="engx-crumb"><button class="engx-back" id="exBack">‹ الأقسام</button> '+st.year.name+' — اختاري المادة 📋</div><div class="engx-grid">'
+      + d.subjects.map(function(k){
+          var bk = BANKS[k], b = best(k);
+          return '<button class="engx-card" data-s="'+k+'"><span class="ex-n">'+bk.name+'</span><span class="ex-s">'+bk.qs.length+' أسئلة'+(b != null ? ' • أفضل نتيجة '+b+'/'+bk.qs.length+' 🏅' : '')+'</span></button>';
+        }).join('') + '</div>';
+    document.getElementById('exBack').onclick = pickDept;
+    root.querySelectorAll('[data-s]').forEach(function(b){
+      b.onclick = function(){ st.subj = b.dataset.s; st.i = 0; st.score = 0; st.wrong = []; renderQ(); };
+    });
+  }
+  function renderQ(){
+    var bk = BANKS[st.subj], q = bk.qs[st.i];
+    root.innerHTML = '<div class="engx-crumb">'+bk.name+' — سؤال '+(st.i+1)+'/'+bk.qs.length+'</div>'
+      + '<div class="engx-prog"><i style="width:'+(st.i/bk.qs.length*100)+'%"></i></div>'
+      + '<div class="engx-q">'+esc(q.q)+'</div><div class="engx-opts" id="exOpts">'
+      + q.o.map(function(o, i){ return '<button class="engx-opt" data-o="'+i+'">'+esc(o)+'</button>'; }).join('') + '</div>';
+    root.querySelectorAll('[data-o]').forEach(function(b){
+      b.onclick = function(){
+        var pick = +b.dataset.o, ok = pick === q.c;
+        root.querySelectorAll('[data-o]').forEach(function(x){
+          x.disabled = true;
+          if(+x.dataset.o === q.c) x.classList.add('ok');
+          else if(+x.dataset.o === pick) x.classList.add('no');
+        });
+        if(ok){ st.score++; if(window.awardPoints) awardPoints(5, 'امتحان هندسة ⚙️'); }
+        else st.wrong.push({q:q.q, yours:q.o[pick], right:q.o[q.c]});
+        setTimeout(function(){ st.i++; st.i < bk.qs.length ? renderQ() : renderResult(); }, ok ? 600 : 1100);
+      };
+    });
+  }
+  function renderResult(){
+    var bk = BANKS[st.subj], n = bk.qs.length, pc = Math.round(st.score/n*100);
+    setBest(st.subj, st.score);
+    var grade = pc >= 85 ? 'ممتاز! مهندسة شاطرة 🏆' : pc >= 60 ? 'كويس جدًا — راجعي الغلط وشدّي حيلك 💪' : 'متزعليش — المراجعة هي اللي بتفرق، عيدي تاني 🌱';
+    root.innerHTML = '<div class="engx-crumb">'+bk.name+' — النتيجة 📊</div>'
+      + '<div class="engx-res"><div class="ex-score">'+st.score+' / '+n+'</div><div class="ex-grade">'+grade+'</div></div>'
+      + (st.wrong.length ? '<div class="engx-rev"><div class="ex-rt">راجعي غلطك 🩹</div>' + st.wrong.map(function(w){
+          return '<div class="ex-w"><div class="ex-wq">'+esc(w.q)+'</div><div class="ex-wy">❌ إجابتك: '+esc(w.yours)+'</div><div class="ex-wr">✅ الصح: '+esc(w.right)+'</div></div>';
+        }).join('') + '</div>' : '<div class="engx-rev ex-perfect">فل مارك! مفيش ولا غلطة 🎉✨</div>')
+      + '<div class="engx-acts"><button class="btn" id="exRetry">أعيدي الامتحان 🔄</button><button class="btn ghost" id="exSubs">مواد تانية 📋</button></div>';
+    document.getElementById('exRetry').onclick = function(){ st.i = 0; st.score = 0; st.wrong = []; renderQ(); };
+    document.getElementById('exSubs').onclick = pickSubject;
+    if(window.confetti && pc >= 85) confetti();
+  }
+
+  try {
+    var li = MENU.findIndex(function(m){ return m[0] === 'eng'; });
+    MENU.splice(li >= 0 ? li + 1 : MENU.length, 0, ['engx','📐','امتحانات هندسة']);
+    VIEWIDS.push('engx');
+    var anchor = document.querySelector('#menuGrid a[href="#eng"]');
+    var cardHtml = '<a class="menu-card" href="#engx"><span class="m-ico">📐</span><span class="m-name">امتحانات هندسة</span></a>';
+    if(anchor) anchor.insertAdjacentHTML('afterend', cardHtml);
+    else document.getElementById('menuGrid').insertAdjacentHTML('beforeend', cardHtml);
+  } catch(e){}
+
+  window.addEventListener('hashchange', function(){ if(location.hash === '#engx') setTimeout(pickYear, 60); });
+  if(location.hash === '#engx') pickYear();
 })();

@@ -2132,6 +2132,85 @@
   @media (prefers-reduced-motion:reduce){.tarab-vinyl,.tarab-tw{animation:none}}
 </style>
 
+<!-- ===================== ENGX (امتحانات هندسة) ===================== -->
+<section id="engx">
+  <h2 class="sec-title">✦ امتحانات هندسة ✦</h2>
+  <p class="sec-sub">امتحانات تدريبية بكليات الهندسة — اختاري سنتك وقسمك ومادتك واتقيّمي على طول 📐</p>
+  <div class="engx-hero" aria-hidden="true">
+    <svg viewBox="0 0 360 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="exGlow" cx="50%" cy="40%" r="65%">
+          <stop offset="0%" stop-color="#f5c445" stop-opacity=".2"/>
+          <stop offset="100%" stop-color="#f5c445" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="exGold" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#f7d774"/><stop offset="100%" stop-color="#d9a421"/>
+        </linearGradient>
+      </defs>
+      <rect width="360" height="140" fill="url(#exGlow)" rx="18"/>
+      <g class="engx-gear" stroke="url(#exGold)" stroke-width="3" fill="none">
+        <circle cx="80" cy="70" r="26"/>
+        <circle cx="80" cy="70" r="9"/>
+        <path d="M80 36v-9M80 113v-9M46 70h-9M123 70h-9M56 46l-7-7M111 101l-7-7M56 94l-7 7M111 39l-7 7" stroke-linecap="round"/>
+      </g>
+      <g stroke="url(#exGold)" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M180 102 L150 44 L210 44 Z"/>
+        <path d="M150 44 L180 102 M180 102 L228 102"/>
+      </g>
+      <g stroke="url(#exGold)" stroke-width="2.6" fill="none" stroke-linecap="round">
+        <path d="M255 38 L285 98 M255 38 L235 88 M235 88 Q240 96 250 92"/>
+        <circle cx="255" cy="38" r="4" fill="url(#exGold)" stroke="none"/>
+      </g>
+      <g stroke="url(#exGold)" stroke-width="2.4" stroke-linecap="round">
+        <path d="M300 108h36M300 100h36" opacity=".0"/>
+      </g>
+      <g fill="url(#exGold)">
+        <path d="M120 26l2 5.4 5.4 2 -5.4 2 -2 5.4 -2 -5.4 -5.4 -2 5.4 -2z" class="engx-tw"/>
+        <path d="M310 40l1.7 4.4 4.4 1.7 -4.4 1.7 -1.7 4.4 -1.7 -4.4 -4.4 -1.7 4.4 -1.7z" class="engx-tw t2"/>
+        <path d="M212 116l1.6 4 4 1.6 -4 1.6 -1.6 4 -1.6 -4 -4 -1.6 4 -1.6z" class="engx-tw t3"/>
+      </g>
+    </svg>
+  </div>
+  <div id="engxBody"></div>
+</section>
+<style>
+  .engx-hero{max-width:560px;margin:4px auto 18px;border-radius:20px;overflow:hidden;border:1px solid rgba(var(--goldA),.25);box-shadow:0 14px 40px rgba(0,0,0,.35)}
+  .engx-hero svg{display:block;width:100%;height:auto}
+  .engx-gear{transform-origin:80px 70px;animation:engxSpin 14s linear infinite}
+  @keyframes engxSpin{to{transform:rotate(360deg)}}
+  .engx-tw{animation:tarabTw 2.8s ease-in-out infinite}
+  .engx-tw.t2{animation-delay:1s}
+  .engx-tw.t3{animation-delay:1.9s}
+  #engxBody{max-width:620px;margin:0 auto}
+  .engx-crumb{font-weight:900;font-size:.95rem;margin:0 2px 14px;color:var(--txt)}
+  .engx-back{background:none;border:1px solid rgba(var(--goldA),.4);color:var(--gold);border-radius:999px;padding:4px 12px;font-weight:800;font-size:.78rem;cursor:pointer;font-family:inherit;margin-inline-end:6px}
+  .engx-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .engx-card{display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:16px 14px;background:var(--card2);border:1px solid rgba(var(--goldA),.25);border-radius:16px;cursor:pointer;transition:.2s;text-align:start;font-family:inherit;color:var(--txt)}
+  .engx-card:hover{border-color:rgba(var(--goldA),.55);transform:translateY(-2px)}
+  .ex-n{font-weight:900;font-size:.92rem}
+  .ex-s{color:var(--muted);font-size:.72rem;font-weight:700}
+  .engx-prog{height:8px;background:rgba(var(--goldA),.15);border-radius:99px;overflow:hidden;margin:0 2px 14px}
+  .engx-prog i{display:block;height:100%;background:linear-gradient(90deg,var(--gold2),var(--gold));border-radius:99px;transition:.3s}
+  .engx-q{background:var(--card2);border:1px solid rgba(var(--goldA),.3);border-radius:18px;padding:20px 16px;font-weight:900;font-size:1.02rem;margin-bottom:14px}
+  .engx-opts{display:flex;flex-direction:column;gap:9px}
+  .engx-opt{background:var(--card2);border:1px solid rgba(var(--goldA),.22);color:var(--txt);border-radius:14px;padding:13px 15px;font-weight:800;font-size:.9rem;cursor:pointer;text-align:start;font-family:inherit;transition:.15s}
+  .engx-opt:hover{border-color:rgba(var(--goldA),.5)}
+  .engx-opt.ok{border-color:#4ade80;background:rgba(60,200,120,.14)}
+  .engx-opt.no{border-color:#ff8a8a;background:rgba(255,100,100,.12)}
+  .engx-res{text-align:center;padding:26px 14px;background:var(--card2);border:1px solid rgba(var(--goldA),.35);border-radius:20px;margin-bottom:14px}
+  .ex-score{font-size:2.4rem;font-weight:900;color:var(--gold)}
+  .ex-grade{font-weight:800;font-size:.95rem;margin-top:6px}
+  .engx-rev{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+  .ex-rt{font-weight:900;font-size:.9rem;margin:0 2px}
+  .ex-w{background:var(--card2);border:1px solid rgba(var(--goldA),.2);border-radius:14px;padding:12px 14px}
+  .ex-wq{font-weight:800;font-size:.85rem;margin-bottom:5px}
+  .ex-wy{color:#ff9d9d;font-size:.78rem;font-weight:700}
+  .ex-wr{color:#7bf1a8;font-size:.78rem;font-weight:700}
+  .ex-perfect{text-align:center;color:#7bf1a8;font-weight:800;padding:14px}
+  .engx-acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  @media (prefers-reduced-motion:reduce){.engx-gear,.engx-tw{animation:none}}
+</style>
+
 <!-- ===================== OFFLINE (من غير نت) ===================== -->
 <section id="offline">
   <h2 class="sec-title">✦ من غير نت ✦</h2>
@@ -3492,6 +3571,6 @@
   <div id="plBody" class="pl-body"></div>
 </div>
 <div id="offlineBar"><span>📵</span><span>أنتِ من غير نت دلوقتي — الدروس والألعاب والقاموس شغالين عادي ✨</span></div>
-<script src="./app.js?v=88" defer></script>
+<script src="./app.js?v=89" defer></script>
 </body>
 </html>
