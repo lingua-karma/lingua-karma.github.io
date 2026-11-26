@@ -2347,6 +2347,37 @@
   <div class="acc-card" style="max-width:520px" id="qotdCard"></div>
 </section>
 
+
+<section id="places">
+  <h2 class="sec-title">✦ أماكن سياحية ✦</h2>
+  <p class="sec-sub">أشهر المعالم بكل دولة — بالصور وباللغة بتاعتها 🏛️</p>
+  <div class="tabs lang-tabs lib-langs" id="placeLangs"></div>
+  <div class="place-grid" id="placeGrid"></div>
+</section>
+<section id="premium">
+  <h2 class="sec-title">✦ لينجوا بريميوم ✦</h2>
+  <p class="sec-sub">نسخة الـ VIP اللي بتستاهليها 💎👑</p>
+  <div class="prem-hero">
+    <h3>👑 لينجوا بريميوم</h3>
+    <p>افتحي كل حاجة بلا حدود: دروس إضافية، تمارين نطق متقدمة، شهادات مميزة، ولمى بلا انتظار.</p>
+  </div>
+  <div class="prem-plans">
+    <div class="prem-plan">
+      <h4>شهري</h4>
+      <div class="price">٤٩ ج<span class="per"> / شهر</span></div>
+      <ul><li>كل الدروس مفتوحة</li><li>لمى بلا حدود</li><li>شهادات PDF مميزة</li></ul>
+      <button class="prem-btn" data-prem>اشتركي 💛</button>
+    </div>
+    <div class="prem-plan hot">
+      <div class="badge">الأوفر ✨</div>
+      <h4>سنوي</h4>
+      <div class="price">٣٩٩ ج<span class="per"> / سنة</span></div>
+      <ul><li>كل مميزات الشهري</li><li>شهرين هدية</li><li>أولوية الدعم</li><li>محتوى حصري</li></ul>
+      <button class="prem-btn" data-prem>اشتركي 👑</button>
+    </div>
+  </div>
+  <div class="prem-lock">🔒 الاشتراك لسه جاي قريب — دلوقتي استمتعي بلينجوا المجانية بالكامل 💜</div>
+</section>
 <section id="jokes">
   <h2 class="sec-title">✦ ركن الضحك ✦</h2>
   <p class="sec-sub">نكتة بكل لغة ومعناها — اتعلمي وانتي بتضحكي 😂</p>
@@ -5162,7 +5193,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['quotes','🎬','اقتباسات'],['ai','🤖','لمى'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
+  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['places','🏛️','أماكن'],['premium','💎','بريميوم'],['quotes','🎬','اقتباسات'],['ai','🤖','لمى'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
 ];
 
 /* ================= v16: free books library ================= */
@@ -7937,7 +7968,7 @@ gbkRender();
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v27.0</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v28.0</div>
 <script>
 
 /* ================= v13: learning map, personality quiz, XO, korean ================= */
@@ -8163,6 +8194,56 @@ gbkRender();
   window.refreshDash = function(){ if(oldRefresh) oldRefresh(); renderCerts(); };
   renderCerts();
 })();
+
+// ================= v28: places + premium =================
+(function(){
+  var PLACES = {
+    en:{name:'إنجلترا 🇬🇧',spots:[
+      {f:'Clock_Tower_-_Palace_of_Westminster,_London_-_September_2006.jpg',n:'Big Ben',a:'بيج بن',c:'لندن'},
+      {f:'Tower_Bridge_London_Feb_2006.jpg',n:'Tower Bridge',a:'برج لندن المتحرك',c:'لندن'},
+      {f:'London_Eye_Twilight_April_2006.jpg',n:'London Eye',a:'عين لندن',c:'لندن'},
+      {f:'Buckingham_Palace_from_gardens,_London,_UK_-_Diliff.jpg',n:'Buckingham Palace',a:'قصر باكنجهام',c:'لندن'}]},
+    fr:{name:'فرنسا 🇫🇷',spots:[
+      {f:'Tour_Eiffel_Wikimedia_Commons.jpg',n:'Tour Eiffel',a:'برج إيفل',c:'باريس'},
+      {f:'Louvre_Museum_Wikimedia_Commons.jpg',n:'Musée du Louvre',a:'متحف اللوفر',c:'باريس'},
+      {f:'Arc_de_Triomphe,_Paris_21_October_2010.jpg',n:"Arc de Triomphe",a:'قوس النصر',c:'باريس'},
+      {f:'Mont-Saint-Michel_vu_du_ciel.jpg',n:'Mont Saint-Michel',a:'مون سان ميشيل',c:'نورماندي'}]},
+    de:{name:'ألمانيا 🇩🇪',spots:[
+      {f:'Brandenburger_Tor_abends.jpg',n:'Brandenburger Tor',a:'بوابة براندنبورج',c:'برلين'},
+      {f:'Schloss_Neuschwanstein_2013.jpg',n:'Schloss Neuschwanstein',a:'قلعة نويشفانشتاين',c:'بافاريا'},
+      {f:'Koelner_Dom_bei_Nacht.jpg',n:'Kölner Dom',a:'كاتدرائية كولونيا',c:'كولونيا'},
+      {f:'Reichstag_building_Berlin_view_from_west_before_sunset.jpg',n:'Reichstag',a:'مبنى الرايخستاج',c:'برلين'}]},
+    zh:{name:'الصين 🇨🇳',spots:[
+      {f:'Great_Wall_of_China_July_2006.JPG',n:'长城 (Chángchéng)',a:'سور الصين العظيم',c:'بكين'},
+      {f:'Forbidden_City_Beijing_Shenwumen_Gate.JPG',n:'故宫 (Gùgōng)',a:'المدينة المحرمة',c:'بكين'},
+      {f:'Terracotta_Army,_View_of_Pit_1.jpg',n:'兵马俑 (Bīngmǎyǒng)',a:'جيش التيراكوتا',c:'شيان'},
+      {f:'Shanghai_-_Nanjing_Road.jpeg',n:'南京路 (Nánjīng Lù)',a:'شارع نانجينج',c:'شنغهاي'}]},
+    ko:{name:'كوريا 🇰🇷',spots:[
+      {f:'Gyeongbokgung_Geunjeongjeon.jpg',n:'경복궁 (Gyeongbokgung)',a:'قصر جيونجبوك',c:'سيول'},
+      {f:'N_Seoul_Tower_Panorama_Night_(cropped).jpg',n:'N서울타워 (N Seoul Tower)',a:'برج إن سيول',c:'سيول'},
+      {f:'Jeju_Island.jpg',n:'제주도 (Jeju-do)',a:'جزيرة جيجو',c:'جيجو'},
+      {f:'Seongsan_Ilchulbong.jpg',n:'성산일출봉 (Seongsan Ilchulbong)',a:'قمة شروق الشمس',c:'جيجو'}]}
+  };
+  var pl=document.getElementById('placeLangs'), pg=document.getElementById('placeGrid');
+  if(pl&&pg){
+    var cur='en';
+    function renderP(){
+      pl.innerHTML=Object.keys(PLACES).map(function(k){
+        return '<button class="tab lang-tab'+(k===cur?' active':'')+'" data-pl="'+k+'"><span class="ln">'+PLACES[k].name+'</span></button>';
+      }).join('');
+      pg.innerHTML=PLACES[cur].spots.map(function(sp){
+        var u='https://commons.wikimedia.org/wiki/Special:FilePath/'+sp.f+'?width=400';
+        return '<div class="place-card"><img loading="lazy" src="'+u+'" alt="'+sp.a+'"><h4>'+sp.n+'</h4><p class="par">'+sp.a+' — '+sp.c+'</p></div>';
+      }).join('');
+      pl.querySelectorAll('[data-pl]').forEach(function(b){ b.onclick=function(){ cur=b.getAttribute('data-pl'); renderP(); }; });
+    }
+    renderP();
+  }
+  document.querySelectorAll('[data-prem]').forEach(function(b){
+    b.onclick=function(){ if(window.toast) toast('الاشتراك جاي قريب جدًا 👑💛'); };
+  });
+})();
+
 </script>
 </body>
 </html>
