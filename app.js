@@ -6472,16 +6472,19 @@ window.KM_POOL = [
       '<h3>' + GAMES[S.game].i + ' ' + GAMES[S.game].n + '</h3>' +
       '<div class="du-code">' + S.code + '</div>' +
       '<div class="du-sub">' + (GAMES[S.game].vocab ? LANGS[S.lang] + ' • ' : '') + GAMES[S.game].d + '</div>' +
+      '<div class="du-conn" id="duConn" style="font-size:.82rem;color:#b9a878;margin-top:6px;cursor:pointer">⏳ جاري الاتصال...</div>' +
       '<a class="btn du-big" href="' + share + '" target="_blank" rel="noopener">💌 ابعتي الدعوة واتساب</a>' +
       '<div class="du-players" id="duPlayers"></div>' +
       '<button class="btn du-big" id="duReady" style="background:linear-gradient(135deg,#34d399,#0e9f6e)">✋ أنا جاهزة!</button>' +
       '<button class="du-leave" id="duLeave">← خروج</button>' +
       '</div>';
     el('duLeave').onclick = leave;
+    el('duConn').onclick = function(){ if(!S._joined && window.duelRetry) window.duelRetry(); };
     el('duReady').onclick = function(){
       el('duReady').disabled = true; el('duReady').textContent = '✅ جاهزة — مستنيين ' + (S.opp ? esc(S.opp.name) : 'صاحبتك');
       S._iReady = true;
-      try { chan.track({name: S.myName, ready: true, game: S.game}); } catch(e){}
+      duelLog('ready pressed (joined=' + !!S._joined + ')');
+      trackState();
       send('ready', {});
       maybeStart();
     };
@@ -6501,8 +6504,49 @@ window.KM_POOL = [
     if(!chan) return;
     chan.send({type: 'broadcast', event: 'du', payload: Object.assign({t: type, by: S.uid, name: S.myName}, payload)});
   }
+  /* ---------- v59: reliability (slow networks, reconnects, dropped ready) ---------- */
+  function duelLog(m){
+    try{
+      var log = JSON.parse(localStorage.getItem('lingua_duel_log')||'[]');
+      log.push(new Date().toISOString().slice(11,19) + ' ' + m);
+      if(log.length > 40) log = log.slice(-40);
+      localStorage.setItem('lingua_duel_log', JSON.stringify(log));
+    }catch(e){}
+  }
+  function trackState(){
+    if(!chan || !S._joined) return;
+    var pl = {name: S.myName, ready: !!S._iReady, game: S.game};
+    if(S.st !== 'lobby' && S.st !== 'home'){
+      pl.started = true; pl.at = S.startT || (Date.now() + 1500); pl.lang = S.lang;
+      if(S.qids && S.qids.length) pl.qi = S.qids;
+    }
+    try { chan.track(pl); } catch(e){ duelLog('track err'); }
+  }
+  function duelConnUI(ok, st){
+    var c = el('duConn');
+    if(!c) return;
+    if(ok){
+      c.textContent = '🟢 متصلين — جاهزين للعب';
+      c.style.color = '#7dd6a0';
+    } else {
+      c.textContent = '🔴 الاتصال ضعيف (' + (st || 'انقطع') + ') — دوسي هنا نحاول تاني';
+      c.style.color = '#e8a0a0';
+    }
+  }
+  function startHeartbeat(){
+    if(S._hb) return;
+    S._hb = setInterval(function(){
+      if(!chan){ clearInterval(S._hb); S._hb = null; return; }
+      trackState();
+      maybeStart();
+    }, 4000);
+  }
   function connect(code, isHost){
-    S.code = code; S.host = isHost; S.st = 'lobby'; S._iReady = false; S._oppReady = false;
+    var freshRoom = (S.code !== code);
+    if(freshRoom){ S._iReady = false; S._oppReady = false; }
+    S.code = code; S.host = isHost; S.st = 'lobby';
+    S._joined = false; S._subOnce = false;
+    duelLog('connect ' + code + (isHost ? ' host' : ' guest'));
     chan = dsb.channel('duel-' + code, {config: {presence: {key: S.uid}}});
     chan.on('presence', {event: 'sync'}, function(){
       var st = chan.presenceState(), arr = [];
@@ -6560,25 +6604,54 @@ window.KM_POOL = [
       if(p.t === 'kans'){ S.oppK = p.ans; knowMaybeReveal(); }
     });
     chan.subscribe(function(status){
+      duelLog('chan ' + status);
       if(status === 'SUBSCRIBED'){
-        chan.track({name: S.myName, ready: false, game: S.game});
-        render();
+        S._joined = true;
+        if(S._wdog){ clearTimeout(S._wdog); S._wdog = null; }
+        trackState();
+        duelConnUI(true);
+        if(!S._subOnce){ S._subOnce = true; render(); } else { renderPlayers(); }
+        startHeartbeat();
+      } else if(status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED'){
+        S._joined = false;
+        duelConnUI(false, status);
       }
     });
+    if(S._wdog){ clearTimeout(S._wdog); S._wdog = null; }
+    S._wdog = setTimeout(function(){
+      if(chan && !S._joined && S.st === 'lobby'){
+        duelLog('watchdog retry ' + code);
+        try { dsb.removeChannel(chan); } catch(e){}
+        chan = null;
+        connect(code, isHost);
+      }
+    }, 12000);
   }
+  window.duelRetry = function(){
+    if(S.st === 'lobby' && S.code){
+      duelLog('manual retry');
+      if(chan){ try { dsb.removeChannel(chan); } catch(e){} chan = null; }
+      var c = el('duConn'); if(c){ c.textContent = '⏳ جاري الاتصال...'; c.style.color = '#b9a878'; }
+      connect(S.code, S.host);
+    }
+  };
   function maybeStart(){
     if(!S.host || S.st !== 'lobby') return;
     if(S._iReady && S._oppReady){
       S.st = 'starting';
       var at = Date.now() + 2500;
+      S.startT = at;
       S.qids = pickIds(S.game);
+      duelLog('start fired');
       send('start', {at: at, game: S.game, lang: S.lang, qi: S.qids});
-      try { chan.track({name: S.myName, ready: true, game: S.game, started: true, at: at, lang: S.lang, qi: S.qids}); } catch(e){}
+      trackState();
       beginGame(at);
     }
   }
   function leave(){
     clearTimers();
+    if(S._hb){ clearInterval(S._hb); S._hb = null; }
+    if(S._wdog){ clearTimeout(S._wdog); S._wdog = null; }
     if(chan){ try { dsb.removeChannel(chan); } catch(e){} chan = null; }
     var keep = {game: S.game, lang: S.lang, uid: S.uid, myName: S.myName};
     S = {st:'home', game:keep.game, code:null, lang:keep.lang, host:false, uid:keep.uid, myName:keep.myName, opp:null, players:[],
@@ -6591,6 +6664,7 @@ window.KM_POOL = [
   var QTIME = 12000, GAP = 2000;
   function beginGame(at){
     clearTimers();
+    duelLog('beginGame');
     S.st = 'game'; S.qi = 0; S.startT = at; S.myAns = []; S.oppAns = []; S.myScore = 0;
     S.oppDone = false; S.oppForfeit = false; S.raceN = 0; S.raceMs = 0; S.oppN = 0; S.oppMs = 0; S.mem = {flip:[], mine:[], opp:[], done:false};
     if(S.game === 'race'){
@@ -7560,5 +7634,63 @@ window.KM_POOL = [
   window.addEventListener('hashchange',function(){ if(location.hash==='#pet') setTimeout(render,50); });
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',render); else render();
   window.petRender=render;
+})();
+
+
+/* ================= v59: forced app updates + version badge + duel log viewer ================= */
+(function(){
+  window.LINGUA_VERSION = 'v59';
+
+  /* ---- force updates: reload as soon as a new service worker takes over ---- */
+  if('serviceWorker' in navigator){
+    var reloaded = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function(){
+      if(reloaded) return; reloaded = true;
+      if(location.hash !== '#duel'){
+        location.reload();
+        return;
+      }
+      /* mid-duel: don't kill the game — show a tap-to-update banner */
+      var b = document.createElement('div');
+      b.style.cssText = 'position:fixed;bottom:86px;left:12px;right:12px;z-index:99999;background:linear-gradient(135deg,#e9c26a,#c99b3e);color:#1c1405;font-weight:800;border-radius:16px;padding:12px 16px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.4);cursor:pointer;font-family:inherit';
+      b.textContent = '✨ نسخة جديدة من Lingua جاهزة — دوسي هنا بعد ما تخلصي اللعبة عشان تحدّثي';
+      b.onclick = function(){ location.hash = ''; setTimeout(function(){ location.reload(); }, 60); };
+      document.body.appendChild(b);
+    });
+    navigator.serviceWorker.ready.then(function(reg){
+      try { reg.update(); } catch(e){}
+      document.addEventListener('visibilitychange', function(){
+        if(!document.hidden){ try { reg.update(); } catch(e){} }
+      });
+    }).catch(function(){});
+  }
+
+  /* ---- tiny version badge inside the duel lobby + duel log viewer ---- */
+  function badge(){
+    var t = document.getElementById('duelBox');
+    if(!t || document.getElementById('duVer')) return;
+    var s = document.createElement('div');
+    s.id = 'duVer';
+    s.style.cssText = 'text-align:center;font-size:.72rem;color:#8a7a52;margin-top:12px;cursor:pointer';
+    s.textContent = 'Lingua ' + window.LINGUA_VERSION;
+    s.title = 'دوسي مرتين لعرض سجل الاتصال';
+    var taps = 0;
+    s.addEventListener('click', function(){
+      taps++;
+      if(taps >= 2){
+        taps = 0;
+        var log = [];
+        try { log = JSON.parse(localStorage.getItem('lingua_duel_log') || '[]'); } catch(e){}
+        var box = document.createElement('pre');
+        box.style.cssText = 'direction:ltr;text-align:left;font-size:.68rem;color:#cbb;background:rgba(0,0,0,.35);border-radius:12px;padding:10px;margin-top:8px;max-height:180px;overflow:auto;white-space:pre-wrap';
+        box.textContent = log.join('\n') || '(no events yet)';
+        s.appendChild(box);
+      }
+    });
+    t.appendChild(s);
+  }
+  window.addEventListener('hashchange', function(){ if(location.hash === '#duel') setTimeout(badge, 900); });
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(badge, 1500); });
+  else setTimeout(badge, 1500);
 })();
 
