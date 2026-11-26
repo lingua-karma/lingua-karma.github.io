@@ -6382,19 +6382,19 @@ gbkRender();
       }
     });
     /* landed from an invite link */
+    render();
     try {
       var q = new URLSearchParams(location.search);
       var dc = q.get('duel'), dl = q.get('lang');
       if(dl && LANGS[dl]) S.lang = dl;
       if(dc && /^[A-Z0-9]{6}$/.test(dc.toUpperCase())){
-        render();
+        if(dl && LANGS[dl]) render(); /* re-render with invite language */
         el('duCode').value = dc.toUpperCase();
         location.hash = 'duel';
         history.replaceState(null, '', location.pathname + '#duel');
         toast('وصلكي تحدي! اكتبي اسمك ودوسي دخول ⚔️');
       }
     } catch(e){}
-    render();
   }
 
   /* menu card */
