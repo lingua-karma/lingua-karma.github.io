@@ -393,13 +393,14 @@ function showGameBest(){
     b !== null ? '⭐ أقل عدد حركات في '+LANG_NAMES[game.lang]+': <b>'+b+'</b>' : '';
 }
 function newGame(lang){
-  game = {lang:lang, first:null, lock:false, moves:0, matched:0};
+  game = {lang:lang, first:null, lock:false, moves:0, matched:0, totalPairs:0};
   document.getElementById('gameMoves').textContent = '0';
   document.getElementById('gameWin').textContent = '';
   showGameBest();
   const all = GAME_WORDS[lang].slice();
   for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=all[i];all[i]=all[j];all[j]=t;}
   const pairs = all.slice(0,6);
+  game.totalPairs = pairs.length;
   const cards = [];
   pairs.forEach(function(p, i){
     cards.push({pair:i, text:p[0], ar:false});
@@ -442,7 +443,7 @@ function flipCard(btn, card){
       b.btn.classList.add('matched');
       game.matched++;
       game.lock = false;
-      if(game.matched === GAME_WORDS[game.lang].length) winGame();
+      if(game.matched === (game.totalPairs || 6)) winGame();
     }, 350);
   } else {
     game.lock = true;
@@ -8227,7 +8228,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v80';
+  window.LINGUA_VERSION = 'v81';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
