@@ -6305,7 +6305,8 @@ window.KM_POOL = [
     memory: {n:'ميموري سوا', i:'🃏', d:'مين يلاقي التطابقات الأول', vocab:true},
     gk:     {n:'معلومات صعبة', i:'🧠', d:'١٥ سؤال معلومات عامة تقيلة 🔥', vocab:false},
     truth:  {n:'الحقيقة', i:'👑', d:'أسئلة ضحك ومفاجآت — جاوبي بصراحة أو تخطّي', vocab:false},
-    knowme: {n:'قد إيه تعرفيني', i:'💜', d:'خمّني إجابات صاحبتك', vocab:false}
+    knowme: {n:'قد إيه تعرفيني', i:'💜', d:'خمّني إجابات صاحبتك', vocab:false},
+    xo:     {n:'إكس أو لايف', i:'⭕', d:'دور بدور — مين يكسر التاني؟', vocab:false}
   };
   var dsb = null, chan = null;
   var S = {st:'home', game:'quiz', code:null, lang:'en', host:false, uid:null, myName:'', opp:null, players:[],
@@ -6645,6 +6646,7 @@ window.KM_POOL = [
       if(p.t === 'tnext'){ if(!S.host) truthRound(p.r); }
       if(p.t === 'kready'){ S._oppKReady = true; knowMaybePhase2(); }
       if(p.t === 'kans'){ S.oppK = p.ans; knowMaybeReveal(); }
+      if(p.t === 'xo'){ xoRecv(p.mv); }
     });
     chan.subscribe(function(status){
       if(chan !== myChan) return;
@@ -6734,11 +6736,73 @@ window.KM_POOL = [
       truthShell(at);
     } else if(S.game === 'knowme'){
       knowShell(at);
+    } else if(S.game === 'xo'){
+      xoShell(at);
     } else {
       S.qs = (S.game === 'gk') ? (S.qids ? buildGkIds(S.qids) : buildGk(S.code)) : (S.qids ? buildMcqIds(S.lang, S.qids) : buildMcq(S.code, 'quiz', S.lang, 12));
       quizShell(at);
     }
     recordSeen(S.game, S.qids);
+  }
+
+  /* ---------- xo: tic-tac-toe live (turn-based, history-synced) ---------- */
+  var XO_WINS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  function xoBoard(mv){ var b = ['','','','','','','','','']; for(var i=0;i<mv.length;i++){ b[mv[i]] = (i%2===0)?'X':'O'; } return b; }
+  function xoWinner(b){ for(var w=0;w<XO_WINS.length;w++){ var L=XO_WINS[w]; if(b[L[0]] && b[L[0]]===b[L[1]] && b[L[1]]===b[L[2]]) return {p:b[L[0]], line:L}; } return null; }
+  function xoMyMark(){ return S.host ? 'X' : 'O'; }
+  function xoTurnMark(){ return (S.xo.mv.length % 2 === 0) ? 'X' : 'O'; }
+  function xoShell(at){
+    S.xo = {mv: []};
+    el('duelBox').innerHTML =
+      '<div class="du-card du-game">' +
+      '<div class="du-top"><div class="du-me">' + esc(S.myName || 'انتي') + ' ' + (S.host ? '❌' : '⭕') + '</div>' +
+      '<div class="du-prog">إكس أو لايف ⭕</div>' +
+      '<div class="du-opp">' + esc(S.opp ? S.opp.name : 'صاحبتك') + ' ' + (S.host ? '⭕' : '❌') + '</div></div>' +
+      '<div class="du-xo-turn" id="xoTurn"></div>' +
+      '<div class="du-xo-grid" id="xoGrid"></div>' +
+      '<div class="du-fb" id="duFb"></div></div>';
+    var wait = at - Date.now();
+    el('xoTurn').textContent = 'البداية بعد ' + Math.max(1, Math.ceil(wait/1000)) + '...';
+    later(function(){ xoRender(); }, Math.max(50, wait));
+  }
+  function xoRender(){
+    if(S.st !== 'game' || !S.xo) return;
+    var mv = S.xo.mv, b = xoBoard(mv);
+    var win = xoWinner(b);
+    var full = mv.length === 9;
+    var myTurn = !win && !full && xoTurnMark() === xoMyMark();
+    el('xoTurn').innerHTML = (win || full) ? '' : (myTurn ? '<b style="color:#e9c26a">دورك يا بطلة! ✨</b>' : 'دور ' + esc(S.opp ? S.opp.name : 'صاحبتك') + '... ⏳');
+    el('xoGrid').innerHTML = b.map(function(v, i){
+      var hl = win && win.line.indexOf(i) >= 0;
+      return '<button class="du-xo-cell' + (hl ? ' win' : '') + '" data-c="' + i + '"' + ((v || !myTurn) ? ' disabled' : '') + '>' + (v === 'X' ? '❌' : (v === 'O' ? '⭕' : '')) + '</button>';
+    }).join('');
+    el('xoGrid').onclick = function(e){
+      var c = e.target.closest('.du-xo-cell');
+      if(!c || c.disabled) return;
+      var i = +c.dataset.c;
+      S.xo.mv.push(i);
+      beep(600, 0.08);
+      send('xo', {mv: S.xo.mv});
+      xoRender();
+    };
+    if(win || full){
+      later(function(){ xoFinish(win); }, 900);
+    }
+  }
+  function xoRecv(mv){
+    if(!S.xo || !mv || !mv.length || mv.length <= S.xo.mv.length) return;
+    S.xo.mv = mv.slice(0, 9);
+    beep(440, 0.08);
+    xoRender();
+  }
+  function xoFinish(win){
+    if(S.st !== 'game') return;
+    S.st = 'result';
+    clearTimers();
+    var won = win && win.p === xoMyMark();
+    var draw = !win;
+    send('done', {ans: [], n: 0, ms: 0, pairs: 0});
+    showResult(won ? 1 : (draw ? 0.5 : 0), won ? 0 : (draw ? 0.5 : 1), '⭐');
   }
 
   /* ---------- shared quiz shell (quiz + gk) ---------- */
@@ -7789,7 +7853,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v71';
+  window.LINGUA_VERSION = 'v72';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
