@@ -2410,7 +2410,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['map','🚀','مسار التعلم'],['placement','🎯','مستواي'],['quests','📋','مهام اليوم'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['places','🏛️','أماكن'],['premium','💎','بريميوم'],['quotes','🎬','اقتباسات'],['ai','🤖','لمى'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق'],['pet','🥚','رفيقتي']
+  ['map','🚀','مسار التعلم'],['placement','🎯','مستواي'],['quests','📋','مهام اليوم'],['listen','🎧','استماع'],['mistakes','🩹','أخطائي'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['places','🏛️','أماكن'],['premium','💎','بريميوم'],['quotes','🎬','اقتباسات'],['ai','🤖','لمى'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق'],['pet','🥚','رفيقتي']
 ];
 
 /* ================= v16: free books library ================= */
@@ -6190,7 +6190,7 @@ window.KM_POOL = [
   };
 
   var GROUPS = [
-    {id:'learn', icon:'book', title:'تعلّم 📚', items:['dash','quests','placement','corners','courses','lessons','quiz','map','dict','gallery','speak','videos','songs','music','cinema','korean','library','stories','capitals','food','fashion','trip','places','quotes','hobbies','themes','tips','eng','scholar','ch30','flash','puzzle','qotd']},
+    {id:'learn', icon:'book', title:'تعلّم 📚', items:['dash','quests','placement','listen','mistakes','corners','courses','lessons','quiz','map','dict','gallery','speak','videos','songs','music','cinema','korean','library','stories','capitals','food','fashion','trip','places','quotes','hobbies','themes','tips','eng','scholar','ch30','flash','puzzle','qotd']},
     {id:'play', icon:'gamepad', title:'العب 🎮', items:['games','brain','fun','dressup','outfit','wheel','snake','xo','shooter','runner','piano','color','duel']},
     {id:'social', icon:'chat', title:'صحابي 💜', items:['friends','wall','mood','jokes','vent','diary','gbk','karma','pquiz','pet']},
     {id:'life', icon:'sparkle', title:'حياتي ✨', items:['deen','mushaf','khatma','weather','shop','premium','settings','ai']}
@@ -7694,7 +7694,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v66';
+  window.LINGUA_VERSION = 'v67';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
@@ -7929,4 +7929,207 @@ window.KM_POOL = [
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ qRender(); plHome(); });
   else { qRender(); plHome(); }
   window.qRender = qRender;
+})();
+
+
+/* ================= v67: listening + dictation + mistakes-only practice ================= */
+(function(){
+  var LS_LANGS = {en:'🇬🇧 إنجليزي', fr:'🇫🇷 فرنسي', de:'🇩🇪 ألماني', zh:'🇨🇳 صيني', ko:'🇰🇷 كوري'};
+
+  function pick(arr, n, exclude){
+    var pool = arr.slice();
+    var out = [];
+    while(out.length < n && pool.length){
+      var i = Math.floor(Math.random()*pool.length);
+      var c = pool.splice(i,1)[0];
+      if(exclude && exclude.indexOf(c) >= 0) continue;
+      out.push(c);
+    }
+    return out;
+  }
+  function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function norm(s){
+    return (s||'').toLowerCase().trim()
+      .replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي')
+      .replace(/[ًٌٍَُِّْ]/g,'').replace(/[.,!?;:'"()\-\s]/g,'');
+  }
+
+  /* ---------------- listening + dictation (#listen) ---------------- */
+  var ls = {lang:'en', mode:'listen', round:0, total:10, score:0, cur:null};
+
+  function lsHome(){
+    var box = document.getElementById('lsBox'); if(!box) return;
+    var h = '<div class="ls-modes">'
+      + '<button class="ls-mode' + (ls.mode==='listen'?' on':'') + '" data-m="listen">🎧 سمع — اسمعي الكلمة واختاري معناها</button>'
+      + '<button class="ls-mode' + (ls.mode==='dict'?' on':'') + '" data-m="dict">✍️ إملاء — اسمعي واكتبي الكلمة</button>'
+      + '</div>'
+      + '<div class="plc-langs">' + Object.keys(LS_LANGS).map(function(l){
+          return '<button class="plc-lcard" data-lsl="'+l+'"><b>' + LS_LANGS[l] + '</b></button>';
+        }).join('') + '</div>'
+      + '<div class="plc-intro">١٠ جولات — إجابة صح = نقاط 💎</div>';
+    box.innerHTML = h;
+    Array.prototype.forEach.call(box.querySelectorAll('[data-m]'), function(b){
+      b.addEventListener('click', function(){ ls.mode = b.dataset.m; lsHome(); });
+    });
+    Array.prototype.forEach.call(box.querySelectorAll('[data-lsl]'), function(b){
+      b.addEventListener('click', function(){ ls.lang = b.dataset.lsl; ls.round = 0; ls.score = 0; lsNext(); });
+    });
+  }
+
+  function lsNext(){
+    var box = document.getElementById('plcBox') && document.getElementById('lsBox'); if(!box) return;
+    box = document.getElementById('lsBox');
+    if(ls.round >= ls.total){ return lsDone(); }
+    ls.round++;
+    var word = pick(DICT[ls.lang], 1)[0];
+    ls.cur = word;
+    var h = '<div class="plc-prog">جولة ' + ls.round + ' / ' + ls.total + ' 🎧</div>'
+      + '<div class="plc-bar"><div class="plc-fill" style="width:' + Math.round((ls.round-1)/ls.total*100) + '%"></div></div>'
+      + '<div class="ls-play"><button class="btn du-big" id="lsHear">🔊 اسمعي الكلمة</button></div>';
+    if(ls.mode === 'listen'){
+      var opts = shuffle([word[1]].concat(pick(DICT[ls.lang].map(function(w){return w[1];}), 3, [word[1]])));
+      h += opts.map(function(o){ return '<button class="opt" data-o="'+o.replace(/"/g,'&quot;')+'">'+o+'</button>'; }).join('');
+      box.innerHTML = h;
+      var speakIt = function(){ speakText(word[0], ls.lang); };
+      document.getElementById('lsHear').addEventListener('click', speakIt);
+      speakIt();
+      Array.prototype.forEach.call(box.querySelectorAll('.opt'), function(b){
+        b.addEventListener('click', function(){
+          var ok = b.dataset.o === word[1];
+          Array.prototype.forEach.call(box.querySelectorAll('.opt'), function(o){
+            if(o.dataset.o === word[1]) o.classList.add('correct'); else if(o === b) o.classList.add('wrong');
+            o.disabled = true;
+          });
+          if(ok){ ls.score++; if(window.sndGood) sndGood(); } else if(window.sndBad) sndBad();
+          setTimeout(lsNext, 900);
+        });
+      });
+    } else {
+      if(ls.lang === 'zh' || ls.lang === 'ko'){
+        h += '<div class="plc-intro">الإملاء بالكتابة متاح للإنجليزي والفرنسي والألماني بس — جربي وضع السمع 🎧</div>';
+        box.innerHTML = h;
+        document.getElementById('lsHear').addEventListener('click', function(){ speakText(word[0], ls.lang); });
+        setTimeout(lsNext, 2200);
+        return;
+      }
+      h += '<div class="ls-dict"><input id="lsIn" class="ls-input" placeholder="اكتبي اللي سمعتيه..." autocomplete="off" autocapitalize="off">'
+        + '<button class="btn" id="lsGo">✔ تأكدي</button></div>';
+      box.innerHTML = h;
+      var inp = document.getElementById('lsIn');
+      document.getElementById('lsHear').addEventListener('click', function(){ speakText(word[0], ls.lang); });
+      speakText(word[0], ls.lang);
+      var check = function(){
+        var ok = norm(inp.value) === norm(word[0]);
+        if(ok){ ls.score++; inp.classList.add('correct'); if(window.sndGood) sndGood(); }
+        else { inp.classList.add('wrong'); if(window.sndBad) sndBad();
+          box.insertAdjacentHTML('beforeend', '<div class="ls-ans">الصح: <b>' + word[0] + '</b> — ' + word[1] + '</div>'); }
+        setTimeout(lsNext, ok ? 800 : 1800);
+      };
+      document.getElementById('lsGo').addEventListener('click', check);
+      inp.addEventListener('keydown', function(e){ if(e.key === 'Enter') check(); });
+      inp.focus();
+    }
+  }
+
+  function lsDone(){
+    var box = document.getElementById('lsBox');
+    var pts = ls.score * (ls.mode === 'dict' ? 3 : 2);
+    if(pts > 0 && window.awardPoints) awardPoints(pts, 'تدريب السمع 🎧');
+    box.innerHTML = '<div class="plc-result">'
+      + '<div class="plc-big">' + ls.score + ' / ' + ls.total + '</div>'
+      + '<div class="plc-lv">' + (ls.score >= 8 ? 'ودانك موسيقية! 🎶' : (ls.score >= 5 ? 'أداء حلو 💜' : 'التكرار بيعلّم الشطار 💪')) + '</div>'
+      + '<p class="du-sub">كسبتي ' + pts + ' نقطة من التدريب ده</p>'
+      + '<button class="btn du-big" id="lsAgain">🔄 تدريب تاني</button></div>';
+    document.getElementById('lsAgain').addEventListener('click', lsHome);
+    if(ls.score >= 5 && window.confetti) try{ confetti(); }catch(e){}
+  }
+
+  /* ---------------- mistakes-only practice (#mistakes) ---------------- */
+  function mLoad(){ try { return JSON.parse(localStorage.getItem('lingua_mistakes') || '[]'); } catch(e){ return []; } }
+  function mSave(m){ try { localStorage.setItem('lingua_mistakes', JSON.stringify(m)); } catch(e){} }
+  var mPrac = null; /* {list, i, ok:{}} */
+
+  /* hook wrong answers in quiz */
+  if(window.answer && !window.__mstHooked){
+    window.__mstHooked = true;
+    var _ans = window.answer;
+    window.answer = function(idx){
+      var before = cur && !cur.locked ? {lang: cur.lang, level: cur.level, i: cur.i} : null;
+      _ans(idx);
+      try {
+        if(before && idx !== QUIZZES[before.lang][before.level][before.i].a && !mPrac){
+          var m = mLoad();
+          var key = before.lang + '|' + before.level + '|' + before.i;
+          var ex = m.filter(function(x){ return x.k === key; })[0];
+          if(ex) ex.ok = 0; else m.push({k: key, lang: before.lang, level: before.level, qi: before.i, ok: 0});
+          mSave(m);
+        }
+      } catch(e){}
+    };
+  }
+
+  function mHome(){
+    var box = document.getElementById('mstBox'); if(!box) return;
+    var m = mLoad();
+    if(!m.length){
+      box.innerHTML = '<div class="plc-result"><div class="plc-big">✨</div>'
+        + '<div class="plc-lv">مفيش أخطاء محفوظة — شطورة!</div>'
+        + '<p class="du-sub">أي غلطة في الاختبارات بتتحفظ هنا علشان تتدربي عليها لحد ما تتقنيها</p></div>';
+      return;
+    }
+    box.innerHTML = '<div class="plc-intro">عندك <b style="color:var(--gold,#e9c26a)">' + m.length + '</b> غلطة محفوظة — ردّي على كل واحدة صح <b>مرتين ورا بعض</b> وهتتمسح 🩹</div>'
+      + '<div class="plc-langs">' + m.map(function(x, i){
+          var q = QUIZZES[x.lang] && QUIZZES[x.lang][x.level] && QUIZZES[x.lang][x.level][x.qi];
+          if(!q) return '';
+          return '<div class="mst-card"><div class="mst-q">' + q.q + '</div><div class="mst-p">تقدمك: ' + x.ok + ' / 2 ✅</div></div>';
+        }).join('') + '</div>'
+      + '<button class="btn du-big" id="mstGo">🩹 ابدئي تدريب الأخطاء</button>';
+    var g = document.getElementById('mstGo');
+    if(g) g.addEventListener('click', function(){ mPrac = {i: 0, list: mLoad()}; mNext(); });
+  }
+
+  function mNext(){
+    var box = document.getElementById('mstBox'); if(!box) return;
+    if(!mPrac || mPrac.i >= mPrac.list.length){
+      mPrac = null;
+      if(window.refreshDash) refreshDash();
+      return mHome();
+    }
+    var x = mPrac.list[mPrac.i];
+    var q = QUIZZES[x.lang][x.level][x.qi];
+    box.innerHTML = '<div class="plc-prog">غلطة ' + (mPrac.i+1) + ' / ' + mPrac.list.length + ' — محتاجة ' + (2 - x.ok) + ' صح ورا بعض 🩹</div>'
+      + '<div class="q-text">' + q.q + '</div>'
+      + q.opts.map(function(o, idx){ return '<button class="opt" data-i="'+idx+'">'+o+'</button>'; }).join('');
+    Array.prototype.forEach.call(box.querySelectorAll('.opt'), function(b){
+      b.addEventListener('click', function(){
+        var idx = parseInt(b.dataset.i, 10);
+        var ok = idx === q.a;
+        Array.prototype.forEach.call(box.querySelectorAll('.opt'), function(o, i){
+          if(i === q.a) o.classList.add('correct'); else if(i === idx) o.classList.add('wrong');
+          o.disabled = true;
+        });
+        var m = mLoad();
+        var rec = m.filter(function(r){ return r.k === x.k; })[0];
+        if(ok){
+          if(window.sndGood) sndGood();
+          if(rec){ rec.ok++; if(rec.ok >= 2){ m = m.filter(function(r){ return r.k !== x.k; }); if(window.awardPoints) awardPoints(5, 'أصلحتِ غلطة 🩹'); } }
+          x.ok = rec ? rec.ok : 2;
+        } else {
+          if(window.sndBad) sndBad();
+          if(rec) rec.ok = 0;
+          x.ok = 0;
+        }
+        mSave(m);
+        setTimeout(function(){ mPrac.i++; mNext(); }, ok ? 800 : 1400);
+      });
+    });
+  }
+
+  window.addEventListener('hashchange', function(){
+    if(location.hash === '#listen') setTimeout(lsHome, 60);
+    if(location.hash === '#mistakes') setTimeout(mHome, 60);
+  });
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ lsHome(); mHome(); });
+  else { lsHome(); mHome(); }
+  window.lsHome = lsHome; window.mHome = mHome;
 })();
