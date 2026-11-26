@@ -5601,7 +5601,6 @@ gbkRender();
   btn.addEventListener('click',function(){ isOn()?disable():enable(); });
   render();
 })();
-
 /* ================= v37: Duolingo-style learning path ================= */
 (function(){
   var PATH_UNITS = ['family','colors','animals','time','school','feelings','food2','places2','transport','sports','work','weather2','health','tech','nature','travel'];
@@ -5924,7 +5923,6 @@ gbkRender();
   renderPath();
 })();
 
-
 /* ================= v41: Weekly friends leaderboard (ترتيب الأسبوع) ================= */
 (function(){
   var SUPA_URL = 'https://yzzlgalxjaaevmytdazf.supabase.co';
@@ -6033,7 +6031,6 @@ gbkRender();
   if(rb) rb.onclick = function(){ renderWeekBoard(); };
   boot();
 })();
-
 /* hard general-knowledge pool (Arabic) for live games */
 window.GK_POOL = [
 {q:'أي دولة فيها أكبر عدد من الأهرامات في العالم؟',a:'السودان',o:['مصر','المكسيك','السودان','الصين']},
@@ -6122,7 +6119,6 @@ window.GK_POOL = [
 {q:'أي نهر بيمر بأكبر عدد من الدول في العالم؟',a:'الدانوب',o:['الدانوب','النيل','الأمازون','الراين']},
 {q:'كم لاعب في فريق الكرلنج على الجليد؟',a:'4',o:['4','6','5','7']}
 ];
-
 /* truth + know-me pools (fun + safe-embarrassing, no sexual/hurtful/private content) */
 window.TRUTH_POOL = [
 {q:'إيه أغبى حاجة عملتيها وانتي صغيرة؟ 😄', c:'fun'},
@@ -6173,7 +6169,6 @@ window.KM_POOL = [
 {q:'موبايلك أكتر حاجة عليه إيه؟', o:['سوشيال ميديا 📱','ألعاب 🎮','صور 📸','مذاكرة وكورسات 📚']},
 {q:'الفلوس ولا الوقت؟', o:['الفلوس 💸','الوقت ⏳','الاتنين سوا 😌','ولا واحد يكفي']}
 ];
-
 
 /* ================= v47: luxury grouped navigation ================= */
 (function(){
@@ -6288,7 +6283,6 @@ window.KM_POOL = [
 
   markNavActive();
 })();
-
 
 /* ================= v48: live-games lobby (قاعة الألعاب اللايف) ================= */
 /* one realtime room + WhatsApp invite system, 4 game types:
@@ -6557,14 +6551,16 @@ window.KM_POOL = [
     if(S._hb) return;
     S._hb = setInterval(function(){
       if(!chan){ clearInterval(S._hb); S._hb = null; return; }
-      trackState();
+      /* v73: liveness via cheap broadcast, NOT presence track — presence events are rate-limited (20/s/IP) */
+      if(S._joined){ try { send('hb', {}); } catch(e){} }
       maybeStart();
-    }, 4000);
+    }, 10000);
   }
   function scheduleReconnect(why){
     if(S._rc) return;
     S._fails = (S._fails || 0) + 1;
-    var delay = Math.min(15000, 2500 * S._fails);
+    /* v73: gentler backoff + jitter — fast retry storms trip the per-IP realtime rate limit */
+    var delay = Math.min(60000, 8000 * S._fails) + Math.floor(Math.random() * 3000);
     S._rc = setTimeout(function(){
       S._rc = null;
       if(!S.code || S.st === 'home') return;
@@ -6586,7 +6582,8 @@ window.KM_POOL = [
     S._joined = false; if(!preserve) S._subOnce = false;
     duelLog('connect ' + code + (isHost ? ' host' : ' guest') + (preserve ? ' (re)' : ''));
     S._attempt = (S._attempt || 0) + 1;
-    S.pkey = S.uid + '-' + S._attempt + '-' + Math.random().toString(36).slice(2,6);
+    /* v73: stable presence key — re-joins REPLACE the old entry instead of piling up ghosts */
+    S.pkey = S.uid;
     chan = dsb.channel('duel-' + code, {config: {presence: {key: S.pkey}}});
     var myChan = chan;
     function isMine(k){ return k === S.uid || k.indexOf(S.uid + '-') === 0; }
@@ -6618,18 +6615,19 @@ window.KM_POOL = [
       if(opp && !S.opp){ S.opp = {uid: opp.uid, name: opp.name}; sndTick(); }
       if(opp) S.opp.name = opp.name;
       if(S.st === 'lobby') renderPlayers();
-      if(opp){ S._oppGoneT = false; }
+      if(opp){ S._oppGoneT = false; S._oppHb = Date.now(); }
       if(!opp && (S.st === 'game' || S.st === 'ending') && !S.oppDone && !S._oppGoneT){
         S._oppGoneT = true;
         later(function(){
           var st2 = chan ? chan.presenceState() : {};
           var still = Object.keys(st2).some(function(k){ return !isMine(k); });
           S._oppGoneT = false;
-          if(!still && (S.st === 'game' || S.st === 'ending') && !S.oppDone){
+          var hbFresh = S._oppHb && (Date.now() - S._oppHb < 25000);
+          if(!still && !hbFresh && (S.st === 'game' || S.st === 'ending') && !S.oppDone){
             toast('صاحبتك خرجت — كملي لوحدك وهتكسبي بالانسحاب 👑');
             S.oppDone = true; S.oppForfeit = true; maybeFinish();
           }
-        }, 8000);
+        }, 25000);
       }
     });
     chan.on('broadcast', {event: 'du'}, function(ev){
@@ -6647,6 +6645,7 @@ window.KM_POOL = [
       if(p.t === 'kready'){ S._oppKReady = true; knowMaybePhase2(); }
       if(p.t === 'kans'){ S.oppK = p.ans; knowMaybeReveal(); }
       if(p.t === 'xo'){ xoRecv(p.mv); }
+      if(p.t === 'hb'){ S._oppHb = Date.now(); }
     });
     chan.subscribe(function(status){
       if(chan !== myChan) return;
@@ -7299,7 +7298,6 @@ window.KM_POOL = [
   boot();
 })();
 
-
 /* ================= v49: new themes + profile chip + theme sync ================= */
 (function(){
   /* ---- 6 new luxury themes ---- */
@@ -7401,7 +7399,6 @@ window.KM_POOL = [
   }
   boot();
 })();
-
 
 /* ================= v54: gender choice (ولد/بنت) ================= */
 /* first-run picker + account settings + feminine->masculine UI text transform */
@@ -7577,7 +7574,6 @@ window.KM_POOL = [
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
-
 
 /* ================= v58/v68: virtual pet رفيقتي (drawn SVG pet, 4 species, grows with points) ================= */
 (function(){
@@ -7850,10 +7846,9 @@ window.KM_POOL = [
   window.petRender=render;
 })();
 
-
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v72';
+  window.LINGUA_VERSION = 'v73';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
@@ -7907,7 +7902,6 @@ window.KM_POOL = [
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(badge, 1500); });
   else setTimeout(badge, 1500);
 })();
-
 
 /* ================= v66: Duolingo pack — placement test + daily quests + streak freeze ================= */
 (function(){
@@ -8089,7 +8083,6 @@ window.KM_POOL = [
   else { qRender(); plHome(); }
   window.qRender = qRender;
 })();
-
 
 /* ================= v67: listening + dictation + mistakes-only practice ================= */
 (function(){
@@ -8293,7 +8286,6 @@ window.KM_POOL = [
   window.lsHome = lsHome; window.mHome = mHome;
 })();
 
-
 /* ================= v69: Karma-corner owner inbox (gbk messages -> Supabase, owner-only inbox) ================= */
 (function(){
   var OWNER_EMAIL = 'carmengreeme125@gmail.com';
@@ -8363,7 +8355,6 @@ window.KM_POOL = [
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ hookGbk(); gbkInboxRender(); });
   else { hookGbk(); gbkInboxRender(); }
 })();
-
 
 /* ================= v71: German corner ركن الألماني (free legit resources) ================= */
 (function(){
