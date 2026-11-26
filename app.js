@@ -6552,8 +6552,12 @@ window.KM_POOL = [
       if(!S.code || S.st === 'home') return;
       duelLog('auto-reconnect (' + why + ')');
       if(chan){ try { dsb.removeChannel(chan); } catch(e){} chan = null; }
-      /* let the leave fully process before re-joining the same topic (avoids duplicate-join kicks) */
-      setTimeout(function(){ if(S.code && S.st !== 'home') connect(S.code, S.host, true); }, 1500);
+      /* full socket reset: clears any server-side ghost channel so the re-join is clean */
+      try { if(dsb && dsb.realtime){ dsb.realtime.disconnect(); } } catch(e){}
+      setTimeout(function(){
+        try { if(dsb && dsb.realtime){ dsb.realtime.connect(); } } catch(e){}
+        setTimeout(function(){ if(S.code && S.st !== 'home') connect(S.code, S.host, true); }, 1200);
+      }, 800);
     }, delay);
   }
   function connect(code, isHost, preserve){
@@ -7676,7 +7680,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v64';
+  window.LINGUA_VERSION = 'v65';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
