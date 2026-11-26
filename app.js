@@ -6302,7 +6302,8 @@ window.KM_POOL = [
     knowme: {n:'قد إيه تعرفيني', i:'💜', d:'خمّني إجابات صاحبتك', vocab:false},
     xo:     {n:'إكس أو لايف', i:'⭕', d:'دور بدور — مين يكسر التاني؟', vocab:false},
     hang:   {n:'خمّني الكلمة', i:'🔤', d:'٣ كلمات — خمّني الحروف قبل ما الرسمة تكمل', vocab:true},
-    wc:     {n:'سلسلة الكلمات', i:'🔗', d:'كلمة بحرف آخر كلمة — مين هيتخنق الأول؟', vocab:true}
+    wc:     {n:'سلسلة الكلمات', i:'🔗', d:'كلمة بحرف آخر كلمة — مين هيتخنق الأول؟', vocab:true},
+    wi:     {n:'مين أنا؟', i:'🕵️‍♀️', d:'اسألي أيوه/لأ وخمّني الكلمة اللي على جبهتك', vocab:true}
   };
   var dsb = null, chan = null;
   var S = {st:'home', game:'quiz', code:null, lang:'en', host:false, uid:null, myName:'', opp:null, players:[],
@@ -6374,6 +6375,7 @@ window.KM_POOL = [
     if(game === 'knowme') return window.KM_POOL.length;
     if(game === 'hang') return hangPool(S.lang).length;
     if(game === 'wc') return hangPool(S.lang).length;
+    if(game === 'wi') return hangPool(S.lang).length;
     return vocabPool().length;
   }
   function needFor(game){
@@ -6385,6 +6387,7 @@ window.KM_POOL = [
     if(game === 'knowme') return 10;
     if(game === 'hang') return 3;
     if(game === 'wc') return 0;
+    if(game === 'wi') return 2;
     return 10;
   }
   function pickIds(game){
@@ -6660,6 +6663,11 @@ window.KM_POOL = [
           if(S.st === 'game') wcFinish(true);
           return;
         }
+        /* wi: a done while I'm still playing means she guessed her word first = I lost */
+        if(S.game === 'wi'){
+          if(S.st === 'game') wiFinish(false);
+          return;
+        }
         S.oppDone = true; S.oppAns = p.ans || S.oppAns; S.oppN = p.n || S.oppN; S.oppMs = p.ms || 0; S.oppPairs = p.pairs;
         /* v76: only finish if I already ended — if I'm still playing, let me finish; my endMyGame will use oppDone */
         if(S.st === 'ending') maybeFinish();
@@ -6670,6 +6678,7 @@ window.KM_POOL = [
       if(p.t === 'kans'){ S.oppK = p.ans; knowMaybeReveal(); }
       if(p.t === 'xo'){ xoRecv(p.mv); }
       if(p.t === 'wc'){ wcRecv(p); }
+      if(p.t === 'wi'){ wiRecv(p); }
       if(p.t === 'hb'){ S._oppHb = Date.now(); }
     });
     chan.subscribe(function(status){
@@ -6767,6 +6776,8 @@ window.KM_POOL = [
       hmShell(at);
     } else if(S.game === 'wc'){
       wcShell(at);
+    } else if(S.game === 'wi'){
+      wiShell(at);
     } else {
       S.qs = (S.game === 'gk') ? (S.qids ? buildGkIds(S.qids) : buildGk(S.code)) : (S.qids ? buildMcqIds(S.lang, S.qids) : buildMcq(S.code, 'quiz', S.lang, 12));
       quizShell(at);
@@ -6874,6 +6885,139 @@ window.KM_POOL = [
     wcRender();
   }
   function wcFinish(won){
+    if(S.st !== 'game') return;
+    S.st = 'result';
+    clearTimers();
+    send('done', {ans: [], n: 0, ms: 0, pairs: 0});
+    showResult(won ? 1 : 0, won ? 0 : 1, '⭐');
+  }
+
+  /* ---------- wi: who-am-I (yes/no questions, turn-based) ---------- */
+  var WI_ASK = 45000, WI_ANS = 30000;
+  function wiWords(){
+    var pool = wcPool(S.lang), ids = (S.qids && S.qids.length >= 2) ? S.qids : [0, 1];
+    var hw = pool[ids[0] % pool.length], gw = pool[ids[1] % pool.length];
+    return {me: S.host ? hw : gw, opp: S.host ? gw : hw};
+  }
+  function wiState(){
+    var log = S.wi.log, last = log[log.length - 1];
+    if(last && last.q !== undefined && last.a === undefined){
+      var askerHost = ((log.length - 1) % 2 === 0);
+      return (askerHost === !!S.host) ? 'wait' : 'answer';
+    }
+    var askHost = (log.length % 2 === 0);
+    return (askHost === !!S.host) ? 'ask' : 'oppask';
+  }
+  function wiShell(at){
+    var w = wiWords();
+    S.wi = {log: [], tLast: 0};
+    el('duelBox').innerHTML =
+      '<div class="du-card du-game">' +
+      '<div class="du-top"><div class="du-me">' + esc(S.myName || 'انتي') + '</div>' +
+      '<div class="du-prog">مين أنا؟ 🕵️‍♀️</div>' +
+      '<div class="du-opp">' + esc(S.opp ? S.opp.name : 'صاحبتك') + '</div></div>' +
+      '<div class="du-xo-turn" id="wiTurn"></div>' +
+      '<div class="du-timer"><div class="du-tbar" id="wiTbar"></div></div>' +
+      '<div class="du-wi-card"><small>دي الكلمة اللي على جبهة ' + esc(S.opp ? S.opp.name : 'صاحبتك') + ' 👀 انتي بس اللي شيفاها!</small>' +
+      '<div class="du-wi-word" dir="ltr">' + w.opp.e + ' ' + esc(w.opp.w) + '</div>' +
+      '<small>' + esc(w.opp.hint) + '</small></div>' +
+      '<div class="du-wi-feed" id="wiFeed"></div>' +
+      '<div class="du-fb" id="duFb"></div>' +
+      '<div id="wiAct"></div></div>';
+    var wait = at - Date.now();
+    el('wiTurn').textContent = 'البداية بعد ' + Math.max(1, Math.ceil(wait / 1000)) + '...';
+    later(function(){ wiRender(); }, Math.max(50, wait));
+  }
+  function wiRender(){
+    if(S.st !== 'game' || !S.wi) return;
+    var st = wiState(), opp = S.opp ? S.opp.name : 'صاحبتك';
+    var turnEl = el('wiTurn'), act = el('wiAct'), ms = 0;
+    el('wiFeed').innerHTML = S.wi.log.map(function(en, i){
+      var who = ((i % 2 === 0) === !!S.host) ? (S.myName || 'انتي') : opp;
+      if(en.pass) return '<div class="du-wi-line du-wi-pass">' + esc(who) + ' عدّت دورها ⏭️</div>';
+      if(en.g !== undefined) return '<div class="du-wi-line"><b>' + esc(who) + '</b> خمّنت: <b dir="ltr">' + esc(en.g) + '</b> ' + (en.ok ? '✅ صح! 🎉' : '❌ غلط') + '</div>';
+      var ans = en.a === undefined ? '⏳' : (en.a === 'y' ? 'أيوه ✅' : en.a === 'n' ? 'لأ ❌' : 'يمكن 🤷');
+      return '<div class="du-wi-line"><b>' + esc(who) + '</b>: ' + esc(en.q) + ' <span class="du-wi-ans">' + ans + '</span></div>';
+    }).join('') || '<div class="du-wi-line du-wi-pass">اسألوا بعض أسئلة أيوه/لأ... أول واحدة تخمّن كلمتها تكسب! 🕵️‍♀️</div>';
+    el('wiFeed').scrollTop = 99999;
+    if(st === 'ask'){
+      turnEl.innerHTML = '<b style="color:#e9c26a">دورك! اسألي سؤال أيوه/لأ ✨</b>';
+      act.innerHTML = '<div class="du-wc-play"><input class="acc-in" id="wiQ" maxlength="80" placeholder="هل هي حيوان؟ هل بيلبس؟ هل بيتاكل؟...">' +
+        '<button class="btn du-wc-go" id="wiAskGo">اسألي</button></div>' +
+        '<button class="du-wi-guess" id="wiGuessBtn">🎯 عندي تخمين!</button>';
+      el('wiAskGo').onclick = wiAsk;
+      el('wiQ').addEventListener('keydown', function(e){ if(e.key === 'Enter') wiAsk(); });
+      el('wiGuessBtn').onclick = function(){
+        act.innerHTML = '<div class="du-wc-play" dir="ltr"><input class="acc-in du-wc-in" id="wiG" maxlength="15" placeholder="TYPE YOUR GUESS" autocomplete="off" autocapitalize="characters">' +
+          '<button class="btn du-wc-go" id="wiGG">✓</button></div><div class="du-wi-hintline">تخمين غلط = الدور يروح! 😬</div>';
+        el('wiGG').onclick = wiGuess;
+        el('wiG').addEventListener('keydown', function(e){ if(e.key === 'Enter') wiGuess(); });
+        el('wiG').focus();
+      };
+      ms = WI_ASK;
+    } else if(st === 'answer'){
+      turnEl.innerHTML = '<b style="color:#e9c26a">جاوبي على سؤال ' + esc(opp) + ' بصراحة 🤫</b>';
+      act.innerHTML = '<div class="du-wi-answers"><button class="du-wi-a" data-a="y">أيوه ✅</button><button class="du-wi-a" data-a="n">لأ ❌</button><button class="du-wi-a" data-a="m">يمكن 🤷</button></div>';
+      act.onclick = function(e){ var b = e.target.closest('.du-wi-a'); if(b) wiAnswer(b.dataset.a); };
+      ms = WI_ANS;
+    } else {
+      act.onclick = null;
+      act.innerHTML = '';
+      turnEl.textContent = st === 'wait' ? ('سؤالك عند ' + opp + '... ⏳') : ('دور ' + opp + ' تسأل... ⏳');
+    }
+    if(ms){
+      S.wi.tLast = Date.now();
+      var tb = el('wiTbar');
+      tb.style.transition = 'none'; tb.style.width = '100%';
+      requestAnimationFrame(function(){ tb.style.transition = 'width ' + (ms / 1000) + 's linear'; tb.style.width = '0%'; });
+      later(function(){ wiTimeout(st); }, ms);
+    }
+  }
+  function wiTimeout(st){
+    if(S.st !== 'game' || !S.wi) return;
+    if(wiState() !== st) return;
+    if(st === 'ask'){ S.wi.log.push({pass: true}); send('wi', {log: S.wi.log}); wiRender(); }
+    else if(st === 'answer'){ wiAnswer('m'); }
+  }
+  function wiAsk(){
+    if(S.st !== 'game' || wiState() !== 'ask') return;
+    var q = el('wiQ').value.trim();
+    if(!q){ toast('اكتبي سؤال الأول ✍️'); return; }
+    S.wi.log.push({q: q});
+    beep(600, 0.08);
+    send('wi', {log: S.wi.log});
+    wiRender();
+  }
+  function wiAnswer(a){
+    if(S.st !== 'game' || wiState() !== 'answer') return;
+    S.wi.log[S.wi.log.length - 1].a = a;
+    beep(440, 0.08);
+    send('wi', {log: S.wi.log});
+    wiRender();
+  }
+  function wiGuess(){
+    if(S.st !== 'game' || wiState() !== 'ask') return;
+    var g = (el('wiG').value || '').trim().toUpperCase();
+    if(!g) return;
+    var ok = (g === wiWords().me.w);
+    S.wi.log.push({g: g, ok: ok});
+    send('wi', {log: S.wi.log});
+    if(ok) wiFinish(true); else { beep(200, 0.1); wiRender(); }
+  }
+  function wiRecv(p){
+    if(!S.wi || S.st !== 'game') return;
+    if(!p.log || p.log.length <= S.wi.log.length) return;
+    S.wi.log = p.log.slice(0, 60);
+    var last = S.wi.log[S.wi.log.length - 1];
+    if(last && last.g !== undefined && last.ok){
+      var askerHost = ((S.wi.log.length - 1) % 2 === 0);
+      wiFinish(askerHost === !!S.host);
+      return;
+    }
+    beep(440, 0.06);
+    wiRender();
+  }
+  function wiFinish(won){
     if(S.st !== 'game') return;
     S.st = 'result';
     clearTimers();
@@ -8078,7 +8222,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v77';
+  window.LINGUA_VERSION = 'v78';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
