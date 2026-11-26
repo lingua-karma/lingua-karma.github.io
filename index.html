@@ -1103,8 +1103,8 @@
 .pl-fb{text-align:center;min-height:28px;margin-top:12px;font-weight:700}
 .pl-fb .ok{color:#4ade80}
 .pl-fb .no{color:#f87171}
-.pl-ans{min-height:52px;border-bottom:2px solid rgba(212,175,55,.4);margin:0 auto 14px;max-width:420px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;padding:6px}
-.pl-tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:420px;margin:0 auto}
+.pl-ans{min-height:52px;border-bottom:2px solid rgba(212,175,55,.4);margin:0 auto 14px;max-width:420px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;padding:6px;direction:ltr}
+.pl-tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:420px;margin:0 auto;direction:ltr}
 .pl-tile{padding:10px 16px;border-radius:12px;border:1.5px solid rgba(212,175,55,.35);background:rgba(255,255,255,.06);color:#fff;font-family:inherit;font-size:1rem;cursor:pointer}
 .pl-tile.in{border-color:var(--gold)}
 .pl-match{display:flex;gap:14px;justify-content:center}
@@ -1759,7 +1759,7 @@
         <div class="scr-word" id="scrWord"></div>
         <div class="scr-hint" id="scrHint"></div>
         <div class="scr-row">
-          <input id="scrInput" placeholder="رتّبي الحروف هنا…" autocomplete="off">
+          <input id="scrInput" placeholder="رتّبي الحروف هنا…" autocomplete="off" dir="ltr">
           <button class="btn" id="scrListen" style="padding:12px 16px">🔊</button>
           <button class="btn" id="scrCheck">تحقق ✓</button>
         </div>
@@ -3376,6 +3376,6 @@
   <div class="pl-top"><button id="plClose" class="pl-x">✕</button><div class="pl-prog"><i id="plBar"></i></div><div class="pl-hearts" id="plHearts"></div></div>
   <div id="plBody" class="pl-body"></div>
 </div>
-<script src="./app.js?v=84" defer></script>
+<script src="./app.js?v=85" defer></script>
 </body>
 </html>

@@ -5783,7 +5783,7 @@ gbkRender();
       bindOpts(ex.opts.indexOf(ex.w));
     } else if(ex.type==='type'){
       plBody.innerHTML = '<div class="pl-q">اكتبي ترجمة <b class="pl-w">'+escH(ex.w.a)+'</b> بالحروف اللاتينية ✍️</div>'
-        + '<input id="plIn" class="pl-in" type="text" autocomplete="off" autocapitalize="none" placeholder="اكتبي هنا..." style="text-align:center">'
+        + '<input id="plIn" class="pl-in" type="text" autocomplete="off" autocapitalize="none" placeholder="اكتبي هنا..." dir="ltr" style="text-align:center">'
         + '<button class="btn pl-check" id="plCheck">تحققي ✓</button><div class="pl-fb" id="plFb"></div>';
       var inp=document.getElementById('plIn'); inp.focus();
       document.getElementById('plCheck').addEventListener('click', check);
@@ -8230,7 +8230,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v84';
+  window.LINGUA_VERSION = 'v85';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
@@ -8546,7 +8546,7 @@ window.KM_POOL = [
         setTimeout(lsNext, 2200);
         return;
       }
-      h += '<div class="ls-dict"><input id="lsIn" class="ls-input" placeholder="اكتبي اللي سمعتيه..." autocomplete="off" autocapitalize="off">'
+      h += '<div class="ls-dict"><input id="lsIn" class="ls-input" placeholder="اكتبي اللي سمعتيه..." autocomplete="off" autocapitalize="off" dir="ltr">'
         + '<button class="btn" id="lsGo">✔ تأكدي</button></div>';
       box.innerHTML = h;
       var inp = document.getElementById('lsIn');
