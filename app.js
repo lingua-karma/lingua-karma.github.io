@@ -6409,10 +6409,21 @@ window.KM_POOL = [
       });
       S.players = arr;
       var opp = arr.find(function(x){ return x.uid !== S.uid; });
-      if(!S.host && opp){
+      if(opp){
         var pr2 = st[opp.uid] && st[opp.uid][0];
-        if(pr2 && pr2.game && GAMES[pr2.game] && S.game !== pr2.game){ S.game = pr2.game; if(S.st === 'lobby') render(); }
+        if(pr2){
+          if(pr2.ready) S._oppReady = true;
+          if(!S.host){
+            if(pr2.game && GAMES[pr2.game] && S.game !== pr2.game){ S.game = pr2.game; if(S.st === 'lobby') render(); }
+            if(pr2.started && S.st === 'lobby'){
+              if(pr2.lang && LANGS[pr2.lang]) S.lang = pr2.lang;
+              beginGame(pr2.at || (Date.now() + 1500));
+              return;
+            }
+          }
+        }
       }
+      maybeStart();
       if(opp && !S.opp){ S.opp = {uid: opp.uid, name: opp.name}; sndTick(); }
       if(opp) S.opp.name = opp.name;
       if(S.st === 'lobby') renderPlayers();
@@ -6448,6 +6459,7 @@ window.KM_POOL = [
       S.st = 'starting';
       var at = Date.now() + 2500;
       send('start', {at: at, game: S.game, lang: S.lang});
+      try { chan.track({name: S.myName, ready: true, game: S.game, started: true, at: at, lang: S.lang}); } catch(e){}
       beginGame(at);
     }
   }
