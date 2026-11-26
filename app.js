@@ -6300,7 +6300,8 @@ window.KM_POOL = [
     gk:     {n:'معلومات صعبة', i:'🧠', d:'١٥ سؤال معلومات عامة تقيلة 🔥', vocab:false},
     truth:  {n:'الحقيقة', i:'👑', d:'أسئلة ضحك ومفاجآت — جاوبي بصراحة أو تخطّي', vocab:false},
     knowme: {n:'قد إيه تعرفيني', i:'💜', d:'خمّني إجابات صاحبتك', vocab:false},
-    xo:     {n:'إكس أو لايف', i:'⭕', d:'دور بدور — مين يكسر التاني؟', vocab:false}
+    xo:     {n:'إكس أو لايف', i:'⭕', d:'دور بدور — مين يكسر التاني؟', vocab:false},
+    hang:   {n:'خمّني الكلمة', i:'🔤', d:'٣ كلمات — خمّني الحروف قبل ما الرسمة تكمل', vocab:true}
   };
   var dsb = null, chan = null;
   var S = {st:'home', game:'quiz', code:null, lang:'en', host:false, uid:null, myName:'', opp:null, players:[],
@@ -6370,6 +6371,7 @@ window.KM_POOL = [
     if(game === 'gk') return window.GK_POOL.length;
     if(game === 'truth') return window.TRUTH_POOL.length;
     if(game === 'knowme') return window.KM_POOL.length;
+    if(game === 'hang') return hangPool(S.lang).length;
     return vocabPool().length;
   }
   function needFor(game){
@@ -6379,6 +6381,7 @@ window.KM_POOL = [
     if(game === 'gk') return 15;
     if(game === 'truth') return 12;
     if(game === 'knowme') return 10;
+    if(game === 'hang') return 3;
     return 10;
   }
   function pickIds(game){
@@ -6748,11 +6751,107 @@ window.KM_POOL = [
       knowShell(at);
     } else if(S.game === 'xo'){
       xoShell(at);
+    } else if(S.game === 'hang'){
+      S.qs = (S.qids ? buildHmIds(S.lang, S.qids) : buildHm(S.code, S.lang));
+      hmShell(at);
     } else {
       S.qs = (S.game === 'gk') ? (S.qids ? buildGkIds(S.qids) : buildGk(S.code)) : (S.qids ? buildMcqIds(S.lang, S.qids) : buildMcq(S.code, 'quiz', S.lang, 12));
       quizShell(at);
     }
     recordSeen(S.game, S.qids);
+  }
+
+  /* ---------- hang: word-guessing race (simultaneous, drawn gallows) ---------- */
+  function hangPool(lang){
+    var li = LIDX[lang] != null ? LIDX[lang] : 0, pool = vocabPool(), out = [];
+    for(var i = 0; i < pool.length; i++){
+      var w = String(pool[i][li] || '').trim();
+      if(/^[A-Za-z]{4,10}$/.test(w)) out.push(pool[i]);
+    }
+    if(!out.length && lang !== 'en') return hangPool('en');
+    return out;
+  }
+  function hangWord(row, lang){ var li = LIDX[lang] != null ? LIDX[lang] : 0; return {w: String(row[li]).trim().toUpperCase(), hint: row[5], e: row[6]}; }
+  function buildHm(code, lang){
+    var r = rng(hash(code + ':hang:' + lang)), pool = hangPool(lang), idx = pool.map(function(_, i){ return i; });
+    for(var k = idx.length - 1; k > 0; k--){ var m = Math.floor(r() * (k + 1)), t = idx[k]; idx[k] = idx[m]; idx[m] = t; }
+    return idx.slice(0, 3).map(function(i){ return hangWord(pool[i], lang); });
+  }
+  function buildHmIds(lang, ids){ var pool = hangPool(lang); return ids.slice(0, 3).map(function(i){ return hangWord(pool[i % pool.length], lang); }); }
+  function hmGallows(stage){
+    var p = '';
+    p += '<line x1="20" y1="130" x2="100" y2="130"/>'; /* base always */
+    if(stage >= 1) p += '<line x1="40" y1="130" x2="40" y2="15"/>';
+    if(stage >= 2) p += '<line x1="40" y1="15" x2="90" y2="15"/><line x1="90" y1="15" x2="90" y2="32"/>';
+    if(stage >= 3) p += '<circle cx="90" cy="42" r="10"/>';
+    if(stage >= 4) p += '<line x1="90" y1="52" x2="90" y2="88"/>';
+    if(stage >= 5) p += '<line x1="90" y1="60" x2="72" y2="76"/><line x1="90" y1="60" x2="108" y2="76"/>';
+    if(stage >= 6) p += '<line x1="90" y1="88" x2="74" y2="112"/><line x1="90" y1="88" x2="106" y2="112"/>';
+    return '<svg viewBox="0 0 120 135" class="du-hm-g" aria-hidden="true">' + p + '</svg>';
+  }
+  function hmShell(at){
+    S.hm = {wi: 0, lives: 6, guessed: {}, t0: 0};
+    el('duelBox').innerHTML =
+      '<div class="du-card du-game">' +
+      '<div class="du-top"><div class="du-me" id="duMeScore">💎 0</div>' +
+      '<div class="du-prog" id="duProg">كلمة ١ / ' + S.qs.length + '</div>' +
+      '<div class="du-opp" id="duOppScore">' + esc(S.opp ? S.opp.name : 'صاحبتك') + ': ✓ 0/' + S.qs.length + '</div></div>' +
+      '<div class="du-hm-wrap"><div id="hmGal" class="du-hm-gal"></div>' +
+      '<div class="du-hm-right"><div class="du-hm-hint" id="hmHint"></div><div class="du-hm-blanks" id="hmBlanks" dir="ltr"></div>' +
+      '<div class="du-fb" id="duFb"></div></div></div>' +
+      '<div class="du-hm-kb" id="hmKb" dir="ltr"></div></div>';
+    var wait = at - Date.now();
+    el('duFb').textContent = 'البداية بعد ' + Math.max(1, Math.ceil(wait / 1000)) + '...';
+    later(function(){ hmWord(0); }, Math.max(50, wait));
+  }
+  function hmWord(i){
+    if(S.st !== 'game') return;
+    if(i >= S.qs.length) return endMyGame();
+    S.hm.wi = i; S.hm.lives = 6; S.hm.guessed = {}; S.hm.t0 = Date.now();
+    el('duProg').textContent = 'كلمة ' + (i + 1) + ' / ' + S.qs.length;
+    el('duFb').textContent = '';
+    var q = S.qs[i];
+    el('hmHint').innerHTML = '<span class="du-hm-e">' + q.e + '</span> ' + esc(q.hint);
+    el('hmGal').innerHTML = hmGallows(0);
+    hmBlanks();
+    var abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    el('hmKb').innerHTML = abc.map(function(L){ return '<button class="du-hm-key" data-l="' + L + '">' + L + '</button>'; }).join('');
+    el('hmKb').onclick = function(e){
+      var b = e.target.closest('.du-hm-key');
+      if(!b || b.disabled || S.st !== 'game') return;
+      hmGuess(b.dataset.l);
+    };
+  }
+  function hmBlanks(){
+    var q = S.qs[S.hm.wi], g = S.hm.guessed;
+    el('hmBlanks').innerHTML = q.w.split('').map(function(ch){
+      return '<span class="du-hm-b' + (g[ch] ? ' on' : '') + '">' + (g[ch] ? ch : '') + '</span>';
+    }).join('');
+  }
+  function hmGuess(L){
+    var q = S.qs[S.hm.wi], g = S.hm.guessed;
+    if(g[L]) return;
+    g[L] = 1;
+    var hit = q.w.indexOf(L) >= 0;
+    var key = el('hmKb').querySelector('[data-l="' + L + '"]');
+    if(key){ key.disabled = true; key.classList.add(hit ? 'hit' : 'miss'); }
+    if(hit){ beep(660, 0.07); hmBlanks(); }
+    else {
+      S.hm.lives--; beep(200, 0.12);
+      el('hmGal').innerHTML = hmGallows(6 - S.hm.lives);
+    }
+    var solved = q.w.split('').every(function(ch){ return g[ch]; });
+    if(solved || S.hm.lives <= 0){
+      var ms = Date.now() - S.hm.t0;
+      S.myAns[S.hm.wi] = {ok: solved, ms: ms};
+      if(solved){ S.myScore += 10; sndOk(); }
+      else { sndNo(); }
+      var e1 = el('duMeScore'); if(e1) e1.textContent = '💎 ' + S.myScore;
+      send('ans', {q: S.hm.wi, ok: solved, ms: ms});
+      el('duFb').innerHTML = solved ? 'برافو! الكلمة: <b>' + esc(q.w) + '</b> ✨' : 'الرسمة كملت 😅 الكلمة كانت: <b>' + esc(q.w) + '</b>';
+      el('hmKb').querySelectorAll('.du-hm-key').forEach(function(k){ k.disabled = true; });
+      later(function(){ hmWord(S.hm.wi + 1); }, 1600);
+    }
   }
 
   /* ---------- xo: tic-tac-toe live (turn-based, history-synced) ---------- */
@@ -7859,7 +7958,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v74';
+  window.LINGUA_VERSION = 'v75';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){

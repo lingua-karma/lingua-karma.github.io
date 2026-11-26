@@ -976,6 +976,22 @@
 /* v72: live xo */
 .du-xo-turn{text-align:center;font-size:15px;color:#cfc6b3;margin:10px 0 12px;min-height:22px}
 .du-xo-grid{display:grid;grid-template-columns:repeat(3,minmax(70px,96px));gap:10px;justify-content:center;margin:6px 0 10px}
+.du-hm-wrap{display:flex;gap:12px;align-items:center;justify-content:center;margin:6px 0}
+.du-hm-gal{flex:0 0 110px}
+.du-hm-g{width:110px;height:124px;stroke:#e9c26a;stroke-width:3;fill:none;stroke-linecap:round}
+.du-hm-right{flex:1;min-width:0}
+.du-hm-hint{font-size:1rem;color:#d8c68f;margin-bottom:8px}
+.du-hm-e{font-size:1.3rem}
+.du-hm-blanks{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:4px 0 6px}
+.du-hm-b{width:26px;height:34px;border-bottom:3px solid #8a7648;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:1.15rem;color:#f4e3ae}
+.du-hm-b.on{border-color:#e9c26a}
+.du-hm-kb{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:8px}
+.du-hm-key{padding:9px 0;border-radius:10px;border:1px solid #3a3350;background:#221c33;color:#f0e2b6;font-weight:700;font-size:.95rem;cursor:pointer;transition:transform .08s}
+.du-hm-key:active{transform:scale(.92)}
+.du-hm-key.hit{background:#1e4030;border-color:#3f8f63;color:#9fe8bd}
+.du-hm-key.miss{background:#402020;border-color:#8f4a3f;color:#e8a79f;opacity:.55}
+.du-hm-key:disabled{cursor:default}
+@media(max-width:380px){.du-hm-kb{grid-template-columns:repeat(6,1fr)}.du-hm-gal{flex-basis:92px}.du-hm-g{width:92px;height:104px}}
 .du-xo-cell{aspect-ratio:1;background:rgba(255,255,255,.05);border:1px solid rgba(233,194,106,.35);border-radius:16px;font-size:34px;cursor:pointer;transition:.15s;font-family:inherit}
 .du-xo-cell:not([disabled]):active{transform:scale(.92)}
 .du-xo-cell[disabled]{cursor:default;opacity:.9}
@@ -3308,6 +3324,6 @@
   <div class="pl-top"><button id="plClose" class="pl-x">✕</button><div class="pl-prog"><i id="plBar"></i></div><div class="pl-hearts" id="plHearts"></div></div>
   <div id="plBody" class="pl-body"></div>
 </div>
-<script src="./app.js?v=74" defer></script>
+<script src="./app.js?v=75" defer></script>
 </body>
 </html>
