@@ -3496,6 +3496,7 @@ const MENU = [
     try{ var u=new SpeechSynthesisUtterance(b.dataset.say); u.lang=LLANG[thLang]; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){}
   });
   renderTh();
+  try{ window.VOCAB_THEMES = THEMES; }catch(e){}
 })();
 
 document.getElementById('menuGrid').innerHTML = MENU.map(function(m){
@@ -5610,12 +5611,12 @@ gbkRender();
   }
 
   function renderPath(){
-    var s = store();
+    var VOC=window.VOCAB_THEMES||{}; var s = store();
     var doneCount = PATH_UNITS.filter(function(k){ return unitDone(s,k); }).length;
     var html = '<div class="map-bar"><i style="width:'+(doneCount/PATH_UNITS.length*100)+'%"></i></div>'
       + '<div class="path-count">🏅 '+doneCount+' / '+PATH_UNITS.length+' وحدة</div>';
     PATH_UNITS.forEach(function(key,u){
-      var th = THEMES[key]; if(!th) return;
+      var th = VOC[key]; if(!th) return;
       var st = s[key]||[false,false,false];
       var done = unitDone(s,key), open = unitOpen(s,u);
       var dots = [0,1,2].map(function(i){ return '<i class="'+(st[i]?'on':'')+'"></i>'; }).join('');
@@ -5651,7 +5652,7 @@ gbkRender();
   function mkMatch(ws){ return {type:'match', pairs:ws, f:shuf(ws), a:shuf(ws), sel:null, got:0}; }
 
   function startLesson(ui, li){
-    var key = PATH_UNITS[ui], th = THEMES[key];
+    var key = PATH_UNITS[ui], th = (window.VOCAB_THEMES||{})[key];
     var words = th.rows.slice(li*10, li*10+10).map(function(r){ return {f:r[LIDX[lang]], a:r[5], e:r[6]}; });
     var exs = [mkMcq(words[0],words), mkMcq(words[1],words), mkListen(words[2],words)];
     exs.push((lang==='zh'||lang==='ko') ? mkListen(words[3],words) : mkType(words[3]));
@@ -5774,7 +5775,7 @@ gbkRender();
       var unitComplete = st[0]&&st[1]&&st[2];
       var bHtml='';
       if(unitComplete){
-        var nm=THEMES[LS.key].name;
+        var nm=(window.VOCAB_THEMES||{})[LS.key].name;
         badge(nm);
         if(window.awardPoints) awardPoints(30,'وسام وحدة 🏅');
         bHtml='<div class="pl-badge">🏅<div>وسام جديد!<br><b>'+escH(nm)+'</b></div></div>';
