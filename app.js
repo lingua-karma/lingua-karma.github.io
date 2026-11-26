@@ -4300,10 +4300,9 @@ document.getElementById('tipsGrid').innerHTML = TIPS.map(function(x, i){
 }).join('');
 function gbkLoad(){ try { return JSON.parse(localStorage.getItem('lingua_gbk') || '[]'); } catch(e){ return []; } }
 function gbkRender(){
-  const items = gbkLoad();
-  document.getElementById('gbkList').innerHTML = items.length ? items.map(function(x){
-    return '<div class="gbk-card"><div class="gbk-msg">' + x.m + '</div><div class="gbk-who">— ' + (x.n || 'زائرة') + ' 💌</div></div>';
-  }).join('') : '<div class="gbk-empty">لسه مفيش كلمات — كوني أول واحدة تسيب كلمة حلوة لكارما 💌</div>';
+  /* خصوصية كارما: الرسايل مش بتتعرض لأي حد — بتوصل لكارما بس في صندوقها الخاص */
+  try { localStorage.removeItem('lingua_gbk'); } catch(e){}
+  document.getElementById('gbkList').innerHTML = '<div class="gbk-empty">🔒 كلمتك بتوصل لكارما بس — محدش غيرها بيشوفها أبد 💌</div>';
 }
 document.getElementById('gbkForm').addEventListener('submit', function(e){
   e.preventDefault();
@@ -4910,19 +4909,8 @@ gbkRender();
     });
   });
 
-  /* ---- guestbook goes live ---- */
-  function gbkRemoteRender(){
-    if(!sb) return;
-    sb.from('guestbook').select('*').order('created_at', {ascending: false}).limit(60).then(function(r){
-      if(r.error) return;
-      var el = document.getElementById('gbkList');
-      if(!el) return;
-      var list = r.data || [];
-      el.innerHTML = list.length ? list.map(function(x){
-        return '<div class="gbk-card"><div class="gbk-msg">' + esc(x.body) + '</div><div class="gbk-who">— ' + esc(x.author_name || 'زائرة') + ' 💌</div></div>';
-      }).join('') : '<div class="gbk-empty">لسه مفيش كلمات — كوني أول واحدة تسيب كلمة حلوة لكارما 💌</div>';
-    });
-  }
+  /* ---- guestbook: رسايل خاصة بكارما — مفيش عرض عام نهائي ---- */
+  function gbkRemoteRender(){ gbkRender(); }
   try {
     var gbkForm = document.getElementById('gbkForm');
     var clone = gbkForm.cloneNode(true);
@@ -4931,18 +4919,12 @@ gbkRender();
       e.preventDefault();
       var m = document.getElementById('gbkMsg').value.trim();
       if(!m) return;
-      var n = document.getElementById('gbkName').value.trim() || 'زائرة';
+      if(!sb){ toast('مفيش نت — جربي لما النت يرجع 💌'); return; }
+      /* الإرسال نفسه بيتم في هوك v69 على gbk_messages (private, owner-only) */
       document.getElementById('gbkMsg').value = '';
-      if(sb){
-        sb.from('guestbook').insert({author_name: n.slice(0, 40), body: m.slice(0, 500)}).then(function(r){
-          if(r.error){ toast('مفيش نت — كلمتك اتحفظت على جهازك 💌'); }
-          gbkRemoteRender();
-        });
-      } else {
-        toast('مفيش نت — جربي لما النت يرجع 💌');
-      }
       toast('وصلت كلمتك لكارما 💌 شكرًا!');
       confetti();
+      gbkRender();
     });
     gbkRemoteRender();
   } catch(e){}
@@ -4972,7 +4954,6 @@ gbkRender();
       }
     });
     sb.channel('lingua-feed').on('postgres_changes', {event: 'INSERT', schema: 'public', table: 'posts'}, function(){ loadFeed(); }).subscribe();
-    sb.channel('lingua-gbk').on('postgres_changes', {event: 'INSERT', schema: 'public', table: 'guestbook'}, function(){ gbkRemoteRender(); }).subscribe();
     loadTop();
     loadFeed();
   }
@@ -8230,7 +8211,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v87';
+  window.LINGUA_VERSION = 'v88';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
