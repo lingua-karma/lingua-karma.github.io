@@ -902,6 +902,38 @@
 .prem-plan ul li::before{content:"✦ ";color:var(--gold2)}
 .prem-btn{display:inline-block;background:linear-gradient(135deg,var(--gold,#c9a227),#e6c65c);color:#1a1428;border:none;border-radius:12px;padding:10px 22px;font-weight:800;font-size:.85rem;cursor:pointer;font-family:inherit}
 .prem-lock{max-width:640px;margin:14px auto 0;background:var(--card);border:1px dashed var(--gold,#c9a227);border-radius:16px;padding:14px;text-align:center;font-size:.8rem;color:var(--muted)}
+
+/* v66: placement + quests */
+.plc-banner{display:block;background:linear-gradient(135deg,rgba(233,194,106,.16),rgba(233,194,106,.05));border:1px solid rgba(233,194,106,.45);border-radius:16px;padding:13px 16px;margin:0 0 14px;color:var(--gold,#e9c26a);text-decoration:none;font-size:15px;transition:.2s}
+.plc-banner:active{transform:scale(.98)}
+.plc-intro{text-align:center;color:#cfc6b3;font-size:15px;margin:6px 0 16px;line-height:1.8}
+.plc-langs{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+.plc-lcard{background:rgba(255,255,255,.04);border:1px solid rgba(233,194,106,.3);border-radius:16px;padding:16px 10px;color:#fff;cursor:pointer;font-family:inherit;transition:.2s;display:flex;flex-direction:column;gap:6px;align-items:center}
+.plc-lcard:active{transform:scale(.96)}
+.plc-lcard b{font-size:16px}
+.plc-saved{color:var(--gold,#e9c26a);font-size:12px}
+.plc-prog{text-align:center;color:#cfc6b3;font-size:14px;margin-bottom:8px}
+.plc-bar{height:8px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin-bottom:16px}
+.plc-fill{height:100%;background:linear-gradient(90deg,#a06c35,#e9c26a);border-radius:99px;transition:width .4s}
+.plc-result{text-align:center;padding:14px 6px}
+.plc-big{font-size:46px;font-weight:900;color:var(--gold,#e9c26a);text-shadow:0 0 24px rgba(233,194,106,.5)}
+.plc-lv{font-size:19px;color:#fff;margin:10px 0 6px}
+.qt-streak{text-align:center;background:rgba(255,255,255,.04);border:1px solid rgba(233,194,106,.3);border-radius:14px;padding:12px;font-size:15px;color:#fff;margin-bottom:16px}
+.qt-streak b{color:var(--gold,#e9c26a)}
+.qt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.qt-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:14px;text-align:center;transition:.2s}
+.qt-card.done{border-color:rgba(233,194,106,.55);box-shadow:0 0 18px rgba(233,194,106,.18)}
+.qt-ico{font-size:30px}
+.qt-t{font-size:14px;color:#fff;margin:8px 0 10px;line-height:1.6;min-height:44px}
+.qt-bar{height:7px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}
+.qt-fill{height:100%;background:linear-gradient(90deg,#a06c35,#e9c26a);transition:width .4s}
+.qt-p{font-size:12px;color:#cfc6b3;margin-top:6px}
+.qt-chest{margin-top:10px;font-size:13px;padding:8px 12px;background:linear-gradient(135deg,#a06c35,#e9c26a);color:#1c1405;border:none;border-radius:12px;font-weight:700;cursor:pointer;animation:qtGlow 1.4s ease-in-out infinite alternate;font-family:inherit}
+@keyframes qtGlow{from{box-shadow:0 0 6px rgba(233,194,106,.4)}to{box-shadow:0 0 20px rgba(233,194,106,.85)}}
+.qt-claimed{margin-top:10px;font-size:13px;color:#8fce8f}
+.qt-freeze{margin-top:16px;background:rgba(255,255,255,.04);border:1px solid rgba(120,190,255,.3);border-radius:16px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:12px;color:#fff}
+.qt-freeze small{color:#cfc6b3;line-height:1.7}
+.qt-freeze .btn{white-space:nowrap}
 </style>
 <style>
 /* v35 perf */
@@ -2981,6 +3013,23 @@
   </div>
 </section>
 
+<!-- v66: placement test + daily quests -->
+<section id="placement" class="page">
+  <div class="wrap">
+    <h2 class="sec-title">🎯 اختبار تحديد المستوى</h2>
+    <p class="du-sub">٩ أسئلة وهنحدد مستواك بالظبط — مش لازم تبدئي من الصفر ✨</p>
+    <div id="plcBox" class="du-card"></div>
+  </div>
+</section>
+
+<section id="quests" class="page">
+  <div class="wrap">
+    <h2 class="sec-title">📋 مهام اليوم</h2>
+    <p class="du-sub">٣ مهام كل يوم — خلّصيهم وافتحي كنوز النقاط 🎁</p>
+    <div id="questBox"></div>
+  </div>
+</section>
+
 <!-- AD SLOT: bottom banner (AdSense anchor / 728x90) قبل الفوتر — تُضاف الشيفرة بعد الموافقة على AdSense -->
 
 <!-- Certificate overlay -->
@@ -3185,6 +3234,6 @@
   <div class="pl-top"><button id="plClose" class="pl-x">✕</button><div class="pl-prog"><i id="plBar"></i></div><div class="pl-hearts" id="plHearts"></div></div>
   <div id="plBody" class="pl-body"></div>
 </div>
-<script src="./app.js?v=65" defer></script>
+<script src="./app.js?v=66" defer></script>
 </body>
 </html>

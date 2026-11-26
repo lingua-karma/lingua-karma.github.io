@@ -574,10 +574,24 @@ window.refreshDash = function(){
   let st = {last:'', count:0};
   try{ st = JSON.parse(localStorage.getItem('lingua_streak')) || st; }catch(e){}
   if(st.last !== today){
-    const y = new Date(Date.now()-86400000).toDateString();
-    st.count = (st.last === y) ? st.count + 1 : 1;
-    st.last = today;
-    localStorage.setItem('lingua_streak', JSON.stringify(st));
+    const y = new Date(Date.now()-86400e3).toDateString();
+    const y2 = new Date(Date.now()-2*86400e3).toDateString();
+    if(st.last !== y && st.last === y2 && st.count > 0 && parseInt(localStorage.getItem('lingua_streak_freeze')||'0',10) > 0){
+      /* streak freeze: one missed day, consume a freeze and keep the streak */
+      localStorage.setItem('lingua_streak_freeze', String(parseInt(localStorage.getItem('lingua_streak_freeze')||'0',10)-1));
+      st.count = st.count + 1;
+      st.last = today;
+      localStorage.setItem('lingua_streak', JSON.stringify(st));
+      setTimeout(function(){ if(window.toast) toast('\u{1F9CA} \u0627\u0644\u062a\u062c\u0645\u064a\u062f \u062d\u0645\u0627\u0643\u064a \u0648\u0633\u0644\u0633\u0644\u062a\u0643 \u0643\u0645\u0644\u062a \u{1F525}'); }, 700);
+    } else {
+      st.count = (st.last === y) ? st.count + 1 : 1;
+      st.last = today;
+      localStorage.setItem('lingua_streak', JSON.stringify(st));
+    }
+    if(st.count > 0 && st.count % 7 === 0 && localStorage.getItem('lingua_freeze_grant') !== String(st.count)){
+      localStorage.setItem('lingua_freeze_grant', String(st.count));
+      localStorage.setItem('lingua_streak_freeze', String(parseInt(localStorage.getItem('lingua_streak_freeze')||'0',10)+1));
+    }
   }
   document.getElementById('dStreak').textContent = st.count;
   /* quiz stats */
@@ -2396,7 +2410,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['map','🚀','مسار التعلم'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['places','🏛️','أماكن'],['premium','💎','بريميوم'],['quotes','🎬','اقتباسات'],['ai','🤖','لمى'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق'],['pet','🥚','رفيقتي']
+  ['map','🚀','مسار التعلم'],['placement','🎯','مستواي'],['quests','📋','مهام اليوم'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['library','📕','مكتبة'],['food','🍳','المطبخ'],['stories','📚','قصص'],['color','🎨','تلوين'],['capitals','🌍','عواصم'],['ch30','📅','تحدي ٣٠ يوم'],['piano','🎹','بيانو'],['diary','📔','يومياتي'],['khatma','📿','ختمتي'],['weather','🌤️','الجو'],['shooter','🔫','صيد الكلمات'],['runner','🏃‍♀️','الجري'],['fashion','👠','موضة'],['trip','✈️','رحلة'],['places','🏛️','أماكن'],['premium','💎','بريميوم'],['quotes','🎬','اقتباسات'],['ai','🤖','لمى'],['puzzle','🧩','بازل الكلمات'],['hobbies','🎨','هوايات'],['themes','🗂️','كلمات بالموضوع'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق'],['pet','🥚','رفيقتي']
 ];
 
 /* ================= v16: free books library ================= */
@@ -6176,7 +6190,7 @@ window.KM_POOL = [
   };
 
   var GROUPS = [
-    {id:'learn', icon:'book', title:'تعلّم 📚', items:['dash','corners','courses','lessons','quiz','map','dict','gallery','speak','videos','songs','music','cinema','korean','library','stories','capitals','food','fashion','trip','places','quotes','hobbies','themes','tips','eng','scholar','ch30','flash','puzzle','qotd']},
+    {id:'learn', icon:'book', title:'تعلّم 📚', items:['dash','quests','placement','corners','courses','lessons','quiz','map','dict','gallery','speak','videos','songs','music','cinema','korean','library','stories','capitals','food','fashion','trip','places','quotes','hobbies','themes','tips','eng','scholar','ch30','flash','puzzle','qotd']},
     {id:'play', icon:'gamepad', title:'العب 🎮', items:['games','brain','fun','dressup','outfit','wheel','snake','xo','shooter','runner','piano','color','duel']},
     {id:'social', icon:'chat', title:'صحابي 💜', items:['friends','wall','mood','jokes','vent','diary','gbk','karma','pquiz','pet']},
     {id:'life', icon:'sparkle', title:'حياتي ✨', items:['deen','mushaf','khatma','weather','shop','premium','settings','ai']}
@@ -7680,7 +7694,7 @@ window.KM_POOL = [
 
 /* ================= v59: forced app updates + version badge + duel log viewer ================= */
 (function(){
-  window.LINGUA_VERSION = 'v65';
+  window.LINGUA_VERSION = 'v66';
 
   /* ---- force updates: reload as soon as a new service worker takes over ---- */
   if('serviceWorker' in navigator){
@@ -7735,3 +7749,184 @@ window.KM_POOL = [
   else setTimeout(badge, 1500);
 })();
 
+
+/* ================= v66: Duolingo pack — placement test + daily quests + streak freeze ================= */
+(function(){
+  /* ---------------- placement test (اختبار تحديد المستوى) ---------------- */
+  var PL_LANGS = {en:'🇬🇧 إنجليزي', fr:'🇫🇷 فرنسي', de:'🇩🇪 ألماني', zh:'🇨🇳 صيني', ko:'🇰🇷 كوري'};
+  var pl = {lang:'en', qs:[], i:0, right:0, on:false};
+
+  function plStart(lang){
+    pl.lang = lang; pl.qs = []; pl.i = 0; pl.right = 0; pl.on = true;
+    ['beg','mid','adv'].forEach(function(lv){
+      QUIZZES[lang][lv].slice(0,3).forEach(function(q){ pl.qs.push({q:q, lv:lv}); });
+    });
+    plRender();
+  }
+  function plRender(){
+    var box = document.getElementById('plcBox'); if(!box) return;
+    if(pl.i >= pl.qs.length){ return plResult(); }
+    var item = pl.qs[pl.i];
+    box.innerHTML =
+      '<div class="plc-prog">سؤال ' + (pl.i+1) + ' / ' + pl.qs.length + ' ✨</div>' +
+      '<div class="plc-bar"><div class="plc-fill" style="width:' + Math.round(pl.i/pl.qs.length*100) + '%"></div></div>' +
+      '<div class="q-text">' + item.q.q + '</div>' +
+      item.q.opts.map(function(o,idx){ return '<button class="opt" data-i="'+idx+'">'+o+'</button>'; }).join('');
+    Array.prototype.forEach.call(box.querySelectorAll('.opt'), function(b){
+      b.addEventListener('click', function(){
+        var idx = parseInt(b.dataset.i,10);
+        Array.prototype.forEach.call(box.querySelectorAll('.opt'), function(o,i){
+          if(i===item.q.a) o.classList.add('correct'); else if(i===idx) o.classList.add('wrong');
+          o.disabled = true;
+        });
+        if(idx===item.q.a){ pl.right++; if(window.sndGood) sndGood(); } else if(window.sndBad) sndBad();
+        setTimeout(function(){ pl.i++; plRender(); }, 850);
+      });
+    });
+  }
+  function plResult(){
+    var box = document.getElementById('plcBox');
+    var lv = pl.right <= 3 ? 'beg' : (pl.right <= 6 ? 'mid' : 'adv');
+    var lvName = {beg:'مبتدئة 🌱', mid:'متوسطة 🌿', adv:'متقدمة 🌳'}[lv];
+    var tip = {beg:'هنبدأ من الأساسيات ونبني قاعدة قوية 💪', mid:'عندك قاعدة حلوة — هنركّز على التوسع والثقة 🚀', adv:'مستواك عالي! هنتحداك بمحتوى متقدم 👑'}[lv];
+    try { localStorage.setItem('lingua_level_'+pl.lang, lv); } catch(e){}
+    if(window.awardPoints) awardPoints(15, 'اختبار المستوى 🎯');
+    box.innerHTML =
+      '<div class="plc-result">' +
+      '<div class="plc-big">' + pl.right + ' / ' + pl.qs.length + '</div>' +
+      '<div class="plc-lv">مستواك في ' + PL_LANGS[pl.lang] + ': <b>' + lvName + '</b></div>' +
+      '<p class="du-sub">' + tip + '</p>' +
+      '<a class="btn du-big" href="#quiz">📝 ابدئي التمارين على مستواك</a>' +
+      '<button class="btn" id="plcAgain" style="margin-top:10px">🔄 اعملي الاختبار تاني</button>' +
+      '</div>';
+    document.getElementById('plcAgain').onclick = function(){ plHome(); };
+    pl.on = false;
+    if(window.confetti) try{ confetti(); }catch(e){}
+  }
+  function plHome(){
+    var box = document.getElementById('plcBox'); if(!box) return;
+    var saved = {};
+    Object.keys(PL_LANGS).forEach(function(l){
+      var v = localStorage.getItem('lingua_level_'+l);
+      if(v) saved[l] = v;
+    });
+    box.innerHTML =
+      '<div class="plc-intro">٩ أسئلة بس وهنعرف مستواك بالظبط — الاختبار بيطلّع من سهلة لصعبة 🎯</div>' +
+      '<div class="plc-langs">' + Object.keys(PL_LANGS).map(function(l){
+        var s = saved[l] ? '<small class="plc-saved">مستواك: ' + ({beg:'مبتدئة 🌱',mid:'متوسطة 🌿',adv:'متقدمة 🌳'})[saved[l]] + '</small>' : '';
+        return '<button class="plc-lcard" data-pl="'+l+'"><b>' + PL_LANGS[l] + '</b>' + s + '</button>';
+      }).join('') + '</div>';
+    Array.prototype.forEach.call(box.querySelectorAll('[data-pl]'), function(b){
+      b.addEventListener('click', function(){ plStart(b.dataset.pl); });
+    });
+  }
+
+  /* ---------------- daily quests + reward chests (مهام اليوم) ---------------- */
+  var QUESTS = [
+    {id:'xp',   ico:'💎', t:'اكسبي ٣٠ نقطة', need:30},
+    {id:'quiz', ico:'📝', t:'خلّصي اختبار واحد', need:1},
+    {id:'duel', ico:'⚔️', t:'العبي لعبة لايف مع صاحبتك', need:1}
+  ];
+  function qKey(){ return 'lingua_quests'; }
+  function qToday(){ return new Date().toDateString(); }
+  function qLoad(){
+    var st = null;
+    try { st = JSON.parse(localStorage.getItem(qKey()) || 'null'); } catch(e){}
+    if(!st || st.d !== qToday()){
+      st = {d: qToday(), p: {xp:0, quiz:0, duel:0}, claimed: []};
+      qSave(st);
+    }
+    return st;
+  }
+  function qSave(st){ try { localStorage.setItem(qKey(), JSON.stringify(st)); } catch(e){} }
+  function qBump(id, n){
+    var st = qLoad();
+    if((st.p[id]||0) >= QUESTS.filter(function(q){return q.id===id;})[0].need) return;
+    st.p[id] = (st.p[id]||0) + n;
+    var q = QUESTS.filter(function(x){return x.id===id;})[0];
+    if(st.p[id] >= q.need && st.claimed.indexOf(id) < 0 && (st.p[id] - n) < q.need){
+      if(window.toast) toast(q.ico + ' مهمة خلصت! افتحي الكنز من مهام اليوم 🎁');
+    }
+    qSave(st);
+    qRender();
+  }
+  function qClaim(id){
+    var st = qLoad();
+    if(st.claimed.indexOf(id) >= 0) return;
+    var q = QUESTS.filter(function(x){return x.id===id;})[0];
+    if((st.p[id]||0) < q.need) return;
+    st.claimed.push(id);
+    qSave(st);
+    var loot = 10 + Math.floor(Math.random()*16);
+    if(window.awardPoints) awardPoints(loot, 'كنز المهام 🎁');
+    if(window.confetti) try{ confetti(); }catch(e){}
+    qRender();
+  }
+  function freezeCount(){ return parseInt(localStorage.getItem('lingua_streak_freeze')||'0',10); }
+  function streakCount(){ try { return (JSON.parse(localStorage.getItem('lingua_streak'))||{}).count || 0; } catch(e){ return 0; } }
+  function buyFreeze(){
+    var pts = parseInt(localStorage.getItem('lingua_points')||'0',10);
+    if(pts < 100){ if(window.toast) toast('محتاجة ١٠٠ نقطة — اكسبي شوية الأول 💎'); return; }
+    localStorage.setItem('lingua_points', String(pts - 100));
+    localStorage.setItem('lingua_streak_freeze', String(freezeCount()+1));
+    if(window.refreshDash) refreshDash();
+    if(window.toast) toast('🧊 اشتريتي تجميد! سلسلتك محمية');
+    qRender();
+  }
+  function qRender(){
+    var box = document.getElementById('questBox'); if(!box) return;
+    var st = qLoad();
+    var h = '<div class="qt-streak">🔥 سلسلتك: <b>' + streakCount() + '</b> يوم &nbsp;•&nbsp; 🧊 تجميد: <b>' + freezeCount() + '</b></div>';
+    h += '<div class="qt-grid">';
+    QUESTS.forEach(function(q){
+      var p = Math.min(st.p[q.id]||0, q.need);
+      var done = p >= q.need;
+      var claimed = st.claimed.indexOf(q.id) >= 0;
+      h += '<div class="qt-card' + (done ? ' done' : '') + '">'
+        + '<div class="qt-ico">' + q.ico + '</div>'
+        + '<div class="qt-t">' + q.t + '</div>'
+        + '<div class="qt-bar"><div class="qt-fill" style="width:' + Math.round(p/q.need*100) + '%"></div></div>'
+        + '<div class="qt-p">' + p + ' / ' + q.need + '</div>'
+        + (claimed
+            ? '<div class="qt-claimed">✅ الكنز اتفتح</div>'
+            : (done
+                ? '<button class="btn qt-chest" data-claim="'+q.id+'"><svg viewBox="0 0 24 24" width="18" height="18" style="vertical-align:-4px"><rect x="3" y="10" width="18" height="10" rx="2" fill="#8a5a2b"/><rect x="3" y="6" width="18" height="6" rx="2" fill="#a06c35"/><rect x="10.5" y="6" width="3" height="14" fill="#e9c26a"/><circle cx="12" cy="12" r="1.6" fill="#1c1405"/></svg> افتحي الكنز!</button>'
+                : ''))
+        + '</div>';
+    });
+    h += '</div>';
+    h += '<div class="qt-freeze"><div><b>🧊 تجميد السلسلة</b><br><small>لو يوم فاتك، التجميد بيحمي سلسلتك تلقائيًا. بتكسبي +1 كل ٧ أيام سلسلة 🎁</small></div>'
+      + '<button class="btn" id="qtBuyFreeze">اشتري بـ ١٠٠ 💎</button></div>';
+    box.innerHTML = h;
+    Array.prototype.forEach.call(box.querySelectorAll('[data-claim]'), function(b){
+      b.addEventListener('click', function(){ qClaim(b.dataset.claim); });
+    });
+    var bf = document.getElementById('qtBuyFreeze');
+    if(bf) bf.addEventListener('click', buyFreeze);
+  }
+
+  /* starter freeze for everyone */
+  try { if(localStorage.getItem('lingua_streak_freeze') === null) localStorage.setItem('lingua_streak_freeze', '1'); } catch(e){}
+
+  /* quest tracking via points flow */
+  if(window.awardPoints){
+    var _a = window.awardPoints;
+    window.awardPoints = function(n, label){
+      _a(n, label);
+      try {
+        qBump('xp', n);
+        var l = label || '';
+        if(/اختبار|تحدي الأسبوع/.test(l)) qBump('quiz', 1);
+        if(/لعبتِ|كسبتِ|قد إيه|الحقيقة/.test(l)) qBump('duel', 1);
+      } catch(e){}
+    };
+  }
+
+  window.addEventListener('hashchange', function(){
+    if(location.hash === '#quests') setTimeout(qRender, 60);
+    if(location.hash === '#placement') setTimeout(plHome, 60);
+  });
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ qRender(); plHome(); });
+  else { qRender(); plHome(); }
+  window.qRender = qRender;
+})();
