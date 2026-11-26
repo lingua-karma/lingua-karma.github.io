@@ -1867,6 +1867,76 @@
 
 <!-- ===================== v6: UI LANGUAGE ===================== -->
 
+
+<!-- ===================== v13: LEARNING MAP ===================== -->
+<section id="map">
+  <h2 class="sec-title">✦ خريطة رحلتك ✦</h2>
+  <p class="sec-sub">طريقك في كل لغة — خلصي مستوى عشان يتفتح اللي بعده 🗺️✨</p>
+  <div class="tabs lang-tabs" id="mapTabs">
+    <button class="tab lang-tab active" data-mlang="en"><span class="lf">🇬🇧</span><span class="ln">إنجليزي</span></button>
+    <button class="tab lang-tab" data-mlang="fr"><span class="lf">🇫🇷</span><span class="ln">فرنسي</span></button>
+    <button class="tab lang-tab" data-mlang="de"><span class="lf">🇩🇪</span><span class="ln">ألماني</span></button>
+    <button class="tab lang-tab" data-mlang="zh"><span class="lf">🇨🇳</span><span class="ln">صيني</span></button>
+  </div>
+  <div id="mapPath" style="max-width:520px;margin:10px auto 0"></div>
+</section>
+<style>
+  .map-node{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.045);border:1px solid rgba(212,175,55,.25);border-radius:18px;padding:16px 18px;margin-bottom:6px;position:relative}
+  .map-node.locked{opacity:.45;filter:grayscale(.6)}
+  .map-node.done{border-color:#4ade80;background:rgba(74,222,128,.08)}
+  .map-node .mn-ico{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;background:linear-gradient(135deg,rgba(212,175,55,.3),rgba(212,175,55,.08));border:1px solid rgba(212,175,55,.4);flex-shrink:0}
+  .map-node.done .mn-ico{background:linear-gradient(135deg,#4ade80,#16a34a);border-color:#4ade80}
+  .map-node .mn-t{flex:1}
+  .map-node .mn-t b{display:block;font-size:1rem}
+  .map-node .mn-t span{color:var(--muted);font-size:.78rem}
+  .map-node .mn-go{color:var(--gold);font-weight:800;font-size:.82rem;text-decoration:none;border:1px solid rgba(212,175,55,.4);border-radius:999px;padding:6px 14px}
+  .map-link{width:2px;height:18px;background:rgba(212,175,55,.4);margin:0 auto}
+  .map-bar{height:8px;border-radius:99px;background:rgba(255,255,255,.08);max-width:520px;margin:0 auto 18px;overflow:hidden}
+  .map-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),#f5d76e);border-radius:99px;transition:width .6s}
+</style>
+
+<!-- ===================== v13: PERSONALITY QUIZ ===================== -->
+<section id="pquiz">
+  <h2 class="sec-title">✦ إيه اللغة اللي تشبهك؟ ✦</h2>
+  <p class="sec-sub">٨ أسئلة سريعة تكشف لغة شخصيتك 🔮💜</p>
+  <div id="pqCard" class="acc-card" style="max-width:560px"></div>
+</section>
+
+<!-- ===================== v13: XO ===================== -->
+<section id="xo">
+  <h2 class="sec-title">✦ إكس أو ضد الكمبيوتر ✦</h2>
+  <p class="sec-sub">اكسبي الجهاز وخدي ١٥ نقطة ⭕❌</p>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
+    <div id="xoBoard" style="display:grid;grid-template-columns:repeat(3,96px);gap:10px;direction:ltr"></div>
+    <div id="xoMsg" style="color:var(--gold);font-weight:800;min-height:24px"></div>
+    <button class="btn" id="xoAgain">🔄 لعبة جديدة</button>
+  </div>
+</section>
+<style>
+  .xo-cell{width:96px;height:96px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(212,175,55,.3);font-size:2.6rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;font-family:inherit}
+  .xo-cell:hover{background:rgba(212,175,55,.12)}
+  .xo-cell.win{background:rgba(74,222,128,.2);border-color:#4ade80}
+</style>
+
+<!-- ===================== v13: KOREAN ===================== -->
+<section id="korean">
+  <h2 class="sec-title">✦ ركن الكوري ✦</h2>
+  <p class="sec-sub">أهلاً بيكي في كوريا — الهانغل أسهل مما بتفكري 🇰🇷💜</p>
+  <div class="tabs lang-tabs" id="krTabs">
+    <button class="tab lang-tab active" data-kr="greet"><span class="ln">👋 تحيات</span></button>
+    <button class="tab lang-tab" data-kr="hangul"><span class="ln">🔤 الهانغل</span></button>
+    <button class="tab lang-tab" data-kr="num"><span class="ln">🔢 أرقام</span></button>
+    <button class="tab lang-tab" data-kr="kpop"><span class="ln">🎧 كيبوب</span></button>
+  </div>
+  <div id="krWrap" style="max-width:640px;margin:0 auto"></div>
+</section>
+<style>
+  .kr-card{background:rgba(255,255,255,.05);border:1px solid rgba(212,175,55,.25);border-radius:16px;padding:14px 18px;margin-bottom:10px;display:flex;align-items:center;gap:14px}
+  .kr-word{font-size:1.5rem;font-weight:800;color:var(--gold2);min-width:110px}
+  .kr-sub{color:var(--muted);font-size:.8rem}
+  .kr-say{margin-inline-start:auto;background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.4);border-radius:50%;width:42px;height:42px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;flex-shrink:0}
+</style>
+
 <!-- ===================== v11: ACCOUNT HUB ===================== -->
 <section id="account">
   <h2 class="sec-title">✦ حسابي وصحابي ✦</h2>
@@ -4491,7 +4561,7 @@ const MENU = [
   ['gallery','📸','بالصور'],['speak','🎤','تدريب النطق'],['videos','🎥','فيديوهات'],
   ['songs','🎵','أغاني'],['music','🎧','استمع'],['cinema','🎬','سينما'],['shop','🛍️','متجر النقاط'],
   ['friends','👯','أصحابي'],['outfit','👚','منسقة اللبس'],['eng','⚙️','كورسات هندسة'],['scholar','🏆','منح دراسية'],
-  ['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
+  ['map','🗺️','خريطتك'],['pquiz','🔮','شخصيتك'],['wheel','🎡','عجلة الحظ'],['qotd','❓','سؤال اليوم'],['flash','🃏','كروت سحرية'],['snake','🐍','الثعبان'],['xo','⭕','إكس أو'],['korean','🇰🇷','كوري'],['jokes','😂','ضحك'],['mood','🎭','مزاجك'],['wall','💬','حائط الكلام'],['deen','🕌','ركن الروح'],['mushaf','📖','المصحف'],['karma','👑','ركن كارما'],['gbk','💌','كلمة لكارما'],['vent','💭','فضفضة'],['tips','💡','نصايح اللغات'],['settings','🌐','لغة التطبيق']
 ];
 document.getElementById('menuGrid').innerHTML = MENU.map(function(m){
   return '<a class="menu-card" href="#'+m[0]+'"><span class="m-ico">'+m[1]+'</span><span class="m-name">'+m[2]+'</span></a>';
@@ -6085,6 +6155,164 @@ gbkRender();
 </script>
 
 <a href="#account" id="accFab" aria-label="حسابي" style="position:fixed;bottom:18px;left:16px;z-index:9999;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--gold),#b8923a);color:#1a1405;font-weight:900;padding:12px 20px;border-radius:999px;box-shadow:0 6px 22px rgba(212,175,55,.5);text-decoration:none;font-size:.95rem">👑 حسابي</a>
-<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v12.2</div>
+<div id="verTag" style="position:fixed;bottom:2px;left:6px;z-index:9998;font-size:.6rem;color:rgba(255,255,255,.25);pointer-events:none">v13.0</div>
+<script>
+/* ================= v13: learning map, personality quiz, XO, korean ================= */
+(function(){
+  /* ---- learning map ---- */
+  var MAP_LVLS = [['beg','🌱','مبتدئ','أساسيات وكلمات يومية'],['mid','🌿','متوسط','جمل ومحادثات'],['adv','🔥','متقدم','قواعد وتعبيرات'],['pro','💎','محترف','طلاقة حقيقية']];
+  var mapLang = 'en';
+  function mapPassed(lang, lvl){
+    var best = parseInt(localStorage.getItem('lingua_best_'+lang+'_'+lvl)||'0',10);
+    var total = (typeof QUIZZES!=='undefined' && QUIZZES[lang] && QUIZZES[lang][lvl]) ? QUIZZES[lang][lvl].length : 10;
+    return best >= Math.ceil(total*0.7);
+  }
+  function renderMap(){
+    var done = MAP_LVLS.filter(function(l){return mapPassed(mapLang,l[0]);}).length;
+    var html = '<div class="map-bar"><i style="width:'+(done/4*100)+'%"></i></div>';
+    var unlocked = true;
+    MAP_LVLS.forEach(function(l){
+      var passed = mapPassed(mapLang, l[0]);
+      var state = passed ? 'done' : (unlocked ? '' : 'locked');
+      var ico = passed ? '✅' : (unlocked ? l[1] : '🔒');
+      html += '<div class="map-node '+state+'"><div class="mn-ico">'+ico+'</div><div class="mn-t"><b>'+l[2]+'</b><span>'+l[3]+'</span></div>'+
+        (state==='locked' ? '' : '<a class="mn-go" href="#quiz">'+(passed?'أعيدي':'ابدئي')+'</a>')+'</div><div class="map-link"></div>';
+      unlocked = passed;
+    });
+    document.getElementById('mapPath').innerHTML = html;
+  }
+  document.querySelectorAll('#mapTabs .tab').forEach(function(t){
+    t.addEventListener('click', function(){
+      document.querySelectorAll('#mapTabs .tab').forEach(function(x){x.classList.remove('active');});
+      t.classList.add('active'); mapLang = t.dataset.mlang; renderMap();
+    });
+  });
+  renderMap();
+
+  /* ---- personality quiz ---- */
+  var PQ = [
+    {q:'مثالية ولا عفوية؟ 😌', a:[['منظمة ودقيقة 📐','de'],['عفوية وحرة 🦋','fr']]},
+    {q:'قهوتك إزاي؟ ☕', a:[['إسبريسو سريع ☕','en'],['قهوة رايقة مع حلويات 🥐','fr']]},
+    {q:'اختاري أجواء سفر ✈️', a:[['مدن عملاقة وطاقة 🌆','zh'],['طبيعة وهدوء وتقليد 🏯','ko']]},
+    {q:'موسيقاك المفضلة 🎵', a:[['بوب عالمي 🎤','en'],['كيبوب وكيدراما 💜','ko']]},
+    {q:'أسلوبك في الشغل 💼', a:[['هندسة ونظام ⚙️','de'],['إبداع وفن 🎨','zh']]},
+    {q:'كلمة توصفك ✨', a:[['أنيقة وراقية 👗','fr'],['عملية ومباشرة 💪','en']]},
+    {q:'فيلمك المفضل 🎬', a:[['رومانسي حالم 💕','ko'],['أكشن ومغامرة 🎥','en']]},
+    {q:'أكلة تجربيها 🍜', a:[['نودلز وسوشي 🍜','zh'],['مخبوزات وجبن 🧀','de']]}
+  ];
+  var PQ_RES = {
+    en:['🇬🇧','الإنجليزية','شخصيتك عملية وطموحة — الإنجليزية مفتاحك للعالم كله 🌍'],
+    fr:['🇫🇷','الفرنسية','روحك رومانسية وأنيقة — الفرنسية لغة تليق بذوقك 🥐'],
+    de:['🇩🇪','الألمانية','عقلك منظم ودقيق — الألمانية تحدي هتعشقيه ⚙️'],
+    zh:['🇨🇳','الصينية','فضولك بيكبر — الصينية مغامرة مختلفة تمامًا 🐉'],
+    ko:['🇰🇷','الكورية','قلبك مع الكيدراما — الكورية أقرب لروحك مما تتخيلي 💜']
+  };
+  var pqI = 0, pqScore = {};
+  function pqRender(){
+    var c = document.getElementById('pqCard');
+    if(pqI >= PQ.length){
+      var win = 'en', mx = -1;
+      Object.keys(pqScore).forEach(function(k){ if(pqScore[k]>mx){mx=pqScore[k];win=k;} });
+      var r = PQ_RES[win];
+      c.innerHTML = '<div style="text-align:center"><div style="font-size:3.4rem">'+r[0]+'</div><h3 style="color:var(--gold);margin:10px 0 6px">لغتك: '+r[1]+'</h3><p style="color:var(--muted);font-size:.9rem;line-height:1.8">'+r[2]+'</p><div style="display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap"><a class="btn" href="#corners" style="text-decoration:none">🌍 ابدئي رحلتها</a><button class="btn" id="pqRetry" style="background:rgba(255,255,255,.08)">🔮 جربي تاني</button></div></div>';
+      if(!localStorage.getItem('lingua_pq_done')){
+        try{ localStorage.setItem('lingua_pq_done','1'); if(window.awardPoints) awardPoints(10,'اختبار الشخصية 🔮'); }catch(e){}
+      }
+      var rb = document.getElementById('pqRetry');
+      if(rb) rb.addEventListener('click', function(){ pqI=0; pqScore={}; pqRender(); });
+      return;
+    }
+    var q = PQ[pqI];
+    c.innerHTML = '<div style="text-align:center;margin-bottom:14px;color:var(--muted);font-size:.8rem">سؤال '+(pqI+1)+' من '+PQ.length+'</div><h3 style="text-align:center;color:#fff;margin:0 0 18px;font-size:1.1rem">'+q.q+'</h3>'+
+      q.a.map(function(a,i){ return '<button class="btn pq-opt" data-k="'+a[1]+'" style="display:block;width:100%;margin-bottom:10px;background:rgba(255,255,255,.07)">'+a[0]+'</button>'; }).join('');
+    c.querySelectorAll('.pq-opt').forEach(function(b){
+      b.addEventListener('click', function(){
+        pqScore[b.dataset.k] = (pqScore[b.dataset.k]||0)+1;
+        pqI++; pqRender();
+      });
+    });
+  }
+  pqRender();
+
+  /* ---- XO vs computer ---- */
+  var xoB, xoOver;
+  function xoNew(){
+    xoB = ['','','','','','','','','']; xoOver = false;
+    document.getElementById('xoMsg').textContent = 'دورك يا بطلة — انتي ❌';
+    xoDraw();
+  }
+  function xoDraw(){
+    var bd = document.getElementById('xoBoard');
+    bd.innerHTML = xoB.map(function(v,i){ return '<button class="xo-cell" data-i="'+i+'">'+(v==='X'?'❌':(v==='O'?'⭕':''))+'</button>'; }).join('');
+    bd.querySelectorAll('.xo-cell').forEach(function(c){
+      c.addEventListener('click', function(){ xoPlay(parseInt(c.dataset.i,10)); });
+    });
+  }
+  function xoWinner(b){
+    var L=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    for(var i=0;i<L.length;i++){ var a=L[i][0],c=L[i][1],d=L[i][2]; if(b[a]&&b[a]===b[c]&&b[a]===b[d]) return [b[a],L[i]]; }
+    return b.indexOf('')<0 ? ['draw',null] : null;
+  }
+  function xoAI(){
+    var free = xoB.map(function(v,i){return v?null:i;}).filter(function(v){return v!==null;});
+    function tryWin(me){
+      for(var i=0;i<free.length;i++){ var b=xoB.slice(); b[free[i]]=me; var w=xoWinner(b); if(w&&w[0]===me) return free[i]; }
+      return null;
+    }
+    return tryWin('O') ?? tryWin('X') ?? (xoB[4]===''?4:null) ?? free[Math.floor(Math.random()*free.length)];
+  }
+  function xoPlay(i){
+    if(xoOver || xoB[i]) return;
+    xoB[i]='X';
+    var w = xoWinner(xoB);
+    if(!w){ xoB[xoAI()]='O'; w = xoWinner(xoB); }
+    xoDraw();
+    if(w){
+      xoOver = true;
+      if(w[1]) w[1].forEach(function(j){ document.querySelectorAll('.xo-cell')[j].classList.add('win'); });
+      var msg = document.getElementById('xoMsg');
+      if(w[0]==='X'){ msg.textContent = 'برافو! كسبتي 🎉'; if(window.awardPoints) awardPoints(15,'إكس أو ⭕'); }
+      else if(w[0]==='O'){ msg.textContent = 'الكمبيوتر كسب 😅 حظ أوفر المرة الجاية'; }
+      else { msg.textContent = 'تعادل! 🤝'; if(window.awardPoints) awardPoints(5,'تعادل إكس أو'); }
+    }
+  }
+  var xa = document.getElementById('xoAgain');
+  if(xa) xa.addEventListener('click', xoNew);
+  xoNew();
+
+  /* ---- korean corner ---- */
+  var KR = {
+    greet: [['안녕하세요','annyeonghaseyo','أهلاً (رسمي) 👋'],['안녕','annyeong','أهلاً (كاجوال) 😊'],['감사합니다','gamsahamnida','شكرًا 🙏'],['사랑해','saranghae','بحبك 💜'],['잘자','jalja','تصبحي على خير 🌙'],['화이팅','hwaiting','يلا بينا / شدي حيلك 💪'],['미안해','mianhae','آسفة 🥺'],['맛있어','masisseo','جميل/لذيذ 😋']],
+    hangul: [['ㅏ','a','حرف A'],['ㅓ','eo','حرف O مقلوب'],['ㅗ','o','حرف O'],['ㅜ','u','حرف U'],['ㅡ','eu','صوت وسطي'],['ㅣ','i','حرف I'],['ㄱ','g/k','جيم كورية'],['ㄴ','n','نون'],['ㄷ','d/t','دال'],['ㄹ','r/l','راء/لام'],['ㅁ','m','ميم'],['ㅂ','b/p','باء'],['ㅅ','s','سين'],['ㅇ','ng/silent','صامت أو نج'],['ㅈ','j','جيم'],['ㅎ','h','هاء']],
+    num: [['하나','hana','١'],['둘','dul','٢'],['셋','set','٣'],['넷','net','٤'],['다섯','daseot','٥'],['여섯','yeoseot','٦'],['일곱','ilgop','٧'],['여덟','yeodeol','٨'],['아홉','ahop','٩'],['열','yeol','١٠']]
+  };
+  function krSay(t){ try{ var u=new SpeechSynthesisUtterance(t); u.lang='ko-KR'; u.rate=.85; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){} }
+  function renderKR(tab){
+    var w = document.getElementById('krWrap');
+    if(tab==='kpop'){
+      w.innerHTML = '<div class="gbk-empty" style="text-align:center;padding:20px;color:var(--muted)">بنجيب أحدث الكيبوب... 🎧</div>';
+      fetch('https://itunes.apple.com/search?term=kpop&media=music&limit=8&entity=song').then(function(r){return r.json();}).then(function(d){
+        if(!d.results || !d.results.length) throw 0;
+        w.innerHTML = d.results.map(function(t){
+          return '<div class="kr-card"><img src="'+t.artworkUrl60+'" style="width:48px;height:48px;border-radius:12px" alt=""><div><b style="font-size:.92rem">'+t.trackName+'</b><div class="kr-sub">'+t.artistName+'</div></div><button class="kr-say kr-play" data-u="'+t.previewUrl+'">▶️</button></div>';
+        }).join('');
+        w.querySelectorAll('.kr-play').forEach(function(b){ b.addEventListener('click', function(){ new Audio(b.dataset.u).play().catch(function(){}); }); });
+      }).catch(function(){ w.innerHTML = '<div class="gbk-empty" style="text-align:center;padding:20px;color:var(--muted)">النت مش متاح دلوقتي — جربي تاني بعدين 🎧</div>'; });
+      return;
+    }
+    w.innerHTML = KR[tab].map(function(x){
+      return '<div class="kr-card"><div class="kr-word">'+x[0]+'</div><div><b style="font-size:.9rem">'+x[2]+'</b><div class="kr-sub" dir="ltr">'+x[1]+'</div></div><button class="kr-say" data-w="'+x[0]+'">🔊</button></div>';
+    }).join('');
+    w.querySelectorAll('.kr-say').forEach(function(b){ b.addEventListener('click', function(){ krSay(b.dataset.w); }); });
+  }
+  document.querySelectorAll('#krTabs .tab').forEach(function(t){
+    t.addEventListener('click', function(){
+      document.querySelectorAll('#krTabs .tab').forEach(function(x){x.classList.remove('active');});
+      t.classList.add('active'); renderKR(t.dataset.kr);
+    });
+  });
+  renderKR('greet');
+})();
+</script>
 </body>
 </html>
