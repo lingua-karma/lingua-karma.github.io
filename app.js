@@ -5621,6 +5621,21 @@ gbkRender();
   function unitOpen(s,u){ return u===0 || unitDone(s, PATH_UNITS[u-1]); }
   function say(t){ try{ var u=new SpeechSynthesisUtterance(t.replace(/ *\(.*?\)/g,'')); u.lang=TTS[lang]; u.rate=.85; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){} }
   function norm(s){ return String(s).toLowerCase().trim().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ß/g,'ss').replace(/[.!?,؛،'’]/g,'').replace(/\s+/g,' '); }
+  var HMAX=5, HREFILL_MS=30*60*1000, HK='lingua_hearts_v1';
+  function getH(){
+    var hh; try{ hh=JSON.parse(localStorage.getItem(HK))||null; }catch(e){ hh=null; }
+    if(!hh || typeof hh.count!=='number') hh={count:HMAX, ts:Date.now()};
+    var add=Math.floor((Date.now()-hh.ts)/HREFILL_MS);
+    if(add>0){ hh.count=Math.min(HMAX, hh.count+add); hh.ts = hh.count>=HMAX ? Date.now() : hh.ts+add*HREFILL_MS; saveH(hh); }
+    return hh;
+  }
+  function saveH(hh){ try{ localStorage.setItem(HK, JSON.stringify(hh)); }catch(e){} }
+  function loseHeartGlobal(){ var hh=getH(); if(hh.count>=HMAX) hh.ts=Date.now(); hh.count=Math.max(0,hh.count-1); saveH(hh); return hh.count; }
+  function nextHeartMin(){ var hh=getH(); if(hh.count>=HMAX) return 0; return Math.max(1, Math.ceil((hh.ts+HREFILL_MS-Date.now())/60000)); }
+  function heartsLine(){
+    var hh=getH();
+    return '❤️ '+hh.count+'/'+HMAX+(hh.count<HMAX ? ' · قلب جديد بعد '+nextHeartMin()+' دقيقة ⏳' : ' · قلوبك كاملة ✨');
+  }
   function badge(name){
     try{ var b=JSON.parse(localStorage.getItem('lingua_badges'))||[]; if(b.indexOf(name)<0){ b.push(name); localStorage.setItem('lingua_badges', JSON.stringify(b)); } }catch(e){}
   }
@@ -5629,7 +5644,8 @@ gbkRender();
     var VOC=window.VOCAB_THEMES||{}; var s = store();
     var doneCount = PATH_UNITS.filter(function(k){ return unitDone(s,k); }).length;
     var html = '<div class="map-bar"><i style="width:'+(doneCount/PATH_UNITS.length*100)+'%"></i></div>'
-      + '<div class="path-count">🏅 '+doneCount+' / '+PATH_UNITS.length+' وحدة</div>';
+      + '<div class="path-count">🏅 '+doneCount+' / '+PATH_UNITS.length+' وحدة</div>'
+      + '<div class="path-hearts" id="pathHearts">'+heartsLine()+'</div>';
     PATH_UNITS.forEach(function(key,u){
       var th = VOC[key]; if(!th) return;
       var st = s[key]||[false,false,false];
@@ -5697,6 +5713,8 @@ gbkRender();
     renderEx();
   }
   function startLesson(ui, li){
+    var hh=getH();
+    if(hh.count<=0){ toast('قلوبك خلصت 💔 قلب جديد بعد '+nextHeartMin()+' دقيقة — أو جربي الاختبار 👑'); return; }
     var key = PATH_UNITS[ui];
     var words = pickWords(key, 8, li*6);
     var pool = themePool(key);
@@ -5704,7 +5722,7 @@ gbkRender();
     exs.push((lang==='zh'||lang==='ko') ? mkListen(words[3],pool) : mkType(words[3]));
     exs.push(mkOrder(ui));
     exs.push(mkMatch(shuf(pool).slice(0,4)));
-    LS = {ui:ui, li:li, key:key, exs:exs, i:0, hearts:5, xp:0};
+    LS = {ui:ui, li:li, key:key, exs:exs, i:0, hearts:hh.count, xp:0};
     overlay.classList.add('show');
     document.body.style.overflow='hidden';
     renderEx();
@@ -5811,7 +5829,7 @@ gbkRender();
   }
   function loseHeart(){
     if(LS.boss){ drawTop(); return; }
-    LS.hearts--; drawTop();
+    LS.hearts = loseHeartGlobal(); drawTop();
     if(LS.hearts<=0){ setTimeout(function(){ endLesson(false); }, 700); }
   }
   function endBoss(){
@@ -5852,7 +5870,7 @@ gbkRender();
       if(window.refreshDash) refreshDash();
       document.getElementById('plDone').addEventListener('click', closeLesson);
     } else {
-      plBody.innerHTML='<div class="pl-end"><div class="pl-star">💔</div><h3>القلوب خلصت</h3><p>معلش، المحاولة أهم من النتيجة — جربي تاني</p>'
+      plBody.innerHTML='<div class="pl-end"><div class="pl-star">💔</div><h3>القلوب خلصت</h3><p>معلش، المحاولة أهم من النتيجة 💜<br>قلب جديد بعد '+nextHeartMin()+' دقيقة</p>'
         +'<button class="btn pl-check" id="plRetry">🔁 أعيدي الدرس</button> <button class="btn pl-check ghost" id="plDone">خروج</button></div>';
       document.getElementById('plRetry').addEventListener('click', function(){ startLesson(LS.ui, LS.li); });
       document.getElementById('plDone').addEventListener('click', closeLesson);
